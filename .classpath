@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
+	<classpathentry kind="lib" path="lib/bcprov-jdk15-143.jar" sourcepath="C:/dev/java/doc/bc1.5">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/dev/java/doc/bc1.5/docs1.5.zip!/docs1.5"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-configuration-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/liquidlnf.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
