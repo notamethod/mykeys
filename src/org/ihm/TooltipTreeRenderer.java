@@ -10,6 +10,7 @@ import javax.swing.tree.TreeCellRenderer;
 
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
+import org.app.KeyStoreInfo.StoreType;
 
 public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 	TreeCellRenderer {
@@ -25,16 +26,50 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 	if (value instanceof DefaultMutableTreeNode) {
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 	    if (node.getUserObject() instanceof KeyStoreInfo) {
-		tooltip = ((KeyStoreInfo) node.getUserObject()).getPath();
-		if (((KeyStoreInfo) node.getUserObject()).isOpen()) {
+		KeyStoreInfo kInfo = (KeyStoreInfo) node.getUserObject();
+		tooltip = kInfo.getPath();
+		if (kInfo.isOpen()) {
+		    ImageIcon icon = null;
 		    // setTextNonSelectionColor( Color.green);
-		    ImageIcon icon = createImageIcon("images/keystore.png");
+		    switch (kInfo.getStoreType()) {
+		    case CERTSTORE:
+			icon = createImageIcon("images/keystoreblueo.png");
+			break;
+		    case CASTORE:
+			icon = createImageIcon("images/keystorered.png");
+			break;
+		    default:
+			icon = createImageIcon("images/keystoreblue.png");
+			break;
+		    }
+
 		    if (icon != null) {
 
 			setIcon(icon);
 
 		    }
 		}
+		else{
+		    ImageIcon icon = null;
+		    // setTextNonSelectionColor( Color.green);
+		    switch (kInfo.getStoreType()) {
+		    case CERTSTORE:
+			icon = createImageIcon("images/keystoreblue.png");
+			break;
+		    case CASTORE:
+			icon = createImageIcon("images/keystorered.png");
+			break;
+		    default:
+			icon = createImageIcon("images/keystoreblue.png");
+			break;
+		    }
+
+		    if (icon != null) {
+
+			setIcon(icon);
+
+		    }
+		}		
 		// ImageIcon icon = createImageIcon("images/keystore.png");
 		// if (icon != null) {
 		//					

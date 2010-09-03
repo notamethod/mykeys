@@ -30,6 +30,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import org.app.ACKeystore;
 import org.app.KSConfig;
 import org.app.KeyStoreInfo;
+import org.app.KeyStoreInfo.StoreFormat;
+import org.app.KeyStoreInfo.StoreType;
 import org.ihm.menuaction.MenuAction;
 
 /**
@@ -318,19 +320,19 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     }
 
     public void updateKeyStoreList() {
-	Iterator iter = KSConfig.getUserCfg().getKeys("magasin");
+	Iterator iter = KSConfig.getUserCfg().getKeys("store");
 	while (iter.hasNext()) {
 	    String key = (String) iter.next();
 	    String[] typeTmp = key.split("\\.");
-	    if (typeTmp != null && typeTmp.length > 1) {
+	    if (typeTmp != null && typeTmp.length > 2) {
 		List list = KSConfig.getUserCfg().getList(key);
 		for (Object o : list) {
 		    String dirName = (String) o;
 		    String fileName = dirName.substring(dirName
 			    .lastIndexOf("\\") + 1, dirName.length());
 		    KeyStoreInfo ki = new KeyStoreInfo(fileName, dirName,
-			    typeTmp[1]);
-		    if (typeTmp[1].equals("AC")){
+			    StoreType.fromValue(typeTmp[1]), StoreFormat.valueOf(typeTmp[2]));
+		    if (ki.getStoreType().equals(StoreType.CASTORE)){
 			ACKeystore.path=dirName;
 		    }
 		    ksList.put(dirName, ki);

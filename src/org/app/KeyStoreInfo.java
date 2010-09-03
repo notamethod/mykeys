@@ -7,16 +7,19 @@ public class KeyStoreInfo {
 
     private String path;
 
-    private String type;
-
     private boolean isOpen = false;
+
+    private StoreType storeType;
+
+    private StoreFormat storeFormat;
 
     private char[] password;
 
-    public KeyStoreInfo(String name, String path, String type) {
+    public KeyStoreInfo(String name, String path, StoreType storeType, StoreFormat storeFormat) {
 	this.name = name;
 	this.path = path;
-	this.type = type;
+	this.storeType = storeType;
+	this.storeFormat = storeFormat;
     }
 
     /*
@@ -59,20 +62,7 @@ public class KeyStoreInfo {
 	this.path = path;
     }
 
-    /**
-     * @return the type
-     */
-    public String getType() {
-	return type;
-    }
 
-    /**
-     * @param type
-     *            the type to set
-     */
-    public void setType(String type) {
-	this.type = type;
-    }
 
     /**
      * @return the isOpen
@@ -103,7 +93,58 @@ public class KeyStoreInfo {
     public void setPassword(char[] password) {
 	this.password = password;
     }
-    
 
+    public enum StoreType {
+	CASTORE, CERTSTORE, KEYSTORE, P12STORE;
 
+	public static StoreType fromValue(String v) {
+	    return valueOf(v);
+	}
+	
+	public static String getValue(StoreType type) {
+	    return type.toString();
+	}	
+    }
+
+    public enum StoreFormat {
+	JKS, PKCS12;
+	public static StoreFormat fromValue(String v) {
+	    return valueOf(v);
+	}
+	public static String getValue(StoreFormat format) {
+	    return format.toString();
+	}	
+    }
+
+    /**
+     * Retourne le storeType.
+     * @return StoreType - le storeType.
+     */
+    public StoreType getStoreType() {
+        return storeType;
+    }
+
+    /**
+     * Affecte le storeType.
+     * @param storeType le storeType à affecter.
+     */
+    public void setStoreType(StoreType storeType) {
+        this.storeType = storeType;
+    }
+
+    /**
+     * Retourne le storeFormat.
+     * @return StoreFormat - le storeFormat.
+     */
+    public StoreFormat getStoreFormat() {
+        return storeFormat;
+    }
+
+    /**
+     * Affecte le storeFormat.
+     * @param storeFormat le storeFormat à affecter.
+     */
+    public void setStoreFormat(StoreFormat storeFormat) {
+        this.storeFormat = storeFormat;
+    }
 }

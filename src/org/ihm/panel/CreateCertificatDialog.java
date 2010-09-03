@@ -36,6 +36,7 @@ import org.app.KeyTools;
 import org.app.KeyToolsException;
 import org.app.ProviderUtil;
 import org.app.X509Constants;
+import org.app.KeyStoreInfo.StoreType;
 import org.ihm.JSpinnerDate;
 import org.ihm.KeyStoreUI;
 import org.ihm.MyKeys;
@@ -64,7 +65,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 
 	super(owner, modal);
 	this.ksInfo = ksInfo;
-	if (ksInfo.getType().equals("AC")) {
+	if (ksInfo.getStoreType().equals(StoreType.CASTORE)) {
 	    isAC = true;
 	}
 	init();
@@ -269,11 +270,6 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		Iterator<String> it = keys.iterator();
 		while (it.hasNext()) {
 		    String key = it.next();
-		    System.out.println(key + "-" + elements.get(key));
-		    // if (key.startsWith("x")) {
-		    // cert.getX509PrincipalModel().set(key, elements.get(key));
-		    //						
-		    // }
 		}
 		if (elements.get("alias") == null
 			|| elements.get("pwd1") == null) {
@@ -283,7 +279,6 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		}
 
 		// certInfo.setX509PrincipalMap(elements);
-		// System.out.println("xx"+cert.getX509PrincipalModel().getX509PrincipalCN());
 		HashMap<String, String> subjectMap = new HashMap<String, String>();
 		certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
 		certInfo.setAlgoSig((String) elements.get("algoSig"));

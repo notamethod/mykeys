@@ -57,14 +57,14 @@ public class CertificateInfo {
     private String certChain;
 
     Certificate[] certificateChain;
-    
+
     private String crlDistributionURL;
-    
+
     private X509Certificate certificate;
-    
+
     private String policyNotice;
 
-    private String policyCPS;    
+    private String policyCPS;
 
     /**
      * Retourne le hasPrivateKey.
@@ -306,8 +306,10 @@ public class CertificateInfo {
 	for (int i = 0; i < v.size(); i++) {
 	    DERObjectIdentifier oid = (DERObjectIdentifier) v.get(i);
 	    String val = (String) name.getValues().get(i);
-	    System.out.println((String) X509Name.DefaultSymbols.get(oid) + ":"
-		    + val);
+	    if (log.isDebugEnabled()) {
+		log.debug((String) X509Name.DefaultSymbols.get(oid) + ":"
+				+ val);
+	    }
 	    subjectMap.put((String) X509Name.DefaultSymbols.get(oid), val);
 	}
 
@@ -460,11 +462,9 @@ public class CertificateInfo {
 	return "2.16.250.1.114412.1.3.0.27";
     }
 
-
-
-//    public String getCrlDistributionURL() {
-//	return el "http://dev.tess2i.fr/ebics/crl";
-//    }
+    // public String getCrlDistributionURL() {
+    // return el "http://dev.tess2i.fr/ebics/crl";
+    // }
 
     /**
      * .
@@ -506,66 +506,78 @@ public class CertificateInfo {
 
     /**
      * Retourne le crlDistributionURL.
+     * 
      * @return String - le crlDistributionURL.
      */
     public String getCrlDistributionURL() {
-        return crlDistributionURL;
+	return crlDistributionURL;
     }
 
     /**
      * Affecte le crlDistributionURL.
-     * @param crlDistributionURL le crlDistributionURL à affecter.
+     * 
+     * @param crlDistributionURL
+     *            le crlDistributionURL à affecter.
      */
     public void setCrlDistributionURL(String crlDistributionURL) {
-        this.crlDistributionURL = crlDistributionURL;
+	this.crlDistributionURL = crlDistributionURL;
     }
 
     /**
      * Retourne le certificate.
+     * 
      * @return X509Certificate - le certificate.
      */
     public X509Certificate getCertificate() {
-        return certificate;
+	return certificate;
     }
 
     /**
      * Affecte le certificate.
-     * @param certificate le certificate à affecter.
+     * 
+     * @param certificate
+     *            le certificate à affecter.
      */
     public void setCertificate(X509Certificate certificate) {
-        this.certificate = certificate;
+	this.certificate = certificate;
     }
 
     /**
      * Retourne le policyNotice.
+     * 
      * @return String - le policyNotice.
      */
     public String getPolicyNotice() {
-        return policyNotice;
+	return policyNotice;
     }
 
     /**
      * Affecte le policyNotice.
-     * @param policyNotice le policyNotice à affecter.
+     * 
+     * @param policyNotice
+     *            le policyNotice à affecter.
      */
     public void setPolicyNotice(String policyNotice) {
-        this.policyNotice = policyNotice;
+	this.policyNotice = policyNotice;
     }
 
     /**
      * Retourne le policyCPS.
+     * 
      * @return String - le policyCPS.
      */
     public String getPolicyCPS() {
-        return policyCPS;
+	return policyCPS;
     }
 
     /**
      * Affecte le policyCPS.
-     * @param policyCPS le policyCPS à affecter.
+     * 
+     * @param policyCPS
+     *            le policyCPS à affecter.
      */
     public void setPolicyCPS(String policyCPS) {
-        this.policyCPS = policyCPS;
+	this.policyCPS = policyCPS;
     }
 
 }

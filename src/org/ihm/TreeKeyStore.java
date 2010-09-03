@@ -62,11 +62,14 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.app.ACKeystore;
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
+import org.app.KeyStoreInfo.StoreType;
 import org.ihm.menuaction.TreePopupMenu;
 import org.ihm.panel.CreateCertificatDialog;
 import org.ihm.panel.DetailPanel;
@@ -75,6 +78,8 @@ import org.ihm.panel.ImportCertificateDialog;
 
 public class TreeKeyStore extends JPanel implements MouseListener,
 	TreeExpansionListener, TreeWillExpandListener {
+    
+    final static Log log = LogFactory.getLog(TreeKeyStore.class);    
     private DetailPanel detailPanel;
 
     private JTree tree;
@@ -203,7 +208,6 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     private DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,
 	    Object child, boolean shouldBeVisible) {
 	DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
-	System.out.println(childNode.getUserObject().getClass());
 	if (parent == null) {
 	    parent = rootNode;
 	}
@@ -243,9 +247,8 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     public boolean openStore(DefaultMutableTreeNode node,
 	    boolean useInternalPwd, boolean expand) {
 	KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
-	if (ksInfo.getType().equals("AC")) {
+	if (ksInfo.getStoreType().equals(StoreType.CASTORE)) {
 	    ksInfo.setPassword(ACKeystore.password.toCharArray());
-	    // ksInfo.setType("JKS");
 	    useInternalPwd = true;
 	}
 	// ask for password
@@ -277,7 +280,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	KeyTools kt = new KeyTools();
 	KeyStore ks = null;
 	try {
-	    ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getType(), ksInfo
+	    ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo
 		    .getPassword());
 
 	} catch (Exception e1) {
@@ -286,14 +289,15 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	    return false;
 	}
 	try {
-	    System.out.println("addcerts");
 	    Enumeration<String> enumKs = ks.aliases();
 	    if (enumKs != null && enumKs.hasMoreElements()) {
 		removeChildrenObjects(node);
 		node.removeAllChildren();
 		while (enumKs.hasMoreElements()) {
 		    String alias = enumKs.nextElement();
-		    System.out.println(alias);
+		    if (log.isDebugEnabled()) {
+			log.debug("alias:"+alias);
+		    }
 		    // try
 		    // {
 		    // KeyStore ks2 = KeyStore.getInstance("PKCS12");
@@ -406,27 +410,27 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
     @Override
     public void treeCollapsed(TreeExpansionEvent event) {
-	System.out.println("collaps");
+	//System.out.println("collaps");
 
     }
 
     @Override
     public void treeExpanded(TreeExpansionEvent event) {
-	System.out.println("expand");
+	//System.out.println("expand");
 
     }
 
     @Override
     public void treeWillCollapse(TreeExpansionEvent event)
 	    throws ExpandVetoException {
-	System.out.println("collapse1");
+	//System.out.println("collapse1");
 
     }
 
     @Override
     public void treeWillExpand(TreeExpansionEvent event)
 	    throws ExpandVetoException {
-	System.out.println("ask expand");
+	//System.out.println("ask expand");
 	DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) event.getPath()
 		.getLastPathComponent();
 	if (tNode.getParent() != null) {

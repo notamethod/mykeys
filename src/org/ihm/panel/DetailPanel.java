@@ -83,7 +83,6 @@ public class DetailPanel extends JPanel {
 		String key = iter.next();
 		String name;
 		try {
-		    System.out.println("key:" + key);
 		    name = MyKeys.getMessage().getString(
 			    X509Util.getMapNames().get(key));
 		} catch (Exception e) {

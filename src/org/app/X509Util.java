@@ -5,13 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 public class X509Util {
 
-    static Map<String, String> mapNames = null;
+    static Map<String, String> mapNames = null;    
+    final static Log log = LogFactory.getLog(X509Util.class);
 
     /**
      * @return the mapNames
@@ -57,10 +60,15 @@ public class X509Util {
 	try {
 	    obj = X509ExtensionUtil.fromExtensionValue(b);
 	} catch (Exception e) {
-	    System.out.println("exc");
+	    if (log.isErrorEnabled()) {
+		log.error(e);
+	    }
 
 	}
-	System.out.println(obj);
+
+	if (log.isDebugEnabled()) {
+	    log.debug(obj);
+	}	
 	b = certificate.getExtensionValue(X509Extensions.SubjectKeyIdentifier
 		.getId());
 	obj = null;
@@ -78,7 +86,7 @@ public class X509Util {
 	// System.out.println("exc");
 	//
 	// }
-	System.out.println(obj);
+	//System.out.println(obj);
 	// AuditIdentity
 	// AuthorityInfoAccess
 	// AuthorityKeyIdentifier

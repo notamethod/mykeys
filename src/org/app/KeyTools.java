@@ -38,6 +38,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.app.KeyStoreInfo.StoreFormat;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DEROctetString;
@@ -275,9 +276,13 @@ public class KeyTools {
 	try {
 	    cert.checkValidity(new Date());
 	} catch (CertificateExpiredException e) {
-	    System.out.println(e);
+	    if (log.isErrorEnabled()) {
+		log.error(e);
+	    }
 	} catch (CertificateNotYetValidException e) {
-	    System.out.println(e);
+	    if (log.isErrorEnabled()) {
+		log.error(e);
+	    }
 	}
 
 	cert.verify(certModel.getPublicKey());
@@ -375,7 +380,6 @@ public class KeyTools {
 	cert.checkValidity(new Date());
 
 	cert.verify(certIssuer.getPublicKey());
-	System.out.println("OK");
 	X509Certificate[] certChain = null;
 	// FIXME: gérer la chaine de l'émetteur
 	if (certIssuer.getCertificate() != null) {
@@ -393,7 +397,7 @@ public class KeyTools {
     @Deprecated
     public void addCertToKeyStore(X509Certificate cert, KeyStoreInfo ksInfo,
 	    CertificateInfo certInfo) throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getType(),
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 		ksInfo.getPassword());
 	saveCert(kstore, cert, certInfo);
 	saveKeyStore(kstore, ksInfo);
@@ -401,7 +405,7 @@ public class KeyTools {
 
     public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo,
 	    CertificateInfo certInfo) throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getType(),
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 		ksInfo.getPassword());
 	saveCertChain(kstore, cert, certInfo);
 	saveKeyStore(kstore, ksInfo);
@@ -410,7 +414,7 @@ public class KeyTools {
     public void addCertToKeyStoreNew(X509Certificate[] xCerts,
 	    KeyStoreInfo ksInfo, CertificateInfo certInfo)
 	    throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getType(),
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 		ksInfo.getPassword());
 	saveCertChain(kstore, xCerts, certInfo);
 	saveKeyStore(kstore, ksInfo);
@@ -564,7 +568,6 @@ public class KeyTools {
 			.getModulus().bitLength());
 		String aa = ((RSAPublicKey) certX509.getPublicKey())
 			.getModulus().toString(16);
-		System.out.println(aa);
 	    }
 	    certInfo.setPublicKey(certX509.getPublicKey());
 
@@ -739,7 +742,7 @@ public class KeyTools {
 	/* save the private key in a file */
 
 	try {
-	    KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getType(),
+	    KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 		    ksInfo.getPassword());
 	    PrivateKey privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
 		    password);
@@ -803,7 +806,6 @@ public class KeyTools {
 	// random.nextBytes(bytes);
 	BigInteger bi = new BigInteger(numBits, random);
 	return bi;
-	// System.out.println(bi);
 
     }
 
@@ -875,6 +877,27 @@ public class KeyTools {
 	}
 	return distPoints;
 
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @param path
+     * @param storeFormat
+     * @param password
+     * @return
+     * @throws KeyToolsException 
+     */
+    public KeyStore loadKeyStore(String path, StoreFormat storeFormat,
+	    char[] password) throws KeyToolsException {
+	// TODO Auto-generated method stub
+	return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
     }
 
     // algorithms.put("MD2WITHRSAENCRYPTION", new
