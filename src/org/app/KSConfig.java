@@ -24,7 +24,7 @@ public class KSConfig {
 
     public static void load() {
 
-	path = System.getProperty("user.home") + File.separator + cfgPathName;
+	path = getCfgPath();
 	try {
 	    userConfig = new PropertiesConfiguration(path + File.separator
 		    + usrFileName);
@@ -51,6 +51,10 @@ public class KSConfig {
 	userConfig.setAutoSave(true);
 	defaultConfig.setAutoSave(true);
 
+    }
+
+    static String getCfgPath() {
+	return System.getProperty("user.home") + File.separator + cfgPathName;
     }
 
     private static void setDefault(PropertiesConfiguration cfg) {

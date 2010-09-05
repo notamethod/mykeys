@@ -22,8 +22,10 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 	final Component rc = super.getTreeCellRendererComponent(tree, value,
 		sel, expanded, leaf, row, hasFocus);
 	String tooltip = null;
+	
 	// setTextNonSelectionColor( Color.black);
 	if (value instanceof DefaultMutableTreeNode) {
+
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 	    if (node.getUserObject() instanceof KeyStoreInfo) {
 		KeyStoreInfo kInfo = (KeyStoreInfo) node.getUserObject();

@@ -1,7 +1,9 @@
 package org.ihm;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
@@ -24,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.app.ACKeystore;
@@ -57,7 +58,13 @@ public class KeyStoreUI extends JFrame implements WindowListener {
      */
     public KeyStoreUI() {
 	super("My Keys");
-	// this.setPreferredSize(new Dimension(840, 640));
+	 // Get toolkit
+	    Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+	    // Get size
+	    Dimension dimension = toolkit.getScreenSize();
+
+	 this.setPreferredSize(dimension);
 	// this.setResizable(false);
 
 	// setNbCols(4);
@@ -68,11 +75,11 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     private void init() {
 	initLookAndFeel();
 	this.addWindowListener(this);
-
+	this.setSize(this.getPreferredSize());
 	buildComponents();
 	updateKeyStoreList();
 	// this.setBackground(new Color(125, 0, 0));
-	this.setSize(900, 680);
+	this.pack();
 	this.setVisible(true);
 
     }
@@ -220,7 +227,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	this.getContentPane().add(p);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	mainPanel = new TreeKeyStore();
+	mainPanel = new TreeKeyStore(null);
 	p.add(mainPanel);
 	// p.add(new DetailPanel());
 
@@ -320,6 +327,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     }
 
     public void updateKeyStoreList() {
+	ACKeystore.getACPath();
 	Iterator iter = KSConfig.getUserCfg().getKeys("store");
 	while (iter.hasNext()) {
 	    String key = (String) iter.next();
@@ -333,7 +341,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 		    KeyStoreInfo ki = new KeyStoreInfo(fileName, dirName,
 			    StoreType.fromValue(typeTmp[1]), StoreFormat.valueOf(typeTmp[2]));
 		    if (ki.getStoreType().equals(StoreType.CASTORE)){
-			ACKeystore.path=dirName;
+			ACKeystore.setPath(dirName);
 		    }
 		    ksList.put(dirName, ki);
 		}

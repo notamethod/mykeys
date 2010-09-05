@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -66,9 +67,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.app.ACKeystore;
 import org.app.CertificateInfo;
+import org.app.KSConfig;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
+import org.app.KeyStoreInfo.StoreFormat;
 import org.app.KeyStoreInfo.StoreType;
 import org.ihm.menuaction.TreePopupMenu;
 import org.ihm.panel.CreateCertificatDialog;
@@ -85,17 +88,26 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     private JTree tree;
 
     DefaultMutableTreeNode rootNode;
+    
+    DefaultMutableTreeNode cliNode;
+    
+    DefaultMutableTreeNode acNode; 
 
     private DefaultTreeModel treeModel;
 
     TreePopupMenu popup;
 
-    public TreeKeyStore() {
+    public TreeKeyStore(Dimension dim) {
 	// super(new GridLayout(1, 0));
 	// super(new GridLayout(1, 0));
-	this.setPreferredSize(new Dimension(840, 600));
+	//this.setPreferredSize(new Dimension(840, 600));
 	// Create the nodes.
 	rootNode = new DefaultMutableTreeNode("Magasins");
+	acNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString("store.ac.name"));
+	cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString("store.cert.name"));
+
+	//cliNode = new DefaultMutableTreeNode(new KeyStoreInfo("aa", "bb", StoreType.CASTORE, StoreFormat.JKS));
+	
 	// createNodes(rootNode);
 	treeModel = new DefaultTreeModel(rootNode);
 	treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
@@ -115,10 +127,21 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
 	// Listen for when the selection changes.
 	// tree.addTreeSelectionListener(this);
+	
+	treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
+	treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
+
+	tree.setRootVisible(false);
+	
 	tree.addMouseListener(this);
 	tree.addTreeWillExpandListener(this);
 	tree.addTreeExpansionListener(this);
+	
 
+	// Make sure the user can see the lovely new node.
+//	if (shouldBeVisible) {
+//	    tree.scrollPathToVisible(new TreePath(childNode.getPath()));
+//	}
 	// Create the scroll pane and add the tree to it.
 	JScrollPane treeView = new JScrollPane(tree);
 
@@ -133,11 +156,11 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	splitPane.setTopComponent(treeView);
 	splitPane.setBottomComponent(scrollDetail);
 
-	Dimension minimumSize = new Dimension(340, 300);
-	Dimension minimumSize2 = new Dimension(180, 300);
-	scrollDetail.setMinimumSize(minimumSize);
-	treeView.setMinimumSize(minimumSize2);
-	splitPane.setDividerLocation(210); // XXX: ignored in some releases
+//	Dimension minimumSize = new Dimension(340, 300);
+//	Dimension minimumSize2 = new Dimension(180, 300);
+//	scrollDetail.setMinimumSize(minimumSize);
+//	treeView.setMinimumSize(minimumSize2);
+//	splitPane.setDividerLocation(210); // XXX: ignored in some releases
 	// of Swing. bug 4101306
 	// workaround for bug 4101306:
 	// treeView.setPreferredSize(new Dimension(100, 100));
@@ -145,7 +168,10 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	splitPane.setPreferredSize(new Dimension(800, 580));
 
 	// Add the split pane to this panel.
+	//getParent().getPreferredSize();
 	add(splitPane);
+	//add(treeView);
+	//add(scrollDetail);
     }
 
     private void displayCertDetail(CertificateInfo info) {
@@ -161,13 +187,19 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     public void updateKSList(HashMap<String, KeyStoreInfo> ksList) {
 	clear();
 	Set<String> dirs = ksList.keySet();
-	rootNode.removeAllChildren();
 	Iterator<String> iter = dirs.iterator();
 	while (iter.hasNext()) {
 	    String dir = iter.next();
+	    KeyStoreInfo ksinfo = ksList.get(dir);
+	    DefaultMutableTreeNode node = null;
+	    if (ksinfo.getStoreType().equals(StoreType.CASTORE)){
+		    node = addObject(acNode, ksinfo,
+			    true);
+	    }else{
+		    node = addObject(cliNode, ksinfo,
+			    true);
 
-	    DefaultMutableTreeNode node = addObject(rootNode, ksList.get(dir),
-		    true);
+	    }	
 	    addObject(node, "[Vide]", false);
 	}
 	// tree.repaint();
@@ -176,7 +208,8 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
     /** Remove all nodes except the root node. */
     public void clear() {
-	rootNode.removeAllChildren();
+	acNode.removeAllChildren();
+	cliNode.removeAllChildren();
 	treeModel.reload();
     }
 
@@ -389,7 +422,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	// Create and set up the content pane.
-	TreeKeyStore newContentPane = new TreeKeyStore();
+	TreeKeyStore newContentPane = new TreeKeyStore(null);
 	newContentPane.setOpaque(true); // content panes must be opaque
 	frame.setContentPane(newContentPane);
 
@@ -445,6 +478,8 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 		    }
 
 		}
+	    }else  if (object instanceof String) {
+		return;
 	    }
 	    throw new ExpandVetoException(event);
 

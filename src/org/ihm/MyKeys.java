@@ -33,6 +33,7 @@ import org.app.ACKeystore;
 import org.app.KSConfig;
 import org.app.KeyTools;
 import org.app.ProviderUtil;
+import org.app.KeyStoreInfo.StoreType;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.ihm.panel.CreateStoreDialog;
 
@@ -98,7 +99,7 @@ public class MyKeys {
 
     private void checkConfig() {
 
-	Iterator iter = KSConfig.getUserCfg().getKeys("magasin");
+	Iterator iter = KSConfig.getUserCfg().getKeys("store");
 	boolean update = false;
 	Map<String, HashMap> typesKS = new HashMap<String, HashMap>();
 	while (iter.hasNext()) {
@@ -112,8 +113,8 @@ public class MyKeys {
 		if (f.exists()) {
 		    typesKS.get(key).put(dirName, dirName);
 		} else {
-		    String type = key.split("\\.")[1];
-		    if (type.equals("AC")){
+		    StoreType type = StoreType.valueOf(key.split("\\.")[1]);
+		    if (type.equals(StoreType.CASTORE)){
 			String acName = createACKeystore();
 			if (acName != null){
 			    typesKS.get(key).put(acName, acName);
