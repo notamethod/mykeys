@@ -22,7 +22,7 @@ import javax.swing.filechooser.FileFilter;
 import org.app.KSConfig;
 import org.app.KeyTools;
 import org.app.KeyStoreInfo.StoreFormat;
-import org.app.KeyStoreInfo.StoreType;
+import org.app.KeyStoreInfo.StoreModel;
 import org.ihm.KeyStoreUI;
 import org.ihm.tools.JFieldsPanel;
 import org.ihm.tools.LabelValuePanel;
@@ -145,7 +145,7 @@ public class ImportStoreDialog extends JDialog {
 //		    KSConfig.getUserCfg().addProperty("magasin." + typeKS,
 //			    tfDirectory.getText());
 		    KSConfig.getUserCfg().addProperty(
-			    "store." +StoreType.CERTSTORE+"." + format.toString(),
+			    "store." +StoreModel.CERTSTORE+"." + format.toString(),
 			    tfDirectory.getText());		    
 		    ((KeyStoreUI) ImportStoreDialog.this.getParent())
 			    .updateKeyStoreList();

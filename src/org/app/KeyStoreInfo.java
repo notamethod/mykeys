@@ -9,18 +9,28 @@ public class KeyStoreInfo {
 
     private boolean isOpen = false;
 
-    private StoreType storeType;
+    private StoreModel storeModel;
 
     private StoreFormat storeFormat;
+    
+    private StoreType storeType = StoreType.EXTERNAL;
 
     private char[] password;
 
-    public KeyStoreInfo(String name, String path, StoreType storeType, StoreFormat storeFormat) {
+    public KeyStoreInfo(String name, String path, StoreModel storeModel, StoreFormat storeFormat) {
 	this.name = name;
 	this.path = path;
-	this.storeType = storeType;
+	this.storeModel = storeModel;
 	this.storeFormat = storeFormat;
     }
+    
+    public KeyStoreInfo(String name, String path, StoreModel storeModel, StoreFormat storeFormat, StoreType storeType) {
+	this.name = name;
+	this.path = path;
+	this.storeModel = storeModel;
+	this.storeFormat = storeFormat;
+	this.storeType = storeType;
+    }    
 
     /*
      * (non-Javadoc)
@@ -94,14 +104,14 @@ public class KeyStoreInfo {
 	this.password = password;
     }
 
-    public enum StoreType {
+    public enum StoreModel {
 	CASTORE, CERTSTORE, KEYSTORE, P12STORE;
 
-	public static StoreType fromValue(String v) {
+	public static StoreModel fromValue(String v) {
 	    return valueOf(v);
 	}
 	
-	public static String getValue(StoreType type) {
+	public static String getValue(StoreModel type) {
 	    return type.toString();
 	}	
     }
@@ -115,21 +125,32 @@ public class KeyStoreInfo {
 	    return format.toString();
 	}	
     }
+    
+    public enum StoreType {
+	INTERNAL, EXTERNAL;
+	public static StoreType fromValue(String v) {
+	    return valueOf(v);
+	}
+	public static String getValue(StoreType type) {
+	    return type.toString();
+	}	
+    }
+    
 
     /**
      * Retourne le storeType.
      * @return StoreType - le storeType.
      */
-    public StoreType getStoreType() {
-        return storeType;
+    public StoreModel getStoreModel() {
+        return storeModel;
     }
 
     /**
      * Affecte le storeType.
      * @param storeType le storeType à affecter.
      */
-    public void setStoreType(StoreType storeType) {
-        this.storeType = storeType;
+    public void setStoreModel(StoreModel storeType) {
+        this.storeModel = storeType;
     }
 
     /**
@@ -146,5 +167,19 @@ public class KeyStoreInfo {
      */
     public void setStoreFormat(StoreFormat storeFormat) {
         this.storeFormat = storeFormat;
+    }
+
+    /**
+     * @return the storeType
+     */
+    public StoreType getStoreType() {
+        return storeType;
+    }
+
+    /**
+     * @param storeType the storeType to set
+     */
+    public void setStoreType(StoreType storeType) {
+        this.storeType = storeType;
     }
 }

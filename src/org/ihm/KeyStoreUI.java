@@ -29,11 +29,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import org.app.ACKeystore;
+import org.app.InternalKeystores;
 import org.app.KSConfig;
 import org.app.KeyStoreInfo;
 import org.app.KeyStoreInfo.StoreFormat;
-import org.app.KeyStoreInfo.StoreType;
+import org.app.KeyStoreInfo.StoreModel;
 import org.ihm.menuaction.MenuAction;
 
 /**
@@ -332,8 +332,8 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     }
 
     public void updateKeyStoreList() {
-	ACKeystore.getACPath();
-	Iterator iter = KSConfig.getUserCfg().getKeys("store");
+	InternalKeystores.getACPath();
+	Iterator iter = KSConfig.getUserCfg().getKeys(KSConfig.STORE_PREFIX);
 	while (iter.hasNext()) {
 	    String key = (String) iter.next();
 	    String[] typeTmp = key.split("\\.");
@@ -344,10 +344,10 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 		    String fileName = dirName.substring(dirName
 			    .lastIndexOf("\\") + 1, dirName.length());
 		    KeyStoreInfo ki = new KeyStoreInfo(fileName, dirName,
-			    StoreType.fromValue(typeTmp[1]), StoreFormat.valueOf(typeTmp[2]));
-		    if (ki.getStoreType().equals(StoreType.CASTORE)){
-			ACKeystore.setPath(dirName);
-		    }
+			    StoreModel.fromValue(typeTmp[1]), StoreFormat.valueOf(typeTmp[2]));
+//		    if (ki.getStoreModel().equals(StoreModel.CASTORE)){
+//			InternalKeystores.setPath(dirName);
+//		    }
 		    ksList.put(dirName, ki);
 		}
 

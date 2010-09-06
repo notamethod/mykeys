@@ -29,14 +29,14 @@ import javax.swing.JPasswordField;
 import javax.swing.border.Border;
 
 import org.apache.commons.lang.StringUtils;
-import org.app.ACKeystore;
+import org.app.InternalKeystores;
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
 import org.app.ProviderUtil;
 import org.app.X509Constants;
-import org.app.KeyStoreInfo.StoreType;
+import org.app.KeyStoreInfo.StoreModel;
 import org.ihm.JSpinnerDate;
 import org.ihm.KeyStoreUI;
 import org.ihm.MyKeys;
@@ -65,7 +65,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 
 	super(owner, modal);
 	this.ksInfo = ksInfo;
-	if (ksInfo.getStoreType().equals(StoreType.CASTORE)) {
+	if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
 	    isAC = true;
 	}
 	init();
@@ -160,8 +160,8 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	infosPanel = new LabelValuePanel();
 	Map<String, String> mapAC = null;
 	try {
-	    mapAC = TreeKeyStore.getListCerts(ACKeystore.path, "JKS",
-		    ACKeystore.password);
+	    mapAC = TreeKeyStore.getListCerts(InternalKeystores.getACPath(), "JKS",
+		    InternalKeystores.password);
 	} catch (Exception e) {
 	    // 
 	}
@@ -210,9 +210,9 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	    "");		    
 	    infosPanel.putEmptyLine();
 	    infosPanel.put("Mot de passe clé privée", JPasswordField.class,
-		    "pwd1", ACKeystore.password, false);
+		    "pwd1", InternalKeystores.password, false);
 	    infosPanel.put("Confirmer le mot de passe", JPasswordField.class,
-		    "pwd2", ACKeystore.password, false);
+		    "pwd2", InternalKeystores.password, false);
 	} else {
 	    infosPanel.put("Alias (nom du certificat)", "alias", "");
 	    infosPanel.putEmptyLine();

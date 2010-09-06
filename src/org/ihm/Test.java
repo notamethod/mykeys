@@ -10,7 +10,7 @@ import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
 import org.app.KeyStoreInfo.StoreFormat;
-import org.app.KeyStoreInfo.StoreType;
+import org.app.KeyStoreInfo.StoreModel;
 
 public class Test {
 
@@ -43,7 +43,7 @@ public class Test {
 	    String alias = "aaa";
 	    String path = "c:/dev/empty.jks";
 	    String pathCert = "c:/dev/cpi.cer";
-	    KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path, StoreType.CERTSTORE, StoreFormat.JKS);
+	    KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path, StoreModel.CERTSTORE, StoreFormat.JKS);
 	    kt.importX509Cert(alias, ksInfo, pathCert, typeCert, "111"
 		    .toCharArray());
 
@@ -57,7 +57,7 @@ public class Test {
 
     private static void loadKS() {
 	String path = "mag1.jks";
-	KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path, StoreType.CERTSTORE, StoreFormat.JKS);
+	KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path, StoreModel.CERTSTORE, StoreFormat.JKS);
 	
 
 	KeyTools kt = new KeyTools();

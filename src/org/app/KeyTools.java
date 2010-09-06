@@ -909,8 +909,8 @@ public class KeyTools {
 
 	KeyStore ks = null;
 	if (!StringUtils.isBlank(alias)) {
-	    char[] password = ACKeystore.password.toCharArray();
-	    ks = loadKeyStore(ACKeystore.path, "AC", ACKeystore.password
+	    char[] password = InternalKeystores.password.toCharArray();
+	    ks = loadKeyStore(InternalKeystores.getACPath(), StoreFormat.JKS, InternalKeystores.password
 		    .toCharArray());
 	    CertificateInfo infoEmetteur = new CertificateInfo();
 	    fillCertInfo(ks, infoEmetteur, alias);

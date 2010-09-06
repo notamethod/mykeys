@@ -29,11 +29,14 @@ import java.util.Set;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.app.ACKeystore;
+import org.app.InternalKeystores;
 import org.app.KSConfig;
+import org.app.KeyStoreInfo;
 import org.app.KeyTools;
+import org.app.KeyToolsException;
 import org.app.ProviderUtil;
 import org.app.KeyStoreInfo.StoreFormat;
+import org.app.KeyStoreInfo.StoreModel;
 import org.app.KeyStoreInfo.StoreType;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.ihm.panel.CreateStoreDialog;
@@ -114,13 +117,13 @@ public class MyKeys {
 		if (f.exists()) {
 		    typesKS.get(key).put(dirName, dirName);
 		} else {
-		    StoreType type = StoreType.valueOf(key.split("\\.")[1]);
-		    if (type.equals(StoreType.CASTORE)){
-			String acName = createACKeystore();
-			if (acName != null){
-			    typesKS.get(key).put(acName, acName);
-			}
-		    }
+//		    StoreModel type = StoreModel.valueOf(key.split("\\.")[1]);
+//		    if (type.equals(StoreModel.CASTORE)){
+//			String acName = createACKeystore();
+//			if (acName != null){
+//			    typesKS.get(key).put(acName, acName);
+//			}
+//		    }
 		    update = true;
 		    
 		}
@@ -156,22 +159,26 @@ public class MyKeys {
      *FIN</pre>
      *
      */
-    private String createACKeystore() {
-	String path = System.getProperty("user.home") + File.separator + KSConfig.cfgPathName + File.separator + ACFileName;
+    private static KeyStoreInfo getACKeystore() {
+	String path = InternalKeystores.getACPath();
 	KeyTools kt = new KeyTools();
-	String pwd = ACKeystore.password;
-	
-	try {
-	    kt.createKeyStore(StoreFormat.JKS,
-		    path, pwd.toCharArray());
-	    ACKeystore.path=path;
-	    return path;
+	String pwd = InternalKeystores.password;
+	KeyStoreInfo kinfo = null;
 
-	} catch (Exception e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return null;
-	}
+	kinfo =  new KeyStoreInfo("interne", InternalKeystores.getACPath(), StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
+	return kinfo;
+//	    try {
+//		kt.loadKeyStore(path, StoreFormat.JKS, pwd.toCharArray());
+//	    } catch (KeyToolsException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    }
+//	    kt.createKeyStore(StoreFormat.JKS,
+//		    InternalKeystores.getACPath(), pwd.toCharArray());
+//	    //InternalKeystores.path=path;
+//	    return new KeyStoreInfo("interne", InternalKeystores.getACPath(), StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
+
+
 
 	
     }

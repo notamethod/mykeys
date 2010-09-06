@@ -10,7 +10,7 @@ import javax.swing.tree.TreeCellRenderer;
 
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
-import org.app.KeyStoreInfo.StoreType;
+import org.app.KeyStoreInfo.StoreModel;
 
 public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 	TreeCellRenderer {
@@ -33,7 +33,7 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 		if (kInfo.isOpen()) {
 		    ImageIcon icon = null;
 		    // setTextNonSelectionColor( Color.green);
-		    switch (kInfo.getStoreType()) {
+		    switch (kInfo.getStoreModel()) {
 		    case CERTSTORE:
 			icon = createImageIcon("images/keystoreblueo.png");
 			break;
@@ -54,7 +54,7 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 		else{
 		    ImageIcon icon = null;
 		    // setTextNonSelectionColor( Color.green);
-		    switch (kInfo.getStoreType()) {
+		    switch (kInfo.getStoreModel()) {
 		    case CERTSTORE:
 			icon = createImageIcon("images/keystoreblue.png");
 			break;
