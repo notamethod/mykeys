@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -20,20 +21,25 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.CRLException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
+import javax.security.auth.x500.X500Principal;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -43,9 +49,10 @@ import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
-import org.bouncycastle.asn1.DERString;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
+import org.bouncycastle.asn1.x509.CRLNumber;
+import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.asn1.x509.DisplayText;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.DistributionPointName;
@@ -61,6 +68,7 @@ import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.provider.X509CertificateObject;
+import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
@@ -93,11 +101,47 @@ public class KeyTools {
 	// test.createKeyStore("JKS");
 	// test.createKeyStore(TYPE_P12, "keystorePub.p12");
 	Security.addProvider(new BouncyCastleProvider());
-	Set aa = Security.getProvider("BC").getServices();
-	Object o = Security.getProvider("BC").get("Signature");
-
-	Set bb = Security.getProvider("BC").keySet();
-	Set cc = Security.getProvider("BC").getServices();
+	try {
+	    test.generateCrl2();
+	} catch (UnrecoverableKeyException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (InvalidKeyException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (KeyStoreException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (NoSuchProviderException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (NoSuchAlgorithmException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (CertificateException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (CRLException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (IllegalStateException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (SignatureException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (KeyToolsException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	// Set aa = Security.getProvider("BC").getServices();
+	// Object o = Security.getProvider("BC").get("Signature");
+	//
+	// Set bb = Security.getProvider("BC").keySet();
+	// Set cc = Security.getProvider("BC").getServices();
 
     }
 
@@ -146,15 +190,16 @@ public class KeyTools {
     /**
      * Create a keystore of type 'ksType' with filename 'name'
      * 
-     * @param ksType
+     * @param format
+     *            .toString()
      * @param name
      * @param password
      * @throws Exception
      */
-    public void createKeyStore(String ksType, String name, char[] password)
+    public void createKeyStore(StoreFormat format, String name, char[] password)
 	    throws Exception {
 	try {
-	    KeyStore ks = KeyStore.getInstance(ksType);
+	    KeyStore ks = KeyStore.getInstance(format.toString());
 
 	    ks.load(null, password);
 	    OutputStream fos = new FileOutputStream(new File(name));
@@ -173,7 +218,40 @@ public class KeyTools {
 	KeyStore ks = null;
 	try {
 	    try {
-		ks = KeyStore.getInstance(type);
+		ks = KeyStore.getInstance(type, "BC");
+	    } catch (Exception e) {
+		ks = KeyStore.getInstance("JKS");
+	    }
+
+	    // get user password and file input stream
+
+	    java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
+	    ks.load(fis, pwd);
+	    fis.close();
+	} catch (KeyStoreException e) {
+	    throw new KeyToolsException("Echec du chargement de:" + ksName, e);
+
+	} catch (FileNotFoundException e) {
+	    throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
+	} catch (NoSuchAlgorithmException e) {
+	    throw new KeyToolsException("Format inconnu:" + ksName, e);
+	} catch (CertificateException e) {
+	    throw new KeyToolsException("Echec du chargement de:" + ksName, e);
+	} catch (IOException e) {
+	    throw new KeyToolsException("Echec du chargement de:" + ksName, e);
+	}
+	return ks;
+
+    }
+
+    public KeyStore loadKeyStore2(String ksName, String type, char[] pwd)
+	    throws KeyToolsException {
+	// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+
+	KeyStore ks = null;
+	try {
+	    try {
+		ks = KeyStore.getInstance(type, "BC");
 	    } catch (Exception e) {
 		ks = KeyStore.getInstance("JKS");
 	    }
@@ -397,16 +475,16 @@ public class KeyTools {
     @Deprecated
     public void addCertToKeyStore(X509Certificate cert, KeyStoreInfo ksInfo,
 	    CertificateInfo certInfo) throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-		ksInfo.getPassword());
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo
+		.getStoreFormat(), ksInfo.getPassword());
 	saveCert(kstore, cert, certInfo);
 	saveKeyStore(kstore, ksInfo);
     }
 
     public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo,
 	    CertificateInfo certInfo) throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-		ksInfo.getPassword());
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo
+		.getStoreFormat(), ksInfo.getPassword());
 	saveCertChain(kstore, cert, certInfo);
 	saveKeyStore(kstore, ksInfo);
     }
@@ -414,8 +492,8 @@ public class KeyTools {
     public void addCertToKeyStoreNew(X509Certificate[] xCerts,
 	    KeyStoreInfo ksInfo, CertificateInfo certInfo)
 	    throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-		ksInfo.getPassword());
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo
+		.getStoreFormat(), ksInfo.getPassword());
 	saveCertChain(kstore, xCerts, certInfo);
 	saveKeyStore(kstore, ksInfo);
     }
@@ -742,8 +820,8 @@ public class KeyTools {
 	/* save the private key in a file */
 
 	try {
-	    KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-		    ksInfo.getPassword());
+	    KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo
+		    .getStoreFormat(), ksInfo.getPassword());
 	    PrivateKey privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
 		    password);
 	    byte[] privKey = privateKey.getEncoded();
@@ -882,17 +960,20 @@ public class KeyTools {
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
+     *<BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
      *    
-     *FIN</pre>
-     *
+     * FIN
+     * </pre>
+     * 
      * @param path
      * @param storeFormat
      * @param password
      * @return
-     * @throws KeyToolsException 
+     * @throws KeyToolsException
      */
     public KeyStore loadKeyStore(String path, StoreFormat storeFormat,
 	    char[] password) throws KeyToolsException {
@@ -900,114 +981,77 @@ public class KeyTools {
 	return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
     }
 
-    // algorithms.put("MD2WITHRSAENCRYPTION", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.2"));
-    // algorithms.put("MD2WITHRSA", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.2"));
-    // algorithms.put("MD5WITHRSAENCRYPTION", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.4"));
-    // algorithms.put("MD5WITHRSA", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.4"));
-    // algorithms.put("RSAWITHMD5", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.4"));
-    // algorithms.put("SHA1WITHRSAENCRYPTION", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.5"));
-    // algorithms.put("SHA1WITHRSA", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.5"));
-    // algorithms.put("SHA224WITHRSAENCRYPTION",
-    // PKCSObjectIdentifiers.sha224WithRSAEncryption);
-    // algorithms.put("SHA224WITHRSA",
-    // PKCSObjectIdentifiers.sha224WithRSAEncryption);
-    // algorithms.put("SHA256WITHRSAENCRYPTION",
-    // PKCSObjectIdentifiers.sha256WithRSAEncryption);
-    // algorithms.put("SHA256WITHRSA",
-    // PKCSObjectIdentifiers.sha256WithRSAEncryption);
-    // algorithms.put("SHA384WITHRSAENCRYPTION",
-    // PKCSObjectIdentifiers.sha384WithRSAEncryption);
-    // algorithms.put("SHA384WITHRSA",
-    // PKCSObjectIdentifiers.sha384WithRSAEncryption);
-    // algorithms.put("SHA512WITHRSAENCRYPTION",
-    // PKCSObjectIdentifiers.sha512WithRSAEncryption);
-    // algorithms.put("SHA512WITHRSA",
-    // PKCSObjectIdentifiers.sha512WithRSAEncryption);
-    // algorithms.put("SHA1WITHRSAANDMGF1",
-    // PKCSObjectIdentifiers.id_RSASSA_PSS);
-    // algorithms.put("SHA224WITHRSAANDMGF1",
-    // PKCSObjectIdentifiers.id_RSASSA_PSS);
-    // algorithms.put("SHA256WITHRSAANDMGF1",
-    // PKCSObjectIdentifiers.id_RSASSA_PSS);
-    // algorithms.put("SHA384WITHRSAANDMGF1",
-    // PKCSObjectIdentifiers.id_RSASSA_PSS);
-    // algorithms.put("SHA512WITHRSAANDMGF1",
-    // PKCSObjectIdentifiers.id_RSASSA_PSS);
-    // algorithms.put("RSAWITHSHA1", new
-    // DERObjectIdentifier("1.2.840.113549.1.1.5"));
-    // algorithms.put("RIPEMD160WITHRSAENCRYPTION", new
-    // DERObjectIdentifier("1.3.36.3.3.1.2"));
-    // algorithms.put("RIPEMD160WITHRSA", new
-    // DERObjectIdentifier("1.3.36.3.3.1.2"));
-    // algorithms.put("SHA1WITHDSA", new
-    // DERObjectIdentifier("1.2.840.10040.4.3"));
-    // algorithms.put("DSAWITHSHA1", new
-    // DERObjectIdentifier("1.2.840.10040.4.3"));
-    // algorithms.put("SHA224WITHDSA", NISTObjectIdentifiers.dsa_with_sha224);
-    // algorithms.put("SHA256WITHDSA", NISTObjectIdentifiers.dsa_with_sha256);
-    // algorithms.put("SHA1WITHECDSA", X9ObjectIdentifiers.ecdsa_with_SHA1);
-    // algorithms.put("SHA224WITHECDSA", X9ObjectIdentifiers.ecdsa_with_SHA224);
-    // algorithms.put("SHA256WITHECDSA", X9ObjectIdentifiers.ecdsa_with_SHA256);
-    // algorithms.put("SHA384WITHECDSA", X9ObjectIdentifiers.ecdsa_with_SHA384);
-    // algorithms.put("SHA512WITHECDSA", X9ObjectIdentifiers.ecdsa_with_SHA512);
-    // algorithms.put("ECDSAWITHSHA1", X9ObjectIdentifiers.ecdsa_with_SHA1);
-    // algorithms.put("GOST3411WITHGOST3410",
-    // CryptoProObjectIdentifiers.gostR3411_94_with_gostR3410_94);
-    // algorithms.put("GOST3410WITHGOST3411",
-    // CryptoProObjectIdentifiers.gostR3411_94_with_gostR3410_94);
-    // algorithms.put("GOST3411WITHECGOST3410",
-    // CryptoProObjectIdentifiers.gostR3411_94_with_gostR3410_2001);
-    // algorithms.put("GOST3411WITHECGOST3410-2001",
-    // CryptoProObjectIdentifiers.gostR3411_94_with_gostR3410_2001);
-    // algorithms.put("GOST3411WITHGOST3410-2001",
-    // CryptoProObjectIdentifiers.gostR3411_94_with_gostR3410_2001);
+    public X509CRL generateCrl(X509Certificate certSign, CrlInfo crlInfo,
+	    Key privateKey) throws KeyStoreException, NoSuchProviderException,
+	    NoSuchAlgorithmException, CertificateException, IOException,
+	    UnrecoverableKeyException, InvalidKeyException, CRLException,
+	    IllegalStateException, SignatureException {
 
-    // 2.16.840.1.114412.1.3.0.27
+	Calendar calendar = Calendar.getInstance();
 
-    // [5]: ObjectId: 2.5.29.32 Criticality=false
-    // CertificatePolicies [
-    // [CertificatePolicyId: [2.16.840.1.114412.1.3.0.1]
-    // [PolicyQualifierInfo: [
-    // qualifierID: 1.3.6.1.5.5.7.2.1 //cps
-    // qualifier: 0000: 16 2E 68 74 74 70 3A 2F 2F 77 77 77 2E 64 69 67
-    // ..http://www.dig
-    // 0010: 69 63 65 72 74 2E 63 6F 6D 2F 73 73 6C 2D 63 70 icert.com/ssl-cp
-    // 0020: 73 2D 72 65 70 6F 73 69 74 6F 72 79 2E 68 74 6D s-repository.htm
-    //
-    // ], PolicyQualifierInfo: [
-    // qualifierID: 1.3.6.1.5.5.7.2.2
-    // qualifier: 0000: 30 82 01 56 1E 82 01 52 00 41 00 6E 00 79 00 20
-    // 0..V...R.A.n.y.
-    // 0010: 00 75 00 73 00 65 00 20 00 6F 00 66 00 20 00 74 .u.s.e. .o.f. .t
-    // 0020: 00 68 00 69 00 73 00 20 00 43 00 65 00 72 00 74 .h.i.s. .C.e.r.t
-    // 0030: 00 69 00 66 00 69 00 63 00 61 00 74 00 65 00 20 .i.f.i.c.a.t.e.
-    // 0040: 00 63 00 6F 00 6E 00 73 00 74 00 69 00 74 00 75 .c.o.n.s.t.i.t.u
-    // 0050: 00 74 00 65 00 73 00 20 00 61 00 63 00 63 00 65 .t.e.s. .a.c.c.e
-    // 0060: 00 70 00 74 00 61 00 6E 00 63 00 65 00 20 00 6F .p.t.a.n.c.e. .o
-    // 0070: 00 66 00 20 00 74 00 68 00 65 00 20 00 44 00 69 .f. .t.h.e. .D.i
-    // 0080: 00 67 00 69 00 43 00 65 00 72 00 74 00 20 00 43 .g.i.C.e.r.t. .C
-    // 0090: 00 50 00 2F 00 43 00 50 00 53 00 20 00 61 00 6E .P./.C.P.S. .a.n
-    // 00A0: 00 64 00 20 00 74 00 68 00 65 00 20 00 52 00 65 .d. .t.h.e. .R.e
-    // 00B0: 00 6C 00 79 00 69 00 6E 00 67 00 20 00 50 00 61 .l.y.i.n.g. .P.a
-    // 00C0: 00 72 00 74 00 79 00 20 00 41 00 67 00 72 00 65 .r.t.y. .A.g.r.e
-    // 00D0: 00 65 00 6D 00 65 00 6E 00 74 00 20 00 77 00 68 .e.m.e.n.t. .w.h
-    // 00E0: 00 69 00 63 00 68 00 20 00 6C 00 69 00 6D 00 69 .i.c.h. .l.i.m.i
-    // 00F0: 00 74 00 20 00 6C 00 69 00 61 00 62 00 69 00 6C .t. .l.i.a.b.i.l
-    // 0100: 00 69 00 74 00 79 00 20 00 61 00 6E 00 64 00 20 .i.t.y. .a.n.d.
-    // 0110: 00 61 00 72 00 65 00 20 00 69 00 6E 00 63 00 6F .a.r.e. .i.n.c.o
-    // 0120: 00 72 00 70 00 6F 00 72 00 61 00 74 00 65 00 64 .r.p.o.r.a.t.e.d
-    // 0130: 00 20 00 68 00 65 00 72 00 65 00 69 00 6E 00 20 . .h.e.r.e.i.n.
-    // 0140: 00 62 00 79 00 20 00 72 00 65 00 66 00 65 00 72 .b.y. .r.e.f.e.r
-    // 0150: 00 65 00 6E 00 63 00 65 00 2E .e.n.c.e..
-    //
-    // ]] ]
-    // ]
+	X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
+
+	Date now = new Date();
+	Date nextUpdate = calendar.getTime();
+
+	//crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
+	crlGen.setIssuerDN(certSign
+		    .getSubjectX500Principal());	
+	String signAlgo = "SHA1WITHRSAENCRYPTION";
+	crlGen.setThisUpdate(crlInfo.getThisUpdate());
+	crlGen.setNextUpdate(crlInfo.getNextUpdate());
+	crlGen.setSignatureAlgorithm(signAlgo);
+	// BigInteger bi = new BigInteger("816384897");
+	// crlGen.addCRLEntry(BigInteger.ONE, now,
+	// CRLReason.privilegeWithdrawn);
+	BigInteger bi = new BigInteger("155461028");
+	crlGen.addCRLEntry(bi, new Date(),
+		CRLReason.privilegeWithdrawn);
+
+	crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
+		new AuthorityKeyIdentifierStructure(certSign));
+	crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
+		crlInfo.getNumber()));
+
+	X509CRL crl = crlGen.generate((PrivateKey) privateKey, "BC");
+	// OutputStream os = new FileOutputStream(new
+	// File("./certificats/crlrevoke.crl"));
+	// os.write(crl.getEncoded());
+	return crl;
+
+    }
+
+    public void revokeCert(X509Certificate cert, X509CRL crl)
+	    throws KeyStoreException, NoSuchProviderException,
+	    NoSuchAlgorithmException, CertificateException, IOException,
+	    UnrecoverableKeyException, InvalidKeyException, CRLException,
+	    IllegalStateException, SignatureException, KeyToolsException {
+
+	// crl.
+
+    }
+
+    public void generateCrl2() throws KeyStoreException,
+	    NoSuchProviderException, NoSuchAlgorithmException,
+	    CertificateException, IOException, UnrecoverableKeyException,
+	    InvalidKeyException, CRLException, IllegalStateException,
+	    SignatureException, KeyToolsException {
+
+	String kst = "C:/Documents and Settings/n096015/.myKeys/ACKS.jks";
+	char[] password = "mKeys983178".toCharArray();
+	KeyStore ks = loadKeyStore(kst, StoreFormat.JKS, password);
+	CertificateInfo cinfo = new CertificateInfo();
+	fillCertInfo(ks, cinfo, "tessi dev root ca");
+	Calendar nextupdate = Calendar.getInstance();
+	CrlInfo crlInfo = new CrlInfo();
+	nextupdate.add(Calendar.DAY_OF_YEAR, 15);
+	crlInfo.setNextUpdate(nextupdate.getTime());
+	Key key = ks.getKey("tessi dev root ca", password);
+	X509CRL crl = generateCrl(cinfo.getCertificate(), crlInfo, key);
+	OutputStream os = new FileOutputStream("c:/dev/crl1.crl");
+	os.write(crl.getEncoded());
+	os.close();
+
+    }
 
 }

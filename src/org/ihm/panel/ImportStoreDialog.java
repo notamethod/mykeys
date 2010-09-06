@@ -21,6 +21,8 @@ import javax.swing.filechooser.FileFilter;
 
 import org.app.KSConfig;
 import org.app.KeyTools;
+import org.app.KeyStoreInfo.StoreFormat;
+import org.app.KeyStoreInfo.StoreType;
 import org.ihm.KeyStoreUI;
 import org.ihm.tools.JFieldsPanel;
 import org.ihm.tools.LabelValuePanel;
@@ -137,10 +139,14 @@ public class ImportStoreDialog extends JDialog {
 		    if (elements.get("typeKS").equals("auto")) {
 			typeKS = findTypeKS(tfDirectory.getText());
 		    }
-		    kt.loadKeyStore(tfDirectory.getText(), typeKS,
+		    StoreFormat format = StoreFormat.valueOf((String)elements.get("typeKS"));
+		    kt.loadKeyStore(tfDirectory.getText(), format,
 			    ((String) elements.get("pwd1")).toCharArray());
-		    KSConfig.getUserCfg().addProperty("magasin." + typeKS,
-			    tfDirectory.getText());
+//		    KSConfig.getUserCfg().addProperty("magasin." + typeKS,
+//			    tfDirectory.getText());
+		    KSConfig.getUserCfg().addProperty(
+			    "store." +StoreType.CERTSTORE+"." + format.toString(),
+			    tfDirectory.getText());		    
 		    ((KeyStoreUI) ImportStoreDialog.this.getParent())
 			    .updateKeyStoreList();
 		    ImportStoreDialog.this.setVisible(false);

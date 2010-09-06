@@ -1,5 +1,6 @@
 package org.ihm;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -109,7 +110,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 
     public static void removeKeyStore(String path) {
 
-	Iterator iter = KSConfig.getUserCfg().getKeys("magasin");
+	Iterator iter = KSConfig.getUserCfg().getKeys(KSConfig.STORE_PREFIX);
 	boolean update = false;
 	Map<String, HashMap> typesKS = new HashMap<String, HashMap>();
 	while (iter.hasNext()) {
@@ -220,16 +221,20 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 
     private void buildComponents() {
 	p = new JPanel(new FlowLayout(FlowLayout.LEADING));
-	// p.setBackground(new Color(125, 0, 0));
+	 p.setBackground(new Color(125, 0, 0));
 	// menu
 	buildMenu();
 
-	this.getContentPane().add(p);
+	this.getContentPane().setBackground(new Color(0, 125, 0));
+	//this.getContentPane().add(p);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+	this.getContentPane().setLayout(new FlowLayout(FlowLayout.LEADING));
 	mainPanel = new TreeKeyStore(null);
-	p.add(mainPanel);
+	this.getContentPane().add(mainPanel);
+	this.getContentPane().getMaximumSize();
+	//p.add(mainPanel);
 	// p.add(new DetailPanel());
+	this.getContentPane().getSize();
 
     }
 

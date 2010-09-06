@@ -33,6 +33,7 @@ import org.app.ACKeystore;
 import org.app.KSConfig;
 import org.app.KeyTools;
 import org.app.ProviderUtil;
+import org.app.KeyStoreInfo.StoreFormat;
 import org.app.KeyStoreInfo.StoreType;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.ihm.panel.CreateStoreDialog;
@@ -161,7 +162,7 @@ public class MyKeys {
 	String pwd = ACKeystore.password;
 	
 	try {
-	    kt.createKeyStore("JKS",
+	    kt.createKeyStore(StoreFormat.JKS,
 		    path, pwd.toCharArray());
 	    ACKeystore.path=path;
 	    return path;

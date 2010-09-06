@@ -75,7 +75,7 @@ public class DetailPanel extends JPanel {
 	infosPanel.put("Fin validité", JLabel.class, "notAfter", info
 		.getNotAfter().toString(), false);
 	infosPanel.putEmptyLine();
-
+	infosPanel.put("Numéro de série", JLabel.class, "numser",info.getCertificate().getSerialNumber().toString(), false);	
 	infosPanel.put("Emetteur", JLabel.class, "emetteur",info.getCertificate().getIssuerX500Principal().toString(), false);	
 	if (info.getSubjectMap() != null) {
 	    Iterator<String> iter = info.getSubjectMap().keySet().iterator();

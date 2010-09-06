@@ -21,6 +21,8 @@ import javax.swing.filechooser.FileFilter;
 
 import org.app.KSConfig;
 import org.app.KeyTools;
+import org.app.KeyStoreInfo.StoreFormat;
+import org.app.KeyStoreInfo.StoreType;
 import org.ihm.KeyStoreUI;
 import org.ihm.tools.JFieldsPanel;
 import org.ihm.tools.LabelValuePanel;
@@ -143,11 +145,12 @@ public class CreateStoreDialog extends JDialog {
 		}
 		KeyTools kt = new KeyTools();
 		try {
-		    kt.createKeyStore((String) elements.get("typeKS"),
+		    StoreFormat format = StoreFormat.valueOf((String)elements.get("typeKS"));
+		    kt.createKeyStore(format,
 			    tfDirectory.getText(), ((String) elements
 				    .get("pwd1")).toCharArray());
 		    KSConfig.getUserCfg().addProperty(
-			    "magasin." + elements.get("typeKS"),
+			    "store." +StoreType.CERTSTORE+"." + format.toString(),
 			    tfDirectory.getText());
 		    ((KeyStoreUI) CreateStoreDialog.this.getParent())
 			    .updateKeyStoreList();

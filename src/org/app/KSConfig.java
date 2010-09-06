@@ -19,6 +19,8 @@ public class KSConfig {
     static String defaultFileName = "default.properties";
 
     public static String cfgPathName = ".myKeys";
+    
+    public static final String STORE_PREFIX="store";
 
     static String path;
 
