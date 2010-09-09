@@ -39,7 +39,6 @@ import java.awt.event.MouseListener;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.Certificate;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,6 +46,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -98,9 +98,8 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     TreePopupMenu popup;
 
     public TreeKeyStore(Dimension dim) {
-	// super(new GridLayout(1, 0));
-	// super(new GridLayout(1, 0));
-	// this.setPreferredSize(new Dimension(840, 600));
+	this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
 	// Create the nodes.
 	rootNode = new DefaultMutableTreeNode("Magasins");
 	acNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
@@ -111,11 +110,9 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	// cliNode = new DefaultMutableTreeNode(new KeyStoreInfo("aa", "bb",
 	// StoreType.CASTORE, StoreFormat.JKS));
 
-	// createNodes(rootNode);
 	treeModel = new DefaultTreeModel(rootNode);
 	treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
 
-	// Create a tree that allows one selection at a time.
 	tree = new JTree(treeModel);
 	TooltipTreeRenderer renderer = new TooltipTreeRenderer();
 
@@ -126,10 +123,6 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 		TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 	popup = new TreePopupMenu("Popup name", this);
-	// Set the icon for leaf nodes.
-
-	// Listen for when the selection changes.
-	// tree.addTreeSelectionListener(this);
 
 	treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
 	treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
@@ -140,40 +133,20 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	tree.addTreeWillExpandListener(this);
 	tree.addTreeExpansionListener(this);
 
-	// Make sure the user can see the lovely new node.
-	// if (shouldBeVisible) {
-	// tree.scrollPathToVisible(new TreePath(childNode.getPath()));
-	// }
 	// Create the scroll pane and add the tree to it.
 	JScrollPane treeView = new JScrollPane(tree);
-
-	// Create the HTML viewing pane.
+	// Create the viewing pane.
 	detailPanel = new DetailPanel();
-
-	// initHelp();
 	JScrollPane scrollDetail = new JScrollPane(detailPanel);
-
 	// Add the scroll panes to a split pane.
 	JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	splitPane.setTopComponent(treeView);
 	splitPane.setBottomComponent(scrollDetail);
-
-	// Dimension minimumSize = new Dimension(340, 300);
-	// Dimension minimumSize2 = new Dimension(180, 300);
-	// scrollDetail.setMinimumSize(minimumSize);
-	// treeView.setMinimumSize(minimumSize2);
-	// splitPane.setDividerLocation(210); // XXX: ignored in some releases
-	// of Swing. bug 4101306
-	// workaround for bug 4101306:
-	// treeView.setPreferredSize(new Dimension(100, 100));
-
-	splitPane.setPreferredSize(new Dimension(800, 580));
+	splitPane.setDividerLocation(210);
 
 	// Add the split pane to this panel.
-	// getParent().getPreferredSize();
 	add(splitPane);
-	// add(treeView);
-	// add(scrollDetail);
+
     }
 
     private void displayCertDetail(CertificateInfo info) {
@@ -294,31 +267,18 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     public boolean openStore(DefaultMutableTreeNode node,
 	    boolean useInternalPwd, boolean expand) {
 	KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
-	if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { //equals(StoreModel.CASTORE)) {
-	   
+	if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { // equals(StoreModel.CASTORE))
+								// {
+
 	    useInternalPwd = true;
 	}
 	// ask for password
 	if (!useInternalPwd) {
 	    char[] password = KeyStoreUI.showPasswordDialog(this);
-	    // JPasswordField jpf = new JPasswordField(30);
-	    // jpf.requestFocus();
-	    // JPanel messagePanel = new JPanel();
-	    // // messagePanel.setLayout(new BoxLayout(messagePanel,
-	    // BoxLayout.Y_AXIS));
-	    // messagePanel.add(new JLabel("Mot de passe:"));
-	    // messagePanel.add(jpf);
-	    // int ret = JOptionPane.showConfirmDialog( this, messagePanel,
-	    // "Mot de passe du magasin",JOptionPane.OK_CANCEL_OPTION);
-	    // if (ret!=JOptionPane.OK_OPTION||jpf.getPassword().length==0){
-	    // return false;
-	    // }
+
 	    if (password == null || password.length == 0) {
 		return false;
 	    }
-	    // String pwd = (String) JOptionPane.showInputDialog(
-	    // TreeKeyStore.this, "Mot de passe du magasin",
-	    // "Mot de passe", JOptionPane.PLAIN_MESSAGE);
 
 	    ksInfo.setPassword(password);
 

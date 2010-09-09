@@ -13,6 +13,7 @@ import javax.swing.tree.TreePath;
 
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
+import org.app.KeyStoreInfo.StoreType;
 import org.ihm.KeyStoreUI;
 import org.ihm.MyKeys;
 import org.ihm.TreeKeyStore;
@@ -207,6 +208,7 @@ public class TreePopupMenu extends JPopupMenu {
 	    } else {
 		openStore.setVisible(true);
 	    }
+	    if (!ksInfo.getStoreType().equals(StoreType.INTERNAL))
 	    removeStore.setVisible(true);
 
 	} else if (node.getUserObject() instanceof CertificateInfo) {

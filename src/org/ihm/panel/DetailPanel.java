@@ -1,5 +1,7 @@
 package org.ihm.panel;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 
@@ -37,11 +39,15 @@ public class DetailPanel extends JPanel {
 
     private void init() {
 	dAction = new ActionPanel();
+	//setBackground(new Color(125,0,0));
 	BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
 	this.setLayout(bl);
+	
 	titre = new JLabel("Gestion des certificats");
 	// add(titre);
 	jp = new JPanel();
+
+	jp.setLayout(new FlowLayout(FlowLayout.LEADING));
 
 	add(jp);
 	// jp.add();

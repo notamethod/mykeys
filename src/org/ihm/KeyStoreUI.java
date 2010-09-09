@@ -1,9 +1,8 @@
 package org.ihm;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -65,7 +64,8 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	    // Get size
 	    Dimension dimension = toolkit.getScreenSize();
 
-	 this.setPreferredSize(dimension);
+	 //this.setPreferredSize(dimension);
+	    this.setPreferredSize(new Dimension(960,650));
 	// this.setResizable(false);
 
 	// setNbCols(4);
@@ -76,8 +76,9 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     private void init() {
 	initLookAndFeel();
 	this.addWindowListener(this);
-	this.setSize(this.getPreferredSize());
 	buildComponents();
+	this.setSize(this.getPreferredSize());
+
 	updateKeyStoreList();
 	// this.setBackground(new Color(125, 0, 0));
 	this.pack();
@@ -220,21 +221,19 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     }
 
     private void buildComponents() {
-	p = new JPanel(new FlowLayout(FlowLayout.LEADING));
-	 p.setBackground(new Color(125, 0, 0));
+	p = new JPanel();
+	p.setLayout(new GridLayout(1,0));
+	 this.setLayout(new GridLayout(1,0));
 	// menu
 	buildMenu();
 
-	this.getContentPane().setBackground(new Color(0, 125, 0));
-	//this.getContentPane().add(p);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	this.getContentPane().setLayout(new FlowLayout(FlowLayout.LEADING));
-	mainPanel = new TreeKeyStore(null);
-	this.getContentPane().add(mainPanel);
+	mainPanel = new TreeKeyStore(this.getPreferredSize());
+	this.getContentPane().add(p);
 	this.getContentPane().getMaximumSize();
-	//p.add(mainPanel);
-	// p.add(new DetailPanel());
-	this.getContentPane().getSize();
+	p.add(mainPanel); 
+	System.out.println(this.getMaximizedBounds());
+
 
     }
 
