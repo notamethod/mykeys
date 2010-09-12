@@ -3,11 +3,13 @@ package org.ihm;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -78,12 +80,22 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	this.addWindowListener(this);
 	buildComponents();
 	this.setSize(this.getPreferredSize());
-
+	this.setIconImages(createIConAppli());
 	updateKeyStoreList();
 	// this.setBackground(new Color(125, 0, 0));
 	this.pack();
 	this.setVisible(true);
 
+    }
+
+    private static List<? extends Image> createIConAppli() {
+	List<Image> images = new ArrayList<Image>();
+	//URL imgURL = null;
+	images.add(Toolkit.getDefaultToolkit().getImage(TreeKeyStore.class.getResource("images/mkico24.png")));
+	images.add(Toolkit.getDefaultToolkit().getImage(TreeKeyStore.class.getResource("images/mkico32.png")));
+	images.add(Toolkit.getDefaultToolkit().getImage(TreeKeyStore.class.getResource("images/mkico48.png")));
+
+	return images;
     }
 
     private void initLookAndFeel() {
@@ -378,5 +390,15 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	    return null;
 	}
     }
+    protected static Image createImage(String path) {
+	java.net.URL imgURL = TreeKeyStore.class.getResource(path);
+	
+	if (imgURL != null) {
+	    return Toolkit.getDefaultToolkit().getImage(imgURL);
+	} else {
+	    System.err.println("Couldn't find file: " + path);
+	    return null;
+	}
+    }    
 
 }
