@@ -8,6 +8,7 @@ import java.io.File;
 import org.app.KeyStoreInfo.StoreFormat;
 import org.app.KeyStoreInfo.StoreModel;
 import org.app.KeyStoreInfo.StoreType;
+import org.ihm.MyKeys;
 
 
 public class InternalKeystores {
@@ -51,8 +52,8 @@ public class InternalKeystores {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
-	}
-	kinfo =  new KeyStoreInfo("interne", InternalKeystores.getACPath(), StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
+	} 
+	kinfo =  new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getACPath(), StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
 	kinfo.setPassword(InternalKeystores.password.toCharArray());
 	return kinfo;   
     }
@@ -72,7 +73,7 @@ public class InternalKeystores {
 		e.printStackTrace();
 	    }
 	}
-	kinfo =  new KeyStoreInfo("interne", InternalKeystores.getCertPath(), StoreModel.CERTSTORE, StoreFormat.JKS, StoreType.INTERNAL);
+	kinfo =  new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getCertPath(), StoreModel.CERTSTORE, StoreFormat.JKS, StoreType.INTERNAL);
 	kinfo.setPassword(InternalKeystores.password.toCharArray());
 	return kinfo;   
     }    

@@ -62,27 +62,27 @@ public class DetailPanel extends JPanel {
 	    return;
 	}
 	certificatInfo = info;
-	titre.setText("Information sur le certificat");
+	titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
 	infosPanel = new LabelValuePanel();
-	infosPanel.put("Alias (nom du certificat)", JLabel.class, "", info
+	infosPanel.put(MyKeys.getMessage().getString("x509.alias"), JLabel.class, "", info
 		.getAlias(), false);
 	infosPanel.putEmptyLine();
-	infosPanel.put("Taille clé publique", JLabel.class, "keyLength", String
+	infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), JLabel.class, "keyLength", String
 		.valueOf(info.getKeyLength()), false);
-	infosPanel.put("Algorithme clé publique", JLabel.class, "algoPubKey",
+	infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), JLabel.class, "algoPubKey",
 		info.getAlgoPubKey(), false);
 	// infosPanel.put("Clé publique", JTextArea.class, "pubKey",
 	// X509Util.toHexString(info.getPublicKey().getEncoded()," ",
 	// false),false);
-	infosPanel.put("Algorithme de signature", JLabel.class, "algoSig", info
+	infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), JLabel.class, "algoSig", info
 		.getAlgoSig(), false);
-	infosPanel.put("Début validité", JLabel.class, "notBefore", info
+	infosPanel.put(MyKeys.getMessage().getString("x509.startdate"), JLabel.class, "notBefore", info
 		.getNotBefore().toString(), false);
-	infosPanel.put("Fin validité", JLabel.class, "notAfter", info
+	infosPanel.put(MyKeys.getMessage().getString("x509.enddate"), JLabel.class, "notAfter", info
 		.getNotAfter().toString(), false);
 	infosPanel.putEmptyLine();
-	infosPanel.put("Numéro de série", JLabel.class, "numser",info.getCertificate().getSerialNumber().toString(), false);	
-	infosPanel.put("Emetteur", JLabel.class, "emetteur",info.getCertificate().getIssuerX500Principal().toString(), false);	
+	infosPanel.put(MyKeys.getMessage().getString("x509.serial"), JLabel.class, "numser",info.getCertificate().getSerialNumber().toString(), false);	
+	infosPanel.put(MyKeys.getMessage().getString("x509.issuer"), JLabel.class, "emetteur",info.getCertificate().getIssuerX500Principal().toString(), false);	
 	if (info.getSubjectMap() != null) {
 	    Iterator<String> iter = info.getSubjectMap().keySet().iterator();
 	    while (iter.hasNext()) {

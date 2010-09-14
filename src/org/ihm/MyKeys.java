@@ -70,6 +70,8 @@ public class MyKeys {
 
     private void init() {
 
+	
+	//Locale.setDefault(Locale.ENGLISH); 
 	Locale currentLocale = Locale.getDefault();
 	try {
 	    messages = ResourceBundle.getBundle("org.config.Messages",

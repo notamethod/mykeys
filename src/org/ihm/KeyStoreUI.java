@@ -59,7 +59,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
      * Constructeur
      */
     public KeyStoreUI() {
-	super("My Keys");
+	super("mykeys");
 	 // Get toolkit
 	    Toolkit toolkit = Toolkit.getDefaultToolkit();
 
@@ -168,8 +168,8 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	// menu
 	JMenuBar menuBar = new JMenuBar();
 	JMenu menu1 = new JMenu(MyKeys.getMessage().getString("magasin"));
-	ImageIcon icon = createImageIcon("images/keystore.png");
-	menu1.setIcon(icon);
+//	ImageIcon icon = createImageIcon("images/keystore.png");
+//	menu1.setIcon(icon);
 	JMenuItem itemStart1 = new JMenuItem(new MenuAction(this, MyKeys
 		.getMessage().getString("magasin.new")));
 	itemStart1.setActionCommand("newStore");
