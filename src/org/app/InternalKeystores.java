@@ -52,9 +52,10 @@ public class InternalKeystores {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
-	} 
+	}
 	kinfo =  new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getACPath(), StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
 	kinfo.setPassword(InternalKeystores.password.toCharArray());
+	kinfo.setOpen(true);
 	return kinfo;   
     }
     
@@ -75,6 +76,7 @@ public class InternalKeystores {
 	}
 	kinfo =  new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getCertPath(), StoreModel.CERTSTORE, StoreFormat.JKS, StoreType.INTERNAL);
 	kinfo.setPassword(InternalKeystores.password.toCharArray());
+	kinfo.setOpen(true);
 	return kinfo;   
     }    
 

@@ -78,12 +78,15 @@ import org.ihm.panel.CreateCertificatDialog;
 import org.ihm.panel.DetailPanel;
 import org.ihm.panel.ExportCertificateDialog;
 import org.ihm.panel.ImportCertificateDialog;
+import org.ihm.panel.ListPanel;
 
 public class TreeKeyStore extends JPanel implements MouseListener,
 	TreeExpansionListener, TreeWillExpandListener {
 
     final static Log log = LogFactory.getLog(TreeKeyStore.class);
     private DetailPanel detailPanel;
+    
+    private ListPanel listePanel;
 
     private JTree tree;
 
@@ -135,15 +138,21 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
 	// Create the scroll pane and add the tree to it.
 	JScrollPane treeView = new JScrollPane(tree);
+	JPanel leftPanel = new JPanel();
+	listePanel = new ListPanel();
+	JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	// Create the viewing pane.
 	detailPanel = new DetailPanel();
 	JScrollPane scrollDetail = new JScrollPane(detailPanel);
+	splitLeftPanel.setBottomComponent(scrollDetail);
+	splitLeftPanel.setTopComponent(listePanel);
 	// Add the scroll panes to a split pane.
 	JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	splitPane.setTopComponent(treeView);
-	splitPane.setBottomComponent(scrollDetail);
+	splitPane.setBottomComponent(splitLeftPanel);
 	splitPane.setDividerLocation(210);
-
+	
+	
 	// Add the split pane to this panel.
 	add(splitPane);
 
@@ -154,6 +163,21 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
     }
 
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @param ksiInfo
+     */
+    private void displayKeystoreList(KeyStoreInfo info) {
+	listePanel.updateInfo(info);
+	
+    }    
     /**
      * Update nodes with keystores list
      * 
@@ -269,7 +293,6 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
 	if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { // equals(StoreModel.CASTORE))
 								// {
-
 	    useInternalPwd = true;
 	}
 	// ask for password
@@ -498,9 +521,16 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 		if (object instanceof CertificateInfo) {
 		    CertificateInfo certInfo = ((CertificateInfo) object);
 		    displayCertDetail(certInfo);
-
+		    
 		} else {
 		    displayCertDetail(null);
+			if (object instanceof KeyStoreInfo) {
+			    KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
+			    displayKeystoreList(ksiInfo);
+			    
+			}else{
+			    displayKeystoreList(null);
+			}
 		}
 
 		System.out.println(selPath);
@@ -520,6 +550,8 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	    }
 	}
     }
+
+
 
     @Override
     public void mouseReleased(MouseEvent e) {
