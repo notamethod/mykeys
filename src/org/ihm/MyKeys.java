@@ -28,18 +28,15 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.app.InternalKeystores;
 import org.app.KSConfig;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
-import org.app.KeyToolsException;
 import org.app.ProviderUtil;
 import org.app.KeyStoreInfo.StoreFormat;
 import org.app.KeyStoreInfo.StoreModel;
 import org.app.KeyStoreInfo.StoreType;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.ihm.panel.CreateStoreDialog;
 
 /**
  * @author Christophe Roger

@@ -58,7 +58,6 @@ import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -88,7 +87,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     
     private ListPanel listePanel;
 
-    private JTree tree;
+    private GradientTree tree;
 
     DefaultMutableTreeNode rootNode;
 
@@ -96,7 +95,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
     DefaultMutableTreeNode acNode;
 
-    private DefaultTreeModel treeModel;
+    private TreeModel treeModel;
 
     TreePopupMenu popup;
 
@@ -113,13 +112,16 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	// cliNode = new DefaultMutableTreeNode(new KeyStoreInfo("aa", "bb",
 	// StoreType.CASTORE, StoreFormat.JKS));
 
-	treeModel = new DefaultTreeModel(rootNode);
+	treeModel = new TreeModel(rootNode);
 	treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
 
-	tree = new JTree(treeModel);
+	tree = new GradientTree(treeModel);
+	System.out.println(tree.getUI());
+	
 	TooltipTreeRenderer renderer = new TooltipTreeRenderer();
 
 	tree.setCellRenderer(renderer);
+	renderer.jtree1 = tree;
 	ToolTipManager.sharedInstance().registerComponent(tree);
 	// javax.swing.ToolTipManager.ToolTipManager.sharedInstance().registerComponent(tree);
 	tree.getSelectionModel().setSelectionMode(
@@ -143,9 +145,11 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	// Create the viewing pane.
 	detailPanel = new DetailPanel();
+	listePanel.setDetailPanel(detailPanel);
 	JScrollPane scrollDetail = new JScrollPane(detailPanel);
 	splitLeftPanel.setBottomComponent(scrollDetail);
 	splitLeftPanel.setTopComponent(listePanel);
+	splitLeftPanel.setDividerLocation(150);
 	// Add the scroll panes to a split pane.
 	JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	splitPane.setTopComponent(treeView);
@@ -202,7 +206,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 		node = addObject(cliNode, ksinfo, true);
 
 	    }
-	    addObject(node, "[Vide]", false);
+	   // addObject(node, "[Vide]", false);
 	}
 	// tree.repaint();
 
@@ -211,9 +215,10 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     private void addInternalKS() {
 	DefaultMutableTreeNode nodei = addObject(acNode, InternalKeystores
 		.getACKeystore(), true);
-	addObject(nodei, "[Vide]", false);
+	
+	//addObject(nodei, "[Vide]", false);
 	nodei = addObject(cliNode, InternalKeystores.getCertKeystore(), true);
-	addObject(nodei, "[Vide]", false);
+	//addObject(nodei, "[Vide]", false);
 
     }
 
@@ -264,6 +269,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	if (shouldBeVisible) {
 	    tree.scrollPathToVisible(new TreePath(childNode.getPath()));
 	}
+	
 	return childNode;
     }
 
@@ -318,80 +324,30 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	    e1.printStackTrace();
 	    return false;
 	}
-	try {
-	    Enumeration<String> enumKs = ks.aliases();
-	    if (enumKs != null && enumKs.hasMoreElements()) {
-		removeChildrenObjects(node);
-		node.removeAllChildren();
-		while (enumKs.hasMoreElements()) {
-		    String alias = enumKs.nextElement();
-		    if (log.isDebugEnabled()) {
-			log.debug("alias:" + alias);
-		    }
-		    // try
-		    // {
-		    // KeyStore ks2 = KeyStore.getInstance("PKCS12");
-		    //
-		    // ks2.load(null, "111".toCharArray());
-		    // //KeyStore ks2 = kt.loadKeyStore(null, "PKCS12",
-		    // "111".toCharArray());
-		    // if (ks.isKeyEntry(alias))
-		    // {
-		    // PrivateKey privatekey = (PrivateKey) ks.getKey(alias,
-		    // "111".toCharArray());
-		    // Certificate[] chain = ks.getCertificateChain(alias);
-		    // //cert = (X509Certificate) ks.getCertificate(alias);
-		    // //Key key = ks.getKey(alias, "111".toCharArray());
-		    // //Certificate[] chain = ks.getCertificateChain(alias);
-		    // ks2.setKeyEntry( alias, privatekey, "111".toCharArray(),
-		    // chain);
-		    // OutputStream fos = new FileOutputStream(new
-		    // File("c:/dev/p1.p12"));
-		    // ks2.store(fos, ksInfo.getPassword());
-		    // fos.close();
-		    // }
-		    //		                
-		    //
-		    // }
-		    //   
-		    // catch (UnrecoverableKeyException e)
-		    // {
-		    // // TODO Auto-generated catch block
-		    // e.printStackTrace();
-		    // }
-		    // catch (NoSuchAlgorithmException e)
-		    // {
-		    // // TODO Auto-generated catch block
-		    // e.printStackTrace();
-		    // }
-		    // catch (FileNotFoundException e)
-		    // {
-		    // // TODO Auto-generated catch block
-		    // e.printStackTrace();
-		    // }
-		    // catch (CertificateException e)
-		    // {
-		    // // TODO Auto-generated catch block
-		    // e.printStackTrace();
-		    // }
-		    // catch (IOException e)
-		    // {
-		    // // TODO Auto-generated catch block
-		    // e.printStackTrace();
-		    // }
-		    CertificateInfo certInfo = new CertificateInfo(alias);
-		    kt.fillCertInfo(ks, certInfo, alias);
-		    addObject(node, certInfo, false);
-		}
-	    }
-	} catch (KeyStoreException e) {
-	    // TODO Auto-generated catch block
-	    return false;
-	}
-	if (expand) {
-	    ksInfo.setOpen(true);
-	    tree.expandPath(new TreePath(node.getPath()));
-	}
+//	try {
+//	    Enumeration<String> enumKs = ks.aliases();
+//	    if (enumKs != null && enumKs.hasMoreElements()) {
+//		removeChildrenObjects(node);
+//		node.removeAllChildren();
+//		while (enumKs.hasMoreElements()) {
+//		    String alias = enumKs.nextElement();
+//		    if (log.isDebugEnabled()) {
+//			log.debug("alias:" + alias);
+//		    }
+//		    
+//		    CertificateInfo certInfo = new CertificateInfo(alias);
+//		    kt.fillCertInfo(ks, certInfo, alias);
+//		    addObject(node, certInfo, false);
+//		}
+//	    }
+//	} catch (KeyStoreException e) {
+//	    // TODO Auto-generated catch block
+//	    return false;
+//	}
+//	if (expand) {
+//	    ksInfo.setOpen(true);
+//	    tree.expandPath(new TreePath(node.getPath()));
+//	}
 	return true;
 
     }

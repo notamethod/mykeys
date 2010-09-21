@@ -27,6 +27,11 @@ import org.app.CertificateInfo;
  */
 public class CertListModel implements ListModel{
 
+    public CertListModel(List<CertificateInfo> data) {
+	super();
+	this.data = data;
+    }
+
     private List<CertificateInfo> data;
     /**
      * .
@@ -43,7 +48,7 @@ public class CertListModel implements ListModel{
      */
     @Override
     public void addListDataListener(ListDataListener arg0) {
-	// TODO Auto-generated method stub
+	//super.a
 	
     }
 
@@ -119,6 +124,7 @@ public class CertListModel implements ListModel{
      */
     public void setData(List<CertificateInfo> data) {
         this.data = data;
+        
     }
 
 }

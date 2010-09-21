@@ -64,7 +64,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	    Toolkit toolkit = Toolkit.getDefaultToolkit();
 
 	    // Get size
-	    Dimension dimension = toolkit.getScreenSize();
+	    //Dimension dimension = toolkit.getScreenSize();
 
 	 //this.setPreferredSize(dimension);
 	    this.setPreferredSize(new Dimension(960,650));

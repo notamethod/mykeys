@@ -1,15 +1,14 @@
 package org.ihm.panel;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import org.app.CertificateInfo;
@@ -28,6 +27,8 @@ public class DetailPanel extends JPanel {
     ActionPanel dAction;
 
     JPanel jp;
+    JPanel jpExt;
+    JTabbedPane jtab;
 
     JLabel titre = new JLabel();
 
@@ -39,28 +40,30 @@ public class DetailPanel extends JPanel {
 
     private void init() {
 	dAction = new ActionPanel();
-	//setBackground(new Color(125,0,0));
+
 	BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
 	this.setLayout(bl);
 	
-	titre = new JLabel("Gestion des certificats");
-	// add(titre);
+	titre = new JLabel("");
+	jtab = new JTabbedPane();
 	jp = new JPanel();
+	jpExt = new JPanel();
 
 	jp.setLayout(new FlowLayout(FlowLayout.LEADING));
+	jpExt.setLayout(new FlowLayout(FlowLayout.LEADING));
 
-	add(jp);
+	add(jtab);
+	jtab.add(jp, "Informations principales");
+	jtab.add(jpExt, "Informations étendues");
 	// jp.add();
 	// jp.add(new JLabel("Contenu du certificat"));
-	jp.setVisible(true);
+	jtab.setVisible(false);
     }
 
-    public void updateInfo(CertificateInfo info) {
+    public void updateInfoGen(CertificateInfo info) {
 	jp.removeAll();
-	jp.revalidate();
-	if (info == null) {
-	    return;
-	}
+	jtab.revalidate();
+
 	certificatInfo = info;
 	titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
 	infosPanel = new LabelValuePanel();
@@ -109,6 +112,20 @@ public class DetailPanel extends JPanel {
 		    keyUsage, false);
 	}
 
+	jp.add(infosPanel);
+
+    }
+    
+    public void updateInfoExt(CertificateInfo info) {
+	jpExt.removeAll();
+	jtab.revalidate();
+
+	certificatInfo = info;
+	titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
+	infosPanel = new LabelValuePanel();
+
+	infosPanel.put(MyKeys.getMessage().getString("x509.alias"), JLabel.class, "", info
+		.getAlias(), false);
 	infosPanel.putEmptyLine();
 	infosPanel.put("Chaine de certificats", JTextArea.class, "xCertChain",
 		info.getCertChain(), false);
@@ -121,16 +138,12 @@ public class DetailPanel extends JPanel {
 	infosPanel.putEmptyLine();
 	infosPanel.put("Signature", JTextArea.class, "signature", X509Util
 		.toHexString(info.getSignature(), " ", false), false);
-	jp.add(infosPanel);
+	jpExt.add(infosPanel);
 
-	//JButton jbCheckOcsp = new JButton("Check OCSP");
-//	jbCheckOcsp.addActionListener(dAction);
-//	jbCheckOcsp.setActionCommand("CHECK_OCSP");
-//	jbCheckOcsp.setVisible(true);
-//	jp.add(jbCheckOcsp);
-	jp.setVisible(true);
-	jp.revalidate();
-    }
+
+
+	
+    }    
 
     public class ActionPanel extends AbstractAction {
 
@@ -150,6 +163,19 @@ public class DetailPanel extends JPanel {
 
 	}
 
+    }
+
+    public void updateInfo(CertificateInfo info) {
+	//FIXME: repaint component ?
+	if (info == null) {
+	    jtab.setVisible(false);
+	    return;
+	}	
+	updateInfoGen(info);
+	updateInfoExt(info);
+	jtab.setVisible(true);
+	jtab.revalidate();
+	
     }
 
 }
