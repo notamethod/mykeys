@@ -30,6 +30,7 @@ import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
+import org.app.KeyStoreInfo.StoreFormat;
 import org.ihm.ImageUtils;
 import org.ihm.TypeAction;
 import org.ihm.tools.LabelValuePanel;
@@ -239,6 +240,9 @@ public class ListPanel extends JPanel {
 	List<CertificateInfo> certs = new ArrayList<CertificateInfo>();
 	KeyTools kt = new KeyTools();
 	KeyStore ks = null;
+	if (ksInfo.getPassword() == null && ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)){
+	    return certs;
+	}
 
 	ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo
 		.getPassword());

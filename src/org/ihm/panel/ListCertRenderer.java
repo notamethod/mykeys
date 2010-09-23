@@ -71,6 +71,7 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 		    setIcon(icon);
 
 		}
+		setText(cert.getName());
 		
 	    }	
 	//return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);

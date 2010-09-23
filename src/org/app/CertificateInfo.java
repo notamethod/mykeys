@@ -189,18 +189,6 @@ public class CertificateInfo {
 	this.keyLength = Integer.valueOf(keyLength).intValue();
     }
 
-    public Object get(Object obj) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    public void set(Object obj1, Object obj2) {
-	// this.
-	// Field fld = X509PrincipalModel.getClass().getField(tf.getName());
-	// CertificateModel xModel = new CertificateModel();
-	// fld.set(xModel.getX509PrincipalModel(), tf.getText());
-	//		
-    }
 
     /**
      * @return the algoSig
@@ -578,6 +566,24 @@ public class CertificateInfo {
      */
     public void setPolicyCPS(String policyCPS) {
 	this.policyCPS = policyCPS;
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @return
+     */
+    public String getName() {
+	if (subjectMap != null){
+	    return subjectMap.get("CN");
+	}
+	return alias;
     }
 
 }
