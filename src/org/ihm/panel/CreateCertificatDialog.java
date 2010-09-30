@@ -157,8 +157,8 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	infosPanel = new LabelValuePanel();
 	Map<String, String> mapAC = null;
 	try {
-	    mapAC = TreeKeyStore.getListCerts(InternalKeystores.getACPath(), "JKS",
-		    InternalKeystores.password);
+	    mapAC = TreeKeyStore.getListCerts(InternalKeystores.getACPath(),
+		    "JKS", InternalKeystores.password);
 	} catch (Exception e) {
 	    // 
 	}
@@ -201,10 +201,8 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	    infosPanel.putEmptyLine();
 	    infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib",
 		    "");
-	    infosPanel.put("Policy notice", "PolicyNotice",
-	    "");
-	    infosPanel.put("Policy CPS", "PolicyCPS",
-	    "");		    
+	    infosPanel.put("Policy notice", "PolicyNotice", "");
+	    infosPanel.put("Policy CPS", "PolicyCPS", "");
 	    infosPanel.putEmptyLine();
 	    infosPanel.put("Mot de passe clé privée", JPasswordField.class,
 		    "pwd1", InternalKeystores.password, false);
@@ -224,12 +222,10 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	    Calendar calendar = Calendar.getInstance();
 
 	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
-		    JSpinnerDate.class, "notBefore", calendar.getTime()
-			    .toLocaleString(), true);
+		    JSpinnerDate.class, "notBefore", calendar.getTime(), true);
 	    calendar.add(Calendar.DAY_OF_YEAR, 60);
 	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
-		    JSpinnerDate.class, "notAfter", calendar.getTime()
-			    .toLocaleString(), true);
+		    JSpinnerDate.class, "notAfter", calendar.getTime(), true);
 	    infosPanel.putEmptyLine();
 	    infosPanel.put("Nom (CN)", "CN", "Nom");
 	    infosPanel.put("Pays (C)", "C", "FR");
@@ -240,12 +236,10 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	    infosPanel.put("Email (E)", "E", "");
 	    infosPanel.putEmptyLine();
 	    infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib",
-	    "");
-	    infosPanel.put("Policy notice", "PolicyNotice",
-	    "");
-	    infosPanel.put("Policy CPS", "PolicyCPS",
-	    "");		    
-    infosPanel.putEmptyLine();	    
+		    "");
+	    infosPanel.put("Policy notice", "PolicyNotice", "");
+	    infosPanel.put("Policy CPS", "PolicyCPS", "");
+	    infosPanel.putEmptyLine();
 	    infosPanel.put("Mot de passe clé privée", JPasswordField.class,
 		    "pwd1", "", true);
 	    infosPanel.put("Confirmer le mot de passe", JPasswordField.class,
@@ -290,32 +284,34 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		certInfo.setSubjectMap(elements);
 		certInfo.setPassword(pkPassword);
 		X509Certificate[] xCerts = null;
-		
-		try {
-			certInfo.setCrlDistributionURL(((String) elements
-				.get("CrlDistrib")));
-			certInfo.setPolicyNotice(((String) elements
-				.get("PolicyNotice")));	
-			certInfo.setPolicyCPS(((String) elements
-				.get("PolicyCPS")));				
 
-		    xCerts = ktools.genererX509(certInfo, (String)elements.get("emetteur"), isAC);
-		    
-//		    
-//		    else {
-//			if (StringUtils.isBlank((String)elements.get("emetteur"))){
-//			    X509Certificate cert = ktools.genererX509(certInfo,
-//					false);
-//			    xCerts = new X509Certificate[] { cert };
-//			}else{
-//			    xCerts = ktools.genererX509(certInfo, (String)elements.get("emetteur"));
-//			}
-//			// X509Certificate xCert = ktools.genererX509(certInfo,
-//			// false);
-//			// FIXME
-//			// ktools.addCertToKeyStore(xCert, ksInfo, certInfo);
-//
-//		    }
+		try {
+		    certInfo.setCrlDistributionURL(((String) elements
+			    .get("CrlDistrib")));
+		    certInfo.setPolicyNotice(((String) elements
+			    .get("PolicyNotice")));
+		    certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
+
+		    xCerts = ktools.genererX509(certInfo, (String) elements
+			    .get("emetteur"), isAC);
+
+		    //		    
+		    // else {
+		    // if
+		    // (StringUtils.isBlank((String)elements.get("emetteur"))){
+		    // X509Certificate cert = ktools.genererX509(certInfo,
+		    // false);
+		    // xCerts = new X509Certificate[] { cert };
+		    // }else{
+		    // xCerts = ktools.genererX509(certInfo,
+		    // (String)elements.get("emetteur"));
+		    // }
+		    // // X509Certificate xCert = ktools.genererX509(certInfo,
+		    // // false);
+		    // // FIXME
+		    // // ktools.addCertToKeyStore(xCert, ksInfo, certInfo);
+		    //
+		    // }
 		    ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
 		    CreateCertificatDialog.this.setVisible(false);
 
@@ -345,4 +341,5 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	}
 
     }
+
 }

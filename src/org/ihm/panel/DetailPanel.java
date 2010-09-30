@@ -10,11 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.app.CertificateInfo;
 import org.app.KeyTools;
 import org.app.X509Util;
 import org.bouncycastle.util.encoders.Hex;
+import org.ihm.JSpinnerDate;
 import org.ihm.MyKeys;
 import org.ihm.tools.LabelValuePanel;
 
@@ -67,25 +69,25 @@ public class DetailPanel extends JPanel {
 	certificatInfo = info;
 	titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
 	infosPanel = new LabelValuePanel();
-	infosPanel.put(MyKeys.getMessage().getString("x509.alias"), JLabel.class, "", info
+	infosPanel.put(MyKeys.getMessage().getString("x509.alias"), JTextField.class, "", info
 		.getAlias(), false);
 	infosPanel.putEmptyLine();
-	infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), JLabel.class, "keyLength", String
+	infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), JTextField.class, "keyLength", String
 		.valueOf(info.getKeyLength()), false);
-	infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), JLabel.class, "algoPubKey",
+	infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), JTextField.class, "algoPubKey",
 		info.getAlgoPubKey(), false);
 	// infosPanel.put("Clé publique", JTextArea.class, "pubKey",
 	// X509Util.toHexString(info.getPublicKey().getEncoded()," ",
 	// false),false);
-	infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), JLabel.class, "algoSig", info
+	infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), JTextField.class, "algoSig", info
 		.getAlgoSig(), false);
-	infosPanel.put(MyKeys.getMessage().getString("x509.startdate"), JLabel.class, "notBefore", info
-		.getNotBefore().toString(), false);
-	infosPanel.put(MyKeys.getMessage().getString("x509.enddate"), JLabel.class, "notAfter", info
-		.getNotAfter().toString(), false);
+	infosPanel.put(MyKeys.getMessage().getString("x509.startdate"), JSpinnerDate.class, "notBefore", info
+		.getNotBefore(), false);
+	infosPanel.put(MyKeys.getMessage().getString("x509.enddate"), JSpinnerDate.class, "notAfter", info
+		.getNotAfter(), false);
 	infosPanel.putEmptyLine();
-	infosPanel.put(MyKeys.getMessage().getString("x509.serial"), JLabel.class, "numser",info.getCertificate().getSerialNumber().toString(), false);	
-	infosPanel.put(MyKeys.getMessage().getString("x509.issuer"), JLabel.class, "emetteur",info.getCertificate().getIssuerX500Principal().toString(), false);	
+	infosPanel.put(MyKeys.getMessage().getString("x509.serial"), JTextField.class, "numser",info.getCertificate().getSerialNumber().toString(), false);	
+	infosPanel.put(MyKeys.getMessage().getString("x509.issuer"), JTextField.class, "emetteur",info.getCertificate().getIssuerX500Principal().toString(), false);	
 	if (info.getSubjectMap() != null) {
 	    Iterator<String> iter = info.getSubjectMap().keySet().iterator();
 	    while (iter.hasNext()) {
@@ -102,7 +104,7 @@ public class DetailPanel extends JPanel {
 		    value = new String(Hex.decode(value.substring(1, value
 			    .length())));
 		}
-		infosPanel.put(name, JLabel.class, "", value, false);
+		infosPanel.put(name, JTextField.class, "", value, false);
 	    }
 	}
 

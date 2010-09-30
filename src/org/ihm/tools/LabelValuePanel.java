@@ -3,7 +3,7 @@ package org.ihm.tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -151,18 +151,34 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
     }
 
     public void put(String label, Class<?> class1, String keyValue,
-	    String value, boolean isEditable) {
+	    Object value, boolean isEditable) {
 	JLabel jl = new JLabel(label);
-
+	String strValue = null;
+	if (value != null) {
+	    if (value instanceof String) {
+		strValue = (String) value;
+	    } else {
+		strValue = value.toString();
+	    }
+	}
 	final String globalKey = keyValue;
 	JComponent component = null;
 	if (class1.getName().equals(JLabel.class.getName())) {
 	    JLabel labelValue = new JLabel();
-	    labelValue.setText(value);
+	    labelValue.setText(strValue);
 
 	    component = labelValue;
+	} else if (class1.getName().equals(JTextField.class.getName())) {
+	    JTextField field = new JTextField();
+	    field.setText(strValue);
+	    field.setEditable(isEditable);
+	    if (!isEditable){
+		field.setBorder(null); 		
+	    }
+
+	    component = field;
 	} else if (class1.getName().equals(JPasswordField.class.getName())) {
-	    JPasswordField pwdField = new JPasswordField(value);
+	    JPasswordField pwdField = new JPasswordField(strValue);
 	    pwdField.setEditable(isEditable);
 	    elements.put(globalKey, value);
 	    pwdField.getDocument().addDocumentListener(new DocumentListener() {
@@ -195,7 +211,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 	    component = pwdField;
 	} else if (class1.getName().equals(JTextArea.class.getName())) {
 	    JTextArea textArea = new JTextArea(5, 20);
-	    textArea.setText(value);
+	    textArea.setText(strValue);
 	    textArea.setLineWrap(true);
 	    textArea.setEditable(isEditable);
 	    JScrollPane scrollPane = new JScrollPane(textArea);
@@ -229,17 +245,26 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 
 	    component = scrollPane;
 	} else if (class1.getName().equals(JSpinnerDate.class.getName())) {
-	    DateFormat df = DateFormat.getDateInstance();
+	    // DateFormat df = DateFormat.getDateInstance();
 
-	    Date date = null;
-	    try {
-		date = df.parse(value);
-	    } catch (ParseException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
+	    Date date = (Date) value;
+	    // try {
+	    // date = df.parse(strValue);
+	    // } catch (ParseException e1) {
+	    // // TODO Auto-generated catch block
+	    // e1.printStackTrace();
+	    // }
+	    if (!isEditable){
+		    DateFormat dateFormat = new SimpleDateFormat(KSConfig.getDefaultCfg()
+			    .getString("default.dateFormat"));
+		put(label, JTextField.class, keyValue,
+			dateFormat.format(date), false);
+		return;
 	    }
+
 	    JSpinnerDate spinner = new JSpinnerDate(KSConfig.getDefaultCfg()
 		    .getString("default.dateFormat"), date);
+
 	    SpinnerModel dateModel = spinner.getModel();
 	    if (dateModel instanceof SpinnerDateModel) {
 		elements.put(globalKey, ((SpinnerDateModel) dateModel)
