@@ -21,17 +21,22 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
 import org.app.KeyStoreInfo.StoreFormat;
+import org.app.KeyStoreInfo.StoreType;
 import org.ihm.ImageUtils;
+import org.ihm.KeyStoreUI;
+import org.ihm.TreeKeyStore;
 import org.ihm.TypeAction;
 import org.ihm.tools.LabelValuePanel;
 
@@ -87,6 +92,7 @@ public class ListPanel extends JPanel {
     JLabel titre = new JLabel();
     
     JButton addCertButton;
+    JToggleButton unlockButton;
 
     CertListModel listModel;
     JList listCerts;
@@ -122,12 +128,20 @@ public class ListPanel extends JPanel {
 	listCerts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
 	 listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 	 listCerts.setVisibleRowCount(-1);
-	 addCertButton = new JButton(ImageUtils.createImageIcon("images/List-add.png"));
-
-	 
+	 addCertButton = new JButton(ImageUtils.createImageIcon("images/add-cert.png"));
+	 unlockButton = new JToggleButton(ImageUtils.createImageIcon("images/Locked.png"));
+	 unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
+	 //unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
+	 unlockButton.setDisabledIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
 	 addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
+	 actions = new KeysAction(this);
+	 unlockButton.addActionListener(actions);
+		toolBar.add(titre);
+	toolBar.add(unlockButton);
 	toolBar.add(addCertButton);
-	toolBar.add(titre);
+	toolBar.addSeparator();
+
+	
 	JScrollPane listScroller = new JScrollPane(listCerts);
 	// listScroller.setPreferredSize(new Dimension(450, 80));
 	listScroller.setAlignmentX(LEFT_ALIGNMENT);
@@ -146,9 +160,9 @@ public class ListPanel extends JPanel {
 	jp.setVisible(false);
 	// jp.removeAll();
 	// jp.revalidate();
-	// if (info == null) {
-	// return;
-	// }
+	 if (info == null) {
+	 return;
+	 }
 	ksInfo = info;
 	listCerts.clearSelection();	
 	try {
@@ -157,66 +171,28 @@ public class ListPanel extends JPanel {
 	    // FIXME
 	    e1.printStackTrace();
 	}
+	
 	addCertButton.removeActionListener(actions);
-	actions = new KeysAction(this, ksInfo);
+	if (ksInfo.getPassword() != null){
+	    unlockButton.setSelected(false);
+	    //unlockButton.setIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
+	    unlockButton.setEnabled(false);
+	    //unlockButton.setDisabledIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
+	    addCertButton.setEnabled(true);
+
 	 addCertButton.addActionListener(actions);
+	
+	}else{
+	    
+	    addCertButton.setEnabled(false);
+	    unlockButton.setSelected(false);
+	    //unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
+	    unlockButton.setEnabled(true);
+	}
 	titre.setText(ksInfo.getName());
 	
 	 jp.revalidate();
 	 jp.setVisible(true);
-    }
-
-    public void updateInfo2(KeyStoreInfo info) {
-	jp.removeAll();
-	jp.revalidate();
-	if (info == null) {
-	    return;
-	}
-	ksInfo = info;
-	// CertListModel listModel = new CertListModel();
-	try {
-	    listModel.setData(getCertificates(ksInfo));
-	} catch (KeyToolsException e1) {
-	    // FIXME
-	    e1.printStackTrace();
-	}
-	infosPanel = new LabelValuePanel();
-	infosPanel.put("Alias (nom du certificat)", JLabel.class, "", ksInfo
-		.getName(), false);
-	infosPanel.putEmptyLine();
-	if (ksInfo.isOpen()) {
-	    infosPanel.put("Etat ks", JLabel.class, "", "ouvert", false);
-	} else {
-	    infosPanel.put("Etat ks", JLabel.class, "", "fermé", false);
-	}
-	jp.add(infosPanel);
-
-	JList listCerts = new JList(listModel);
-	ListSelectionListener listListener = new CertListListener();
-	listCerts.addListSelectionListener(listListener);
-	ListCertRenderer renderer = new ListCertRenderer();
-	listCerts.setCellRenderer(renderer);
-	listCerts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	// if (longValue != null) {
-	// list.setPrototypeCellValue(longValue); //get extra space
-	// }
-	listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-	listCerts.setVisibleRowCount(-1);
-	listCerts.addMouseListener(new MouseAdapter() {
-	    public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() == 2) {
-		    // setButton.doClick(); //emulate button click
-		}
-	    }
-	});
-	JScrollPane listScroller = new JScrollPane(listCerts);
-	listScroller.setPreferredSize(new Dimension(450, 80));
-	listScroller.setAlignmentX(LEFT_ALIGNMENT);
-
-	jp.add(listScroller);
-
-	jp.setVisible(true);
-	jp.revalidate();
     }
 
     /**
@@ -314,17 +290,17 @@ public class ListPanel extends JPanel {
     
     public class KeysAction implements ActionListener {
 
-	    public KeysAction(JComponent frameSource, KeyStoreInfo ksInfo) {
+	    public KeysAction(JComponent frameSource) {
 		super();
 		this.frameSource = frameSource;
-		this.ksInfo = ksInfo;
+		//this.ksInfo = ksInfo;
 	    }
 
 
 
 	    private JComponent frameSource;
 	    
-	    private KeyStoreInfo ksInfo;
+	    //private KeyStoreInfo ksInfo;
 	    
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -354,9 +330,11 @@ public class ListPanel extends JPanel {
 //			treeKeyStoreParent.exporterCertificate(node, false);
 //			break;
 	//
-//		    case OPEN_STORE:
-//			treeKeyStoreParent.openStore(node, false, true);
-//			break;
+		    case OPEN_STORE:
+			if(openStore(false, true)){			    
+			}
+			updateInfo(ListPanel.this.ksInfo);
+			break;
 	//
 //		    case CLOSE_STORE:
 //			treeKeyStoreParent.closeStore(node, true);
@@ -390,5 +368,40 @@ public class ListPanel extends JPanel {
 	return;
 
     }	    
+    
+    public boolean openStore(
+	    boolean useInternalPwd, boolean expand) {
+
+//	if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { // equals(StoreModel.CASTORE))
+//								// {
+//	    useInternalPwd = true;
+//	}
+	// ask for password
+	if (ksInfo.getPassword() == null) {
+	    char[] password = KeyStoreUI.showPasswordDialog(this);
+
+	    if (password == null || password.length == 0) {
+		return false;
+	    }
+
+	    ksInfo.setPassword(password);
+
+	}
+
+	KeyTools kt = new KeyTools();
+	KeyStore ks = null;
+	try {
+	    ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+		    ksInfo.getPassword());
+
+	} catch (Exception e1) {
+	    KeyStoreUI.showError(this, e1.getMessage());
+	    e1.printStackTrace();
+	    return false;
+	}
+
+	return true;
+
+    }    
 
 }

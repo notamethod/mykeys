@@ -268,9 +268,11 @@ public class KeyStoreUI extends JFrame implements WindowListener {
      * @return
      */
     public static char[] showPasswordDialog(Component parent) {
+	System.out.println("xxx");
 	final JPasswordField jpf = new JPasswordField();
 	JOptionPane jop = new JOptionPane(jpf, JOptionPane.QUESTION_MESSAGE,
 		JOptionPane.OK_CANCEL_OPTION);
+	//FIXME: label
 	JDialog dialog = jop.createDialog(parent, "Mot de passe:");
 	dialog.addComponentListener(new ComponentAdapter() {
 
@@ -287,6 +289,8 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	char[] password = null;
 	if (result == JOptionPane.OK_OPTION) {
 	    password = jpf.getPassword();
+	}else{
+	    return null;
 	}
 	return password;
     }

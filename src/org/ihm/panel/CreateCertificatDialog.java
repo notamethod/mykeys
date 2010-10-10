@@ -136,7 +136,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -160,7 +160,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	    mapAC = TreeKeyStore.getListCerts(InternalKeystores.getACPath(),
 		    "JKS", InternalKeystores.password);
 	} catch (Exception e) {
-	    // 
+	    //
 	}
 	if (mapAC == null) {
 	    mapAC = new HashMap<String, String>();
@@ -183,12 +183,10 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	    Calendar calendar = Calendar.getInstance();
 
 	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
-		    JSpinnerDate.class, "notBefore", calendar.getTime()
-			    .toLocaleString(), true);
+		    JSpinnerDate.class, "notBefore", calendar.getTime(), true);
 	    calendar.add(Calendar.YEAR, 5);
 	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
-		    JSpinnerDate.class, "notAfter", calendar.getTime()
-			    .toLocaleString(), true);
+		    JSpinnerDate.class, "notAfter", calendar.getTime(), true);
 	    infosPanel.putEmptyLine();
 	    infosPanel.put("Nom (CN)", "CN", "MyKeys Root CA");
 	    infosPanel.put("Pays (C)", "C", "FR");
@@ -292,10 +290,10 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 			    .get("PolicyNotice")));
 		    certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
 
-		    xCerts = ktools.genererX509(certInfo, (String) elements
-			    .get("emetteur"), isAC);
+		    xCerts = ktools.genererX509(certInfo,
+			    (String) elements.get("emetteur"), isAC);
 
-		    //		    
+		    //
 		    // else {
 		    // if
 		    // (StringUtils.isBlank((String)elements.get("emetteur"))){
@@ -316,8 +314,8 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		    CreateCertificatDialog.this.setVisible(false);
 
 		} catch (Exception e) {
-		    KeyStoreUI.showError(CreateCertificatDialog.this, e
-			    .getMessage());
+		    KeyStoreUI.showError(CreateCertificatDialog.this,
+			    e.getMessage());
 		    e.printStackTrace();
 		}
 	    } else if (command.equals("CANCEL")) {

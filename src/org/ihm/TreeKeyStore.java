@@ -482,6 +482,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 		    displayCertDetail(null);
 			if (object instanceof KeyStoreInfo) {
 			    KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
+			    if (ksiInfo != null)
 			    displayKeystoreList(ksiInfo);
 			    
 			}else{
