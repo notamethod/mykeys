@@ -27,9 +27,9 @@ import javax.swing.event.ListSelectionListener;
 
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
+import org.app.KeyStoreInfo.StoreFormat;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
-import org.app.KeyStoreInfo.StoreFormat;
 import org.ihm.ImageUtils;
 import org.ihm.KeyStoreUI;
 import org.ihm.TypeAction;
@@ -87,6 +87,8 @@ public class ListPanel extends JPanel {
     JLabel titre = new JLabel();
     
     JButton addCertButton;
+    JButton importButton;
+    JButton exportButton;
     JToggleButton unlockButton;
 
     DefaultListModel listModel;
@@ -129,11 +131,19 @@ public class ListPanel extends JPanel {
 	 //unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
 	 unlockButton.setDisabledIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
 	 addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
+	 importButton= new JButton("Import");
+	 importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
+	 exportButton= new JButton("Export");
+	 exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());	 
 	 actions = new KeysAction(this);
+	 exportButton.addActionListener(actions);
+	 importButton.addActionListener(actions);
 	 unlockButton.addActionListener(actions);
 		toolBar.add(titre);
 	toolBar.add(unlockButton);
 	toolBar.add(addCertButton);
+	toolBar.add(importButton);
+	toolBar.add(exportButton);
 	toolBar.addSeparator();
 
 	
@@ -178,11 +188,14 @@ public class ListPanel extends JPanel {
 	    unlockButton.setEnabled(false);
 	    //unlockButton.setDisabledIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
 	    addCertButton.setEnabled(true);
-
+	    importButton.setEnabled(true);
+	    exportButton.setEnabled(true);
 	 addCertButton.addActionListener(actions);
 	
 	}else{
 	    
+	    importButton.setEnabled(false);
+	    exportButton.setEnabled(false);
 	    addCertButton.setEnabled(false);
 	    unlockButton.setSelected(false);
 	    //unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
@@ -342,7 +355,16 @@ public class ListPanel extends JPanel {
 		    case ADD_CERT:
 			    addCertificate(ksInfo, false);
 			break;
-
+		    case IMPORT_CERT:
+			importCertificate(ksInfo, false);
+			break;
+			
+		    case EXPORT_CERT:
+			if (listCerts!=null && listCerts.getSelectedValue() !=null && listCerts.getSelectedValue() instanceof CertificateInfo) {
+			    exporterCertificate(ksInfo,(CertificateInfo)listCerts.getSelectedValue(), false);
+			    }			
+			
+			break;			
 
 		    default:
 			break;
@@ -368,6 +390,30 @@ public class ListPanel extends JPanel {
 
     }	    
     
+    public void exporterCertificate(KeyStoreInfo ksInfo, CertificateInfo certificateInfo, boolean b) {
+	JFrame frame = (JFrame) this.getTopLevelAncestor();
+
+
+	ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
+		certificateInfo, true);
+	cs.setLocationRelativeTo(frame);
+	cs.setResizable(false);
+	cs.setVisible(true);
+	
+    }
+
+    public void importCertificate(KeyStoreInfo ksInfo2, boolean b) {
+	JFrame frame = (JFrame) this.getTopLevelAncestor();
+	
+	ImportCertificateDialog cs = new ImportCertificateDialog(frame, ksInfo,
+		true);
+	cs.setLocationRelativeTo(frame);
+	cs.setResizable(false);
+	cs.setVisible(true);
+	updateInfo(ksInfo);
+	
+    }
+
     public boolean openStore(
 	    boolean useInternalPwd, boolean expand) {
 
