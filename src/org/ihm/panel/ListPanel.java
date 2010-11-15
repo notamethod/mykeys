@@ -1,11 +1,8 @@
 package org.ihm.panel;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.util.ArrayList;
@@ -13,6 +10,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -26,17 +24,14 @@ import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
 import org.app.KeyStoreInfo.StoreFormat;
-import org.app.KeyStoreInfo.StoreType;
 import org.ihm.ImageUtils;
 import org.ihm.KeyStoreUI;
-import org.ihm.TreeKeyStore;
 import org.ihm.TypeAction;
 import org.ihm.tools.LabelValuePanel;
 
@@ -94,7 +89,7 @@ public class ListPanel extends JPanel {
     JButton addCertButton;
     JToggleButton unlockButton;
 
-    CertListModel listModel;
+    DefaultListModel listModel;
     JList listCerts;
 
     public ListPanel() {
@@ -118,7 +113,7 @@ public class ListPanel extends JPanel {
 	// jp.add(titre);
 	JToolBar toolBar = new JToolBar("Still draggable");
 	toolBar.setFloatable(false);
-	listModel = new CertListModel(new ArrayList<CertificateInfo>());
+	listModel = new DefaultListModel();
 	ListSelectionListener listListener = new CertListListener();
 
 	listCerts = new JList(listModel);
@@ -165,8 +160,12 @@ public class ListPanel extends JPanel {
 	 }
 	ksInfo = info;
 	listCerts.clearSelection();	
+	listModel.removeAllElements();
 	try {
-	    listModel.setData(getCertificates(ksInfo));
+	    for (CertificateInfo ci : getCertificates(ksInfo)){
+		listModel.addElement(ci);
+		}
+	
 	} catch (KeyToolsException e1) {
 	    // FIXME
 	    e1.printStackTrace();
