@@ -4,6 +4,10 @@
 package org.app;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 import org.app.KeyStoreInfo.StoreFormat;
 import org.app.KeyStoreInfo.StoreModel;
@@ -45,13 +49,39 @@ public class InternalKeystores {
 	KeyStoreInfo kinfo = null;
 	File f= new File(path);
 	if (!f.exists()){
-	    try {
-		kt.createKeyStore(StoreFormat.JKS,
-		InternalKeystores.getACPath(), pwd.toCharArray());
-	    } catch (Exception e) {
+	    FileChannel inChannel = null;
+	    FileChannel outChannel = null;
+	        try {
+	     inChannel =  new FileInputStream(InternalKeystores.class.getResource("/org/config/myKeysAc.jks").getFile()).getChannel();
+            //InternalKeystores.class.getResource("/org/config/myKeysAc.jks").getFile()getChannel();
+         outChannel = new
+            FileOutputStream(f).getChannel();
+
+            inChannel.transferTo(0, inChannel.size(),
+                    outChannel);
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+		if (inChannel != null) inChannel.close();
+		if (outChannel != null) outChannel.close();
+	    } catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
+        }
+	    
+//	    try {
+//		InputStream is =  InternalKeystores.class.getResourceAsStream("/org/config/myKeysAc.jks");
+//		
+//		kt.createKeyStore(StoreFormat.JKS,
+//		InternalKeystores.getACPath(), pwd.toCharArray());
+//	    } catch (Exception e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    }
 	}
 	kinfo =  new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getACPath(), StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
 	kinfo.setPassword(InternalKeystores.password.toCharArray());
