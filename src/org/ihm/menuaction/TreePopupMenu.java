@@ -18,8 +18,8 @@ import org.ihm.KeyStoreUI;
 import org.ihm.MyKeys;
 import org.ihm.TreeKeyStore;
 import org.ihm.TypeAction;
-import org.ihm.panel.CreateStoreDialog;
-import org.ihm.panel.ImportStoreDialog;
+import org.ihm.windows.CreateStoreDialog;
+import org.ihm.windows.ImportStoreDialog;
 
 public class TreePopupMenu extends JPopupMenu {
 

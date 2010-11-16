@@ -6,10 +6,11 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import org.ihm.KeyStoreUI;
-import org.ihm.panel.CreateStoreDialog;
-import org.ihm.panel.ImportStoreDialog;
+import org.ihm.windows.CreateStoreDialog;
+import org.ihm.windows.ImportStoreDialog;
 
 public class MenuAction extends AbstractAction {
 
@@ -35,17 +36,25 @@ public class MenuAction extends AbstractAction {
 	new Thread(new Runnable() {
 	    public void run() {
 		if (action.equals("newStore")) {
-		    CreateStoreDialog cs = new CreateStoreDialog(keyStoreUI,
-			    true);
-		    cs.setLocationRelativeTo(keyStoreUI);
+		    SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+			    CreateStoreDialog cs = new CreateStoreDialog(
+				    keyStoreUI, true);
+			    cs.setLocationRelativeTo(keyStoreUI);
+			    cs.setVisible(true);
+			}
+		    });
 
-		    cs.setVisible(true);
 		} else if (action.equals("loadStore")) {
-		    ImportStoreDialog cs = new ImportStoreDialog(keyStoreUI,
-			    true);
-		    cs.setLocationRelativeTo(keyStoreUI);
+		    SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+			    ImportStoreDialog cs = new ImportStoreDialog(
+				    keyStoreUI, true);
+			    cs.setLocationRelativeTo(keyStoreUI);
 
-		    cs.setVisible(true);
+			    cs.setVisible(true);
+			}
+		    });
 
 		}
 
@@ -55,3 +64,13 @@ public class MenuAction extends AbstractAction {
     }
 
 }
+// javax.swing.SwingUtilities.invokeLater(new Runnable() {
+// public void run() {
+// createAndShowGUI();
+// }
+// });
+
+// CreateStoreDialog cs = new CreateStoreDialog(keyStoreUI,
+// true);
+// cs.setLocationRelativeTo(keyStoreUI);
+// cs.setVisible(true);

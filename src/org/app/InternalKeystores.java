@@ -4,11 +4,8 @@
 package org.app;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileChannel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +16,8 @@ import org.ihm.MyKeys;
 
 
 public class InternalKeystores {
-    public static final Log log = LogFactory.getLog(InternalKeystores.class);   
+    
+    public static final Log log = LogFactory.getLog(InternalKeystores.class);    
     public static String password="mKeys983178";
     private static String pathAC;
     private static String pathCert;
@@ -64,7 +62,6 @@ public class InternalKeystores {
         catch (Exception e) {
         	log.error(e);
         }
-
 	    
 //	    try {
 //		InputStream is =  InternalKeystores.class.getResourceAsStream("/org/config/myKeysAc.jks");
@@ -102,7 +99,7 @@ public class InternalKeystores {
 	kinfo.setOpen(true);
 	return kinfo;   
     }    
-    
+
     public static void copyFile(InputStream is, File out) throws Exception {
         //InputStream fis  = new FileInputStream(in);
         FileOutputStream fos = new FileOutputStream(out);

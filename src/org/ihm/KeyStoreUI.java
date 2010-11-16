@@ -30,6 +30,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.app.InternalKeystores;
 import org.app.KSConfig;
 import org.app.KeyStoreInfo;
@@ -42,6 +44,7 @@ import org.ihm.menuaction.MenuAction;
  */
 public class KeyStoreUI extends JFrame implements WindowListener {
 
+    private static final Log log = LogFactory.getLog(KeyStoreUI.class);
     JPanel p;// panel principal qui contient les images
 
     // répertoire des images
@@ -60,14 +63,14 @@ public class KeyStoreUI extends JFrame implements WindowListener {
      */
     public KeyStoreUI() {
 	super("mykeys");
-	 // Get toolkit
-	    Toolkit toolkit = Toolkit.getDefaultToolkit();
+	// Get toolkit
+	Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-	    // Get size
-	    //Dimension dimension = toolkit.getScreenSize();
+	// Get size
+	// Dimension dimension = toolkit.getScreenSize();
 
-	 //this.setPreferredSize(dimension);
-	    this.setPreferredSize(new Dimension(960,650));
+	// this.setPreferredSize(dimension);
+	this.setPreferredSize(new Dimension(960, 650));
 	// this.setResizable(false);
 
 	// setNbCols(4);
@@ -90,18 +93,24 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 
     private static List<? extends Image> createIConAppli() {
 	List<Image> images = new ArrayList<Image>();
-	//URL imgURL = null;
-	images.add(Toolkit.getDefaultToolkit().getImage(TreeKeyStore.class.getResource("images/mkico24.png")));
-	images.add(Toolkit.getDefaultToolkit().getImage(TreeKeyStore.class.getResource("images/mkico32.png")));
-	images.add(Toolkit.getDefaultToolkit().getImage(TreeKeyStore.class.getResource("images/mkico48.png")));
+	// URL imgURL = null;
+	images.add(Toolkit.getDefaultToolkit().getImage(
+		TreeKeyStore.class.getResource("images/mkico24.png")));
+	images.add(Toolkit.getDefaultToolkit().getImage(
+		TreeKeyStore.class.getResource("images/mkico32.png")));
+	images.add(Toolkit.getDefaultToolkit().getImage(
+		TreeKeyStore.class.getResource("images/mkico48.png")));
 
 	return images;
     }
 
     private void initLookAndFeel() {
 
+	setDefaultLookAndFeelDecorated(true);
 	try {
-	    UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+	    // UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+	    UIManager
+		    .setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
 	    return;
 	} catch (Exception e1) {
 	    // TODO Auto-generated catch block
@@ -168,8 +177,8 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	// menu
 	JMenuBar menuBar = new JMenuBar();
 	JMenu menu1 = new JMenu(MyKeys.getMessage().getString("magasin"));
-//	ImageIcon icon = createImageIcon("images/keystore.png");
-//	menu1.setIcon(icon);
+	// ImageIcon icon = createImageIcon("images/keystore.png");
+	// menu1.setIcon(icon);
 	JMenuItem itemStart1 = new JMenuItem(new MenuAction(this, MyKeys
 		.getMessage().getString("magasin.new")));
 	itemStart1.setActionCommand("newStore");
@@ -179,63 +188,25 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	itemLoad.setActionCommand("loadStore");
 	menu1.add(itemLoad);
 
-	JMenu menu2 = new JMenu(MyKeys.getMessage().getString("options"));
+	JMenu menuOptions = new JMenu(MyKeys.getMessage().getString("options"));
 
-	JMenuItem itemStart = new JMenuItem(new MenuAction(this, messages
-		.getString("options")));
-	itemStart.setActionCommand("newGame");
-	JMenu item = new JMenu(messages.getString("options"));
-	menu2.add(itemStart);
-	itemStart.add(item);
+	JMenuItem itemLog = new JMenuItem(new MenuAction(this,
+		messages.getString("options")));
+	itemLog.setActionCommand("log");
 
-	// JMenu itemb = new JMenu(messages.getString("options.images"));
-	// ButtonGroup group = new ButtonGroup();
-	//
-	// JRadioButtonMenuItem item1 = new JRadioButtonMenuItem(new MenuAction(
-	// this, messages.getString("level.easy")));
-	// JRadioButtonMenuItem item2 = new JRadioButtonMenuItem(new MenuAction(
-	// this, messages.getString("level.medium")));
-	// JRadioButtonMenuItem item3 = new JRadioButtonMenuItem(new MenuAction(
-	// this, messages.getString("level.hard")));
-	// item1.setActionCommand("lEasy");
-	// item2.setActionCommand("lMedium");
-	// item3.setActionCommand("lHard");
-	// item1.setSelected(true);
-	//
-	// group.add(item1);
-	// group.add(item2);
-	// group.add(item3);
-	//
-	// JCheckBoxMenuItem itemCheck = new JCheckBoxMenuItem(new MenuAction(
-	// this, messages.getString("options.fix")));
-	// itemCheck.setActionCommand("actCheckBloc");
-	// // JMenuItem item1 = new JMenuItem(new MenuAction(this,
-	// // messages.getString("level.easy")));
-	// // JMenuItem item2 = new JMenuItem(new MenuAction(this,
-	// // messages.getString("level.medium")));
-	// // JMenuItem item3 = new JMenuItem(new MenuAction(this,
-	// // messages.getString("level.hard")));
-	//
-	// item.add(item1);
-	// item.add(item2);
-	// item.add(item3);
+	menuOptions.add(itemLog);
+
 	menuBar.add(menu1);
-	menuBar.add(menu2);
-	// menuBar.add(menu2);
-	// menu2.add(itemStart);
-	// menu2.add(item);
-	// menu2.add(itemb);
+	menuBar.add(menuOptions);
+
 	this.setJMenuBar(menuBar);
-	// String[] fichiersImage = getFichiersImage();
-	// buildMenuImages(itemb, fichiersImage);
-	// menu2.add(itemCheck);
 
     }
 
     private void buildComponents() {
 	p = new JPanel();
-	p.setLayout(new GridLayout(1,0));
-	 this.setLayout(new GridLayout(1,0));
+	p.setLayout(new GridLayout(1, 0));
+	this.setLayout(new GridLayout(1, 0));
 	// menu
 	buildMenu();
 
@@ -243,9 +214,8 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	mainPanel = new TreeKeyStore(this.getPreferredSize());
 	this.getContentPane().add(p);
 	this.getContentPane().getMaximumSize();
-	p.add(mainPanel); 
+	p.add(mainPanel);
 	System.out.println(this.getMaximizedBounds());
-
 
     }
 
@@ -272,7 +242,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	final JPasswordField jpf = new JPasswordField();
 	JOptionPane jop = new JOptionPane(jpf, JOptionPane.QUESTION_MESSAGE,
 		JOptionPane.OK_CANCEL_OPTION);
-	//FIXME: label
+	// FIXME: label
 	JDialog dialog = jop.createDialog(parent, "Mot de passe:");
 	dialog.addComponentListener(new ComponentAdapter() {
 
@@ -289,7 +259,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	char[] password = null;
 	if (result == JOptionPane.OK_OPTION) {
 	    password = jpf.getPassword();
-	}else{
+	} else {
 	    return null;
 	}
 	return password;
@@ -356,13 +326,14 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 		List list = KSConfig.getUserCfg().getList(key);
 		for (Object o : list) {
 		    String dirName = (String) o;
-		    String fileName = dirName.substring(dirName
-			    .lastIndexOf("\\") + 1, dirName.length());
+		    String fileName = dirName.substring(
+			    dirName.lastIndexOf("\\") + 1, dirName.length());
 		    KeyStoreInfo ki = new KeyStoreInfo(fileName, dirName,
-			    StoreModel.fromValue(typeTmp[1]), StoreFormat.valueOf(typeTmp[2]));
-//		    if (ki.getStoreModel().equals(StoreModel.CASTORE)){
-//			InternalKeystores.setPath(dirName);
-//		    }
+			    StoreModel.fromValue(typeTmp[1]),
+			    StoreFormat.valueOf(typeTmp[2]));
+		    // if (ki.getStoreModel().equals(StoreModel.CASTORE)){
+		    // InternalKeystores.setPath(dirName);
+		    // }
 		    ksList.put(dirName, ki);
 		}
 
@@ -394,15 +365,16 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	    return null;
 	}
     }
+
     protected static Image createImage(String path) {
 	java.net.URL imgURL = TreeKeyStore.class.getResource(path);
-	
+
 	if (imgURL != null) {
 	    return Toolkit.getDefaultToolkit().getImage(imgURL);
 	} else {
 	    System.err.println("Couldn't find file: " + path);
 	    return null;
 	}
-    }    
+    }
 
 }

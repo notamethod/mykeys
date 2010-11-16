@@ -73,11 +73,11 @@ import org.app.KeyToolsException;
 import org.app.KeyStoreInfo.StoreModel;
 import org.app.KeyStoreInfo.StoreType;
 import org.ihm.menuaction.TreePopupMenu;
-import org.ihm.panel.CreateCertificatDialog;
-import org.ihm.panel.DetailPanel;
-import org.ihm.panel.ExportCertificateDialog;
-import org.ihm.panel.ImportCertificateDialog;
-import org.ihm.panel.ListPanel;
+import org.ihm.windows.CreateCertificatDialog;
+import org.ihm.windows.DetailPanel;
+import org.ihm.windows.ExportCertificateDialog;
+import org.ihm.windows.ImportCertificateDialog;
+import org.ihm.windows.ListPanel;
 
 public class TreeKeyStore extends JPanel implements MouseListener,
 	TreeExpansionListener, TreeWillExpandListener {
