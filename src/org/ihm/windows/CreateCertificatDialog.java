@@ -293,23 +293,6 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		    xCerts = ktools.genererX509(certInfo,
 			    (String) elements.get("emetteur"), isAC);
 
-		    //
-		    // else {
-		    // if
-		    // (StringUtils.isBlank((String)elements.get("emetteur"))){
-		    // X509Certificate cert = ktools.genererX509(certInfo,
-		    // false);
-		    // xCerts = new X509Certificate[] { cert };
-		    // }else{
-		    // xCerts = ktools.genererX509(certInfo,
-		    // (String)elements.get("emetteur"));
-		    // }
-		    // // X509Certificate xCert = ktools.genererX509(certInfo,
-		    // // false);
-		    // // FIXME
-		    // // ktools.addCertToKeyStore(xCert, ksInfo, certInfo);
-		    //
-		    // }
 		    ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
 		    CreateCertificatDialog.this.setVisible(false);
 

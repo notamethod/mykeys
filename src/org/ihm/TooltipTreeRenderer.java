@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
@@ -31,6 +32,7 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 	String tooltip = null;
 	setOpenIcon(createImageIcon("images/Go-down.png"));
 	setClosedIcon(createImageIcon("images/Go-previous.png"));
+	
 	// setTextNonSelectionColor( Color.black);
 	if (value instanceof DefaultMutableTreeNode) {
 
@@ -58,7 +60,7 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 			setIcon(icon);
 
 		    }	
-
+	
 	    }
 	    else if (node.getUserObject() instanceof CertificateInfo) {
 		tooltip = ((CertificateInfo) node.getUserObject())
@@ -73,9 +75,21 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 		if (icon != null) {
 
 		    setIcon(icon);
-
+		    //setTextSelectionColor(UIManager.getColor("Tree.textForeground"));
 		}
 	    }else{
+//	        label.setForeground( sel ?
+//		            getTextSelectionColor( ) :
+//		            getTextNonSelectionColor( ) );		    
+//	    setTextSelectionColor(UIManager.getColor("Tree.textForeground"));
+//		setTextSelectionColor(UIManager.getColor("Tree.textBackground"));
+		
+		
+//		setTextNonSelectionColor(UIManager.getColor("Tree.textForeground"));
+//	            setTextSelectionColor(UIManager.getColor
+//	("Tree.selectionForeground"));
+		
+		//setTextNonSelectionColor(Color.RED);
 //		    setBackgroundSelectionColor(new Color(10,20,30));
 //		    setBackground(new Color(10,20,30));
 	    }

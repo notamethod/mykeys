@@ -374,8 +374,11 @@ public class KeyTools {
 		certModel);
 
 	X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
-
-	certGen.setSerialNumber(RandomBI(30));
+	BigInteger bi = RandomBI(30);
+	certGen.setSerialNumber(bi);
+	if (StringUtils.isBlank(certModel.getAlias())){
+	    certModel.setAlias(bi.toString(16));
+	}
 	if (certIssuer.getCertificate() != null) {
 	    certGen.setIssuerDN(certIssuer.getCertificate()
 		    .getSubjectX500Principal());
@@ -903,16 +906,16 @@ public class KeyTools {
      * @throws Exception
      */
     public X509Certificate[] genererX509(CertificateInfo certInfo,
-	    String alias, boolean isAC) throws Exception {
+	    String aliasEmetteur, boolean isAC) throws Exception {
 
 	KeyStore ks = null;
-	if (!StringUtils.isBlank(alias)) {
+	if (!StringUtils.isBlank(aliasEmetteur)) {
 	    char[] password = InternalKeystores.password.toCharArray();
 	    ks = loadKeyStore(InternalKeystores.getACPath(), StoreFormat.JKS, InternalKeystores.password
 		    .toCharArray());
 	    CertificateInfo infoEmetteur = new CertificateInfo();
-	    fillCertInfo(ks, infoEmetteur, alias);
-	    infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(alias, password));
+	    fillCertInfo(ks, infoEmetteur, aliasEmetteur);
+	    infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
 	    return genererX509(certInfo, infoEmetteur, isAC);
 	} else {
 	    return genererX509(certInfo, certInfo, isAC);

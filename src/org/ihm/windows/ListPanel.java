@@ -1,6 +1,7 @@
 package org.ihm.windows;
 
 import java.awt.BorderLayout;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.KeyStore;
@@ -22,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -36,17 +38,32 @@ import org.ihm.TypeAction;
 import org.ihm.tools.LabelValuePanel;
 
 public class ListPanel extends JPanel {
+    public class ListTransferHandler extends TransferHandler {
+	DataFlavor certFlavor;
+	     public ListTransferHandler() {
+	         try {
+	     	String certType = DataFlavor.javaJVMLocalObjectMimeType +
+	        ";class=\"" +
+	        org.app.CertificateInfo.class.getName() +
+		                               "\"";
+		certFlavor = new DataFlavor(certType);
+	         } catch(ClassNotFoundException e) {
+	             System.out.println("ClassNotFound: " + e.getMessage());
+	         }
+	     }	
+    }
+
     private DetailPanel detailPanel;
     KeysAction actions;
 
     /**
-     *<pre>
+     * <pre>
      * b&gt;&lt;/b&gt;.
      * 
      * b&gt;Description :&lt;/b&gt;
      * 
      * 
-     *</pre>
+     * </pre>
      * 
      * @author C. Roger<BR>
      * <BR>
@@ -83,9 +100,9 @@ public class ListPanel extends JPanel {
     ActionPanel dAction;
 
     JPanel jp;
-    
+
     JLabel titre = new JLabel();
-    
+
     JButton addCertButton;
     JButton importButton;
     JButton exportButton;
@@ -122,31 +139,35 @@ public class ListPanel extends JPanel {
 	listCerts.addListSelectionListener(listListener);
 	ListCertRenderer renderer = new ListCertRenderer();
 	listCerts.setCellRenderer(renderer);
-	listCerts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
-	 listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-	 listCerts.setVisibleRowCount(-1);
-	 addCertButton = new JButton(ImageUtils.createImageIcon("images/add-cert.png"));
-	 unlockButton = new JToggleButton(ImageUtils.createImageIcon("images/Locked.png"));
-	 unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
-	 //unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
-	 unlockButton.setDisabledIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
-	 addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
-	 importButton= new JButton("Import");
-	 importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
-	 exportButton= new JButton("Export");
-	 exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());	 
-	 actions = new KeysAction(this);
-	 exportButton.addActionListener(actions);
-	 importButton.addActionListener(actions);
-	 unlockButton.addActionListener(actions);
-		toolBar.add(titre);
+	listCerts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+	listCerts.setVisibleRowCount(-1);
+	listCerts.setDragEnabled(true);
+	listCerts.setTransferHandler(new ListTransferHandler());
+	addCertButton = new JButton(
+		ImageUtils.createImageIcon("images/add-cert.png"));
+	unlockButton = new JToggleButton(
+		ImageUtils.createImageIcon("images/Locked.png"));
+	unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
+	// unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
+	unlockButton.setDisabledIcon(ImageUtils
+		.createImageIcon("images/Unlocked.png"));
+	addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
+	importButton = new JButton("Import");
+	importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
+	exportButton = new JButton("Export");
+	exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
+	actions = new KeysAction(this);
+	exportButton.addActionListener(actions);
+	importButton.addActionListener(actions);
+	unlockButton.addActionListener(actions);
+	toolBar.add(titre);
 	toolBar.add(unlockButton);
 	toolBar.add(addCertButton);
 	toolBar.add(importButton);
 	toolBar.add(exportButton);
 	toolBar.addSeparator();
 
-	
 	JScrollPane listScroller = new JScrollPane(listCerts);
 	// listScroller.setPreferredSize(new Dimension(450, 80));
 	listScroller.setAlignmentX(LEFT_ALIGNMENT);
@@ -165,52 +186,52 @@ public class ListPanel extends JPanel {
 	jp.setVisible(false);
 	// jp.removeAll();
 	// jp.revalidate();
-	 if (info == null) {
-	 return;
-	 }
+	if (info == null) {
+	    return;
+	}
 	ksInfo = info;
-	listCerts.clearSelection();	
+	listCerts.clearSelection();
 	listModel.removeAllElements();
 	try {
-	    for (CertificateInfo ci : getCertificates(ksInfo)){
+	    for (CertificateInfo ci : getCertificates(ksInfo)) {
 		listModel.addElement(ci);
-		}
-	
+	    }
+
 	} catch (KeyToolsException e1) {
 	    // FIXME
 	    e1.printStackTrace();
 	}
-	
+
 	addCertButton.removeActionListener(actions);
-	if (ksInfo.getPassword() != null){
+	if (ksInfo.getPassword() != null) {
 	    unlockButton.setSelected(false);
-	    //unlockButton.setIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
+	    // unlockButton.setIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
 	    unlockButton.setEnabled(false);
-	    //unlockButton.setDisabledIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
+	    // unlockButton.setDisabledIcon(ImageUtils.createImageIcon("images/Unlocked.png"));
 	    addCertButton.setEnabled(true);
 	    importButton.setEnabled(true);
 	    exportButton.setEnabled(true);
-	 addCertButton.addActionListener(actions);
-	
-	}else{
-	    
+	    addCertButton.addActionListener(actions);
+
+	} else {
+
 	    importButton.setEnabled(false);
 	    exportButton.setEnabled(false);
 	    addCertButton.setEnabled(false);
 	    unlockButton.setSelected(false);
-	    //unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
+	    // unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
 	    unlockButton.setEnabled(true);
 	}
 	titre.setText(ksInfo.getName());
-	
-	 jp.revalidate();
-	 jp.setVisible(true);
+
+	jp.revalidate();
+	jp.setVisible(true);
     }
 
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * &lt;b&gt;Algorithme : &lt;/b&gt;
@@ -228,12 +249,13 @@ public class ListPanel extends JPanel {
 	List<CertificateInfo> certs = new ArrayList<CertificateInfo>();
 	KeyTools kt = new KeyTools();
 	KeyStore ks = null;
-	if (ksInfo.getPassword() == null && ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)){
+	if (ksInfo.getPassword() == null
+		&& ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)) {
 	    return certs;
 	}
 
-	ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo
-		.getPassword());
+	ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+		ksInfo.getPassword());
 
 	System.out.println("addcerts");
 	Enumeration<String> enumKs;
@@ -290,92 +312,92 @@ public class ListPanel extends JPanel {
      * @return the ksInfo
      */
     public KeyStoreInfo getKsInfo() {
-        return ksInfo;
+	return ksInfo;
     }
 
     /**
-     * @param ksInfo the ksInfo to set
+     * @param ksInfo
+     *            the ksInfo to set
      */
     public void setKsInfo(KeyStoreInfo ksInfo) {
-        this.ksInfo = ksInfo;
+	this.ksInfo = ksInfo;
     }
-    
+
     public class KeysAction implements ActionListener {
 
-	    public KeysAction(JComponent frameSource) {
-		super();
-		this.frameSource = frameSource;
-		//this.ksInfo = ksInfo;
+	public KeysAction(JComponent frameSource) {
+	    super();
+	    this.frameSource = frameSource;
+	    // this.ksInfo = ksInfo;
+	}
+
+	private JComponent frameSource;
+
+	// private KeyStoreInfo ksInfo;
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    final String action = e.getActionCommand();
+	    final Object composant = e.getSource();
+
+	    TypeAction typeAction = TypeAction.getTypeAction(action);
+	    JDialog cs;
+	    JFrame frame = null;
+	    switch (typeAction) {
+	    // case ADD_STORE:
+	    // frame = (JFrame) tree.getTopLevelAncestor();
+	    // cs = new CreateStoreDialog(frame, true);
+	    // cs.setLocationRelativeTo(frame);
+	    // cs.setVisible(true);
+	    // break;
+	    //
+	    // case IMPORT_STORE:
+	    // frame = (JFrame) tree.getTopLevelAncestor();
+	    // cs = new ImportStoreDialog(frame, true);
+	    // cs.setLocationRelativeTo(frame);
+	    // cs.setVisible(true);
+	    // break;
+
+	    // case EXPORT_CERT:
+	    // treeKeyStoreParent.exporterCertificate(node, false);
+	    // break;
+	    //
+	    case OPEN_STORE:
+		if (openStore(false, true)) {
+		}
+		updateInfo(ListPanel.this.ksInfo);
+		break;
+	    //
+	    // case CLOSE_STORE:
+	    // treeKeyStoreParent.closeStore(node, true);
+	    // break;
+
+	    case ADD_CERT:
+		addCertificate(ksInfo, false);
+		break;
+	    case IMPORT_CERT:
+		importCertificate(ksInfo, false);
+		break;
+
+	    case EXPORT_CERT:
+		if (listCerts != null
+			&& listCerts.getSelectedValue() != null
+			&& listCerts.getSelectedValue() instanceof CertificateInfo) {
+		    exporterCertificate(ksInfo,
+			    (CertificateInfo) listCerts.getSelectedValue(),
+			    false);
+		}
+
+		break;
+
+	    default:
+		break;
 	    }
 
+	}
 
+    }
 
-	    private JComponent frameSource;
-	    
-	    //private KeyStoreInfo ksInfo;
-	    
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		    final String action = e.getActionCommand();
-		    final Object composant = e.getSource();
-
-
-		    TypeAction typeAction = TypeAction.getTypeAction(action);
-		    JDialog cs;
-		    JFrame frame = null;
-		    switch (typeAction) {
-//		    case ADD_STORE:
-//			frame = (JFrame) tree.getTopLevelAncestor();
-//			cs = new CreateStoreDialog(frame, true);
-//			cs.setLocationRelativeTo(frame);
-//			cs.setVisible(true);
-//			break;
-	//
-//		    case IMPORT_STORE:
-//			frame = (JFrame) tree.getTopLevelAncestor();
-//			cs = new ImportStoreDialog(frame, true);
-//			cs.setLocationRelativeTo(frame);
-//			cs.setVisible(true);
-//			break;
-
-//		    case EXPORT_CERT:
-//			treeKeyStoreParent.exporterCertificate(node, false);
-//			break;
-	//
-		    case OPEN_STORE:
-			if(openStore(false, true)){			    
-			}
-			updateInfo(ListPanel.this.ksInfo);
-			break;
-	//
-//		    case CLOSE_STORE:
-//			treeKeyStoreParent.closeStore(node, true);
-//			break;
-
-		    case ADD_CERT:
-			    addCertificate(ksInfo, false);
-			break;
-		    case IMPORT_CERT:
-			importCertificate(ksInfo, false);
-			break;
-			
-		    case EXPORT_CERT:
-			if (listCerts!=null && listCerts.getSelectedValue() !=null && listCerts.getSelectedValue() instanceof CertificateInfo) {
-			    exporterCertificate(ksInfo,(CertificateInfo)listCerts.getSelectedValue(), false);
-			    }			
-			
-			break;			
-
-		    default:
-			break;
-		    }
-
-		}
-		
-
-
-	}   
-    
     public void addCertificate(KeyStoreInfo ksInfo, boolean b) {
 	JFrame frame = (JFrame) this.getTopLevelAncestor();
 
@@ -388,39 +410,39 @@ public class ListPanel extends JPanel {
 
 	return;
 
-    }	    
-    
-    public void exporterCertificate(KeyStoreInfo ksInfo, CertificateInfo certificateInfo, boolean b) {
-	JFrame frame = (JFrame) this.getTopLevelAncestor();
+    }
 
+    public void exporterCertificate(KeyStoreInfo ksInfo,
+	    CertificateInfo certificateInfo, boolean b) {
+	JFrame frame = (JFrame) this.getTopLevelAncestor();
 
 	ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
 		certificateInfo, true);
 	cs.setLocationRelativeTo(frame);
 	cs.setResizable(false);
 	cs.setVisible(true);
-	
+
     }
 
     public void importCertificate(KeyStoreInfo ksInfo2, boolean b) {
 	JFrame frame = (JFrame) this.getTopLevelAncestor();
-	
+
 	ImportCertificateDialog cs = new ImportCertificateDialog(frame, ksInfo,
 		true);
 	cs.setLocationRelativeTo(frame);
 	cs.setResizable(false);
 	cs.setVisible(true);
 	updateInfo(ksInfo);
-	
+
     }
 
-    public boolean openStore(
-	    boolean useInternalPwd, boolean expand) {
+    public boolean openStore(boolean useInternalPwd, boolean expand) {
 
-//	if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { // equals(StoreModel.CASTORE))
-//								// {
-//	    useInternalPwd = true;
-//	}
+	// if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { //
+	// equals(StoreModel.CASTORE))
+	// // {
+	// useInternalPwd = true;
+	// }
 	// ask for password
 	if (ksInfo.getPassword() == null) {
 	    char[] password = KeyStoreUI.showPasswordDialog(this);
@@ -447,6 +469,6 @@ public class ListPanel extends JPanel {
 
 	return true;
 
-    }    
+    }
 
 }

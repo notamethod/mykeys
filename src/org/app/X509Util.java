@@ -119,5 +119,11 @@ public class X509Util {
 	// SubjectKeyIdentifier
 	// TargetInformation
     }
+//    public static String BiToHex(BigInteger bi) {
+//
+//        System.out.println("max long   = " + Long.toHexString(Long.MAX_VALUE));
+//        System.out.println("bi as long = " + Long.toHexString(bi.longValue()));
+//        System.out.println("bi as hex  = " + bi.toString(16));
+//    }
 
 }

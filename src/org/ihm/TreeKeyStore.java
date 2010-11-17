@@ -32,6 +32,7 @@ package org.ihm;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -47,6 +48,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.BoxLayout;
+import javax.swing.DropMode;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -54,6 +56,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
+import javax.swing.TransferHandler;
+import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeWillExpandListener;
@@ -68,10 +72,10 @@ import org.apache.commons.logging.LogFactory;
 import org.app.CertificateInfo;
 import org.app.InternalKeystores;
 import org.app.KeyStoreInfo;
-import org.app.KeyTools;
-import org.app.KeyToolsException;
 import org.app.KeyStoreInfo.StoreModel;
 import org.app.KeyStoreInfo.StoreType;
+import org.app.KeyTools;
+import org.app.KeyToolsException;
 import org.ihm.menuaction.TreePopupMenu;
 import org.ihm.windows.CreateCertificatDialog;
 import org.ihm.windows.DetailPanel;
@@ -81,6 +85,28 @@ import org.ihm.windows.ListPanel;
 
 public class TreeKeyStore extends JPanel implements MouseListener,
 	TreeExpansionListener, TreeWillExpandListener {
+
+    public class TreeTransferHandler extends TransferHandler {
+	     DataFlavor nodesFlavor;
+	     DataFlavor[] flavors = new DataFlavor[1];
+	/* (non-Javadoc)
+	 * @see javax.swing.TransferHandler#canImport(javax.swing.TransferHandler.TransferSupport)
+	 */
+	@Override
+	public boolean canImport(TransferSupport support) {
+
+	         if(!support.isDrop()) {
+	             return false;
+	         }
+	         support.setShowDropLocation(true);
+	         System.out.println(nodesFlavor.getHumanPresentableName());
+	         if(!support.isDataFlavorSupported(nodesFlavor)) {
+	             return false;
+	         }
+	         return true;
+	}
+
+    }
 
     final static Log log = LogFactory.getLog(TreeKeyStore.class);
     private DetailPanel detailPanel;
@@ -137,7 +163,9 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	tree.addMouseListener(this);
 	tree.addTreeWillExpandListener(this);
 	tree.addTreeExpansionListener(this);
-
+	//drop enabled
+        tree.setDropMode(DropMode.ON);
+        tree.setTransferHandler(new TreeTransferHandler());
 	// Create the scroll pane and add the tree to it.
 	JScrollPane treeView = new JScrollPane(tree);
 	JPanel leftPanel = new JPanel();
