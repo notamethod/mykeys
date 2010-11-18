@@ -106,6 +106,7 @@ public class ListPanel extends JPanel {
     JButton addCertButton;
     JButton importButton;
     JButton exportButton;
+    JButton deleteButton;
     JToggleButton unlockButton;
 
     DefaultListModel listModel;
@@ -157,15 +158,21 @@ public class ListPanel extends JPanel {
 	importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
 	exportButton = new JButton("Export");
 	exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
+	//FIXME libelles
+    deleteButton = new JButton("Supprimer");
+    deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());	
+    deleteButton.setEnabled(false);
 	actions = new KeysAction(this);
 	exportButton.addActionListener(actions);
 	importButton.addActionListener(actions);
 	unlockButton.addActionListener(actions);
+	deleteButton.addActionListener(actions);
 	toolBar.add(titre);
 	toolBar.add(unlockButton);
 	toolBar.add(addCertButton);
 	toolBar.add(importButton);
 	toolBar.add(exportButton);
+	toolBar.add(deleteButton);
 	toolBar.addSeparator();
 
 	JScrollPane listScroller = new JScrollPane(listCerts);
@@ -211,12 +218,14 @@ public class ListPanel extends JPanel {
 	    addCertButton.setEnabled(true);
 	    importButton.setEnabled(true);
 	    exportButton.setEnabled(true);
+	       deleteButton.setEnabled(true);
 	    addCertButton.addActionListener(actions);
 
 	} else {
 
 	    importButton.setEnabled(false);
 	    exportButton.setEnabled(false);
+        deleteButton.setEnabled(false);
 	    addCertButton.setEnabled(false);
 	    unlockButton.setSelected(false);
 	    // unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
@@ -387,8 +396,11 @@ public class ListPanel extends JPanel {
 			    (CertificateInfo) listCerts.getSelectedValue(),
 			    false);
 		}
-
 		break;
+        case DELETE_CERT:
+            deleteCertificate(ksInfo, (CertificateInfo) listCerts.getSelectedValue());
+            break;
+		
 
 	    default:
 		break;
@@ -409,6 +421,31 @@ public class ListPanel extends JPanel {
 	updateInfo(ksInfo);
 
 	return;
+
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @param ksInfo2
+     * @param certificateInfo
+     */
+    public void deleteCertificate(KeyStoreInfo ksInfo2, CertificateInfo certificateInfo) {
+        KeyTools kt = new KeyTools();
+        try {
+            kt.deleteCertificate(ksInfo, certificateInfo);
+
+        } catch (Exception e1) {
+            KeyStoreUI.showError(this, e1.getMessage());
+            e1.printStackTrace();          
+        }
+        updateInfo(ksInfo);
 
     }
 

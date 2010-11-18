@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 public enum TypeAction {
     ADD_STORE("AddStore"), EXPORT_CERT("ExportCert"), IMPORT_STORE(
 	    "ImportStore"), OPEN_STORE("OpenStore"), ADD_CERT("AddCert"), IMPORT_CERT(
-	    "ImportCert"), CLOSE_STORE("CloseStore"), REMOVE_STORE("RemoveStore"), DELETE_STORE("DeleteStore"), ADD_CERT_AC("AddCertAC");
+	    "ImportCert"), CLOSE_STORE("CloseStore"), REMOVE_STORE("RemoveStore"), DELETE_STORE("DeleteStore"), ADD_CERT_AC("AddCertAC"), DELETE_CERT("DeleteCert");
 
     /** L'attribut qui contient la valeur associé à l'enum */
     private final String value;

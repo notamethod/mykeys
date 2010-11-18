@@ -111,9 +111,6 @@ public class ImportCertificateDialog extends JDialog {
 	    String command = event.getActionCommand();
 	    if (command.equals("CHOOSE_IN")) {
 		JFileChooser jfc = new JFileChooser();
-		// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
-
-		// jPanel1.add(jfc);
 		if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 		    tfDirectory
 			    .setText(jfc.getSelectedFile().getAbsolutePath());

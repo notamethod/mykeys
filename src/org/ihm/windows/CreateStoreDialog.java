@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
 
 import org.app.KSConfig;
 import org.app.KeyTools;
@@ -77,7 +78,10 @@ public class CreateStoreDialog extends JDialog {
 	// JFieldsPanel jf2 = new JFieldsPanel(jl2, pwd2);
 
 	JLabel jl4 = new JLabel("Emplacement");
-	tfDirectory = new JTextField(20);
+    tfDirectory = new JTextField(40);
+    FileSystemView fsv = FileSystemView.getFileSystemView();
+    File f = fsv.getDefaultDirectory();
+    tfDirectory.setText(f.getAbsolutePath());
 	JButton jbChoose = new JButton("...");
 	jbChoose.addActionListener(dAction);
 	jbChoose.setActionCommand("CHOOSE_IN");

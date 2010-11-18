@@ -20,10 +20,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
 
 import org.app.CertificateInfo;
+import org.app.CommonsActions;
 import org.app.KeyStoreInfo;
 import org.app.KeyTools;
+import org.app.KeyStoreInfo.StoreFormat;
 import org.ihm.KeyStoreUI;
 import org.ihm.tools.JFieldsPanel;
 import org.ihm.tools.LabelValuePanel;
@@ -66,6 +69,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 	Map<String, String> mapType = new LinkedHashMap<String, String>();
 	mapType.put("der", "der");
 	mapType.put("pem", "pem/key");
+	mapType.put("pkcs12", "PKCS12");
 
 	// mapType.put("der", "der");
 
@@ -84,7 +88,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 	infosPanel.putEmptyLine();
 
 	JLabel jl4 = new JLabel("Emplacement");
-	tfDirectory = new JTextField(20);
+	tfDirectory = new JTextField(40);
+	FileSystemView fsv = FileSystemView.getFileSystemView();
+	File f = fsv.getDefaultDirectory();
+	tfDirectory.setText(f.getAbsolutePath());
 	JButton jbChoose = new JButton("...");
 	jbChoose.addActionListener(dAction);
 	jbChoose.setActionCommand("CHOOSE_IN");
@@ -135,34 +142,41 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 			    "Champs invalides");
 		    return;
 		}
-
+		
+		String path = tfDirectory.getText();
+	      // saisie mot de passe
+        char[] password = null;
+        if (isExportCle) {
+            password = KeyStoreUI.showPasswordDialog(null);
+        }
 		KeyTools kt = new KeyTools();
-
-		// saisie mot de passe
-		char[] password = null;
-		if (isExportCle){
-		password = KeyStoreUI.showPasswordDialog(null);
-		}
+		String format = (String)infosPanel.getElements().get("formatCert");
+		
+		if (format.equals("PKCS12")){
+		    CommonsActions cact = new CommonsActions();
+		    cact.exportCert(StoreFormat.PKCS12, path, password, certInfo);
+		}else{
 		try {
-		    kt.exportDer(certInfo, tfDirectory.getText());
-		    if (isExportCle){
-		    kt.exportPrivateKey(certInfo, ksInfo, password, tfDirectory
-			    .getText());
+		    kt.exportDer(certInfo, path);
+		    if (isExportCle) {
+			kt.exportPrivateKey(certInfo, ksInfo, password,
+				tfDirectory.getText());
 		    }
-		    ExportCertificateDialog.this.setVisible(false);
-		    KeyStoreUI.showInfo(ExportCertificateDialog.this,
-			    "Exportation terminée");
+
 		} catch (Exception e) {
 
 		    KeyStoreUI.showError(ExportCertificateDialog.this, e
 			    .getLocalizedMessage());
 
 		}
-
+		}
+        ExportCertificateDialog.this.setVisible(false);
+        KeyStoreUI.showInfo(ExportCertificateDialog.this,
+            "Exportation terminée");
 	    } else if (command.equals("CANCEL")) {
 		ExportCertificateDialog.this.setVisible(false);
 	    }
-
+	  
 	}
 
     }
@@ -206,7 +220,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     public void itemStateChanged(ItemEvent e) {
 	Object source = e.getItemSelectable();
 	JCheckBox jc = (JCheckBox) source;
-	isExportCle  = jc.isSelected();
+	isExportCle = jc.isSelected();
 	// for (int i=0; i<X509Constants.keyUsageLabel.length; i++){
 	// if (val.equals(X509Constants.keyUsageLabel[i])){
 	// certInfo.getKeyUsage()[i]=jc.isSelected();

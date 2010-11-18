@@ -43,6 +43,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.app.KeyStoreInfo.StoreFormat;
+import org.app.KeyStoreInfo.StoreType;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DEROctetString;
@@ -71,6 +72,7 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
+import org.ihm.KeyStoreUI;
 
 public class KeyTools {
     final Log log = LogFactory.getLog(KeyTools.class);
@@ -194,10 +196,11 @@ public class KeyTools {
      * @param password
      * @throws Exception
      */
-    public void createKeyStore(StoreFormat format, String name, char[] password)
+    public KeyStore createKeyStore(StoreFormat format, String name, char[] password)
 	    throws Exception {
+	KeyStore ks = null;
 	try {
-	    KeyStore ks = KeyStore.getInstance(format.toString());
+	     ks = KeyStore.getInstance(format.toString());
 
 	    ks.load(null, password);
 	    OutputStream fos = new FileOutputStream(new File(name));
@@ -206,6 +209,7 @@ public class KeyTools {
 	} catch (Exception e) {
 	    throw new Exception(e);
 	}
+	return ks;
 
     }
 
@@ -499,6 +503,14 @@ public class KeyTools {
 	saveKeyStore(kstore, ksInfo);
     }
 
+    public void deleteCertificate(KeyStoreInfo ksInfo, CertificateInfo certificateInfo) throws KeyToolsException, KeyStoreException {
+
+        KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+                ksInfo.getPassword());
+        ks.deleteEntry(certificateInfo.getAlias());
+       saveKeyStore(ks, ksInfo);
+
+    }
     /**
      * .
      * 
@@ -823,8 +835,14 @@ public class KeyTools {
 	try {
 	    KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo
 		    .getStoreFormat(), ksInfo.getPassword());
-	    PrivateKey privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
+	    PrivateKey privateKey = null;
+	    if (ksInfo.getStoreType().equals(StoreType.INTERNAL)){
+		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
+			ksInfo.getPassword());
+	    }else{
+		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
 		    password);
+	    }
 	    byte[] privKey = privateKey.getEncoded();
 	    FileOutputStream keyfos = new FileOutputStream(new File(fName
 		    + ".key"));
@@ -1038,18 +1056,19 @@ public class KeyTools {
 	    InvalidKeyException, CRLException, IllegalStateException,
 	    SignatureException, KeyToolsException {
 
-	String kst = "C:/Documents and Settings/n096015/.myKeys/ACKS.jks";
+	String kst = "C:/Documents and Settings/n096015/.myKeys/mykeysAc.jks";
+	
 	char[] password = "mKeys983178".toCharArray();
 	KeyStore ks = loadKeyStore(kst, StoreFormat.JKS, password);
 	CertificateInfo cinfo = new CertificateInfo();
-	fillCertInfo(ks, cinfo, "tessi dev root ca");
+	fillCertInfo(ks, cinfo, "TESSI DEV AC Intermediaire");
 	Calendar nextupdate = Calendar.getInstance();
 	CrlInfo crlInfo = new CrlInfo();
-	nextupdate.add(Calendar.DAY_OF_YEAR, 15);
+	nextupdate.add(Calendar.DAY_OF_YEAR, 30);
 	crlInfo.setNextUpdate(nextupdate.getTime());
 	Key key = ks.getKey("tessi dev root ca", password);
 	X509CRL crl = generateCrl(cinfo.getCertificate(), crlInfo, key);
-	OutputStream os = new FileOutputStream("c:/dev/crl1.crl");
+	OutputStream os = new FileOutputStream("c:/dev/crl2.crl");
 	os.write(crl.getEncoded());
 	os.close();
 
