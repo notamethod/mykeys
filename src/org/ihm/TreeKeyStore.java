@@ -57,7 +57,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
-import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeWillExpandListener;
@@ -76,6 +75,8 @@ import org.app.KeyStoreInfo.StoreModel;
 import org.app.KeyStoreInfo.StoreType;
 import org.app.KeyTools;
 import org.app.KeyToolsException;
+import org.ihm.components.GradientTree;
+import org.ihm.components.GradientTreeRenderer;
 import org.ihm.menuaction.TreePopupMenu;
 import org.ihm.windows.CreateCertificatDialog;
 import org.ihm.windows.DetailPanel;
@@ -135,16 +136,13 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
 		"store.cert.name"));
 
-	// cliNode = new DefaultMutableTreeNode(new KeyStoreInfo("aa", "bb",
-	// StoreType.CASTORE, StoreFormat.JKS));
-
 	treeModel = new TreeModel(rootNode);
 	treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
 
 	tree = new GradientTree(treeModel);
 	System.out.println(tree.getUI());
 	
-	TooltipTreeRenderer renderer = new TooltipTreeRenderer();
+	GradientTreeRenderer renderer = new GradientTreeRenderer();
 
 	tree.setCellRenderer(renderer);
 	renderer.jtree1 = tree;

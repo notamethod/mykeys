@@ -28,7 +28,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import org.app.KSConfig;
-import org.ihm.JSpinnerDate;
+import org.ihm.components.JSpinnerDate;
 
 public class LabelValuePanel extends JPanel implements DocumentListener {
 

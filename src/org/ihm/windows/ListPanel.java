@@ -1,6 +1,7 @@
 package org.ihm.windows;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -35,22 +37,23 @@ import org.app.KeyToolsException;
 import org.ihm.ImageUtils;
 import org.ihm.KeyStoreUI;
 import org.ihm.TypeAction;
+import org.ihm.components.JImgList;
 import org.ihm.tools.LabelValuePanel;
 
 public class ListPanel extends JPanel {
     public class ListTransferHandler extends TransferHandler {
 	DataFlavor certFlavor;
-	     public ListTransferHandler() {
-	         try {
-	     	String certType = DataFlavor.javaJVMLocalObjectMimeType +
-	        ";class=\"" +
-	        org.app.CertificateInfo.class.getName() +
-		                               "\"";
+
+	public ListTransferHandler() {
+	    try {
+		String certType = DataFlavor.javaJVMLocalObjectMimeType
+			+ ";class=\"" + org.app.CertificateInfo.class.getName()
+			+ "\"";
 		certFlavor = new DataFlavor(certType);
-	         } catch(ClassNotFoundException e) {
-	             System.out.println("ClassNotFound: " + e.getMessage());
-	         }
-	     }	
+	    } catch (ClassNotFoundException e) {
+		System.out.println("ClassNotFound: " + e.getMessage());
+	    }
+	}
     }
 
     private DetailPanel detailPanel;
@@ -110,7 +113,7 @@ public class ListPanel extends JPanel {
     JToggleButton unlockButton;
 
     DefaultListModel listModel;
-    JList listCerts;
+    JImgList listCerts;
 
     public ListPanel() {
 	super(new BorderLayout());
@@ -128,6 +131,28 @@ public class ListPanel extends JPanel {
 	// titre = new GradientLabel("Gestion des certificats");
 	// add(titre);
 	jp = new JPanel(new BorderLayout());
+	final ImageIcon icon= ImageUtils.createImageIcon("images/Locked.png");
+
+//	 Jpanel jp2 = new JPanel(new BorderLayout())
+//	{
+//		public void paintComponent(Graphics g)
+//		{
+//			//  Approach 1: Dispaly image at at full size
+//			g.drawImage(icon.getImage(), 0, 0, null);
+//
+//			//  Approach 2: Scale image to size of component
+//			// Dimension d = getSize();
+//			// g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
+//
+//			//  Approach 3: Fix the image position in the scroll pane
+//			// Point p = scrollPane.getViewport().getViewPosition();
+//			// g.drawImage(icon.getImage(), p.x, p.y, null);
+//
+//			setOpaque( false );
+//			super.paintComponent(g);
+//		}
+//	};
+	
 	//
 	// jp.setLayout(new FlowLayout(FlowLayout.LEADING));
 	// jp.add(titre);
@@ -136,7 +161,8 @@ public class ListPanel extends JPanel {
 	listModel = new DefaultListModel();
 	ListSelectionListener listListener = new CertListListener();
 
-	listCerts = new JList(listModel);
+	listCerts = new JImgList(listModel);
+
 	listCerts.addListSelectionListener(listListener);
 	ListCertRenderer renderer = new ListCertRenderer();
 	listCerts.setCellRenderer(renderer);
@@ -158,10 +184,10 @@ public class ListPanel extends JPanel {
 	importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
 	exportButton = new JButton("Export");
 	exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
-	//FIXME libelles
-    deleteButton = new JButton("Supprimer");
-    deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());	
-    deleteButton.setEnabled(false);
+	// FIXME libelles
+	deleteButton = new JButton("Supprimer");
+	deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
+	deleteButton.setEnabled(false);
 	actions = new KeysAction(this);
 	exportButton.addActionListener(actions);
 	importButton.addActionListener(actions);
@@ -218,18 +244,20 @@ public class ListPanel extends JPanel {
 	    addCertButton.setEnabled(true);
 	    importButton.setEnabled(true);
 	    exportButton.setEnabled(true);
-	       deleteButton.setEnabled(true);
+	    deleteButton.setEnabled(true);
 	    addCertButton.addActionListener(actions);
+	    listCerts.setShowImage(false);
 
 	} else {
 
 	    importButton.setEnabled(false);
 	    exportButton.setEnabled(false);
-        deleteButton.setEnabled(false);
+	    deleteButton.setEnabled(false);
 	    addCertButton.setEnabled(false);
 	    unlockButton.setSelected(false);
 	    // unlockButton.setIcon(ImageUtils.createImageIcon("images/Locked.png"));
 	    unlockButton.setEnabled(true);
+	    listCerts.setShowImage(true);
 	}
 	titre.setText(ksInfo.getName());
 
@@ -397,10 +425,18 @@ public class ListPanel extends JPanel {
 			    false);
 		}
 		break;
-        case DELETE_CERT:
-            deleteCertificate(ksInfo, (CertificateInfo) listCerts.getSelectedValue());
-            break;
-		
+	    case DELETE_CERT:
+		if (listCerts != null
+			&& listCerts.getSelectedValue() != null
+			&& listCerts.getSelectedValue() instanceof CertificateInfo) {
+		    CertificateInfo certInfo = (CertificateInfo) listCerts
+			    .getSelectedValue();
+		    if (KeyStoreUI.askConfirmDialog(null,
+			    "Suppression du certificat " + certInfo.getName())) {
+			deleteCertificate(ksInfo, certInfo);
+		    }
+		}
+		break;
 
 	    default:
 		break;
@@ -427,25 +463,29 @@ public class ListPanel extends JPanel {
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @param ksInfo2
      * @param certificateInfo
      */
-    public void deleteCertificate(KeyStoreInfo ksInfo2, CertificateInfo certificateInfo) {
-        KeyTools kt = new KeyTools();
-        try {
-            kt.deleteCertificate(ksInfo, certificateInfo);
+    public void deleteCertificate(KeyStoreInfo ksInfo2,
+	    CertificateInfo certificateInfo) {
+	KeyTools kt = new KeyTools();
+	try {
+	    kt.deleteCertificate(ksInfo, certificateInfo);
 
-        } catch (Exception e1) {
-            KeyStoreUI.showError(this, e1.getMessage());
-            e1.printStackTrace();          
-        }
-        updateInfo(ksInfo);
+	} catch (Exception e1) {
+	    KeyStoreUI.showError(this, e1.getMessage());
+	    e1.printStackTrace();
+	}
+	updateInfo(ksInfo);
 
     }
 

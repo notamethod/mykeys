@@ -377,4 +377,23 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	}
     }
 
+    /**
+     * Show dialog box with a password field
+     * 
+     * @param parent
+     * @return
+     */
+    public static boolean askConfirmDialog(Component parent, String message) {
+
+	boolean retour = false;
+	int result = JOptionPane.showConfirmDialog(parent, message,
+		"Confirmation de l'action", JOptionPane.OK_CANCEL_OPTION,
+		JOptionPane.QUESTION_MESSAGE);
+
+	if (result == JOptionPane.OK_OPTION) {
+	    retour = true;
+	}
+	return retour;
+    }
+
 }

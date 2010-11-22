@@ -34,10 +34,10 @@ import org.app.KeyTools;
 import org.app.ProviderUtil;
 import org.app.X509Constants;
 import org.app.KeyStoreInfo.StoreModel;
-import org.ihm.JSpinnerDate;
 import org.ihm.KeyStoreUI;
 import org.ihm.MyKeys;
 import org.ihm.TreeKeyStore;
+import org.ihm.components.JSpinnerDate;
 import org.ihm.tools.JFieldsPanel;
 import org.ihm.tools.LabelValuePanel;
 

@@ -1,4 +1,4 @@
-package org.ihm;
+package org.ihm.components;
 
 import java.util.Calendar;
 import java.util.Date;

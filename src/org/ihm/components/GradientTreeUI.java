@@ -1,4 +1,4 @@
-package org.ihm;
+package org.ihm.components;
 
 import java.awt.Graphics;
 import java.awt.Insets;

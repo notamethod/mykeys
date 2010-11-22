@@ -16,8 +16,8 @@ import org.app.CertificateInfo;
 import org.app.KeyTools;
 import org.app.X509Util;
 import org.bouncycastle.util.encoders.Hex;
-import org.ihm.JSpinnerDate;
 import org.ihm.MyKeys;
+import org.ihm.components.JSpinnerDate;
 import org.ihm.tools.LabelValuePanel;
 
 public class DetailPanel extends JPanel {

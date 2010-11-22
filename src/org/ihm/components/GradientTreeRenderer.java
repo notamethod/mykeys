@@ -1,4 +1,4 @@
-package org.ihm;
+package org.ihm.components;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -14,24 +14,27 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.app.CertificateInfo;
 import org.app.KeyStoreInfo;
+import org.ihm.TreeKeyStore;
 
-public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
+public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 	TreeCellRenderer {
 
-    private JLabel label = new JLabel( );
     public JTree jtree1;
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
-	    boolean sel, boolean expanded, boolean leaf, int row,
+	    boolean isSelected, boolean expanded, boolean leaf, int row,
 	    boolean hasFocus) {
-	final Component rc = super.getTreeCellRendererComponent(tree, value,
-		sel, expanded, leaf, row, hasFocus);
+	final JLabel rc = (JLabel)super.getTreeCellRendererComponent(tree, value,
+		isSelected, expanded, leaf, row, hasFocus);
 	String tooltip = null;
 	setOpenIcon(createImageIcon("images/Go-down.png"));
 	setClosedIcon(createImageIcon("images/Go-previous.png"));
+	
+	Color colorb=UIManager.getColor("Tree.textBackground");
+	Color colorf=UIManager.getColor("Tree.textForeground");
+	rc.setForeground(colorf);
 	
 	// setTextNonSelectionColor( Color.black);
 	if (value instanceof DefaultMutableTreeNode) {
@@ -45,7 +48,8 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 		    // setTextNonSelectionColor( Color.green);
 		    switch (kInfo.getStoreModel()) {
 		    case CERTSTORE:
-			icon = createImageIcon("images/keystoreblueo.png");
+			icon = createImageIcon("images/keystoreblue.png");
+			//icon = createImageIcon("images/keystoreblueo.png");
 			break;
 		    case CASTORE:
 			icon = createImageIcon("images/keystorered.png");
@@ -59,39 +63,15 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 
 			setIcon(icon);
 
-		    }	
-	
+		    }
+		    if (isSelected){
+			rc.setForeground(colorb);
+		    }
 	    }
-	    else if (node.getUserObject() instanceof CertificateInfo) {
-		tooltip = ((CertificateInfo) node.getUserObject())
-			.getSubjectString();
-		ImageIcon icon = null;
-		if (((CertificateInfo) node.getUserObject())
-			.isContainsPrivateKey()) {
-		    icon = createImageIcon("images/certificatekey.png");
-		} else {
-		    icon = createImageIcon("images/certificate2.png");
-		}
-		if (icon != null) {
 
-		    setIcon(icon);
-		    //setTextSelectionColor(UIManager.getColor("Tree.textForeground"));
-		}
-	    }else{
-//	        label.setForeground( sel ?
-//		            getTextSelectionColor( ) :
-//		            getTextNonSelectionColor( ) );		    
-//	    setTextSelectionColor(UIManager.getColor("Tree.textForeground"));
-//		setTextSelectionColor(UIManager.getColor("Tree.textBackground"));
-		
-		
-//		setTextNonSelectionColor(UIManager.getColor("Tree.textForeground"));
-//	            setTextSelectionColor(UIManager.getColor
-//	("Tree.selectionForeground"));
-		
-		//setTextNonSelectionColor(Color.RED);
-//		    setBackgroundSelectionColor(new Color(10,20,30));
-//		    setBackground(new Color(10,20,30));
+	    
+	    else{
+//
 	    }
 	}
 	if (tooltip != null) {
@@ -101,30 +81,6 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 	return rc;
 
     }
-    
- // @Override
-  public Component getTreeCellRendererComponent1(JTree tree, Object value,
-	    boolean isSelected, boolean isExpanded, boolean isLeaf, int row,
-	    boolean hasFocus) {
-      JLabel defaut = (JLabel)super.getTreeCellRendererComponent(
-	            tree, value, isSelected, isExpanded,
-	            isLeaf, row, hasFocus );
-	 
-	        label.setIcon( defaut.getIcon( ) );
-	        label.setText( defaut.getText( ) );
-	        label.setIconTextGap( defaut.getIconTextGap( ) );
-	        label.setFont( defaut.getFont( ) );
-	        label.setBackground( isSelected ?
-	            getBackgroundSelectionColor( ) :
-	            getBackgroundNonSelectionColor( ) );
-	        label.setForeground( isSelected ?
-	            getTextSelectionColor( ) :
-	            getTextNonSelectionColor( ) );
-	        label.setOpaque( isSelected );
-	        return label;
-
-
-  }    
 
     /** Returns an ImageIcon, or null if the path was invalid. */
     protected static ImageIcon createImageIcon(String path) {
@@ -142,8 +98,6 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
      */
     @Override
     protected void paintComponent(Graphics g) {
-	// TODO Auto-generated method stub
-	System.out.println(jtree1.getPathForLocation(getX(), getY()));
 	if(jtree1.getPathForLocation(getX(), getY()).getPathCount()!=2){
 	    super.paintComponent( g );
 	    return;

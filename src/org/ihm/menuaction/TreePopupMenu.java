@@ -167,8 +167,8 @@ public class TreePopupMenu extends JPopupMenu {
 	add(addCert);
 	add(importCert);
 	add(exportCert);
-	add(openStore);
-	add(closeStore);
+	//add(openStore);
+	//add(closeStore);
 	add(removeStore);
 	add(deleteStore);
     }

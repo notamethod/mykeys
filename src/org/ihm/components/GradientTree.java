@@ -1,7 +1,8 @@
-package org.ihm;
+package org.ihm.components;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
+
 
 public class GradientTree extends JTree {
 
