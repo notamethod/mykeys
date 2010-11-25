@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project MyKeys with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="C:/Users/Buck/workspace/MyKeys/dist/mykeys.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="org.dpr.mykeys.ihm.MyKeys"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ bcprov-jdk15-143.jar commons-codec-1.3.jar commons-logging-1.1.1.jar log4j-1.2.9.jar commons-collections-3.2.jar commons-configuration-1.5.jar commons-lang-2.3.jar liquidlnf.jar substance.jar trident.jar"/>
+            	<attribute name="SplashScreen-Image" value="mykeys-splash.png"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="C:/Users/Buck/workspace/MyKeys/bin"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="bcprov-jdk15-143.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="commons-codec-1.3.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="commons-logging-1.1.1.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="log4j-1.2.9.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="commons-collections-3.2.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="commons-configuration-1.5.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="commons-lang-2.3.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="liquidlnf.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="substance.jar"/>
+            <zipfileset dir="C:\Users\Buck\workspace\MyKeys\lib" includes="trident.jar"/>
+        	<zipfileset dir="C:\Users\Buck\workspace\MyKeys" includes="mykeys-splash.png"/>
+        	
+        </jar>
+    </target>
+</project>
