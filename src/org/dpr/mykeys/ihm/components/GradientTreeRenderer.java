@@ -15,6 +15,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.dpr.mykeys.app.KeyStoreInfo;
+import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.swingutils.ImageUtils;
 
 public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
@@ -52,10 +53,18 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 		    // icon = createImageIcon("keystoreblueo.png");
 		    break;
 		case CASTORE:
-		    icon = ImageUtils.createImageIcon("keystorered.png");
+		    // icon = ImageUtils.createImageIcon("keystorered.png");
 		    break;
 		default:
 		    icon = ImageUtils.createImageIcon("keystoreblue.png");
+		    break;
+		}
+
+		switch (kInfo.getStoreType()) {
+		case INTERNAL:
+		    icon = ImageUtils.createImageIcon("keystorered.png");
+		    break;
+		default:
 		    break;
 		}
 

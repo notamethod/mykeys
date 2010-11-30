@@ -85,7 +85,11 @@ public class ListPanel extends JPanel {
 		if (e.getSource() instanceof JList) {
 		    if (((JList) e.getSource()).getSelectedValue() instanceof CertificateInfo) {
 			displayCertDetail((CertificateInfo) ((JList) e
-				.getSource()).getSelectedValue());
+				.getSource()).getSelectedValue());			
+		    if (ksInfo.getPassword() != null) {
+		        exportButton.setEnabled(true);
+		        deleteButton.setEnabled(true);
+		    }			
 		    }
 
 		}
@@ -188,6 +192,8 @@ public class ListPanel extends JPanel {
 	deleteButton = new JButton("Supprimer");
 	deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
 	deleteButton.setEnabled(false);
+	exportButton.setEnabled(false);
+
 	actions = new KeysAction(this);
 	exportButton.addActionListener(actions);
 	importButton.addActionListener(actions);
@@ -243,8 +249,7 @@ public class ListPanel extends JPanel {
 	    // unlockButton.setDisabledIcon(ImageUtils.createImageIcon("Unlocked.png"));
 	    addCertButton.setEnabled(true);
 	    importButton.setEnabled(true);
-	    exportButton.setEnabled(true);
-	    deleteButton.setEnabled(true);
+
 	    addCertButton.addActionListener(actions);
 	    listCerts.setShowImage(false);
 

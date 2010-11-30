@@ -22,7 +22,7 @@ import java.util.Date;
  * <BR>
  *         <i>Copyright : Tessi Informatique </i><BR>
  */
-public class CrlInfo {
+public class CrlInfo  implements NodeInfo{
     Date thisUpdate = new Date();
     Date nextUpdate;
 
@@ -83,6 +83,86 @@ public class CrlInfo {
      */
     public void setNumber(BigInteger number) {
 	this.number = number;
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @return
+     * 
+     * @see org.dpr.mykeys.app.NodeInfo#getName()
+     */
+    @Override
+    public String getName()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @return
+     * 
+     * @see org.dpr.mykeys.app.NodeInfo#getPath()
+     */
+    @Override
+    public String getPath()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @param name
+     * 
+     * @see org.dpr.mykeys.app.NodeInfo#setName(java.lang.String)
+     */
+    @Override
+    public void setName(String name)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @param path
+     * 
+     * @see org.dpr.mykeys.app.NodeInfo#setPath(java.lang.String)
+     */
+    @Override
+    public void setPath(String path)
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

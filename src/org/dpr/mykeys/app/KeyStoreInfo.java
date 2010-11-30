@@ -1,7 +1,7 @@
 package org.dpr.mykeys.app;
 
 
-public class KeyStoreInfo {
+public class KeyStoreInfo implements NodeInfo{
 
     private String name;
 

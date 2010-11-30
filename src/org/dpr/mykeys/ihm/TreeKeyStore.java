@@ -121,6 +121,8 @@ public class TreeKeyStore extends JPanel implements MouseListener,
     DefaultMutableTreeNode cliNode;
 
     DefaultMutableTreeNode acNode;
+    
+    DefaultMutableTreeNode crlNode;
 
     private TreeModel treeModel;
 
@@ -135,6 +137,9 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 		"store.ac.name"));
 	cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
 		"store.cert.name"));
+	
+    crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+    "store.crl.name"));	
 
 	treeModel = new TreeModel(rootNode);
 	treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
@@ -155,6 +160,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
 	treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
 	treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
+	treeModel.insertNodeInto(crlNode, rootNode, rootNode.getChildCount());
 
 	tree.setRootVisible(false);
 

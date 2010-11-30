@@ -35,8 +35,6 @@ public class InternalKeystores {
     }    
     
     public static String getCertPath() {
-//	String key = "store."+StoreModel.CASTORE.toString()+"."+StoreFormat.JKS.toString();
-//	String pathTmp = KSConfig.getUserCfg().getString(key);
 	if (pathCert == null){
 
 	    pathCert = KSConfig.getCfgPath()+File.separator+"mykeysCert.jks";
