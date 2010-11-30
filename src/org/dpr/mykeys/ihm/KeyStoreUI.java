@@ -56,7 +56,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 
     HashMap<String, KeyStoreInfo> ksList = new HashMap<String, KeyStoreInfo>();
 
-    TreeKeyStore mainPanel;
+    TreeKeyStorePanel mainPanel;
 
     /**
      * Constructeur
@@ -95,11 +95,11 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	List<Image> images = new ArrayList<Image>();
 	// URL imgURL = null;
 	images.add(Toolkit.getDefaultToolkit().getImage(
-		TreeKeyStore.class.getResource("images/mkico24.png")));
+		TreeKeyStorePanel.class.getResource("images/mkico24.png")));
 	images.add(Toolkit.getDefaultToolkit().getImage(
-		TreeKeyStore.class.getResource("images/mkico32.png")));
+		TreeKeyStorePanel.class.getResource("images/mkico32.png")));
 	images.add(Toolkit.getDefaultToolkit().getImage(
-		TreeKeyStore.class.getResource("images/mkico48.png")));
+		TreeKeyStorePanel.class.getResource("images/mkico48.png")));
 
 	return images;
     }
@@ -179,8 +179,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	JMenu menu1 = new JMenu(MyKeys.getMessage().getString("magasin"));
 	// ImageIcon icon = createImageIcon("images/keystore.png");
 	// menu1.setIcon(icon);
-	JMenuItem itemStart1 = new JMenuItem(new MenuAction(this, MyKeys
-		.getMessage().getString("magasin.new")));
+	JMenuItem itemStart1 = new JMenuItem(new MenuAction(this, MyKeys.getMessage().getString("magasin.new")));
 	itemStart1.setActionCommand("newStore");
 	menu1.add(itemStart1);
 	JMenuItem itemLoad = new JMenuItem(new MenuAction(this, MyKeys
@@ -196,8 +195,11 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 
 	menuOptions.add(itemLog);
 
+	JMenuItem menu3 = new JMenuItem(new MenuAction(this, MyKeys.getMessage().getString("crl.add")));
+	menu3.setActionCommand("addCrl");
 	menuBar.add(menu1);
 	menuBar.add(menuOptions);
+	menuBar.add(menu3);
 
 	this.setJMenuBar(menuBar);
 
@@ -211,7 +213,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 	buildMenu();
 
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	mainPanel = new TreeKeyStore(this.getPreferredSize());
+	mainPanel = new TreeKeyStorePanel(this.getPreferredSize());
 	this.getContentPane().add(p);
 	this.getContentPane().getMaximumSize();
 	p.add(mainPanel);
@@ -357,7 +359,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     }
 
     protected static ImageIcon createImageIcon(String path) {
-	java.net.URL imgURL = TreeKeyStore.class.getResource(path);
+	java.net.URL imgURL = TreeKeyStorePanel.class.getResource(path);
 	if (imgURL != null) {
 	    return new ImageIcon(imgURL);
 	} else {
@@ -367,7 +369,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     }
 
     protected static Image createImage(String path) {
-	java.net.URL imgURL = TreeKeyStore.class.getResource(path);
+	java.net.URL imgURL = TreeKeyStorePanel.class.getResource(path);
 
 	if (imgURL != null) {
 	    return Toolkit.getDefaultToolkit().getImage(imgURL);

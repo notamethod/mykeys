@@ -165,4 +165,42 @@ public class CrlInfo  implements NodeInfo{
         
     }
 
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @return
+     * 
+     * @see org.dpr.mykeys.app.NodeInfo#isOpen()
+     */
+    @Override
+    public boolean isOpen() {
+	// TODO Auto-generated method stub
+	return false;
+    }
+
+    /**
+     * .
+     * 
+     *<BR><pre>
+     *<b>Algorithme : </b>
+     *DEBUT
+     *    
+     *FIN</pre>
+     *
+     * @param isOpen
+     * 
+     * @see org.dpr.mykeys.app.NodeInfo#setOpen(boolean)
+     */
+    @Override
+    public void setOpen(boolean isOpen) {
+	// TODO Auto-generated method stub
+	
+    }
+
 }

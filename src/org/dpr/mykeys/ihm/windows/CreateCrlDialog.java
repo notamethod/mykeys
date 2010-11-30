@@ -28,6 +28,7 @@ import javax.swing.JPasswordField;
 import javax.swing.border.Border;
 
 import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
@@ -41,7 +42,7 @@ import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class CreateCertificatDialog extends JDialog implements ItemListener {
+public class CreateCrlDialog extends JDialog implements ItemListener {
 
     // JTextField x509PrincipalC;
     // JTextField x509PrincipalO;
@@ -51,20 +52,17 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
     // JTextField x509PrincipalCN;
     LabelValuePanel infosPanel;
 
-    KeyStoreInfo ksInfo;
+    CrlInfo crlInfo;
 
     CertificateInfo certInfo = new CertificateInfo();
 
     boolean isAC = false;
 
-    public CreateCertificatDialog(JFrame owner, KeyStoreInfo ksInfo,
+    public CreateCrlDialog(JFrame owner,
 	    boolean modal) {
 
 	super(owner, modal);
-	this.ksInfo = ksInfo;
-	if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
-	    isAC = true;
-	}
+
 	init();
 	this.pack();
 
@@ -73,11 +71,10 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
     private void init() {
 
 	DialogAction dAction = new DialogAction();
-	if (isAC) {
-	    setTitle("Création d'une autorité de certification");
-	} else {
-	    setTitle("Création de Certificat");
-	}
+	//FIXME:
+
+	setTitle("Création d'une liste de révocation");
+
 	JPanel jp = new JPanel();
 	BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 	jp.setLayout(bl);
@@ -168,45 +165,6 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 	mapAC.put(" ", " ");
 	infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
 
-	if (isAC) {
-	    infosPanel.put("Alias (nom du certificat)", "alias",
-		    "MyKeys Root CA");
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Taille clé publique", JComboBox.class, "keyLength",
-		    mapKeyLength, "2048 bits");
-	    infosPanel.put("Algorithme clé publique", JComboBox.class,
-		    "algoPubKey", mapAlgoKey, "RSA");
-	    infosPanel.put("Algorithme de signature", JComboBox.class,
-		    "algoSig", mapAlgoSig, "SHA256WithRSAEncryption");
-	    // subject
-	    infosPanel.putEmptyLine();
-	    Calendar calendar = Calendar.getInstance();
-
-	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
-		    JSpinnerDate.class, "notBefore", calendar.getTime(), true);
-	    calendar.add(Calendar.YEAR, 5);
-	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
-		    JSpinnerDate.class, "notAfter", calendar.getTime(), true);
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Nom (CN)", "CN", "MyKeys Root CA");
-	    infosPanel.put("Pays (C)", "C", "FR");
-	    infosPanel.put("Organisation (O)", "O", "MyKeys");
-	    infosPanel.put("Section (OU)", "OU", "");
-	    infosPanel.put("Localité (L)", "L", "");
-	    infosPanel.put("Rue (ST)", "SR", "");
-	    infosPanel.put("Email (E)", "E", "");
-
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib",
-		    "");
-	    infosPanel.put("Policy notice", "PolicyNotice", "");
-	    infosPanel.put("Policy CPS", "PolicyCPS", "");
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Mot de passe clé privée", JPasswordField.class,
-		    "pwd1", InternalKeystores.password, false);
-	    infosPanel.put("Confirmer le mot de passe", JPasswordField.class,
-		    "pwd2", InternalKeystores.password, false);
-	} else {
 	    infosPanel.put("Alias (nom du certificat)", "alias", "");
 	    infosPanel.putEmptyLine();
 	    infosPanel.put("Taille clé publique", JComboBox.class, "keyLength",
@@ -242,7 +200,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		    "pwd1", "", true);
 	    infosPanel.put("Confirmer le mot de passe", JPasswordField.class,
 		    "pwd2", "", true);
-	}
+	
 
     }
 
@@ -262,7 +220,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		}
 		if (elements.get("alias") == null
 			|| elements.get("pwd1") == null) {
-		    KeyStoreUI.showError(CreateCertificatDialog.this,
+		    KeyStoreUI.showError(CreateCrlDialog.this,
 			    "Champs obligatoires");
 		    return;
 		}
@@ -293,16 +251,16 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		    xCerts = ktools.genererX509(certInfo,
 			    (String) elements.get("emetteur"), isAC);
 
-		    ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
-		    CreateCertificatDialog.this.setVisible(false);
+		    //ktools.generateCrl(certSign, crlInfo, privateKey);
+		    CreateCrlDialog.this.setVisible(false);
 
 		} catch (Exception e) {
-		    KeyStoreUI.showError(CreateCertificatDialog.this,
+		    KeyStoreUI.showError(CreateCrlDialog.this,
 			    e.getMessage());
 		    e.printStackTrace();
 		}
 	    } else if (command.equals("CANCEL")) {
-		CreateCertificatDialog.this.setVisible(false);
+		CreateCrlDialog.this.setVisible(false);
 	    }
 
 	}

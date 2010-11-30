@@ -16,7 +16,7 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.ihm.TreeKeyStore;
+import org.dpr.mykeys.ihm.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.TypeAction;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
 import org.dpr.mykeys.ihm.windows.ImportStoreDialog;
@@ -41,7 +41,7 @@ public class TreePopupMenu extends JPopupMenu {
 
     JMenuItem exportCert;
 
-    TreeKeyStore treeKeyStoreParent;
+    TreeKeyStorePanel treeKeyStoreParent;
 
     private TreePath path;
 
@@ -110,7 +110,7 @@ public class TreePopupMenu extends JPopupMenu {
 
     }
 
-    public TreePopupMenu(String string, TreeKeyStore treeKeyStore) {
+    public TreePopupMenu(String string, TreeKeyStorePanel treeKeyStore) {
 	super(string);
 	this.treeKeyStoreParent = treeKeyStore;
 	init();

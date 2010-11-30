@@ -84,7 +84,7 @@ import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListPanel;
 
-public class TreeKeyStore extends JPanel implements MouseListener,
+public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	TreeExpansionListener, TreeWillExpandListener {
 
     public class TreeTransferHandler extends TransferHandler {
@@ -109,7 +109,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
     }
 
-    final static Log log = LogFactory.getLog(TreeKeyStore.class);
+    final static Log log = LogFactory.getLog(TreeKeyStorePanel.class);
     private DetailPanel detailPanel;
     
     private ListPanel listePanel;
@@ -128,7 +128,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 
     TreePopupMenu popup;
 
-    public TreeKeyStore(Dimension dim) {
+    public TreeKeyStorePanel(Dimension dim) {
 	this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 	// Create the nodes.
@@ -350,9 +350,9 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	try {
 	    ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 		    ksInfo.getPassword());
-
+	    ksInfo.setOpen(true);
 	} catch (Exception e1) {
-	    KeyStoreUI.showError(TreeKeyStore.this, e1.getMessage());
+	    KeyStoreUI.showError(TreeKeyStorePanel.this, e1.getMessage());
 	    e1.printStackTrace();
 	    return false;
 	}
@@ -407,7 +407,7 @@ public class TreeKeyStore extends JPanel implements MouseListener,
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	// Create and set up the content pane.
-	TreeKeyStore newContentPane = new TreeKeyStore(null);
+	TreeKeyStorePanel newContentPane = new TreeKeyStorePanel(null);
 	newContentPane.setOpaque(true); // content panes must be opaque
 	frame.setContentPane(newContentPane);
 

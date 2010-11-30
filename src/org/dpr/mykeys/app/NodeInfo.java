@@ -50,4 +50,14 @@ public interface NodeInfo
      */
     public void setPath(String path);
     
+    /**
+     * @return the isOpen
+     */
+    public boolean isOpen();
+    /**
+     * @param isOpen
+     *            the isOpen to set
+     */
+    public void setOpen(boolean isOpen);
+      
 }

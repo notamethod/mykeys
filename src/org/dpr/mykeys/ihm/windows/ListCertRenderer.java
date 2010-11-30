@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.ihm.TreeKeyStore;
+import org.dpr.mykeys.ihm.TreeKeyStorePanel;
 import org.dpr.swingutils.ImageUtils;
 
 /**
@@ -80,7 +80,7 @@ public class ListCertRenderer extends DefaultListCellRenderer {
     }
     
     protected static ImageIcon createImageIcon(String path) {
-	java.net.URL imgURL = TreeKeyStore.class.getResource(path);
+	java.net.URL imgURL = TreeKeyStorePanel.class.getResource(path);
 	if (imgURL != null) {
 	    return new ImageIcon(imgURL);
 	} else {

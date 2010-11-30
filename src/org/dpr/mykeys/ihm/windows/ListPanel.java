@@ -86,7 +86,7 @@ public class ListPanel extends JPanel {
 		    if (((JList) e.getSource()).getSelectedValue() instanceof CertificateInfo) {
 			displayCertDetail((CertificateInfo) ((JList) e
 				.getSource()).getSelectedValue());			
-		    if (ksInfo.getPassword() != null) {
+		    if (ksInfo.isOpen()) {
 		        exportButton.setEnabled(true);
 		        deleteButton.setEnabled(true);
 		    }			
@@ -242,7 +242,7 @@ public class ListPanel extends JPanel {
 	}
 
 	addCertButton.removeActionListener(actions);
-	if (ksInfo.getPassword() != null) {
+	if (ksInfo.isOpen()) {
 	    unlockButton.setSelected(false);
 	    // unlockButton.setIcon(ImageUtils.createImageIcon("Unlocked.png"));
 	    unlockButton.setEnabled(false);
@@ -534,6 +534,7 @@ public class ListPanel extends JPanel {
 	    }
 
 	    ksInfo.setPassword(password);
+	    
 
 	}
 
@@ -542,6 +543,7 @@ public class ListPanel extends JPanel {
 	try {
 	    ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 		    ksInfo.getPassword());
+	    ksInfo.setOpen(true);
 
 	} catch (Exception e1) {
 	    KeyStoreUI.showError(this, e1.getMessage());

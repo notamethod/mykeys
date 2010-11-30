@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.dpr.mykeys.ihm.KeyStoreUI;
+import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
 import org.dpr.mykeys.ihm.windows.ImportStoreDialog;
 
@@ -52,6 +53,16 @@ public class MenuAction extends AbstractAction {
 				    keyStoreUI, true);
 			    cs.setLocationRelativeTo(keyStoreUI);
 
+			    cs.setVisible(true);
+			}
+		    });
+
+		} else if (action.equals("addCrl")) {
+		    SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+			    CreateCrlDialog cs = new CreateCrlDialog(
+				    keyStoreUI, true);
+			    cs.setLocationRelativeTo(keyStoreUI);
 			    cs.setVisible(true);
 			}
 		    });

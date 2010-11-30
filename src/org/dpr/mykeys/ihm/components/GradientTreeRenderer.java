@@ -14,8 +14,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
+import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.swingutils.ImageUtils;
 
 public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
@@ -78,8 +78,23 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 		}
 	    }
 
-	    else {
-		//
+	    else    if (node.getUserObject() instanceof CrlInfo) {
+		CrlInfo cInfo = (CrlInfo) node.getUserObject();
+		tooltip = cInfo.getPath();
+		// if (kInfo.isOpen()) {
+		ImageIcon icon = null;
+
+		    icon = ImageUtils.createImageIcon("keystorered.png");
+
+
+		if (icon != null) {
+
+		    setIcon(icon);
+
+		}
+		if (isSelected) {
+		    rc.setForeground(colorb);
+		}
 	    }
 	}
 	if (tooltip != null) {
