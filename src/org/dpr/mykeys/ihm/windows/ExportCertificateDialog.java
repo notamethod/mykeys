@@ -154,7 +154,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		
 		if (format.equals("PKCS12")){
 		    CommonsActions cact = new CommonsActions();
-		    cact.exportCert(StoreFormat.PKCS12, path, password, certInfo);
+		    cact.signData(ksInfo, password, certInfo);
+		    //FIXME
+		    //cact.exportCert(StoreFormat.PKCS12, path, password, certInfo);
 		}else{
 		try {
 		    kt.exportDer(certInfo, path);

@@ -4,6 +4,10 @@
 package org.dpr.mykeys.app;
 
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
 
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
@@ -44,6 +48,34 @@ public class CommonsActions {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+
+    public void signData(KeyStoreInfo kInfo, char[] password,
+	    CertificateInfo certInfo) {
+	KeyTools kt = new KeyTools();
+	KeyStore ks;
+	try {
+	    ks = kt.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(),
+		    kInfo.getPassword());
+	    certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(),
+		    kInfo.getPassword()));
+	} catch (KeyToolsException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (UnrecoverableKeyException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (KeyStoreException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (NoSuchAlgorithmException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	SignTools sTools = new SignTools();
+	sTools.SignData(null, certInfo, "c:/dev/SMC_test.sql");
+
     }
 
     /**

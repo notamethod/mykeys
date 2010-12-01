@@ -12,6 +12,8 @@ import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
 import org.dpr.mykeys.ihm.windows.ImportStoreDialog;
+import org.dpr.mykeys.ihm.windows.SignDocumentDialog;
+import org.dpr.mykeys.ihm.windows.VerifSigDialog;
 
 public class MenuAction extends AbstractAction {
 
@@ -64,6 +66,21 @@ public class MenuAction extends AbstractAction {
 				    keyStoreUI, true);
 			    cs.setLocationRelativeTo(keyStoreUI);
 			    cs.setVisible(true);
+			}
+		    });
+
+		} else if (action.equals("signFile")) {
+		    SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+			    VerifSigDialog cs = new VerifSigDialog(
+				    keyStoreUI, true);
+			    cs.setLocationRelativeTo(keyStoreUI);
+			    cs.setVisible(true);
+//			    SignDocumentDialog cs = new SignDocumentDialog(
+//			    keyStoreUI, true);
+//		    cs.setLocationRelativeTo(keyStoreUI);
+//		    cs.setVisible(true);			    
+			    
 			}
 		    });
 

@@ -638,6 +638,8 @@ public class KeyTools {
 		bf.append(chainCert.toString());
 	    }
 	    certInfo.setCertChain(bf.toString());
+	    certInfo.setCertificateChain(certs);
+
 	} catch (KeyStoreException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();

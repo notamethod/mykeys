@@ -197,9 +197,13 @@ public class KeyStoreUI extends JFrame implements WindowListener {
 
 	JMenuItem menu3 = new JMenuItem(new MenuAction(this, MyKeys.getMessage().getString("crl.add")));
 	menu3.setActionCommand("addCrl");
+	
+	JMenuItem menu4 = new JMenuItem(new MenuAction(this, MyKeys.getMessage().getString("file.sign")));
+	menu4.setActionCommand("signFile");	
 	menuBar.add(menu1);
 	menuBar.add(menuOptions);
 	menuBar.add(menu3);
+	menuBar.add(menu4);
 
 	this.setJMenuBar(menuBar);
 
