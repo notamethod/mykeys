@@ -25,6 +25,8 @@ import java.util.Date;
 public class CrlInfo  implements NodeInfo{
     Date thisUpdate = new Date();
     Date nextUpdate;
+    String name;
+    String path;
 
     BigInteger number = BigInteger.ONE;
 
@@ -102,7 +104,7 @@ public class CrlInfo  implements NodeInfo{
     public String getName()
     {
         // TODO Auto-generated method stub
-        return null;
+        return name;
     }
 
     /**
@@ -122,7 +124,7 @@ public class CrlInfo  implements NodeInfo{
     public String getPath()
     {
         // TODO Auto-generated method stub
-        return null;
+        return path;
     }
 
     /**
@@ -141,7 +143,7 @@ public class CrlInfo  implements NodeInfo{
     @Override
     public void setName(String name)
     {
-        // TODO Auto-generated method stub
+        this.name=name;
         
     }
 
@@ -161,7 +163,7 @@ public class CrlInfo  implements NodeInfo{
     @Override
     public void setPath(String path)
     {
-        // TODO Auto-generated method stub
+	 this.path=path;
         
     }
 

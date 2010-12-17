@@ -2,11 +2,8 @@ package org.dpr.mykeys.ihm.windows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.security.cert.X509Certificate;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,25 +13,22 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.border.Border;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileSystemView;
 
-import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.InternalKeystores;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.TreeKeyStorePanel;
@@ -42,7 +36,7 @@ import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class CreateCrlDialog extends JDialog implements ItemListener {
+public class CreateCrlDialog extends JDialog {
 
     // JTextField x509PrincipalC;
     // JTextField x509PrincipalO;
@@ -50,16 +44,18 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
     // JTextField x509PrincipalST;
     // JTextField x509PrincipalE;
     // JTextField x509PrincipalCN;
+
+    JTextField tfDirectoryOut;
     LabelValuePanel infosPanel;
 
-    CrlInfo crlInfo;
+   
 
-    CertificateInfo certInfo = new CertificateInfo();
+    // CertificateInfo certInfo = new CertificateInfo();
 
     boolean isAC = false;
+    public JFileChooser jfc;
 
-    public CreateCrlDialog(JFrame owner,
-	    boolean modal) {
+    public CreateCrlDialog(JFrame owner, boolean modal) {
 
 	super(owner, modal);
 
@@ -71,7 +67,7 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
     private void init() {
 
 	DialogAction dAction = new DialogAction();
-	//FIXME:
+	// FIXME:
 
 	setTitle("Création d'une liste de révocation");
 
@@ -83,38 +79,31 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
 	JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
 	panelInfo.setMinimumSize(new Dimension(400, 100));
 
-	Map<String, String> mapKeyLength = new HashMap<String, String>();
-	mapKeyLength.put("512 bits", "512");
-	mapKeyLength.put("1024 bits", "1024");
-	mapKeyLength.put("2048 bits", "2048");
-	mapKeyLength.put("4096 bits", "4096");
-	// fill with provider's available algorithms
-	Map<String, String> mapAlgoKey = new LinkedHashMap<String, String>();
-	for (String algo : ProviderUtil.KeyPairGeneratorList) {
-	    mapAlgoKey.put(algo, algo);
-	}
+
 	// fill with provider's available algorithms
 	Map<String, String> mapAlgoSig = new LinkedHashMap<String, String>();
 	for (String algo : ProviderUtil.SignatureList) {
 	    mapAlgoSig.put(algo, algo);
 	}
 
-	getInfoPanel(isAC, mapKeyLength, mapAlgoKey, mapAlgoSig);
+	getInfoPanel(mapAlgoSig);
 	panelInfo.add(infosPanel);
 
-	// JPanel panelInfo2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
-	JPanel checkPanel = new JPanel(new GridLayout(0, 3));
+	FileSystemView fsv = FileSystemView.getFileSystemView();
+	File f = fsv.getDefaultDirectory();
 
-	Border border = BorderFactory.createTitledBorder("Key usage");
-	checkPanel.setBorder(border);
-	for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
-	    JCheckBox item = new JCheckBox(X509Constants.keyUsageLabel[i]);
-	    item.addItemListener(this);
-	    if ((isAC && i == 5) || (isAC && i == 6)) {
-		item.setSelected(true);
-	    }
-	    checkPanel.add(item);
-	}
+	JLabel jl5 = new JLabel("Fichier en sortie");
+
+	tfDirectoryOut = new JTextField(40);
+	tfDirectoryOut.setText(f.getAbsolutePath());
+	JButton jbChoose2 = new JButton("...");
+	jbChoose2.addActionListener(dAction);
+	jbChoose2.setActionCommand("CHOOSE_OUT");
+
+	JPanel jpDirectory2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
+	jpDirectory2.add(jl5);
+	jpDirectory2.add(tfDirectoryOut);
+	jpDirectory2.add(jbChoose2);
 
 	JButton jbOK = new JButton("Valider");
 	jbOK.addActionListener(dAction);
@@ -125,7 +114,7 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
 	JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
 	jp.add(panelInfo);
-	jp.add(checkPanel);
+	jp.add(jpDirectory2);
 	jp.add(jf4);
 
     }
@@ -149,13 +138,12 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
      * @param isAC2
      * @return
      */
-    private void getInfoPanel(boolean isAC, Map<String, String> mapKeyLength,
-	    Map<String, String> mapAlgoKey, Map<String, String> mapAlgoSig) {
+    private void getInfoPanel(Map<String, String> mapAlgoSig) {
 	infosPanel = new LabelValuePanel();
 	Map<String, String> mapAC = null;
 	try {
-	    mapAC = TreeKeyStorePanel.getListCerts(InternalKeystores.getACPath(),
-		    "JKS", InternalKeystores.password);
+	    mapAC = TreeKeyStorePanel.getListCerts(InternalKeystores
+		    .getACPath(), "JKS", InternalKeystores.password);
 	} catch (Exception e) {
 	    //
 	}
@@ -165,42 +153,23 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
 	mapAC.put(" ", " ");
 	infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
 
-	    infosPanel.put("Alias (nom du certificat)", "alias", "");
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Taille clé publique", JComboBox.class, "keyLength",
-		    mapKeyLength, "2048 bits");
-	    infosPanel.put("Algorithme clé publique", JComboBox.class,
-		    "algoPubKey", mapAlgoKey, "RSA");
-	    infosPanel.put("Algorithme de signature", JComboBox.class,
-		    "algoSig", mapAlgoSig, "SHA256WithRSAEncryption");
-	    // subject
-	    infosPanel.putEmptyLine();
-	    Calendar calendar = Calendar.getInstance();
+	infosPanel.put("Alias (nom du certificat)", "alias", "");
+	infosPanel.putEmptyLine();
 
-	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
-		    JSpinnerDate.class, "notBefore", calendar.getTime(), true);
-	    calendar.add(Calendar.DAY_OF_YEAR, 60);
-	    infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
-		    JSpinnerDate.class, "notAfter", calendar.getTime(), true);
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Nom (CN)", "CN", "Nom");
-	    infosPanel.put("Pays (C)", "C", "FR");
-	    infosPanel.put("Organisation (O)", "O", "Orga");
-	    infosPanel.put("Section (OU)", "OU", "Développement");
-	    infosPanel.put("Localité (L)", "L", "Saint-Etienne");
-	    infosPanel.put("Rue (ST)", "SR", "");
-	    infosPanel.put("Email (E)", "E", "");
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib",
-		    "");
-	    infosPanel.put("Policy notice", "PolicyNotice", "");
-	    infosPanel.put("Policy CPS", "PolicyCPS", "");
-	    infosPanel.putEmptyLine();
-	    infosPanel.put("Mot de passe clé privée", JPasswordField.class,
-		    "pwd1", "", true);
-	    infosPanel.put("Confirmer le mot de passe", JPasswordField.class,
-		    "pwd2", "", true);
-	
+	infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig",
+		mapAlgoSig, "SHA256WithRSAEncryption");
+	// subject
+	infosPanel.putEmptyLine();
+	Calendar calendar = Calendar.getInstance();
+
+	infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
+		JSpinnerDate.class, "notBefore", calendar.getTime(), true);
+	calendar.add(Calendar.DAY_OF_YEAR, 7);
+	infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
+		JSpinnerDate.class, "notAfter", calendar.getTime(), true);
+	infosPanel.putEmptyLine();
+
+	infosPanel.putEmptyLine();
 
     }
 
@@ -209,54 +178,60 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 	    String command = event.getActionCommand();
-	    if (command.equals("CHOOSE_IN")) {
+	    if (command.equals("CHOOSE_OUT")) {
+		infosPanel.set("alias", "totototo");
+//		jfc = new JFileChooser();
+//		if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+//		    String path = jfc.getSelectedFile().getAbsolutePath();
+//
+//		    if (!path.toUpperCase().endsWith("CRL")) {
+//
+//			path = path + ".crl";
+//		    }
+//
+//		    tfDirectoryOut.setText(path);
+//		}
 
 	    } else if (command.equals("OK")) {
+		
 		Map<String, Object> elements = infosPanel.getElements();
+		System.out.println(elements.get("alias"));
 		Set<String> keys = elements.keySet();
 		Iterator<String> it = keys.iterator();
 		while (it.hasNext()) {
 		    String key = it.next();
 		}
-		if (elements.get("alias") == null
-			|| elements.get("pwd1") == null) {
+		if (elements.get("alias") == null) {
 		    KeyStoreUI.showError(CreateCrlDialog.this,
-			    "Champs obligatoires");
+			    "alias obligatoire");
 		    return;
 		}
+		 CrlInfo crlInfo = new CrlInfo();;
 
 		// certInfo.setX509PrincipalMap(elements);
 		HashMap<String, String> subjectMap = new HashMap<String, String>();
-		certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
-		certInfo.setAlgoSig((String) elements.get("algoSig"));
-		certInfo.setKeyLength((String) elements.get("keyLength"));
-		certInfo.setAlias((String) elements.get("alias"));
-		certInfo.setNotBefore((Date) elements.get("notBefore"));
-		certInfo.setNotAfter((Date) elements.get("notAfter"));
-		KeyTools ktools = new KeyTools();
-		char[] pkPassword = ((String) elements.get("pwd1"))
-			.toCharArray();
+		crlInfo.setName((String) elements.get("alias"));
+		crlInfo.setThisUpdate((Date) elements.get("notBefore"));
+		crlInfo.setNextUpdate((Date) elements.get("notAfter"));
+		crlInfo.setPath(tfDirectoryOut.getText());
 
-		certInfo.setSubjectMap(elements);
-		certInfo.setPassword(pkPassword);
-		X509Certificate[] xCerts = null;
+		KeyTools ktools = new KeyTools();
+		// CertificateInfo certSign =
+		// ktools.getCertificateACByAlias((String)
+		// elements.get("emetteur"));
+
+		CommonsActions cActions = new CommonsActions();
 
 		try {
-		    certInfo.setCrlDistributionURL(((String) elements
-			    .get("CrlDistrib")));
-		    certInfo.setPolicyNotice(((String) elements
-			    .get("PolicyNotice")));
-		    certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
 
-		    xCerts = ktools.genererX509(certInfo,
-			    (String) elements.get("emetteur"), isAC);
-
-		    //ktools.generateCrl(certSign, crlInfo, privateKey);
+		    cActions.generateCrl((String) elements.get("emetteur"),
+			    crlInfo);
+		    // FIXME: add crl to tree
+		    // ktools.generateCrl(certSign, crlInfo, privateKey);
 		    CreateCrlDialog.this.setVisible(false);
 
 		} catch (Exception e) {
-		    KeyStoreUI.showError(CreateCrlDialog.this,
-			    e.getMessage());
+		    KeyStoreUI.showError(CreateCrlDialog.this, e.getMessage());
 		    e.printStackTrace();
 		}
 	    } else if (command.equals("CANCEL")) {
@@ -264,21 +239,6 @@ public class CreateCrlDialog extends JDialog implements ItemListener {
 	    }
 
 	}
-
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-	Object source = e.getItemSelectable();
-	JCheckBox jc = (JCheckBox) source;
-	String val = jc.getText();
-	for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
-	    if (val.equals(X509Constants.keyUsageLabel[i])) {
-		certInfo.getKeyUsage()[i] = jc.isSelected();
-		return;
-	    }
-	}
-
     }
 
 }

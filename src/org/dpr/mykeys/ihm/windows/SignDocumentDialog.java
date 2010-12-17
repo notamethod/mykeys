@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
@@ -155,7 +156,7 @@ public class SignDocumentDialog extends JDialog {
 		    }
 	
 
-		    tfDirectoryIn.setText(path);
+		    tfDirectoryOut.setText(path);
 
 		}
 
@@ -171,29 +172,16 @@ public class SignDocumentDialog extends JDialog {
 			    "Mot de passe incorrect");
 		    return;
 		}
-		KeyTools kt = new KeyTools();
-		// try {
-		// StoreFormat format = StoreFormat.valueOf((String) elements
-		// .get("typeKS"));
-		// createKeyStore(format, tfDirectory.getText(),
-		// ((String) elements.get("pwd1")).toCharArray());
-		// kt.createKeyStore(format, tfDirectory.getText(),
-		// ((String) elements.get("pwd1")).toCharArray());
-		// KSConfig.getUserCfg().addProperty(
-		// "store." + StoreModel.CERTSTORE + "."
-		// + format.toString(), tfDirectory.getText());
-		// ((KeyStoreUI) SignDocumentDialog.this.getParent())
-		// .updateKeyStoreList();
-		// SignDocumentDialog.this.setVisible(false);
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+
+		    CommonsActions cact = new CommonsActions();
+		 //   cact.signData(ksInfo, password, certInfo, false);
+		    //FIXME
+		    //cact.exportCert(StoreFormat.PKCS12, path, password, certInfo);
+		
 
 	    } else if (command.equals("CANCEL")) {
 		SignDocumentDialog.this.setVisible(false);
 	    }
-
 	}
 
     }

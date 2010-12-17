@@ -3,12 +3,18 @@ package org.dpr.mykeys.app;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
+
+import javax.security.auth.x500.X500Principal;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.x509.X509Extensions;
+import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 public class X509Util {
@@ -125,5 +131,40 @@ public class X509Util {
 //        System.out.println("bi as long = " + Long.toHexString(bi.longValue()));
 //        System.out.println("bi as hex  = " + bi.toString(16));
 //    }
+    
+    public static Map<DERObjectIdentifier, String> getSubjectMap(X509Certificate x509Certificate)
+    {
+        X500Principal x500Principal = x509Certificate.getSubjectX500Principal();
+        return getInfosMap(x500Principal);
+    }
+    
+    public static Map<DERObjectIdentifier, String> getIssuerMap(X509Certificate x509Certificate)
+    {
+        X500Principal x500Principal = x509Certificate.getIssuerX500Principal();
+        return getInfosMap(x500Principal);
+    }    
+    
+    public static Map<DERObjectIdentifier, String> getInfosMap(X500Principal x500Principal)
+    {
+        Map<DERObjectIdentifier, String> subjectMap = new HashMap<DERObjectIdentifier, String>();
+        if (x500Principal == null)
+        {
+            return subjectMap;
+        }
+        String principalName = x500Principal.getName();
+        if (StringUtils.isBlank(principalName))
+        {
+            return subjectMap;
+        }
+        X509Name x509Name = new X509Name(principalName);
+        Vector<DERObjectIdentifier> v = x509Name.getOIDs();
+        for (int i = 0; i < v.size(); i++)
+        {
+            DERObjectIdentifier oid = v.get(i);
+            String val = (String) x509Name.getValues().get(i);
+            subjectMap.put(oid, val);
+        }
+        return subjectMap;
+    }    
 
 }

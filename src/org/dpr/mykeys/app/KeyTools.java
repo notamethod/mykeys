@@ -30,15 +30,21 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
+import java.security.cert.CertificateParsingException;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,7 +78,6 @@ import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 
 public class KeyTools {
     final Log log = LogFactory.getLog(KeyTools.class);
@@ -88,6 +93,9 @@ public class KeyTools {
     static String EXT_P12 = ".p12";
 
     static String X509_TYPE = "X.509";
+
+    static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
+    static final String END_PEM = "-----END CERTIFICATE-----";
 
     private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
 
@@ -196,11 +204,11 @@ public class KeyTools {
      * @param password
      * @throws Exception
      */
-    public KeyStore createKeyStore(StoreFormat format, String name, char[] password)
-	    throws Exception {
+    public KeyStore createKeyStore(StoreFormat format, String name,
+	    char[] password) throws Exception {
 	KeyStore ks = null;
 	try {
-	     ks = KeyStore.getInstance(format.toString());
+	    ks = KeyStore.getInstance(format.toString());
 
 	    ks.load(null, password);
 	    OutputStream fos = new FileOutputStream(new File(name));
@@ -380,7 +388,7 @@ public class KeyTools {
 	X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 	BigInteger bi = RandomBI(30);
 	certGen.setSerialNumber(bi);
-	if (StringUtils.isBlank(certModel.getAlias())){
+	if (StringUtils.isBlank(certModel.getAlias())) {
 	    certModel.setAlias(bi.toString(16));
 	}
 	if (certIssuer.getCertificate() != null) {
@@ -503,14 +511,17 @@ public class KeyTools {
 	saveKeyStore(kstore, ksInfo);
     }
 
-    public void deleteCertificate(KeyStoreInfo ksInfo, CertificateInfo certificateInfo) throws KeyToolsException, KeyStoreException {
+    public void deleteCertificate(KeyStoreInfo ksInfo,
+	    CertificateInfo certificateInfo) throws KeyToolsException,
+	    KeyStoreException {
 
-        KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-                ksInfo.getPassword());
-        ks.deleteEntry(certificateInfo.getAlias());
-       saveKeyStore(ks, ksInfo);
+	KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+		ksInfo.getPassword());
+	ks.deleteEntry(certificateInfo.getAlias());
+	saveKeyStore(ks, ksInfo);
 
     }
+
     /**
      * .
      * 
@@ -838,12 +849,12 @@ public class KeyTools {
 	    KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo
 		    .getStoreFormat(), ksInfo.getPassword());
 	    PrivateKey privateKey = null;
-	    if (ksInfo.getStoreType().equals(StoreType.INTERNAL)){
+	    if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), ksInfo
+			.getPassword());
+	    } else {
 		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
-			ksInfo.getPassword());
-	    }else{
-		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
-		    password);
+			password);
 	    }
 	    byte[] privKey = privateKey.getEncoded();
 	    FileOutputStream keyfos = new FileOutputStream(new File(fName
@@ -893,6 +904,35 @@ public class KeyTools {
 	}
     }
 
+    public void exportPem(CertificateInfo certInfo, String fName)
+	    throws KeyToolsException {
+	/* save the public key in a file */
+	try {
+	    List<String> lines = new ArrayList<String>();
+	    lines.add(BEGIN_PEM);
+	    //FileUtils.writeLines(file, lines)
+	    File f = new File(fName + ".pem");
+//	    FileOutputStream keyfos = new FileOutputStream(new File(fName
+//		    + ".pem"));
+	    byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
+	    String tmpString = new String(b);
+	    String[] datas = tmpString.split("(?<=\\G.{64})");
+	    for (String data : datas){
+		lines.add(data);
+	    }
+	    
+	    lines.add(END_PEM);   
+	    FileUtils.writeLines(f, lines);
+//	    keyfos.write(certInfo.getCertificate().getEncoded());
+//	    keyfos.close();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    log.error(e);
+	    throw new KeyToolsException("Export de la clé publique impossible:"
+		    + certInfo.getAlias(), e);
+	}
+    }
+
     /**
      * get a random BigInteger
      * 
@@ -931,15 +971,31 @@ public class KeyTools {
 	KeyStore ks = null;
 	if (!StringUtils.isBlank(aliasEmetteur)) {
 	    char[] password = InternalKeystores.password.toCharArray();
-	    ks = loadKeyStore(InternalKeystores.getACPath(), StoreFormat.JKS, InternalKeystores.password
-		    .toCharArray());
+	    ks = loadKeyStore(InternalKeystores.getACPath(), StoreFormat.JKS,
+		    InternalKeystores.password.toCharArray());
 	    CertificateInfo infoEmetteur = new CertificateInfo();
 	    fillCertInfo(ks, infoEmetteur, aliasEmetteur);
-	    infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
+	    infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur,
+		    password));
 	    return genererX509(certInfo, infoEmetteur, isAC);
 	} else {
 	    return genererX509(certInfo, certInfo, isAC);
 	}
+    }
+
+    public CertificateInfo getCertificateACByAlias(String aliasEmetteur)
+	    throws Exception {
+
+	KeyStore ks = null;
+
+	char[] password = InternalKeystores.password.toCharArray();
+	ks = loadKeyStore(InternalKeystores.getACPath(), StoreFormat.JKS,
+		InternalKeystores.password.toCharArray());
+	CertificateInfo infoEmetteur = new CertificateInfo();
+	fillCertInfo(ks, infoEmetteur, aliasEmetteur);
+	infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur,
+		password));
+	return infoEmetteur;
 
     }
 
@@ -1015,9 +1071,8 @@ public class KeyTools {
 	Date now = new Date();
 	Date nextUpdate = calendar.getTime();
 
-	//crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
-	crlGen.setIssuerDN(certSign
-		    .getSubjectX500Principal());	
+	// crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
+	crlGen.setIssuerDN(certSign.getSubjectX500Principal());
 	String signAlgo = "SHA1WITHRSAENCRYPTION";
 	crlGen.setThisUpdate(crlInfo.getThisUpdate());
 	crlGen.setNextUpdate(crlInfo.getNextUpdate());
@@ -1026,8 +1081,7 @@ public class KeyTools {
 	// crlGen.addCRLEntry(BigInteger.ONE, now,
 	// CRLReason.privilegeWithdrawn);
 	BigInteger bi = new BigInteger("155461028");
-	crlGen.addCRLEntry(bi, new Date(),
-		CRLReason.privilegeWithdrawn);
+	crlGen.addCRLEntry(bi, new Date(), CRLReason.privilegeWithdrawn);
 
 	crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 		new AuthorityKeyIdentifierStructure(certSign));
@@ -1059,7 +1113,7 @@ public class KeyTools {
 	    SignatureException, KeyToolsException {
 
 	String kst = "C:/Documents and Settings/n096015/.myKeys/mykeysAc.jks";
-	
+
 	char[] password = "mKeys983178".toCharArray();
 	KeyStore ks = loadKeyStore(kst, StoreFormat.JKS, password);
 	CertificateInfo cinfo = new CertificateInfo();
@@ -1076,4 +1130,76 @@ public class KeyTools {
 
     }
 
+    // public void timeStamp(KeyStoreInfo ksInfo, CertificateInfo certInfo){
+    // TimeStampTokenGenerator ts = new TimeStampTokenGenerator(
+    // }
+
+    /**
+     * .
+     * 
+     *<BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *    
+     * FIN
+     * </pre>
+     * 
+     * @param certSign
+     * @param crlInfo
+     * @return
+     * @throws CertificateParsingException
+     * @throws SignatureException
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchProviderException
+     * @throws IllegalStateException
+     * @throws CRLException
+     * @throws InvalidKeyException
+     */
+    public X509CRL generateCrl(CertificateInfo certSign, CrlInfo crlInfo)
+	    throws CertificateParsingException, InvalidKeyException,
+	    CRLException, IllegalStateException, NoSuchProviderException,
+	    NoSuchAlgorithmException, SignatureException {
+
+	X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
+	// crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
+	crlGen.setIssuerDN(certSign.getCertificate().getSubjectX500Principal());
+	String signAlgo = "SHA1WITHRSAENCRYPTION";
+	crlGen.setThisUpdate(crlInfo.getThisUpdate());
+	crlGen.setNextUpdate(crlInfo.getNextUpdate());
+	crlGen.setSignatureAlgorithm(signAlgo);
+
+	crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
+		new AuthorityKeyIdentifierStructure(certSign.getCertificate()));
+	crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
+		crlInfo.getNumber()));
+
+	X509CRL crl = crlGen.generate((PrivateKey) certSign.getPrivateKey(),
+		"BC");
+	return crl;
+    }
+
+    /**
+     * .
+     * 
+     *<BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *    
+     * FIN
+     * </pre>
+     * 
+     * @param xCerts
+     * @throws IOException
+     * @throws CRLException
+     */
+    public void saveCRL(X509CRL crl, File crlFile) throws CRLException,
+	    IOException {
+	OutputStream output = new FileOutputStream(crlFile);
+	IOUtils.write(crl.getEncoded(), output);
+
+    }
 }

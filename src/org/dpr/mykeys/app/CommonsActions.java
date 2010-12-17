@@ -8,7 +8,10 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.Date;
+import java.util.HashMap;
 
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
@@ -51,12 +54,12 @@ public class CommonsActions {
     }
 
     public void signData(KeyStoreInfo kInfo, char[] password,
-	    CertificateInfo certInfo) {
+	    CertificateInfo certInfo, boolean isInclude) {
 	KeyTools kt = new KeyTools();
 	KeyStore ks;
 	try {
-	    ks = kt.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(),
-		    kInfo.getPassword());
+	    ks = kt.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo
+		    .getPassword());
 	    certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(),
 		    kInfo.getPassword()));
 	} catch (KeyToolsException e) {
@@ -74,7 +77,7 @@ public class CommonsActions {
 	}
 
 	SignTools sTools = new SignTools();
-	sTools.SignData(null, certInfo, "c:/dev/SMC_test.sql");
+	sTools.SignData(null, certInfo, "c:/dev/SMC_test.sql", isInclude);
 
     }
 
@@ -121,4 +124,19 @@ public class CommonsActions {
     //      
     //
     // }
+
+    public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
+
+	KeyTools ktools = new KeyTools();
+	CertificateInfo certSign;
+	try {
+	    certSign = ktools.getCertificateACByAlias(aliasEmetteur);
+	    X509CRL xCRL = CrlTools.generateCrl(certSign, crlInfo);
+	    CrlTools.saveCRL(xCRL, crlInfo.getPath());
+	} catch (Exception e) {
+	    //log.error
+	    throw e;
+	}
+
+    }
 }

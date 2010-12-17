@@ -27,7 +27,7 @@ import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class ImportStoreDialog extends JDialog {
+public class CopyOfImportStoreDialog extends JDialog {
 
     private JTextField tfDirectory;
 
@@ -37,13 +37,13 @@ public class ImportStoreDialog extends JDialog {
 
     public static final String KSTYPE_EXT_JKS = "jks";
 
-    public static final String[] KSTYPE_EXT_PKCS12 = { "p12", "pfx" };
+    public static final String KSTYPE_EXT_PKCS12 = "p12";
 
     LabelValuePanel infosPanel;
 
     // Map<String, String> elements = new HashMap<String, String>();
 
-    public ImportStoreDialog(Frame owner, boolean modal) {
+    public CopyOfImportStoreDialog(Frame owner, boolean modal) {
 	super(owner, modal);
 	init();
 	this.pack();
@@ -128,7 +128,7 @@ public class ImportStoreDialog extends JDialog {
 	    } else if (command.equals("OK")) {
 		if (tfDirectory.getText().equals("")
 			|| elements.get("pwd1") == null) {
-		    KeyStoreUI.showError(ImportStoreDialog.this,
+		    KeyStoreUI.showError(CopyOfImportStoreDialog.this,
 			    "Champs invalides");
 		    return;
 		}
@@ -139,28 +139,27 @@ public class ImportStoreDialog extends JDialog {
 		    if (elements.get("typeKS").equals("auto")) {
 			typeKS = findTypeKS(tfDirectory.getText());
 		    }
-		    StoreFormat format = StoreFormat.valueOf((String) elements
-			    .get("typeKS"));
+		    StoreFormat format = StoreFormat.valueOf((String)elements.get("typeKS"));
 		    kt.loadKeyStore(tfDirectory.getText(), format,
 			    ((String) elements.get("pwd1")).toCharArray());
-		    // KSConfig.getUserCfg().addProperty("magasin." + typeKS,
-		    // tfDirectory.getText());
+//		    KSConfig.getUserCfg().addProperty("magasin." + typeKS,
+//			    tfDirectory.getText());
 		    KSConfig.getUserCfg().addProperty(
-			    "store." + StoreModel.CERTSTORE + "."
-				    + format.toString(), tfDirectory.getText());
-		    ((KeyStoreUI) ImportStoreDialog.this.getParent())
+			    "store." +StoreModel.CERTSTORE+"." + format.toString(),
+			    tfDirectory.getText());		    
+		    ((KeyStoreUI) CopyOfImportStoreDialog.this.getParent())
 			    .updateKeyStoreList();
-		    ImportStoreDialog.this.setVisible(false);
+		    CopyOfImportStoreDialog.this.setVisible(false);
 		} catch (Exception e) {
 		    // TODO Auto-generated catch block
-		    KeyStoreUI.showError(ImportStoreDialog.this, e
+		    KeyStoreUI.showError(CopyOfImportStoreDialog.this, e
 			    .getLocalizedMessage());
 		    // e.printStackTrace();
 
 		}
 
 	    } else if (command.equals("CANCEL")) {
-		ImportStoreDialog.this.setVisible(false);
+		CopyOfImportStoreDialog.this.setVisible(false);
 	    }
 
 	}
@@ -172,10 +171,8 @@ public class ImportStoreDialog extends JDialog {
 		if (ext.equalsIgnoreCase(KSTYPE_EXT_JKS)) {
 		    return KSTYPE_KEY_JKS;
 		}
-		for (String aliasType : KSTYPE_EXT_PKCS12) {
-		    if (ext.equalsIgnoreCase(aliasType)) {
-			return KSTYPE_KEY_PKCS12;
-		    }
+		if (ext.equalsIgnoreCase(KSTYPE_EXT_PKCS12)) {
+		    return KSTYPE_KEY_PKCS12;
 		}
 		return null;
 	    } catch (IndexOutOfBoundsException e) {

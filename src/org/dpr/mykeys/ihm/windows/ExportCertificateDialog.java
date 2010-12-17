@@ -142,43 +142,59 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 			    "Champs invalides");
 		    return;
 		}
-		
+
 		String path = tfDirectory.getText();
-	      // saisie mot de passe
-        char[] password = null;
-        if (isExportCle) {
-            password = KeyStoreUI.showPasswordDialog(null);
-        }
-		KeyTools kt = new KeyTools();
-		String format = (String)infosPanel.getElements().get("formatCert");
+		// saisie mot de passe
+		char[] password = null;
+		if (isExportCle) {
+		    password = KeyStoreUI.showPasswordDialog(null);
+		}
 		
-		if (format.equals("PKCS12")){
+		KeyTools kt = new KeyTools();
+		String format = (String) infosPanel.getElements().get(
+			"formatCert");
+
+		if (format.equals("PKCS12")) {
 		    CommonsActions cact = new CommonsActions();
-		    cact.signData(ksInfo, password, certInfo);
-		    //FIXME
-		    //cact.exportCert(StoreFormat.PKCS12, path, password, certInfo);
-		}else{
-		try {
-		    kt.exportDer(certInfo, path);
-		    if (isExportCle) {
-			kt.exportPrivateKey(certInfo, ksInfo, password,
-				tfDirectory.getText());
+		    cact.exportCert(StoreFormat.PKCS12, path, password,
+			    certInfo);
+		} else if (format.equals("der")){
+		    try {
+			kt.exportDer(certInfo, path);
+			if (isExportCle) {
+			    kt.exportPrivateKey(certInfo, ksInfo, password,
+				    tfDirectory.getText());
+			}
+
+		    } catch (Exception e) {
+
+			KeyStoreUI.showError(ExportCertificateDialog.this, e
+				.getLocalizedMessage());
+
 		    }
+		
+		} else {
+		    try {
+			kt.exportPem(certInfo, path);
+//			if (isExportCle) {
+//			    kt.exportPrivateKey(certInfo, ksInfo, password,
+//				    tfDirectory.getText());
+//			}
 
-		} catch (Exception e) {
+		    } catch (Exception e) {
 
-		    KeyStoreUI.showError(ExportCertificateDialog.this, e
-			    .getLocalizedMessage());
+			KeyStoreUI.showError(ExportCertificateDialog.this, e
+				.getLocalizedMessage());
 
-		}
-		}
-        ExportCertificateDialog.this.setVisible(false);
-        KeyStoreUI.showInfo(ExportCertificateDialog.this,
-            "Exportation terminée");
+		    }
+		}		
+		ExportCertificateDialog.this.setVisible(false);
+		KeyStoreUI.showInfo(ExportCertificateDialog.this,
+			"Exportation terminée");
 	    } else if (command.equals("CANCEL")) {
 		ExportCertificateDialog.this.setVisible(false);
 	    }
-	  
+
 	}
 
     }
