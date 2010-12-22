@@ -36,11 +36,14 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -242,13 +245,17 @@ public class KeyTools {
 	    throw new KeyToolsException("Echec du chargement de:" + ksName, e);
 
 	} catch (FileNotFoundException e) {
-	    throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
+	    throw new KeyToolsException("Fichier non trouvé:" + ksName + ", "
+		    + e.getCause(), e);
 	} catch (NoSuchAlgorithmException e) {
-	    throw new KeyToolsException("Format inconnu:" + ksName, e);
+	    throw new KeyToolsException("Format inconnu:" + ksName + ", "
+		    + e.getCause(), e);
 	} catch (CertificateException e) {
-	    throw new KeyToolsException("Echec du chargement de:" + ksName, e);
+	    throw new KeyToolsException("Echec du chargement de:" + ksName
+		    + ", " + e.getCause(), e);
 	} catch (IOException e) {
-	    throw new KeyToolsException("Echec du chargement de:" + ksName, e);
+	    throw new KeyToolsException("Echec du chargement de:" + ksName
+		    + ", " + e.getCause(), e);
 	}
 	return ks;
 
@@ -756,6 +763,17 @@ public class KeyTools {
 	return cert;
     }
 
+    private static Set<X509Certificate> loadX509Certs(InputStream aCertStream)
+	    throws GeneralSecurityException {
+
+        CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
+
+        // chargement du certificat
+        Collection<X509Certificate> certs = (Collection<X509Certificate>) cf.generateCertificates(aCertStream);
+        Set<X509Certificate> certificates = new HashSet<X509Certificate>(certs);
+        return certificates;
+    }
+
     public void importX509Cert(String alias, KeyStoreInfo ksInfo,
 	    String fileName, String typeCert, char[] charArray)
 	    throws KeyToolsException, KeyStoreException,
@@ -803,6 +821,39 @@ public class KeyTools {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
+	    }
+	}
+
+    }
+
+    public void loadX509Certs(String fileName)
+	    throws KeyToolsException, KeyStoreException,
+	    UnrecoverableKeyException, NoSuchAlgorithmException {
+
+	NodeInfo nInfo = new BagInfo(fileName);
+
+	InputStream is = null;
+	try {
+	    is = new FileInputStream(new File(fileName));
+	    Set<X509Certificate> certs = loadX509Certs(is);
+	    
+	    for (X509Certificate cert : certs){
+		CertificateInfo certInfo = new CertificateInfo();
+		fillCertInfo(certInfo, cert);
+	    }
+
+	} catch (FileNotFoundException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (GeneralSecurityException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}  finally {
+	    try {
+		is.close();
+	    } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	    }
 	}
 
@@ -910,21 +961,22 @@ public class KeyTools {
 	try {
 	    List<String> lines = new ArrayList<String>();
 	    lines.add(BEGIN_PEM);
-	    //FileUtils.writeLines(file, lines)
+	    // FileUtils.writeLines(file, lines)
 	    File f = new File(fName + ".pem");
-//	    FileOutputStream keyfos = new FileOutputStream(new File(fName
-//		    + ".pem"));
-	    byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
+	    // FileOutputStream keyfos = new FileOutputStream(new File(fName
+	    // + ".pem"));
+	    byte[] b = Base64.encodeBase64(certInfo.getCertificate()
+		    .getEncoded());
 	    String tmpString = new String(b);
 	    String[] datas = tmpString.split("(?<=\\G.{64})");
-	    for (String data : datas){
+	    for (String data : datas) {
 		lines.add(data);
 	    }
-	    
-	    lines.add(END_PEM);   
+
+	    lines.add(END_PEM);
 	    FileUtils.writeLines(f, lines);
-//	    keyfos.write(certInfo.getCertificate().getEncoded());
-//	    keyfos.close();
+	    // keyfos.write(certInfo.getCertificate().getEncoded());
+	    // keyfos.close();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    log.error(e);
@@ -1057,6 +1109,23 @@ public class KeyTools {
 	// TODO Auto-generated method stub
 	return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
     }
+    
+    public KeyStore importStore(String path, StoreFormat storeFormat,
+	    char[] password) throws KeyToolsException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+	// TODO Auto-generated method stub
+	switch (storeFormat) {
+	case JKS:
+	case PKCS12:
+	    return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
+	    
+
+	default:
+	    loadX509Certs(path);
+	    return null;
+	    
+	}
+    }    
+    
 
     public X509CRL generateCrl(X509Certificate certSign, CrlInfo crlInfo,
 	    Key privateKey) throws KeyStoreException, NoSuchProviderException,

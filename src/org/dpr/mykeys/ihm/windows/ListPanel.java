@@ -1,7 +1,6 @@
 package org.dpr.mykeys.ihm.windows;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +32,7 @@ import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.mykeys.ihm.TypeAction;
@@ -47,7 +47,8 @@ public class ListPanel extends JPanel {
 	public ListTransferHandler() {
 	    try {
 		String certType = DataFlavor.javaJVMLocalObjectMimeType
-			+ ";class=\"" + org.dpr.mykeys.app.CertificateInfo.class.getName()
+			+ ";class=\""
+			+ org.dpr.mykeys.app.CertificateInfo.class.getName()
 			+ "\"";
 		certFlavor = new DataFlavor(certType);
 	    } catch (ClassNotFoundException e) {
@@ -85,11 +86,11 @@ public class ListPanel extends JPanel {
 		if (e.getSource() instanceof JList) {
 		    if (((JList) e.getSource()).getSelectedValue() instanceof CertificateInfo) {
 			displayCertDetail((CertificateInfo) ((JList) e
-				.getSource()).getSelectedValue());			
-		    if (ksInfo.isOpen()) {
-		        exportButton.setEnabled(true);
-		        deleteButton.setEnabled(true);
-		    }			
+				.getSource()).getSelectedValue());
+			if (ksInfo.isOpen()) {
+			    exportButton.setEnabled(true);
+			    deleteButton.setEnabled(true);
+			}
 		    }
 
 		}
@@ -135,28 +136,28 @@ public class ListPanel extends JPanel {
 	// titre = new GradientLabel("Gestion des certificats");
 	// add(titre);
 	jp = new JPanel(new BorderLayout());
-	final ImageIcon icon= ImageUtils.createImageIcon("Locked.png");
+	final ImageIcon icon = ImageUtils.createImageIcon("Locked.png");
 
-//	 Jpanel jp2 = new JPanel(new BorderLayout())
-//	{
-//		public void paintComponent(Graphics g)
-//		{
-//			//  Approach 1: Dispaly image at at full size
-//			g.drawImage(icon.getImage(), 0, 0, null);
-//
-//			//  Approach 2: Scale image to size of component
-//			// Dimension d = getSize();
-//			// g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
-//
-//			//  Approach 3: Fix the image position in the scroll pane
-//			// Point p = scrollPane.getViewport().getViewPosition();
-//			// g.drawImage(icon.getImage(), p.x, p.y, null);
-//
-//			setOpaque( false );
-//			super.paintComponent(g);
-//		}
-//	};
-	
+	// Jpanel jp2 = new JPanel(new BorderLayout())
+	// {
+	// public void paintComponent(Graphics g)
+	// {
+	// // Approach 1: Dispaly image at at full size
+	// g.drawImage(icon.getImage(), 0, 0, null);
+	//
+	// // Approach 2: Scale image to size of component
+	// // Dimension d = getSize();
+	// // g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
+	//
+	// // Approach 3: Fix the image position in the scroll pane
+	// // Point p = scrollPane.getViewport().getViewPosition();
+	// // g.drawImage(icon.getImage(), p.x, p.y, null);
+	//
+	// setOpaque( false );
+	// super.paintComponent(g);
+	// }
+	// };
+
 	//
 	// jp.setLayout(new FlowLayout(FlowLayout.LEADING));
 	// jp.add(titre);
@@ -175,14 +176,13 @@ public class ListPanel extends JPanel {
 	listCerts.setVisibleRowCount(-1);
 	listCerts.setDragEnabled(true);
 	listCerts.setTransferHandler(new ListTransferHandler());
-	addCertButton = new JButton(
-		ImageUtils.createImageIcon("add-cert.png"));
-	unlockButton = new JToggleButton(
-		ImageUtils.createImageIcon("Locked.png"));
+	addCertButton = new JButton(ImageUtils.createImageIcon("add-cert.png"));
+	unlockButton = new JToggleButton(ImageUtils
+		.createImageIcon("Locked.png"));
 	unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
 	// unlockButton.setIcon(ImageUtils.createImageIcon("Locked.png"));
-	unlockButton.setDisabledIcon(ImageUtils
-		.createImageIcon("Unlocked.png"));
+	unlockButton
+		.setDisabledIcon(ImageUtils.createImageIcon("Unlocked.png"));
 	addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 	importButton = new JButton("Import");
 	importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
@@ -221,26 +221,40 @@ public class ListPanel extends JPanel {
 	jp.setVisible(false);
     }
 
-    public void updateInfo(KeyStoreInfo info) {
+    /**
+     * Msie à jour infos liste.
+     * 
+     *<BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *    
+     * FIN
+     * </pre>
+     * 
+     * @param info
+     */
+    public void updateInfo(NodeInfo info) {
 	jp.setVisible(false);
 	// jp.removeAll();
 	// jp.revalidate();
 	if (info == null) {
 	    return;
 	}
-	ksInfo = info;
-	listCerts.clearSelection();
-	listModel.removeAllElements();
-	try {
-	    for (CertificateInfo ci : getCertificates(ksInfo)) {
-		listModel.addElement(ci);
+	if (info instanceof KeyStoreInfo) {
+	    ksInfo = (KeyStoreInfo) info;
+	    listCerts.clearSelection();
+	    listModel.removeAllElements();
+	    try {
+		for (CertificateInfo ci : getCertificates(ksInfo)) {
+		    listModel.addElement(ci);
+		}
+	    } catch (KeyToolsException e1) {
+		// FIXME
+		e1.printStackTrace();
 	    }
-
-	} catch (KeyToolsException e1) {
-	    // FIXME
-	    e1.printStackTrace();
 	}
-
 	addCertButton.removeActionListener(actions);
 	if (ksInfo.isOpen()) {
 	    unlockButton.setSelected(false);
@@ -286,36 +300,38 @@ public class ListPanel extends JPanel {
      * @return
      * @throws KeyToolsException
      */
-    private List<CertificateInfo> getCertificates(KeyStoreInfo ksInfo2)
+    private List<CertificateInfo> getCertificates(NodeInfo info)
 	    throws KeyToolsException {
 	List<CertificateInfo> certs = new ArrayList<CertificateInfo>();
 	KeyTools kt = new KeyTools();
-	KeyStore ks = null;
-	if (ksInfo.getPassword() == null
-		&& ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)) {
-	    return certs;
-	}
-
-	ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-		ksInfo.getPassword());
-
-	System.out.println("addcerts");
-	Enumeration<String> enumKs;
-	try {
-	    enumKs = ks.aliases();
-	    if (enumKs != null && enumKs.hasMoreElements()) {
-
-		while (enumKs.hasMoreElements()) {
-		    String alias = enumKs.nextElement();
-
-		    CertificateInfo certInfo = new CertificateInfo(alias);
-		    kt.fillCertInfo(ks, certInfo, alias);
-		    certs.add(certInfo);
-		}
+	if (info instanceof KeyStoreInfo) {
+	    KeyStore ks = null;
+	    if (ksInfo.getPassword() == null
+		    && ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)) {
+		return certs;
 	    }
-	} catch (KeyStoreException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+
+	    ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+		    ksInfo.getPassword());
+
+	    System.out.println("addcerts");
+	    Enumeration<String> enumKs;
+	    try {
+		enumKs = ks.aliases();
+		if (enumKs != null && enumKs.hasMoreElements()) {
+
+		    while (enumKs.hasMoreElements()) {
+			String alias = enumKs.nextElement();
+
+			CertificateInfo certInfo = new CertificateInfo(alias);
+			kt.fillCertInfo(ks, certInfo, alias);
+			certs.add(certInfo);
+		    }
+		}
+	    } catch (KeyStoreException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	}
 	return certs;
 
@@ -425,9 +441,8 @@ public class ListPanel extends JPanel {
 		if (listCerts != null
 			&& listCerts.getSelectedValue() != null
 			&& listCerts.getSelectedValue() instanceof CertificateInfo) {
-		    exporterCertificate(ksInfo,
-			    (CertificateInfo) listCerts.getSelectedValue(),
-			    false);
+		    exporterCertificate(ksInfo, (CertificateInfo) listCerts
+			    .getSelectedValue(), false);
 		}
 		break;
 	    case DELETE_CERT:
@@ -534,7 +549,6 @@ public class ListPanel extends JPanel {
 	    }
 
 	    ksInfo.setPassword(password);
-	    
 
 	}
 

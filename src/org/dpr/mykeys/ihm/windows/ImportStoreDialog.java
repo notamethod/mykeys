@@ -37,7 +37,7 @@ public class ImportStoreDialog extends JDialog {
 
     public static final String KSTYPE_EXT_JKS = "jks";
 
-    public static final String[] KSTYPE_EXT_PKCS12 = { "p12", "pfx" };
+    public static final String[] KSTYPE_EXT_PKCS12 = { "p12", "pfx", "pkcs12" };
 
     LabelValuePanel infosPanel;
 
@@ -139,9 +139,8 @@ public class ImportStoreDialog extends JDialog {
 		    if (elements.get("typeKS").equals("auto")) {
 			typeKS = findTypeKS(tfDirectory.getText());
 		    }
-		    StoreFormat format = StoreFormat.valueOf((String) elements
-			    .get("typeKS"));
-		    kt.loadKeyStore(tfDirectory.getText(), format,
+		    StoreFormat format = StoreFormat.fromValue(typeKS);
+		    kt.importStore(tfDirectory.getText(), format,
 			    ((String) elements.get("pwd1")).toCharArray());
 		    // KSConfig.getUserCfg().addProperty("magasin." + typeKS,
 		    // tfDirectory.getText());
