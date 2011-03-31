@@ -10,122 +10,122 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 public class KSConfig {
 
-    static PropertiesConfiguration userConfig;
+	static PropertiesConfiguration userConfig;
 
-    static PropertiesConfiguration defaultConfig;
+	static PropertiesConfiguration defaultConfig;
 
-    static String usrFileName = "user.properties";
+	static String usrFileName = "user.properties";
 
-    static String defaultFileName = "default.properties";
+	static String defaultFileName = "default.properties";
 
-    public static String cfgPathName = ".myKeys";
-    
-    public static final String STORE_PREFIX="store";
+	public static String cfgPathName = ".myKeys";
 
-    static String path;
+	public static final String STORE_PREFIX = "store";
 
-    public static void load() {
+	static String path;
 
-	path = getCfgPath();
-	try {
-	    userConfig = new PropertiesConfiguration(path + File.separator
-		    + usrFileName);
+	public static void load() {
 
-	} catch (ConfigurationException e) {
-	    // create files
-	    userConfig = new PropertiesConfiguration();
-	    userConfig.setFile(new File(path, usrFileName));
+		path = getCfgPath();
+		try {
+			userConfig = new PropertiesConfiguration(path + File.separator
+					+ usrFileName);
+
+		} catch (ConfigurationException e) {
+			// create files
+			userConfig = new PropertiesConfiguration();
+			userConfig.setFile(new File(path, usrFileName));
+
+		}
+		try {
+
+			defaultConfig = new PropertiesConfiguration(path + File.separator
+					+ defaultFileName);
+			defaultConfig.setAutoSave(true);
+		} catch (ConfigurationException e) {
+			// create files
+
+			defaultConfig = new PropertiesConfiguration();
+			defaultConfig.setFile(new File(path, defaultFileName));
+
+			setDefault(defaultConfig);
+		}
+		userConfig.setAutoSave(true);
+		defaultConfig.setAutoSave(true);
 
 	}
-	try {
 
-	    defaultConfig = new PropertiesConfiguration(path + File.separator
-		    + defaultFileName);
-	    defaultConfig.setAutoSave(true);
-	} catch (ConfigurationException e) {
-	    // create files
-
-	    defaultConfig = new PropertiesConfiguration();
-	    defaultConfig.setFile(new File(path, defaultFileName));
-
-	    setDefault(defaultConfig);
+	static String getCfgPath() {
+		return System.getProperty("user.home") + File.separator + cfgPathName;
 	}
-	userConfig.setAutoSave(true);
-	defaultConfig.setAutoSave(true);
 
-    }
+	private static void setDefault(PropertiesConfiguration cfg) {
+		defaultConfig.setAutoSave(true);
+		cfg.setProperty("subject.key.CN", "true");
+		cfg.setProperty("subject.key.O", "true");
+		cfg.setProperty("subject.key.OU", "true");
+		cfg.setProperty("subject.key.L", "true");
+		cfg.setProperty("subject.key.ST", "true");
+		cfg.setProperty("subject.key.E", "true");
+		cfg.setProperty("default.dateFormat", "dd/MM/yyyy HH:mm");
 
-    static String getCfgPath() {
-	return System.getProperty("user.home") + File.separator + cfgPathName;
-    }
-
-    private static void setDefault(PropertiesConfiguration cfg) {
-	defaultConfig.setAutoSave(true);
-	cfg.setProperty("subject.key.CN", "true");
-	cfg.setProperty("subject.key.O", "true");
-	cfg.setProperty("subject.key.OU", "true");
-	cfg.setProperty("subject.key.L", "true");
-	cfg.setProperty("subject.key.ST", "true");
-	cfg.setProperty("subject.key.E", "true");
-	cfg.setProperty("default.dateFormat", "dd/MM/yyyy HH:mm");
-
-    }
-
-    public static List getSubjectKeys() {
-	List<String> list = new ArrayList<String>();
-	Iterator<String> iter = userConfig.getKeys("subject.key.");
-	while (iter.hasNext()) {
-	    String name = iter.next();
-	    if (userConfig.getBoolean(name)) {
-		list.add(name.substring("subject.key.".length()));
-	    }
 	}
-	return list;
 
-    }
+	public static List getSubjectKeys() {
+		List<String> list = new ArrayList<String>();
+		Iterator<String> iter = userConfig.getKeys("subject.key.");
+		while (iter.hasNext()) {
+			String name = iter.next();
+			if (userConfig.getBoolean(name)) {
+				list.add(name.substring("subject.key.".length()));
+			}
+		}
+		return list;
 
-    public static void save() {
-	// if (userConfig == null) {
-	// return;
-	// }
-	//
-	// try {
-	// userConfig.save();
-	// } catch (ConfigurationException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-
-    }
-
-    /**
-     * @return the application
-     */
-    public static PropertiesConfiguration getUserCfg() {
-	if (userConfig == null) {
-	    try {
-		load();
-	    } catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
 	}
-	return userConfig;
-    }
 
-    /**
-     * @return the application
-     */
-    public static PropertiesConfiguration getDefaultCfg() {
-	if (defaultConfig == null) {
-	    try {
-		load();
-	    } catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+	public static void save() {
+		// if (userConfig == null) {
+		// return;
+		// }
+		//
+		// try {
+		// userConfig.save();
+		// } catch (ConfigurationException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
 	}
-	return defaultConfig;
-    }
+
+	/**
+	 * @return the application
+	 */
+	public static PropertiesConfiguration getUserCfg() {
+		if (userConfig == null) {
+			try {
+				load();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return userConfig;
+	}
+
+	/**
+	 * @return the application
+	 */
+	public static PropertiesConfiguration getDefaultCfg() {
+		if (defaultConfig == null) {
+			try {
+				load();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return defaultConfig;
+	}
 
 }

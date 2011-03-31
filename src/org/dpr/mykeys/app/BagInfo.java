@@ -4,13 +4,13 @@
 package org.dpr.mykeys.app;
 
 /**
- *<pre>
+ * <pre>
  * <b></b>.
  * 
  * <b>Description :</b>
  * 
  * 
- *</pre>
+ * </pre>
  * 
  * @author C. Roger<BR>
  * <BR>
@@ -46,7 +46,7 @@ public class BagInfo implements NodeInfo {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -68,7 +68,7 @@ public class BagInfo implements NodeInfo {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>

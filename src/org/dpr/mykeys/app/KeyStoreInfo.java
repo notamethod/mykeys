@@ -1,7 +1,6 @@
 package org.dpr.mykeys.app;
 
-
-public class KeyStoreInfo implements NodeInfo{
+public class KeyStoreInfo implements NodeInfo {
 
     private String name;
 
@@ -12,25 +11,27 @@ public class KeyStoreInfo implements NodeInfo{
     private StoreModel storeModel;
 
     private StoreFormat storeFormat;
-    
+
     private StoreType storeType = StoreType.EXTERNAL;
 
     private char[] password;
 
-    public KeyStoreInfo(String name, String path, StoreModel storeModel, StoreFormat storeFormat) {
+    public KeyStoreInfo(String name, String path, StoreModel storeModel,
+	    StoreFormat storeFormat) {
 	this.name = name;
 	this.path = path;
 	this.storeModel = storeModel;
 	this.storeFormat = storeFormat;
     }
-    
-    public KeyStoreInfo(String name, String path, StoreModel storeModel, StoreFormat storeFormat, StoreType storeType) {
+
+    public KeyStoreInfo(String name, String path, StoreModel storeModel,
+	    StoreFormat storeFormat, StoreType storeType) {
 	this.name = name;
 	this.path = path;
 	this.storeModel = storeModel;
 	this.storeFormat = storeFormat;
 	this.storeType = storeType;
-    }    
+    }
 
     /*
      * (non-Javadoc)
@@ -72,8 +73,6 @@ public class KeyStoreInfo implements NodeInfo{
 	this.path = path;
     }
 
-
-
     /**
      * @return the isOpen
      */
@@ -110,10 +109,10 @@ public class KeyStoreInfo implements NodeInfo{
 	public static StoreModel fromValue(String v) {
 	    return valueOf(v);
 	}
-	
+
 	public static String getValue(StoreModel type) {
 	    return type.toString();
-	}	
+	}
     }
 
     public enum StoreFormat {
@@ -126,67 +125,75 @@ public class KeyStoreInfo implements NodeInfo{
 		fmt = UNKNOWN;
 	    }
 	    return fmt;
-	    
+
 	}
+
 	public static String getValue(StoreFormat format) {
 	    return format.toString();
-	}	
+	}
     }
-    
+
     public enum StoreType {
 	INTERNAL, EXTERNAL;
 	public static StoreType fromValue(String v) {
 	    return valueOf(v);
 	}
+
 	public static String getValue(StoreType type) {
 	    return type.toString();
-	}	
+	}
     }
-    
 
     /**
      * Retourne le storeType.
+     * 
      * @return StoreType - le storeType.
      */
     public StoreModel getStoreModel() {
-        return storeModel;
+	return storeModel;
     }
 
     /**
      * Affecte le storeType.
-     * @param storeType le storeType à affecter.
+     * 
+     * @param storeType
+     *            le storeType à affecter.
      */
     public void setStoreModel(StoreModel storeType) {
-        this.storeModel = storeType;
+	this.storeModel = storeType;
     }
 
     /**
      * Retourne le storeFormat.
+     * 
      * @return StoreFormat - le storeFormat.
      */
     public StoreFormat getStoreFormat() {
-        return storeFormat;
+	return storeFormat;
     }
 
     /**
      * Affecte le storeFormat.
-     * @param storeFormat le storeFormat à affecter.
+     * 
+     * @param storeFormat
+     *            le storeFormat à affecter.
      */
     public void setStoreFormat(StoreFormat storeFormat) {
-        this.storeFormat = storeFormat;
+	this.storeFormat = storeFormat;
     }
 
     /**
      * @return the storeType
      */
     public StoreType getStoreType() {
-        return storeType;
+	return storeType;
     }
 
     /**
-     * @param storeType the storeType to set
+     * @param storeType
+     *            the storeType to set
      */
     public void setStoreType(StoreType storeType) {
-        this.storeType = storeType;
+	this.storeType = storeType;
     }
 }

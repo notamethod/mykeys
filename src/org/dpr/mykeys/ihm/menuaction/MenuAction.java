@@ -17,79 +17,79 @@ import org.dpr.mykeys.ihm.windows.VerifSigDialog;
 
 public class MenuAction extends AbstractAction {
 
-    private MykeysFrame keyStoreUI;
+	private MykeysFrame keyStoreUI;
 
-    ResourceBundle messages = ResourceBundle.getBundle("org.dpr.mykeys.config.Messages",
-	    Locale.getDefault());
+	ResourceBundle messages = ResourceBundle.getBundle(
+			"org.dpr.mykeys.config.Messages", Locale.getDefault());
 
-    public MenuAction(Object keyStoreUI, String string) {
-	super(string);
-	this.keyStoreUI = (MykeysFrame) keyStoreUI;
-    }
+	public MenuAction(Object keyStoreUI, String string) {
+		super(string);
+		this.keyStoreUI = (MykeysFrame) keyStoreUI;
+	}
 
-    public MenuAction(Object keyStoreUI, String nomImg, ImageIcon ic) {
-	super(nomImg, ic);
-	this.keyStoreUI = (MykeysFrame) keyStoreUI;
-    }
+	public MenuAction(Object keyStoreUI, String nomImg, ImageIcon ic) {
+		super(nomImg, ic);
+		this.keyStoreUI = (MykeysFrame) keyStoreUI;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-	final String action = e.getActionCommand();
-	final Object composant = e.getSource();
-	new Thread(new Runnable() {
-	    public void run() {
-		if (action.equals("newStore")) {
-		    SwingUtilities.invokeLater(new Runnable() {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		final String action = e.getActionCommand();
+		final Object composant = e.getSource();
+		new Thread(new Runnable() {
 			public void run() {
-			    CreateStoreDialog cs = new CreateStoreDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
-			    cs.setVisible(true);
+				if (action.equals("newStore")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							CreateStoreDialog cs = new CreateStoreDialog(
+									keyStoreUI, true);
+							cs.setLocationRelativeTo(keyStoreUI);
+							cs.setVisible(true);
+						}
+					});
+
+				} else if (action.equals("loadStore")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							ImportStoreDialog cs = new ImportStoreDialog(
+									keyStoreUI, true);
+							cs.setLocationRelativeTo(keyStoreUI);
+
+							cs.setVisible(true);
+						}
+					});
+
+				} else if (action.equals("addCrl")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							CreateCrlDialog cs = new CreateCrlDialog(
+									keyStoreUI, true);
+							cs.setLocationRelativeTo(keyStoreUI);
+							cs.setVisible(true);
+						}
+					});
+
+				} else if (action.equals("signFile")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							VerifSigDialog cs = new VerifSigDialog(keyStoreUI,
+									true);
+							cs.setLocationRelativeTo(keyStoreUI);
+							cs.setVisible(true);
+							// SignDocumentDialog cs = new SignDocumentDialog(
+							// keyStoreUI, true);
+							// cs.setLocationRelativeTo(keyStoreUI);
+							// cs.setVisible(true);
+
+						}
+					});
+
+				}
+
 			}
-		    });
+		}).start();
 
-		} else if (action.equals("loadStore")) {
-		    SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-			    ImportStoreDialog cs = new ImportStoreDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
-
-			    cs.setVisible(true);
-			}
-		    });
-
-		} else if (action.equals("addCrl")) {
-		    SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-			    CreateCrlDialog cs = new CreateCrlDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
-			    cs.setVisible(true);
-			}
-		    });
-
-		} else if (action.equals("signFile")) {
-		    SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-			    VerifSigDialog cs = new VerifSigDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
-			    cs.setVisible(true);
-//			    SignDocumentDialog cs = new SignDocumentDialog(
-//			    keyStoreUI, true);
-//		    cs.setLocationRelativeTo(keyStoreUI);
-//		    cs.setVisible(true);			    
-			    
-			}
-		    });
-
-		}
-
-	    }
-	}).start();
-
-    }
+	}
 
 }
 // javax.swing.SwingUtilities.invokeLater(new Runnable() {

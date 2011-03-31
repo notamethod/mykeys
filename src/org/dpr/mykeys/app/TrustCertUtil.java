@@ -44,376 +44,392 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 /**
- *<pre>
- *<b>Utilitaires pour la gestion des AC x509</b>.
+ * <pre>
+ * <b>Utilitaires pour la gestion des AC x509</b>.
+ *  
+ * <b>Description :</b>
  * 
- *<b>Description :</b>
- *    
  * 
- *</pre>
+ * </pre>
+ * 
  * @author C. Roger<BR>
- *  <BR>
- * Créé le 20 août 2010 <BR>
- *  <BR>
- *  <BR>
- * <i>Copyright : Tessi Informatique </i><BR>
+ * <BR>
+ *         Créé le 20 août 2010 <BR>
+ * <BR>
+ * <BR>
+ *         <i>Copyright : Tessi Informatique </i><BR>
  */
-public class TrustCertUtil
-{
+public class TrustCertUtil {
 
-    public static final String FILTRE_CERTIFICAT_X509 = "*.CER";
-    public static final String X509_CERTIFICATE_TYPE = "X.509";
-    private static final Log log = LogFactory.getLog(TrustCertUtil.class);
+	public static final String FILTRE_CERTIFICAT_X509 = "*.CER";
+	public static final String X509_CERTIFICATE_TYPE = "X.509";
+	private static final Log log = LogFactory.getLog(TrustCertUtil.class);
 
-    /**
-     * .
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @return
-     * @throws GeneralSecurityException 
-     */
-    public static X509Certificate[] getTrustedCerts(String repertoireAC, String provider)
-            throws GeneralSecurityException
-    {
-        String typeCert = X509_CERTIFICATE_TYPE;
-        X509Certificate[] trustedCerts = null;
-        // Chargement de la liste des certificats de confiance
-        try
-        {
-            Set<X509Certificate> certs = listerCertificats(repertoireAC, typeCert, provider);
-            trustedCerts = new X509Certificate[certs.size()];
-            int i = 0;
-            for (X509Certificate certificat : certs)
-            {
-                trustedCerts[i++] = certificat;
-            }
-        }
-        catch (IOException ioe)
-        {
-            throw new GeneralSecurityException("Problème de lecture des certificats de confiance de " + repertoireAC,
-                    ioe);
-        }
+	/**
+	 * .
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @return
+	 * @throws GeneralSecurityException
+	 */
+	public static X509Certificate[] getTrustedCerts(String repertoireAC,
+			String provider) throws GeneralSecurityException {
+		String typeCert = X509_CERTIFICATE_TYPE;
+		X509Certificate[] trustedCerts = null;
+		// Chargement de la liste des certificats de confiance
+		try {
+			Set<X509Certificate> certs = listerCertificats(repertoireAC,
+					typeCert, provider);
+			trustedCerts = new X509Certificate[certs.size()];
+			int i = 0;
+			for (X509Certificate certificat : certs) {
+				trustedCerts[i++] = certificat;
+			}
+		} catch (IOException ioe) {
+			throw new GeneralSecurityException(
+					"Problème de lecture des certificats de confiance de "
+							+ repertoireAC, ioe);
+		}
 
-        return trustedCerts;
-    }
+		return trustedCerts;
+	}
 
-    /**
-     * Récupération des AC reconnues à partir d'un keystore.
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @return
-     * @throws GeneralSecurityException 
-     */
-    public static X509Certificate[] getTrustedCerts(KeyStore ks, String provider) throws GeneralSecurityException
-    {
-        Enumeration<String> en = ks.aliases();
-        Set<X509Certificate> lstCerts = new HashSet<X509Certificate>();
-        while (en.hasMoreElements())
-        {
-            String alias = en.nextElement();
-            lstCerts.add((X509Certificate) ks.getCertificate(alias));
-        }
-        X509Certificate[] trustedCerts = new X509Certificate[lstCerts.size()];
-        int i = 0;
-        for (X509Certificate cert : lstCerts)
-        {
-            trustedCerts[i++] = cert;
-        }
+	/**
+	 * Récupération des AC reconnues à partir d'un keystore.
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @return
+	 * @throws GeneralSecurityException
+	 */
+	public static X509Certificate[] getTrustedCerts(KeyStore ks, String provider)
+			throws GeneralSecurityException {
+		Enumeration<String> en = ks.aliases();
+		Set<X509Certificate> lstCerts = new HashSet<X509Certificate>();
+		while (en.hasMoreElements()) {
+			String alias = en.nextElement();
+			lstCerts.add((X509Certificate) ks.getCertificate(alias));
+		}
+		X509Certificate[] trustedCerts = new X509Certificate[lstCerts.size()];
+		int i = 0;
+		for (X509Certificate cert : lstCerts) {
+			trustedCerts[i++] = cert;
+		}
 
-        return trustedCerts;
-    }
+		return trustedCerts;
+	}
 
-    /**
-     * Concatene des fichiers .cer dans un fichier unique,
-     * en supprimant les doublons.
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @return
-     * @throws GeneralSecurityException 
-     * @throws IOException 
-     */
-    public static void concatCerts(String srcPath, File destFile, String provider) throws GeneralSecurityException,
-            IOException
-    {
-        String typeCert = X509_CERTIFICATE_TYPE;
-        // Chargement de la liste des certificats de confiance
+	/**
+	 * Concatene des fichiers .cer dans un fichier unique, en supprimant les
+	 * doublons.
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @return
+	 * @throws GeneralSecurityException
+	 * @throws IOException
+	 */
+	public static void concatCerts(String srcPath, File destFile,
+			String provider) throws GeneralSecurityException, IOException {
+		String typeCert = X509_CERTIFICATE_TYPE;
+		// Chargement de la liste des certificats de confiance
 
-        Set<X509Certificate> certs = listerCertificats(srcPath, typeCert, provider);
-        try
-        {
-            InputStream certStream = new FileInputStream(destFile);
-            //remarque: un fichier .cer peut contenir plus d'un certificat
-            Collection<X509Certificate> trustedCerts2 = chargerCertificatsX509(certStream, typeCert, provider);
-            IOUtils.closeQuietly(certStream);
-            certs.addAll(trustedCerts2);
-        }
-        catch (IOException ioe)
-        {
-            //fichier vide
-        }
+		Set<X509Certificate> certs = listerCertificats(srcPath, typeCert,
+				provider);
+		try {
+			InputStream certStream = new FileInputStream(destFile);
+			// remarque: un fichier .cer peut contenir plus d'un certificat
+			Collection<X509Certificate> trustedCerts2 = chargerCertificatsX509(
+					certStream, typeCert, provider);
+			IOUtils.closeQuietly(certStream);
+			certs.addAll(trustedCerts2);
+		} catch (IOException ioe) {
+			// fichier vide
+		}
 
-        OutputStream output = new FileOutputStream(destFile);
+		OutputStream output = new FileOutputStream(destFile);
 
-        for (X509Certificate certificat : certs)
-        {
-            output.write(certificat.getEncoded());
-        }
-        output.close();
+		for (X509Certificate certificat : certs) {
+			output.write(certificat.getEncoded());
+		}
+		output.close();
 
-    }
+	}
 
-    /**
-     * Vérification chaine de certificats.
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @param password
-     * @param anchors
-     * @param certs
-     * @param crls
-     * @throws CertPathValidatorException si le chemin de certification n'est pas valide     
-     * @throws KeyStoreException
-     * @throws NoSuchAlgorithmException
-     * @throws CertificateException
-     * @throws IOException
-     * @throws InvalidAlgorithmParameterException
-     * @throws CertPathBuilderException
-     * @throws NoSuchProviderException
+	/**
+	 * Vérification chaine de certificats.
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param password
+	 * @param anchors
+	 * @param certs
+	 * @param crls
+	 * @throws CertPathValidatorException
+	 *             si le chemin de certification n'est pas valide
+	 * @throws KeyStoreException
+	 * @throws NoSuchAlgorithmException
+	 * @throws CertificateException
+	 * @throws IOException
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws CertPathBuilderException
+	 * @throws NoSuchProviderException
+	 */
+	protected static void checkTrusted(X509Certificate[] anchors,
+			Certificate[] certs, Collection<?> crls, String provider,
+			boolean isCheckCrl) throws CertPathValidatorException,
+			NoSuchAlgorithmException, CertificateException,
+			InvalidAlgorithmParameterException, NoSuchProviderException {
 
-     */
-    protected static void checkTrusted(X509Certificate[] anchors, Certificate[] certs, Collection<?> crls,
-            String provider, boolean isCheckCrl) throws CertPathValidatorException, 
-            NoSuchAlgorithmException, CertificateException,  InvalidAlgorithmParameterException,
-             NoSuchProviderException
-    {
+		/* Construct a valid path. */
+		List<TrustAnchor> listAnchors = new ArrayList<TrustAnchor>();
 
-        /* Construct a valid path. */
-        List<TrustAnchor> listAnchors = new ArrayList<TrustAnchor>();
+		for (X509Certificate cert : anchors) {
+			TrustAnchor ta = new TrustAnchor(cert, null);
+			listAnchors.add(ta);
+		}
 
-        for (X509Certificate cert : anchors)
-        {
-            TrustAnchor ta = new TrustAnchor(cert, null);
-            listAnchors.add(ta);
-        }
+		Set anchorSet = new HashSet(listAnchors);
+		List<X509Certificate> lstChaine = new ArrayList<X509Certificate>();
+		for (Certificate cc0 : certs) {
+			lstChaine.add((X509Certificate) cc0);
+		}
+		CollectionCertStoreParameters params = new CollectionCertStoreParameters(
+				lstChaine);
+		CertStore store = CertStore.getInstance("Collection", params, provider);
 
-        Set anchorSet = new HashSet(listAnchors);
-        List<X509Certificate> lstChaine = new ArrayList<X509Certificate>();
-        for (Certificate cc0 : certs)
-        {
-            lstChaine.add((X509Certificate) cc0);
-        }
-        CollectionCertStoreParameters params = new CollectionCertStoreParameters(lstChaine);
-        CertStore store = CertStore.getInstance("Collection", params, provider);
+		CertStore crlStore = null;
+		if (isCheckCrl) {
+			CollectionCertStoreParameters revoked = new CollectionCertStoreParameters(
+					crls);
+			crlStore = CertStore.getInstance("Collection", revoked, provider);
+		}
 
-        CertStore crlStore = null;
-        if (isCheckCrl)
-        {
-            CollectionCertStoreParameters revoked = new CollectionCertStoreParameters(crls);
-            crlStore = CertStore.getInstance("Collection", revoked, provider);
-        }
+		// create certificate path
+		CertificateFactory factory = CertificateFactory.getInstance("X.509",
+				provider);
+		List certChain = new ArrayList();
 
-        // create certificate path
-        CertificateFactory factory = CertificateFactory.getInstance("X.509", provider);
-        List certChain = new ArrayList();
+		certChain.add(lstChaine.get(0));
+		// certChain.add(interCert);
 
-        certChain.add(lstChaine.get(0));
-        //certChain.add(interCert);
+		CertPath certPath = factory.generateCertPath(certChain);
+		Set trust = anchorSet;// Collections.singleton(new TrustAnchor(rootCert,
+								// null));
+		// perform validation
+		CertPathValidator validator = CertPathValidator.getInstance("PKIX",
+				provider);
+		PKIXParameters param = new PKIXParameters(trust);
 
-        CertPath certPath = factory.generateCertPath(certChain);
-        Set trust = anchorSet;//Collections.singleton(new TrustAnchor(rootCert, null));
-        // perform validation
-        CertPathValidator validator = CertPathValidator.getInstance("PKIX", provider);
-        PKIXParameters param = new PKIXParameters(trust);
+		param.addCertStore(store);
+		param.setDate(new Date());
 
-        param.addCertStore(store);
-        param.setDate(new Date());
+		if (isCheckCrl) {
+			param.addCertStore(crlStore);
+			param.setRevocationEnabled(true);
+		} else {
+			param.setRevocationEnabled(false);
+		}
 
-        if (isCheckCrl)
-        {
-            param.addCertStore(crlStore);
-            param.setRevocationEnabled(true);
-        }
-        else
-        {
-            param.setRevocationEnabled(false);
-        }
+		// CertPathValidatorResult result = validator.validate(certPath, param);
+		validator.validate(certPath, param);
+		if (log.isInfoEnabled()) {
+			log.info("certificate path validated");
+		}
+	}
 
-        //CertPathValidatorResult result = validator.validate(certPath, param);
-        validator.validate(certPath, param);
-        if (log.isInfoEnabled())
-        {
-            log.info("certificate path validated");
-        }
-    }
+	protected static Set<X509Certificate> listerCertificats(
+			String aCertificatesDirectory, String typeCert, String provider,
+			boolean recursive) throws IOException, GeneralSecurityException {
+		List<X509Certificate> lstCert = new ArrayList<X509Certificate>();
+		// Set<X509Certificate> lstCert = new HashSet<X509Certificate>();
+		// recherche des certificats dans le répertoire (*.cer ou *.CER)
 
-    protected static Set<X509Certificate> listerCertificats(String aCertificatesDirectory, String typeCert,
-            String provider, boolean recursive) throws IOException, GeneralSecurityException
-    {
-        List<X509Certificate> lstCert = new ArrayList<X509Certificate>();
-        //Set<X509Certificate> lstCert = new HashSet<X509Certificate>();
-        // recherche des certificats dans le répertoire (*.cer ou *.CER)
+		IOFileFilter fileFilter = new WildcardFileFilter(
+				FILTRE_CERTIFICAT_X509, IOCase.INSENSITIVE);
 
-        IOFileFilter fileFilter = new WildcardFileFilter(FILTRE_CERTIFICAT_X509,
-                IOCase.INSENSITIVE);
-        
-        IOFileFilter dirFilter = recursive ? TrueFileFilter.INSTANCE : null;
-        Collection<File> lstFichiers = FileUtils.listFiles(new File(aCertificatesDirectory), fileFilter, dirFilter);
+		IOFileFilter dirFilter = recursive ? TrueFileFilter.INSTANCE : null;
+		Collection<File> lstFichiers = FileUtils.listFiles(new File(
+				aCertificatesDirectory), fileFilter, dirFilter);
 
-        if (lstFichiers != null)
-        {
-            // boucle sur les certificats trouvés
-            for (File fichier : lstFichiers)
-            {
-                InputStream certStream = new FileInputStream(fichier);
-                //remarque: un fichier .cer peut contenir plus d'un certificat
-                Collection<X509Certificate> trustedCerts = chargerCertificatsX509(certStream, typeCert, provider);
-                IOUtils.closeQuietly(certStream);
-                lstCert.addAll(trustedCerts);
-            }
-        }
-        Set<X509Certificate> trustedCertificates = new HashSet<X509Certificate>(lstCert);
-        return trustedCertificates;
-    }
-    
-    
-    protected static Set<X509Certificate> listerCertificats(String aCertificatesDirectory, String typeCert,
-            String provider) throws IOException, GeneralSecurityException
-    {    
-        return listerCertificats(aCertificatesDirectory, typeCert,
-                provider, false);
-    }
+		if (lstFichiers != null) {
+			// boucle sur les certificats trouvés
+			for (File fichier : lstFichiers) {
+				InputStream certStream = new FileInputStream(fichier);
+				// remarque: un fichier .cer peut contenir plus d'un certificat
+				Collection<X509Certificate> trustedCerts = chargerCertificatsX509(
+						certStream, typeCert, provider);
+				IOUtils.closeQuietly(certStream);
+				lstCert.addAll(trustedCerts);
+			}
+		}
+		Set<X509Certificate> trustedCertificates = new HashSet<X509Certificate>(
+				lstCert);
+		return trustedCertificates;
+	}
 
-    /**
-     * Récupère une liste de certificats à partir d'un fichier .cer.
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @param aCertStream
-     * @return
-     * @throws GeneralSecurityException
-     */
-    private static Collection<X509Certificate> chargerCertificatsX509(InputStream aCertStream, String typeCert,
-            String provider) throws GeneralSecurityException
-    {
-        // création d'une fabrique de certificat X509
-        CertificateFactory cf = CertificateFactory.getInstance(typeCert, provider);
+	protected static Set<X509Certificate> listerCertificats(
+			String aCertificatesDirectory, String typeCert, String provider)
+			throws IOException, GeneralSecurityException {
+		return listerCertificats(aCertificatesDirectory, typeCert, provider,
+				false);
+	}
 
-        // chargement du certificat
-        Collection<X509Certificate> certs = (Collection<X509Certificate>) cf.generateCertificates(aCertStream);
-        return certs;
-    }
+	/**
+	 * Récupère une liste de certificats à partir d'un fichier .cer.
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param aCertStream
+	 * @return
+	 * @throws GeneralSecurityException
+	 */
+	private static Collection<X509Certificate> chargerCertificatsX509(
+			InputStream aCertStream, String typeCert, String provider)
+			throws GeneralSecurityException {
+		// création d'une fabrique de certificat X509
+		CertificateFactory cf = CertificateFactory.getInstance(typeCert,
+				provider);
 
-    /**
-     * Vérifie le chemin de certification d'un certificat.
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @param trusted: liste des certificats reconnus
-     * @param certs: chaîne de certification du certificat à contrôler
-     * @throws IOException 
-     */
-    public static void validate(X509Certificate[] trusted, Certificate[] certs, String provider) throws CertPathValidatorException,
-            GeneralSecurityException
-    {
-        checkTrusted(trusted, certs, null, provider, false);
-    }
+		// chargement du certificat
+		Collection<X509Certificate> certs = (Collection<X509Certificate>) cf
+				.generateCertificates(aCertStream);
+		return certs;
+	}
 
-    /**
-     * Récupère les AC reconnues à partir d'un Stream.
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @param is le inputStream à lire
-     * @param securityProvider
-     * @throws GeneralSecurityException 
-     */
-    public static X509Certificate[] getTrustedCerts(InputStream certStream, String securityProvider)
-            throws GeneralSecurityException
-    {
-        String typeCert = X509_CERTIFICATE_TYPE;
-        Collection<X509Certificate> trustedCerts = chargerCertificatsX509(certStream, typeCert, securityProvider);
-        //suppression des doublons
-        Set<X509Certificate> trustedCertificates = new HashSet<X509Certificate>(trustedCerts);
-        X509Certificate[] certsArray = null;
-        // Chargement de la liste des certificats de confiance
+	/**
+	 * Vérifie le chemin de certification d'un certificat.
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param trusted
+	 *            : liste des certificats reconnus
+	 * @param certs
+	 *            : chaîne de certification du certificat à contrôler
+	 * @throws IOException
+	 */
+	public static void validate(X509Certificate[] trusted, Certificate[] certs,
+			String provider) throws CertPathValidatorException,
+			GeneralSecurityException {
+		checkTrusted(trusted, certs, null, provider, false);
+	}
 
-        certsArray = new X509Certificate[trustedCertificates.size()];
-        int i = 0;
-        for (X509Certificate certificat : trustedCerts)
-        {
-            certsArray[i++] = certificat;
-        }
-        return certsArray;
-    }
+	/**
+	 * Récupère les AC reconnues à partir d'un Stream.
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param is
+	 *            le inputStream à lire
+	 * @param securityProvider
+	 * @throws GeneralSecurityException
+	 */
+	public static X509Certificate[] getTrustedCerts(InputStream certStream,
+			String securityProvider) throws GeneralSecurityException {
+		String typeCert = X509_CERTIFICATE_TYPE;
+		Collection<X509Certificate> trustedCerts = chargerCertificatsX509(
+				certStream, typeCert, securityProvider);
+		// suppression des doublons
+		Set<X509Certificate> trustedCertificates = new HashSet<X509Certificate>(
+				trustedCerts);
+		X509Certificate[] certsArray = null;
+		// Chargement de la liste des certificats de confiance
 
-    /**
-     * .
-     * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
-     * @param repertoireAC
-     * @param provider
-     * @return
-     */
-    public static X509Certificate[] getAllTrustedCerts(String repertoireAC, String provider) throws GeneralSecurityException
-    {
-        String typeCert = X509_CERTIFICATE_TYPE;
-        X509Certificate[] trustedCerts = null;
-        // Chargement de la liste des certificats de confiance
-        try
-        {
-            Set<X509Certificate> certs = listerCertificats(repertoireAC, typeCert, provider, true);
-            trustedCerts = new X509Certificate[certs.size()];
-            int i = 0;
-            for (X509Certificate certificat : certs)
-            {
-                trustedCerts[i++] = certificat;
-            }
-        }
-        catch (IOException ioe)
-        {
-            throw new GeneralSecurityException("Problème de lecture des certificats de confiance de " + repertoireAC,
-                    ioe);
-        }
+		certsArray = new X509Certificate[trustedCertificates.size()];
+		int i = 0;
+		for (X509Certificate certificat : trustedCerts) {
+			certsArray[i++] = certificat;
+		}
+		return certsArray;
+	}
 
-        return trustedCerts;
-    }
+	/**
+	 * .
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param repertoireAC
+	 * @param provider
+	 * @return
+	 */
+	public static X509Certificate[] getAllTrustedCerts(String repertoireAC,
+			String provider) throws GeneralSecurityException {
+		String typeCert = X509_CERTIFICATE_TYPE;
+		X509Certificate[] trustedCerts = null;
+		// Chargement de la liste des certificats de confiance
+		try {
+			Set<X509Certificate> certs = listerCertificats(repertoireAC,
+					typeCert, provider, true);
+			trustedCerts = new X509Certificate[certs.size()];
+			int i = 0;
+			for (X509Certificate certificat : certs) {
+				trustedCerts[i++] = certificat;
+			}
+		} catch (IOException ioe) {
+			throw new GeneralSecurityException(
+					"Problème de lecture des certificats de confiance de "
+							+ repertoireAC, ioe);
+		}
+
+		return trustedCerts;
+	}
 
 }

@@ -309,9 +309,7 @@ public class KeyTools {
 	certGen.setNotBefore(certModel.getNotBefore());
 	certGen.setNotAfter(certModel.getNotAfter());
 
-	certGen
-		.setSubjectDN(new X509Principal(certModel
-			.subjectMapToX509Name()));
+	certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
 	certGen.setSignatureAlgorithm(certModel.getAlgoSig());
 
 	if (isAC) {
@@ -410,9 +408,7 @@ public class KeyTools {
 	certGen.setNotBefore(certModel.getNotBefore());
 	certGen.setNotAfter(certModel.getNotAfter());
 
-	certGen
-		.setSubjectDN(new X509Principal(certModel
-			.subjectMapToX509Name()));
+	certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
 	certGen.setSignatureAlgorithm(certModel.getAlgoSig());
 
 	if (isAC) {
@@ -431,11 +427,15 @@ public class KeyTools {
 
 	// FIXME: à vérifier en cas de auto signé
 	if (certIssuer.getCertificate() != null) {
-	    certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
+	    certGen.addExtension(
+		    X509Extensions.AuthorityKeyIdentifier,
+		    false,
 		    new AuthorityKeyIdentifierStructure(certIssuer
 			    .getCertificate()));
 	} else {
-	    certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
+	    certGen.addExtension(
+		    X509Extensions.AuthorityKeyIdentifier,
+		    false,
 		    new AuthorityKeyIdentifierStructure(certModel
 			    .getPublicKey()));
 	}
@@ -495,16 +495,16 @@ public class KeyTools {
     @Deprecated
     public void addCertToKeyStore(X509Certificate cert, KeyStoreInfo ksInfo,
 	    CertificateInfo certInfo) throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo
-		.getStoreFormat(), ksInfo.getPassword());
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(),
+		ksInfo.getStoreFormat(), ksInfo.getPassword());
 	saveCert(kstore, cert, certInfo);
 	saveKeyStore(kstore, ksInfo);
     }
 
     public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo,
 	    CertificateInfo certInfo) throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo
-		.getStoreFormat(), ksInfo.getPassword());
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(),
+		ksInfo.getStoreFormat(), ksInfo.getPassword());
 	saveCertChain(kstore, cert, certInfo);
 	saveKeyStore(kstore, ksInfo);
     }
@@ -512,8 +512,8 @@ public class KeyTools {
     public void addCertToKeyStoreNew(X509Certificate[] xCerts,
 	    KeyStoreInfo ksInfo, CertificateInfo certInfo)
 	    throws KeyToolsException {
-	KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo
-		.getStoreFormat(), ksInfo.getPassword());
+	KeyStore kstore = loadKeyStore(ksInfo.getPath(),
+		ksInfo.getStoreFormat(), ksInfo.getPassword());
 	saveCertChain(kstore, xCerts, certInfo);
 	saveKeyStore(kstore, ksInfo);
     }
@@ -532,7 +532,7 @@ public class KeyTools {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -553,8 +553,9 @@ public class KeyTools {
 		// kstore.setCertificateEntry(certInfo.getAlias(), cert);
 	    } else {
 
-		kstore.setKeyEntry(certInfo.getAlias(), certInfo
-			.getPrivateKey(), certInfo.getPassword(), xCerts);
+		kstore.setKeyEntry(certInfo.getAlias(),
+			certInfo.getPrivateKey(), certInfo.getPassword(),
+			xCerts);
 	    }
 
 	    // ks.setCertificateEntry(alias, cer);
@@ -605,8 +606,9 @@ public class KeyTools {
 		kstore.setCertificateEntry(certInfo.getAlias(), cert);
 	    } else {
 
-		kstore.setKeyEntry(certInfo.getAlias(), certInfo
-			.getPrivateKey(), certInfo.getPassword(), chaine);
+		kstore.setKeyEntry(certInfo.getAlias(),
+			certInfo.getPrivateKey(), certInfo.getPassword(),
+			chaine);
 	    }
 
 	    // ks.setCertificateEntry(alias, cer);
@@ -626,8 +628,9 @@ public class KeyTools {
 		kstore.setCertificateEntry(certInfo.getAlias(), cert);
 	    } else {
 
-		kstore.setKeyEntry(certInfo.getAlias(), certInfo
-			.getPrivateKey(), certInfo.getPassword(), chaine);
+		kstore.setKeyEntry(certInfo.getAlias(),
+			certInfo.getPrivateKey(), certInfo.getPassword(),
+			chaine);
 	    }
 
 	    // ks.setCertificateEntry(alias, cer);
@@ -739,7 +742,7 @@ public class KeyTools {
     /**
      * Chargement certificat X509 à partir d'un flux.
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * b&gt;Algorithme : &lt;/b&gt;
@@ -766,12 +769,13 @@ public class KeyTools {
     private static Set<X509Certificate> loadX509Certs(InputStream aCertStream)
 	    throws GeneralSecurityException {
 
-        CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
+	CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
 
-        // chargement du certificat
-        Collection<X509Certificate> certs = (Collection<X509Certificate>) cf.generateCertificates(aCertStream);
-        Set<X509Certificate> certificates = new HashSet<X509Certificate>(certs);
-        return certificates;
+	// chargement du certificat
+	Collection<X509Certificate> certs = (Collection<X509Certificate>) cf
+		.generateCertificates(aCertStream);
+	Set<X509Certificate> certificates = new HashSet<X509Certificate>(certs);
+	return certificates;
     }
 
     public void importX509Cert(String alias, KeyStoreInfo ksInfo,
@@ -826,9 +830,9 @@ public class KeyTools {
 
     }
 
-    public void loadX509Certs(String fileName)
-	    throws KeyToolsException, KeyStoreException,
-	    UnrecoverableKeyException, NoSuchAlgorithmException {
+    public void loadX509Certs(String fileName) throws KeyToolsException,
+	    KeyStoreException, UnrecoverableKeyException,
+	    NoSuchAlgorithmException {
 
 	NodeInfo nInfo = new BagInfo(fileName);
 
@@ -836,8 +840,8 @@ public class KeyTools {
 	try {
 	    is = new FileInputStream(new File(fileName));
 	    Set<X509Certificate> certs = loadX509Certs(is);
-	    
-	    for (X509Certificate cert : certs){
+
+	    for (X509Certificate cert : certs) {
 		CertificateInfo certInfo = new CertificateInfo();
 		fillCertInfo(certInfo, cert);
 	    }
@@ -848,7 +852,7 @@ public class KeyTools {
 	} catch (GeneralSecurityException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
-	}  finally {
+	} finally {
 	    try {
 		is.close();
 	    } catch (IOException e) {
@@ -897,12 +901,12 @@ public class KeyTools {
 	/* save the private key in a file */
 
 	try {
-	    KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo
-		    .getStoreFormat(), ksInfo.getPassword());
+	    KeyStore ks = loadKeyStore(ksInfo.getPath(),
+		    ksInfo.getStoreFormat(), ksInfo.getPassword());
 	    PrivateKey privateKey = null;
 	    if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
-		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), ksInfo
-			.getPassword());
+		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
+			ksInfo.getPassword());
 	    } else {
 		privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
 			password);
@@ -1003,7 +1007,7 @@ public class KeyTools {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -1073,9 +1077,8 @@ public class KeyTools {
 		    .fromExtensionValue(extension));
 	} catch (Exception e) {
 	    if (log.isWarnEnabled()) {
-		log
-			.warn("Extension de CRLDistributionPoint non reconnue pour: "
-				+ certificateImpl.getSubjectDN());//
+		log.warn("Extension de CRLDistributionPoint non reconnue pour: "
+			+ certificateImpl.getSubjectDN());//
 	    }
 	    if (log.isDebugEnabled()) {
 		log.debug(e);
@@ -1089,7 +1092,7 @@ public class KeyTools {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -1109,23 +1112,24 @@ public class KeyTools {
 	// TODO Auto-generated method stub
 	return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
     }
-    
+
     public KeyStore importStore(String path, StoreFormat storeFormat,
-	    char[] password) throws KeyToolsException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+	    char[] password) throws KeyToolsException,
+	    UnrecoverableKeyException, KeyStoreException,
+	    NoSuchAlgorithmException {
 	// TODO Auto-generated method stub
 	switch (storeFormat) {
 	case JKS:
 	case PKCS12:
-	    return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
-	    
+	    return loadKeyStore(path, StoreFormat.getValue(storeFormat),
+		    password);
 
 	default:
 	    loadX509Certs(path);
 	    return null;
-	    
+
 	}
-    }    
-    
+    }
 
     public X509CRL generateCrl(X509Certificate certSign, CrlInfo crlInfo,
 	    Key privateKey) throws KeyStoreException, NoSuchProviderException,
@@ -1206,7 +1210,7 @@ public class KeyTools {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -1252,7 +1256,7 @@ public class KeyTools {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>

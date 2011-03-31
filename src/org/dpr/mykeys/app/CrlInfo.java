@@ -22,7 +22,7 @@ import java.util.Date;
  * <BR>
  *         <i>Copyright : Tessi Informatique </i><BR>
  */
-public class CrlInfo  implements NodeInfo{
+public class CrlInfo implements NodeInfo {
     Date thisUpdate = new Date();
     Date nextUpdate;
     String name;
@@ -90,92 +90,103 @@ public class CrlInfo  implements NodeInfo{
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @return
      * 
      * @see org.dpr.mykeys.app.NodeInfo#getName()
      */
     @Override
-    public String getName()
-    {
-        // TODO Auto-generated method stub
-        return name;
+    public String getName() {
+	// TODO Auto-generated method stub
+	return name;
     }
 
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @return
      * 
      * @see org.dpr.mykeys.app.NodeInfo#getPath()
      */
     @Override
-    public String getPath()
-    {
-        // TODO Auto-generated method stub
-        return path;
+    public String getPath() {
+	// TODO Auto-generated method stub
+	return path;
     }
 
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @param name
      * 
      * @see org.dpr.mykeys.app.NodeInfo#setName(java.lang.String)
      */
     @Override
-    public void setName(String name)
-    {
-        this.name=name;
-        
+    public void setName(String name) {
+	this.name = name;
+
     }
 
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @param path
      * 
      * @see org.dpr.mykeys.app.NodeInfo#setPath(java.lang.String)
      */
     @Override
-    public void setPath(String path)
-    {
-	 this.path=path;
-        
+    public void setPath(String path) {
+	this.path = path;
+
     }
 
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @return
      * 
      * @see org.dpr.mykeys.app.NodeInfo#isOpen()
@@ -189,12 +200,15 @@ public class CrlInfo  implements NodeInfo{
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @param isOpen
      * 
      * @see org.dpr.mykeys.app.NodeInfo#setOpen(boolean)
@@ -202,7 +216,7 @@ public class CrlInfo  implements NodeInfo{
     @Override
     public void setOpen(boolean isOpen) {
 	// TODO Auto-generated method stub
-	
+
     }
 
 }

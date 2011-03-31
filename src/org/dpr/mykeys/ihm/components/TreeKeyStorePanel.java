@@ -87,649 +87,649 @@ import org.dpr.mykeys.ihm.windows.ListPanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
-	TreeExpansionListener, TreeWillExpandListener {
+		TreeExpansionListener, TreeWillExpandListener {
 
-    public class TreeTransferHandler extends TransferHandler {
-	DataFlavor nodesFlavor;
-	DataFlavor[] flavors = new DataFlavor[1];
+	public class TreeTransferHandler extends TransferHandler {
+		DataFlavor nodesFlavor;
+		DataFlavor[] flavors = new DataFlavor[1];
 
-	/*
-	 * (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * javax.swing.TransferHandler#canImport(javax.swing.TransferHandler
+		 * .TransferSupport)
+		 */
+		@Override
+		public boolean canImport(TransferSupport support) {
+
+			if (!support.isDrop()) {
+				return false;
+			}
+			support.setShowDropLocation(true);
+			System.out.println(nodesFlavor.getHumanPresentableName());
+			if (!support.isDataFlavorSupported(nodesFlavor)) {
+				return false;
+			}
+			return true;
+		}
+
+	}
+
+	final static Log log = LogFactory.getLog(TreeKeyStorePanel.class);
+	private DetailPanel detailPanel;
+
+	private ListPanel listePanel;
+
+	private GradientTree tree;
+
+	DefaultMutableTreeNode rootNode;
+
+	DefaultMutableTreeNode cliNode;
+
+	DefaultMutableTreeNode acNode;
+
+	DefaultMutableTreeNode crlNode;
+
+	DefaultMutableTreeNode sandBoxNode;
+
+	private TreeModel treeModel;
+
+	TreePopupMenu popup;
+
+	public TreeKeyStorePanel(Dimension dim) {
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+		// Create the nodes.
+		rootNode = new DefaultMutableTreeNode("Magasins");
+		acNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+				"store.ac.name"));
+		cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+				"store.cert.name"));
+
+		crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+				"store.crl.name"));
+
+		sandBoxNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+				"store.sandbox.name"));
+
+		treeModel = new TreeModel(rootNode);
+		treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
+
+		tree = new GradientTree(treeModel);
+		System.out.println(tree.getUI());
+
+		GradientTreeRenderer renderer = new GradientTreeRenderer();
+
+		tree.setCellRenderer(renderer);
+		renderer.jtree1 = tree;
+		ToolTipManager.sharedInstance().registerComponent(tree);
+		// javax.swing.ToolTipManager.ToolTipManager.sharedInstance().registerComponent(tree);
+		tree.getSelectionModel().setSelectionMode(
+				TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		popup = new TreePopupMenu("Popup name", this);
+
+		treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
+		treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
+		treeModel.insertNodeInto(crlNode, rootNode, rootNode.getChildCount());
+		treeModel.insertNodeInto(sandBoxNode, rootNode,
+				rootNode.getChildCount());
+
+		tree.setRootVisible(false);
+
+		tree.addMouseListener(this);
+		tree.addTreeWillExpandListener(this);
+		tree.addTreeExpansionListener(this);
+		// drop enabled
+		tree.setDropMode(DropMode.ON);
+		tree.setTransferHandler(new TreeTransferHandler());
+		// Create the scroll pane and add the tree to it.
+		JScrollPane treeView = new JScrollPane(tree);
+		JPanel leftPanel = new JPanel();
+		listePanel = new ListPanel();
+		JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		// Create the viewing pane.
+		detailPanel = new DetailPanel();
+		listePanel.setDetailPanel(detailPanel);
+		JScrollPane scrollDetail = new JScrollPane(detailPanel);
+		splitLeftPanel.setBottomComponent(scrollDetail);
+		splitLeftPanel.setTopComponent(listePanel);
+		splitLeftPanel.setDividerLocation(150);
+		// Add the scroll panes to a split pane.
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setTopComponent(treeView);
+		splitPane.setBottomComponent(splitLeftPanel);
+		splitPane.setDividerLocation(210);
+
+		// Add the split pane to this panel.
+		add(splitPane);
+
+	}
+
+	private void displayCertDetail(CertificateInfo info) {
+		detailPanel.updateInfo(info);
+
+	}
+
+	/**
+	 * .
 	 * 
-	 * @see
-	 * javax.swing.TransferHandler#canImport(javax.swing.TransferHandler
-	 * .TransferSupport)
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param ksiInfo
 	 */
-	@Override
-	public boolean canImport(TransferSupport support) {
-
-	    if (!support.isDrop()) {
-		return false;
-	    }
-	    support.setShowDropLocation(true);
-	    System.out.println(nodesFlavor.getHumanPresentableName());
-	    if (!support.isDataFlavorSupported(nodesFlavor)) {
-		return false;
-	    }
-	    return true;
-	}
-
-    }
-
-    final static Log log = LogFactory.getLog(TreeKeyStorePanel.class);
-    private DetailPanel detailPanel;
-
-    private ListPanel listePanel;
-
-    private GradientTree tree;
-
-    DefaultMutableTreeNode rootNode;
-
-    DefaultMutableTreeNode cliNode;
-
-    DefaultMutableTreeNode acNode;
-
-    DefaultMutableTreeNode crlNode;
-
-    DefaultMutableTreeNode sandBoxNode;
-
-    private TreeModel treeModel;
-
-    TreePopupMenu popup;
-
-    public TreeKeyStorePanel(Dimension dim) {
-	this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
-	// Create the nodes.
-	rootNode = new DefaultMutableTreeNode("Magasins");
-	acNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-		"store.ac.name"));
-	cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-		"store.cert.name"));
-
-	crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-		"store.crl.name"));
-
-	sandBoxNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-		"store.sandbox.name"));
-
-	treeModel = new TreeModel(rootNode);
-	treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
-
-	tree = new GradientTree(treeModel);
-	System.out.println(tree.getUI());
-
-	GradientTreeRenderer renderer = new GradientTreeRenderer();
-
-	tree.setCellRenderer(renderer);
-	renderer.jtree1 = tree;
-	ToolTipManager.sharedInstance().registerComponent(tree);
-	// javax.swing.ToolTipManager.ToolTipManager.sharedInstance().registerComponent(tree);
-	tree.getSelectionModel().setSelectionMode(
-		TreeSelectionModel.SINGLE_TREE_SELECTION);
-
-	popup = new TreePopupMenu("Popup name", this);
-
-	treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
-	treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
-	treeModel.insertNodeInto(crlNode, rootNode, rootNode.getChildCount());
-	treeModel.insertNodeInto(sandBoxNode, rootNode,
-		rootNode.getChildCount());
-
-	tree.setRootVisible(false);
-
-	tree.addMouseListener(this);
-	tree.addTreeWillExpandListener(this);
-	tree.addTreeExpansionListener(this);
-	// drop enabled
-	tree.setDropMode(DropMode.ON);
-	tree.setTransferHandler(new TreeTransferHandler());
-	// Create the scroll pane and add the tree to it.
-	JScrollPane treeView = new JScrollPane(tree);
-	JPanel leftPanel = new JPanel();
-	listePanel = new ListPanel();
-	JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-	// Create the viewing pane.
-	detailPanel = new DetailPanel();
-	listePanel.setDetailPanel(detailPanel);
-	JScrollPane scrollDetail = new JScrollPane(detailPanel);
-	splitLeftPanel.setBottomComponent(scrollDetail);
-	splitLeftPanel.setTopComponent(listePanel);
-	splitLeftPanel.setDividerLocation(150);
-	// Add the scroll panes to a split pane.
-	JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-	splitPane.setTopComponent(treeView);
-	splitPane.setBottomComponent(splitLeftPanel);
-	splitPane.setDividerLocation(210);
-
-	// Add the split pane to this panel.
-	add(splitPane);
-
-    }
-
-    private void displayCertDetail(CertificateInfo info) {
-	detailPanel.updateInfo(info);
-
-    }
-
-    /**
-     * .
-     * 
-     * <BR>
-     * 
-     * <pre>
-     * <b>Algorithme : </b>
-     * DEBUT
-     *     
-     * FIN
-     * </pre>
-     * 
-     * @param ksiInfo
-     */
-    private void displayKeystoreList(KeyStoreInfo info) {
-	listePanel.updateInfo(info);
-
-    }
-
-    /**
-     * Update nodes with keystores list
-     * 
-     * @param ksList
-     */
-    public void updateKSList(HashMap<String, KeyStoreInfo> ksList) {
-	clear();
-	// Set<String> dirs = ksList.keySet();
-	SortedSet<String> dirs = new TreeSet<String>(
-		String.CASE_INSENSITIVE_ORDER);
-	dirs.addAll(ksList.keySet());
-	addInternalKS();
-
-	Iterator<String> iter = dirs.iterator();
-	while (iter.hasNext()) {
-	    String dir = iter.next();
-	    KeyStoreInfo ksinfo = ksList.get(dir);
-	    DefaultMutableTreeNode node = null;
-	    if (ksinfo.getStoreModel().equals(StoreModel.CASTORE)) {
-		node = addObject(acNode, ksinfo, true);
-	    } else {
-		node = addObject(cliNode, ksinfo, true);
-
-	    }
-	    // addObject(node, "[Vide]", false);
-	}
-	// tree.repaint();
-
-    }
-
-    private void addInternalKS() {
-	DefaultMutableTreeNode nodei = addObject(acNode,
-		InternalKeystores.getACKeystore(), true);
-
-	// addObject(nodei, "[Vide]", false);
-	nodei = addObject(cliNode, InternalKeystores.getCertKeystore(), true);
-	// addObject(nodei, "[Vide]", false);
-
-    }
-
-    /** Remove all nodes except the root node. */
-    public void clear() {
-	acNode.removeAllChildren();
-	cliNode.removeAllChildren();
-	treeModel.reload();
-    }
-
-    /** Remove the currently selected node. */
-    public void removeCurrentNode() {
-	TreePath currentSelection = tree.getSelectionPath();
-	if (currentSelection != null) {
-	    DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection
-		    .getLastPathComponent());
-	    MutableTreeNode parent = (MutableTreeNode) (currentNode.getParent());
-	    if (parent != null) {
-		treeModel.removeNodeFromParent(currentNode);
-		return;
-	    }
-	}
-
-    }
-
-    public void removeNode(DefaultMutableTreeNode node) {
-
-	MutableTreeNode parent = (MutableTreeNode) (node.getParent());
-	if (parent != null) {
-	    treeModel.removeNodeFromParent(node);
-	    return;
-	}
-
-    }
-
-    private DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,
-	    Object child, boolean shouldBeVisible) {
-	DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
-	if (parent == null) {
-	    parent = rootNode;
-	}
-
-	// It is key to invoke this on the TreeModel, and NOT
-	// DefaultMutableTreeNode
-	treeModel.insertNodeInto(childNode, parent, parent.getChildCount());
-
-	// Make sure the user can see the lovely new node.
-	if (shouldBeVisible) {
-	    tree.scrollPathToVisible(new TreePath(childNode.getPath()));
-	}
-
-	return childNode;
-    }
-
-    private void removeChildrenObjects(DefaultMutableTreeNode parent) {
-
-	while (treeModel.getChildCount(parent) != 0) {
-	    treeModel.removeNodeFromParent((DefaultMutableTreeNode) treeModel
-		    .getChild(parent, 0));
-	}
-
-    }
-
-    public boolean closeStore(DefaultMutableTreeNode node, boolean collapse) {
-	KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
-	removeChildrenObjects(node);
-	addObject(node, "[Vide]", false);
-	if (collapse) {
-	    ksInfo.setOpen(false);
-	    tree.collapsePath(new TreePath(node.getPath()));
-	}
-	return true;
-
-    }
-
-    public boolean openStore(DefaultMutableTreeNode node,
-	    boolean useInternalPwd, boolean expand) {
-	KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
-	if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { // equals(StoreModel.CASTORE))
-								// {
-	    useInternalPwd = true;
-	}
-	// ask for password
-	if (!useInternalPwd) {
-	    char[] password = MykeysFrame.showPasswordDialog(this);
-
-	    if (password == null || password.length == 0) {
-		return false;
-	    }
-
-	    ksInfo.setPassword(password);
+	private void displayKeystoreList(KeyStoreInfo info) {
+		listePanel.updateInfo(info);
 
 	}
 
-	KeyTools kt = new KeyTools();
-	KeyStore ks = null;
-	try {
-	    ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-		    ksInfo.getPassword());
-	    ksInfo.setOpen(true);
-	} catch (Exception e1) {
-	    MykeysFrame.showError(TreeKeyStorePanel.this, e1.getMessage());
-	    e1.printStackTrace();
-	    return false;
-	}
-	// try {
-	// Enumeration<String> enumKs = ks.aliases();
-	// if (enumKs != null && enumKs.hasMoreElements()) {
-	// removeChildrenObjects(node);
-	// node.removeAllChildren();
-	// while (enumKs.hasMoreElements()) {
-	// String alias = enumKs.nextElement();
-	// if (log.isDebugEnabled()) {
-	// log.debug("alias:" + alias);
-	// }
-	//
-	// CertificateInfo certInfo = new CertificateInfo(alias);
-	// kt.fillCertInfo(ks, certInfo, alias);
-	// addObject(node, certInfo, false);
-	// }
-	// }
-	// } catch (KeyStoreException e) {
-	// // TODO Auto-generated catch block
-	// return false;
-	// }
-	// if (expand) {
-	// ksInfo.setOpen(true);
-	// tree.expandPath(new TreePath(node.getPath()));
-	// }
-	return true;
+	/**
+	 * Update nodes with keystores list
+	 * 
+	 * @param ksList
+	 */
+	public void updateKSList(HashMap<String, KeyStoreInfo> ksList) {
+		clear();
+		// Set<String> dirs = ksList.keySet();
+		SortedSet<String> dirs = new TreeSet<String>(
+				String.CASE_INSENSITIVE_ORDER);
+		dirs.addAll(ksList.keySet());
+		addInternalKS();
 
-    }
+		Iterator<String> iter = dirs.iterator();
+		while (iter.hasNext()) {
+			String dir = iter.next();
+			KeyStoreInfo ksinfo = ksList.get(dir);
+			DefaultMutableTreeNode node = null;
+			if (ksinfo.getStoreModel().equals(StoreModel.CASTORE)) {
+				node = addObject(acNode, ksinfo, true);
+			} else {
+				node = addObject(cliNode, ksinfo, true);
 
-    public void showPopupMenu(MouseEvent e) {
-	DefaultMutableTreeNode tNode = null;
-	int selRow = tree.getRowForLocation(e.getX(), e.getY());
-	TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-	if (selPath != null) {
-	    tNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
-	}
-
-	popup.setNode(tNode);
-	popup.show(tree, e.getX(), e.getY());
-
-    }
-
-    /**
-     * Create the GUI and show it. For thread safety, this method should be
-     * invoked from the event-dispatching thread.
-     */
-    private static void createAndShowGUI() {
-	// Create and set up the window.
-	JFrame frame = new JFrame("TreeIconDemo");
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-	// Create and set up the content pane.
-	TreeKeyStorePanel newContentPane = new TreeKeyStorePanel(null);
-	newContentPane.setOpaque(true); // content panes must be opaque
-	frame.setContentPane(newContentPane);
-
-	// Display the window.
-	frame.pack();
-	frame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-	// Schedule a job for the event-dispatching thread:
-	// creating and showing this application's GUI.
-	javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	    public void run() {
-		createAndShowGUI();
-	    }
-	});
-    }
-
-    @Override
-    public void treeCollapsed(TreeExpansionEvent event) {
-	// System.out.println("collaps");
-
-    }
-
-    @Override
-    public void treeExpanded(TreeExpansionEvent event) {
-	// System.out.println("expand");
-
-    }
-
-    @Override
-    public void treeWillCollapse(TreeExpansionEvent event)
-	    throws ExpandVetoException {
-	// System.out.println("collapse1");
-
-    }
-
-    @Override
-    public void treeWillExpand(TreeExpansionEvent event)
-	    throws ExpandVetoException {
-	// System.out.println("ask expand");
-	DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) event.getPath()
-		.getLastPathComponent();
-	if (tNode.getParent() != null) {
-	    Object object = tNode.getUserObject();
-	    if (object instanceof KeyStoreInfo) {
-		if (((KeyStoreInfo) object).isOpen()) {
-		    return;
-		} else {
-
-		    if (openStore(tNode, false, true)) {
-			return;
-		    }
-
+			}
+			// addObject(node, "[Vide]", false);
 		}
-	    } else if (object instanceof String) {
-		return;
-	    }
-	    throw new ExpandVetoException(event);
+		// tree.repaint();
 
 	}
-    }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
+	private void addInternalKS() {
+		DefaultMutableTreeNode nodei = addObject(acNode,
+				InternalKeystores.getACKeystore(), true);
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
+		// addObject(nodei, "[Vide]", false);
+		nodei = addObject(cliNode, InternalKeystores.getCertKeystore(), true);
+		// addObject(nodei, "[Vide]", false);
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
+	}
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-	if (e.isPopupTrigger()) {
-	    int selRow = tree.getRowForLocation(e.getX(), e.getY());
-	    TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-	    if (selRow != -1) {
+	/** Remove all nodes except the root node. */
+	public void clear() {
+		acNode.removeAllChildren();
+		cliNode.removeAllChildren();
+		treeModel.reload();
+	}
+
+	/** Remove the currently selected node. */
+	public void removeCurrentNode() {
 		TreePath currentSelection = tree.getSelectionPath();
-		if (currentSelection == null
-			|| !currentSelection.equals(selPath)) {
-		    tree.setSelectionPath(selPath);
+		if (currentSelection != null) {
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection
+					.getLastPathComponent());
+			MutableTreeNode parent = (MutableTreeNode) (currentNode.getParent());
+			if (parent != null) {
+				treeModel.removeNodeFromParent(currentNode);
+				return;
+			}
 		}
 
-	    }
-	    showPopupMenu(e);
-
 	}
-	int selRow = tree.getRowForLocation(e.getX(), e.getY());
-	TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-	if (selRow != -1) {
-	    if (e.getClickCount() == 1) {
-		DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) selPath
-			.getLastPathComponent();
-		Object object = tNode.getUserObject();
-		if (object instanceof CertificateInfo) {
-		    CertificateInfo certInfo = ((CertificateInfo) object);
-		    displayCertDetail(certInfo);
 
-		} else {
-		    displayCertDetail(null);
-		    if (object instanceof KeyStoreInfo) {
-			KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
-			if (ksiInfo != null)
-			    displayKeystoreList(ksiInfo);
+	public void removeNode(DefaultMutableTreeNode node) {
 
-		    } else {
-			displayKeystoreList(null);
-		    }
+		MutableTreeNode parent = (MutableTreeNode) (node.getParent());
+		if (parent != null) {
+			treeModel.removeNodeFromParent(node);
+			return;
 		}
 
-		System.out.println(selPath);
-	    } else if (e.getClickCount() == 2) {
-		// DefaultMutableTreeNode tNode = (DefaultMutableTreeNode)
-		// selPath
-		// .getLastPathComponent();
-		// Object object = tNode.getUserObject();
-		// if (object instanceof KeyStoreInfo) {
-		// KeyStoreInfo ksInfo = ((KeyStoreInfo) object);
-		//
-		// if (!ksInfo.isOpen()) {
-		// openStore(tNode, false, true);
-		//
-		// }
-		// }
-	    }
 	}
-    }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-	if (e.isPopupTrigger()) {
-	    if (e.isPopupTrigger()) {
+	private DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,
+			Object child, boolean shouldBeVisible) {
+		DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
+		if (parent == null) {
+			parent = rootNode;
+		}
+
+		// It is key to invoke this on the TreeModel, and NOT
+		// DefaultMutableTreeNode
+		treeModel.insertNodeInto(childNode, parent, parent.getChildCount());
+
+		// Make sure the user can see the lovely new node.
+		if (shouldBeVisible) {
+			tree.scrollPathToVisible(new TreePath(childNode.getPath()));
+		}
+
+		return childNode;
+	}
+
+	private void removeChildrenObjects(DefaultMutableTreeNode parent) {
+
+		while (treeModel.getChildCount(parent) != 0) {
+			treeModel.removeNodeFromParent((DefaultMutableTreeNode) treeModel
+					.getChild(parent, 0));
+		}
+
+	}
+
+	public boolean closeStore(DefaultMutableTreeNode node, boolean collapse) {
+		KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
+		removeChildrenObjects(node);
+		addObject(node, "[Vide]", false);
+		if (collapse) {
+			ksInfo.setOpen(false);
+			tree.collapsePath(new TreePath(node.getPath()));
+		}
+		return true;
+
+	}
+
+	public boolean openStore(DefaultMutableTreeNode node,
+			boolean useInternalPwd, boolean expand) {
+		KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
+		if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { // equals(StoreModel.CASTORE))
+			// {
+			useInternalPwd = true;
+		}
+		// ask for password
+		if (!useInternalPwd) {
+			char[] password = MykeysFrame.showPasswordDialog(this);
+
+			if (password == null || password.length == 0) {
+				return false;
+			}
+
+			ksInfo.setPassword(password);
+
+		}
+
+		KeyTools kt = new KeyTools();
+		KeyStore ks = null;
+		try {
+			ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+					ksInfo.getPassword());
+			ksInfo.setOpen(true);
+		} catch (Exception e1) {
+			MykeysFrame.showError(TreeKeyStorePanel.this, e1.getMessage());
+			e1.printStackTrace();
+			return false;
+		}
+		// try {
+		// Enumeration<String> enumKs = ks.aliases();
+		// if (enumKs != null && enumKs.hasMoreElements()) {
+		// removeChildrenObjects(node);
+		// node.removeAllChildren();
+		// while (enumKs.hasMoreElements()) {
+		// String alias = enumKs.nextElement();
+		// if (log.isDebugEnabled()) {
+		// log.debug("alias:" + alias);
+		// }
+		//
+		// CertificateInfo certInfo = new CertificateInfo(alias);
+		// kt.fillCertInfo(ks, certInfo, alias);
+		// addObject(node, certInfo, false);
+		// }
+		// }
+		// } catch (KeyStoreException e) {
+		// // TODO Auto-generated catch block
+		// return false;
+		// }
+		// if (expand) {
+		// ksInfo.setOpen(true);
+		// tree.expandPath(new TreePath(node.getPath()));
+		// }
+		return true;
+
+	}
+
+	public void showPopupMenu(MouseEvent e) {
+		DefaultMutableTreeNode tNode = null;
+		int selRow = tree.getRowForLocation(e.getX(), e.getY());
+		TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+		if (selPath != null) {
+			tNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
+		}
+
+		popup.setNode(tNode);
+		popup.show(tree, e.getX(), e.getY());
+
+	}
+
+	/**
+	 * Create the GUI and show it. For thread safety, this method should be
+	 * invoked from the event-dispatching thread.
+	 */
+	private static void createAndShowGUI() {
+		// Create and set up the window.
+		JFrame frame = new JFrame("TreeIconDemo");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Create and set up the content pane.
+		TreeKeyStorePanel newContentPane = new TreeKeyStorePanel(null);
+		newContentPane.setOpaque(true); // content panes must be opaque
+		frame.setContentPane(newContentPane);
+
+		// Display the window.
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		// Schedule a job for the event-dispatching thread:
+		// creating and showing this application's GUI.
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				createAndShowGUI();
+			}
+		});
+	}
+
+	@Override
+	public void treeCollapsed(TreeExpansionEvent event) {
+		// System.out.println("collaps");
+
+	}
+
+	@Override
+	public void treeExpanded(TreeExpansionEvent event) {
+		// System.out.println("expand");
+
+	}
+
+	@Override
+	public void treeWillCollapse(TreeExpansionEvent event)
+			throws ExpandVetoException {
+		// System.out.println("collapse1");
+
+	}
+
+	@Override
+	public void treeWillExpand(TreeExpansionEvent event)
+			throws ExpandVetoException {
+		// System.out.println("ask expand");
+		DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) event.getPath()
+				.getLastPathComponent();
+		if (tNode.getParent() != null) {
+			Object object = tNode.getUserObject();
+			if (object instanceof KeyStoreInfo) {
+				if (((KeyStoreInfo) object).isOpen()) {
+					return;
+				} else {
+
+					if (openStore(tNode, false, true)) {
+						return;
+					}
+
+				}
+			} else if (object instanceof String) {
+				return;
+			}
+			throw new ExpandVetoException(event);
+
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if (e.isPopupTrigger()) {
+			int selRow = tree.getRowForLocation(e.getX(), e.getY());
+			TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+			if (selRow != -1) {
+				TreePath currentSelection = tree.getSelectionPath();
+				if (currentSelection == null
+						|| !currentSelection.equals(selPath)) {
+					tree.setSelectionPath(selPath);
+				}
+
+			}
+			showPopupMenu(e);
+
+		}
 		int selRow = tree.getRowForLocation(e.getX(), e.getY());
 		TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 		if (selRow != -1) {
+			if (e.getClickCount() == 1) {
+				DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) selPath
+						.getLastPathComponent();
+				Object object = tNode.getUserObject();
+				if (object instanceof CertificateInfo) {
+					CertificateInfo certInfo = ((CertificateInfo) object);
+					displayCertDetail(certInfo);
 
-		    TreePath currentSelection = tree.getSelectionPath();
-		    if (currentSelection == null
-			    || !currentSelection.equals(selPath)) {
-			tree.setSelectionPath(selPath);
-		    }
+				} else {
+					displayCertDetail(null);
+					if (object instanceof KeyStoreInfo) {
+						KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
+						if (ksiInfo != null)
+							displayKeystoreList(ksiInfo);
+
+					} else {
+						displayKeystoreList(null);
+					}
+				}
+
+				System.out.println(selPath);
+			} else if (e.getClickCount() == 2) {
+				// DefaultMutableTreeNode tNode = (DefaultMutableTreeNode)
+				// selPath
+				// .getLastPathComponent();
+				// Object object = tNode.getUserObject();
+				// if (object instanceof KeyStoreInfo) {
+				// KeyStoreInfo ksInfo = ((KeyStoreInfo) object);
+				//
+				// if (!ksInfo.isOpen()) {
+				// openStore(tNode, false, true);
+				//
+				// }
+				// }
+			}
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (e.isPopupTrigger()) {
+			if (e.isPopupTrigger()) {
+				int selRow = tree.getRowForLocation(e.getX(), e.getY());
+				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				if (selRow != -1) {
+
+					TreePath currentSelection = tree.getSelectionPath();
+					if (currentSelection == null
+							|| !currentSelection.equals(selPath)) {
+						tree.setSelectionPath(selPath);
+					}
+
+				}
+				showPopupMenu(e);
+
+			}
+			showPopupMenu(e);
+		}
+
+	}
+
+	class PopupHandler implements ActionListener {
+		JTree tree;
+
+		JPopupMenu popup;
+
+		Point loc;
+
+		public PopupHandler(JTree tree, JPopupMenu popup) {
+			this.tree = tree;
+			this.popup = popup;
+			// tree.addMouseListener(ma);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("popuprr");
+			String ac = e.getActionCommand();
+			TreePath path = tree.getPathForLocation(loc.x, loc.y);
+			// //System.out.println("path = " + path);
+			// //System.out.printf("loc = [%d, %d]%n", loc.x, loc.y);
+			// if(ac.equals("ADD CHILD"))
+			// System.out.println("popuprr");
+			// if(ac.equals("ADD SIBLING"))
+			// addSibling(path);
+		}
+	}
+
+	public void addCertificate(DefaultMutableTreeNode node, boolean b) {
+		JFrame frame = (JFrame) tree.getTopLevelAncestor();
+		KeyStoreInfo ksInfo = null;
+		Object object = node.getUserObject();
+		if (object instanceof KeyStoreInfo) {
+			ksInfo = ((KeyStoreInfo) object);
+		}
+		CreateCertificatDialog cs = new CreateCertificatDialog(frame, ksInfo,
+				true);
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+		openStore(node, true, true);
+
+		return;
+
+	}
+
+	public void importCertificate(DefaultMutableTreeNode node, boolean b) {
+		JFrame frame = (JFrame) tree.getTopLevelAncestor();
+		KeyStoreInfo ksInfo = null;
+		Object object = node.getUserObject();
+		if (object instanceof KeyStoreInfo) {
+			ksInfo = ((KeyStoreInfo) object);
+		}
+		ImportCertificateDialog cs = new ImportCertificateDialog(frame, ksInfo,
+				true);
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+		openStore(node, true, true);
+
+	}
+
+	/**
+	 * .
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * &lt;b&gt;Algorithme : &lt;/b&gt;
+	 * DEBUT
+	 *    
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param node
+	 * @param b
+	 */
+	public void exporterCertificate(DefaultMutableTreeNode node, boolean b) {
+		JFrame frame = (JFrame) tree.getTopLevelAncestor();
+		// KeyStoreInfo ksInfo = null;
+		CertificateInfo certInfo = null;
+		Object object = node.getUserObject();
+		if (object instanceof CertificateInfo) {
+			certInfo = ((CertificateInfo) object);
+		}
+		KeyStoreInfo ksInfo = null;
+		DefaultMutableTreeNode objectKs = (DefaultMutableTreeNode) node
+				.getParent();// .getUserObject();
+		if (objectKs.getUserObject() instanceof KeyStoreInfo) {
+			ksInfo = ((KeyStoreInfo) objectKs.getUserObject());
+		}
+		ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
+				certInfo, true);
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+
+	}
+
+	/**
+	 * .
+	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * &lt;b&gt;Algorithme : &lt;/b&gt;
+	 * DEBUT
+	 *    
+	 * FIN
+	 * </pre>
+	 * 
+	 * @param node
+	 * @param b
+	 */
+	public void addCertificateAC(DefaultMutableTreeNode node, boolean b) {
+		JFrame frame = (JFrame) tree.getTopLevelAncestor();
+		KeyStoreInfo ksInfo = null;
+		Object object = node.getUserObject();
+		if (object instanceof KeyStoreInfo) {
+			ksInfo = ((KeyStoreInfo) object);
+		}
+		CreateCertificatDialog cs = new CreateCertificatDialog(frame, ksInfo,
+				true);
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+		openStore(node, true, true);
+
+		return;
+	}
+
+	public static Map<String, String> getListCerts(String path, String type,
+			String password) throws KeyToolsException, KeyStoreException {
+		KeyTools kt = new KeyTools();
+		KeyStore ks = null;
+
+		ks = kt.loadKeyStore(path, type, password.toCharArray());
+		Map<String, String> certsAC = new HashMap<String, String>();
+		Enumeration<String> enumKs = ks.aliases();
+		while (enumKs.hasMoreElements()) {
+			String alias = enumKs.nextElement();
+			Certificate cert = ks.getCertificate(alias);
+
+			CertificateInfo certInfo = new CertificateInfo(alias);
+			kt.fillCertInfo(ks, certInfo, alias);
+
+			certsAC.put(alias, alias);
 
 		}
-		showPopupMenu(e);
 
-	    }
-	    showPopupMenu(e);
-	}
-
-    }
-
-    class PopupHandler implements ActionListener {
-	JTree tree;
-
-	JPopupMenu popup;
-
-	Point loc;
-
-	public PopupHandler(JTree tree, JPopupMenu popup) {
-	    this.tree = tree;
-	    this.popup = popup;
-	    // tree.addMouseListener(ma);
-	}
-
-	public void actionPerformed(ActionEvent e) {
-	    System.out.println("popuprr");
-	    String ac = e.getActionCommand();
-	    TreePath path = tree.getPathForLocation(loc.x, loc.y);
-	    // //System.out.println("path = " + path);
-	    // //System.out.printf("loc = [%d, %d]%n", loc.x, loc.y);
-	    // if(ac.equals("ADD CHILD"))
-	    // System.out.println("popuprr");
-	    // if(ac.equals("ADD SIBLING"))
-	    // addSibling(path);
-	}
-    }
-
-    public void addCertificate(DefaultMutableTreeNode node, boolean b) {
-	JFrame frame = (JFrame) tree.getTopLevelAncestor();
-	KeyStoreInfo ksInfo = null;
-	Object object = node.getUserObject();
-	if (object instanceof KeyStoreInfo) {
-	    ksInfo = ((KeyStoreInfo) object);
-	}
-	CreateCertificatDialog cs = new CreateCertificatDialog(frame, ksInfo,
-		true);
-	cs.setLocationRelativeTo(frame);
-	cs.setResizable(false);
-	cs.setVisible(true);
-	openStore(node, true, true);
-
-	return;
-
-    }
-
-    public void importCertificate(DefaultMutableTreeNode node, boolean b) {
-	JFrame frame = (JFrame) tree.getTopLevelAncestor();
-	KeyStoreInfo ksInfo = null;
-	Object object = node.getUserObject();
-	if (object instanceof KeyStoreInfo) {
-	    ksInfo = ((KeyStoreInfo) object);
-	}
-	ImportCertificateDialog cs = new ImportCertificateDialog(frame, ksInfo,
-		true);
-	cs.setLocationRelativeTo(frame);
-	cs.setResizable(false);
-	cs.setVisible(true);
-	openStore(node, true, true);
-
-    }
-
-    /**
-     * .
-     * 
-     * <BR>
-     * 
-     * <pre>
-     * &lt;b&gt;Algorithme : &lt;/b&gt;
-     * DEBUT
-     *    
-     * FIN
-     * </pre>
-     * 
-     * @param node
-     * @param b
-     */
-    public void exporterCertificate(DefaultMutableTreeNode node, boolean b) {
-	JFrame frame = (JFrame) tree.getTopLevelAncestor();
-	// KeyStoreInfo ksInfo = null;
-	CertificateInfo certInfo = null;
-	Object object = node.getUserObject();
-	if (object instanceof CertificateInfo) {
-	    certInfo = ((CertificateInfo) object);
-	}
-	KeyStoreInfo ksInfo = null;
-	DefaultMutableTreeNode objectKs = (DefaultMutableTreeNode) node
-		.getParent();// .getUserObject();
-	if (objectKs.getUserObject() instanceof KeyStoreInfo) {
-	    ksInfo = ((KeyStoreInfo) objectKs.getUserObject());
-	}
-	ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
-		certInfo, true);
-	cs.setLocationRelativeTo(frame);
-	cs.setResizable(false);
-	cs.setVisible(true);
-
-    }
-
-    /**
-     * .
-     * 
-     * <BR>
-     * 
-     * <pre>
-     * &lt;b&gt;Algorithme : &lt;/b&gt;
-     * DEBUT
-     *    
-     * FIN
-     * </pre>
-     * 
-     * @param node
-     * @param b
-     */
-    public void addCertificateAC(DefaultMutableTreeNode node, boolean b) {
-	JFrame frame = (JFrame) tree.getTopLevelAncestor();
-	KeyStoreInfo ksInfo = null;
-	Object object = node.getUserObject();
-	if (object instanceof KeyStoreInfo) {
-	    ksInfo = ((KeyStoreInfo) object);
-	}
-	CreateCertificatDialog cs = new CreateCertificatDialog(frame, ksInfo,
-		true);
-	cs.setLocationRelativeTo(frame);
-	cs.setResizable(false);
-	cs.setVisible(true);
-	openStore(node, true, true);
-
-	return;
-    }
-
-    public static Map<String, String> getListCerts(String path, String type,
-	    String password) throws KeyToolsException, KeyStoreException {
-	KeyTools kt = new KeyTools();
-	KeyStore ks = null;
-
-	ks = kt.loadKeyStore(path, type, password.toCharArray());
-	Map<String, String> certsAC = new HashMap<String, String>();
-	Enumeration<String> enumKs = ks.aliases();
-	while (enumKs.hasMoreElements()) {
-	    String alias = enumKs.nextElement();
-	    Certificate cert = ks.getCertificate(alias);
-
-	    CertificateInfo certInfo = new CertificateInfo(alias);
-	    kt.fillCertInfo(ks, certInfo, alias);
-
-	    certsAC.put(alias, alias);
+		return certsAC;
 
 	}
-
-	return certsAC;
-
-    }
 
 }

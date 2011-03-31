@@ -189,7 +189,6 @@ public class CertificateInfo {
 	this.keyLength = Integer.valueOf(keyLength).intValue();
     }
 
-
     /**
      * @return the algoSig
      */
@@ -295,8 +294,7 @@ public class CertificateInfo {
 	    DERObjectIdentifier oid = (DERObjectIdentifier) v.get(i);
 	    String val = (String) name.getValues().get(i);
 	    if (log.isDebugEnabled()) {
-		log.debug((String) X509Name.DefaultSymbols.get(oid) + ":"
-				+ val);
+		log.debug((String) X509Name.DefaultSymbols.get(oid) + ":" + val);
 	    }
 	    subjectMap.put((String) X509Name.DefaultSymbols.get(oid), val);
 	}
@@ -457,7 +455,7 @@ public class CertificateInfo {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -476,7 +474,7 @@ public class CertificateInfo {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -571,16 +569,19 @@ public class CertificateInfo {
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @return
      */
     public String getName() {
-	if (subjectMap != null){
+	if (subjectMap != null) {
 	    return subjectMap.get("CN");
 	}
 	return alias;

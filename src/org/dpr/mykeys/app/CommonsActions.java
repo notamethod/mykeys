@@ -17,13 +17,13 @@ import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 
 /**
- *<pre>
+ * <pre>
  * <b></b>.
  * 
  * <b>Description :</b>
  * 
  * 
- *</pre>
+ * </pre>
  * 
  * @author C. Roger<BR>
  * <BR>
@@ -44,9 +44,7 @@ public class CommonsActions {
 
 	try {
 	    KeyStore ks = kt.createKeyStore(storeFormat, path, password);
-	    kt
-		    .addCertToKeyStoreNew(certInfo.getCertificate(), ksInfo,
-			    certInfo);
+	    kt.addCertToKeyStoreNew(certInfo.getCertificate(), ksInfo, certInfo);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -58,8 +56,8 @@ public class CommonsActions {
 	KeyTools kt = new KeyTools();
 	KeyStore ks;
 	try {
-	    ks = kt.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo
-		    .getPassword());
+	    ks = kt.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(),
+		    kInfo.getPassword());
 	    certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(),
 		    kInfo.getPassword()));
 	} catch (KeyToolsException e) {
@@ -77,14 +75,14 @@ public class CommonsActions {
 	}
 
 	SignTools sTools = new SignTools();
-	sTools.SignData(null, certInfo, "c:/dev/SMC_test.sql", isInclude);
+	sTools.SignData(null, certInfo, "c:/dev/_test.sql", isInclude);
 
     }
 
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -121,11 +119,12 @@ public class CommonsActions {
     // .getStoreFormat(), ksInfo.getPassword());
     // saveCertChain(kstore, cert, certInfo);
     // saveKeyStore(kstore, ksInfo);
-    //      
+    //
     //
     // }
 
-    public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
+    public void generateCrl(String aliasEmetteur, CrlInfo crlInfo)
+	    throws Exception {
 
 	KeyTools ktools = new KeyTools();
 	CertificateInfo certSign;
@@ -134,7 +133,7 @@ public class CommonsActions {
 	    X509CRL xCRL = CrlTools.generateCrl(certSign, crlInfo);
 	    CrlTools.saveCRL(xCRL, crlInfo.getPath());
 	} catch (Exception e) {
-	    //log.error
+	    // log.error
 	    throw e;
 	}
 

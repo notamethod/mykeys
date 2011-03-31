@@ -54,7 +54,7 @@ public class CrlTools {
     /**
      * Chargement certificat X509 à partir d'un flux.
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * b&gt;Algorithme : &lt;/b&gt;
@@ -148,7 +148,7 @@ public class CrlTools {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -168,7 +168,7 @@ public class CrlTools {
      * @throws CRLException
      * @throws InvalidKeyException
      */
-    public static  X509CRL generateCrl(CertificateInfo certSign, CrlInfo crlInfo)
+    public static X509CRL generateCrl(CertificateInfo certSign, CrlInfo crlInfo)
 	    throws CertificateParsingException, InvalidKeyException,
 	    CRLException, IllegalStateException, NoSuchProviderException,
 	    NoSuchAlgorithmException, SignatureException {
@@ -194,7 +194,7 @@ public class CrlTools {
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * <b>Algorithme : </b>
@@ -207,9 +207,9 @@ public class CrlTools {
      * @throws IOException
      * @throws CRLException
      */
-    public static void saveCRL(X509CRL crl, String crlFile) throws CRLException,
-	    IOException {
-	
+    public static void saveCRL(X509CRL crl, String crlFile)
+	    throws CRLException, IOException {
+
 	OutputStream output = new FileOutputStream(crlFile);
 	IOUtils.write(crl.getEncoded(), output);
 
