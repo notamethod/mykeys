@@ -34,7 +34,6 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
@@ -262,7 +261,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		}
 		if (elements.get("alias") == null
 			|| elements.get("pwd1") == null) {
-		    KeyStoreUI.showError(CreateCertificatDialog.this,
+		    MykeysFrame.showError(CreateCertificatDialog.this,
 			    "Champs obligatoires");
 		    return;
 		}
@@ -297,7 +296,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 		    CreateCertificatDialog.this.setVisible(false);
 
 		} catch (Exception e) {
-		    KeyStoreUI.showError(CreateCertificatDialog.this,
+		    MykeysFrame.showError(CreateCertificatDialog.this,
 			    e.getMessage());
 		    e.printStackTrace();
 		}

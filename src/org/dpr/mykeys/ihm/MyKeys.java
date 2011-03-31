@@ -37,6 +37,7 @@ import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 /**
  * @author Christophe Roger
@@ -57,7 +58,7 @@ public class MyKeys {
 	mk.init();
 	SwingUtilities.invokeLater(new Runnable() {
 	    public void run() {
-		KeyStoreUI frame = new KeyStoreUI();
+		MykeysFrame frame = new MykeysFrame();
 		// frame.addComponents();
 
 	    }
@@ -81,7 +82,7 @@ public class MyKeys {
 	    KSConfig.load();
 	    checkConfig();
 	} catch (Exception e) {
-	    KeyStoreUI.showError(null, messages.getString("error.config"));
+	    MykeysFrame.showError(null, messages.getString("error.config"));
 	    throw new RuntimeException("Fatal Error");
 	}
 	Security.addProvider(new BouncyCastleProvider());

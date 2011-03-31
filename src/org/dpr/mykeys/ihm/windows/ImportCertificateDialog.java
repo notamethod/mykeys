@@ -21,7 +21,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -120,7 +119,7 @@ public class ImportCertificateDialog extends JDialog {
 	    } else if (command.equals("OK")) {
 		if (tfDirectory.getText().equals("")
 			|| elements.get("pwd1") == null) {
-		    KeyStoreUI.showError(ImportCertificateDialog.this,
+		    MykeysFrame.showError(ImportCertificateDialog.this,
 			    "Champs invalides");
 		    return;
 		}
@@ -133,18 +132,18 @@ public class ImportCertificateDialog extends JDialog {
 		    }
 		    String alias = (String) elements.get("alias");
 		    if (alias == null) {
-			KeyStoreUI.showError(ImportCertificateDialog.this,
+			MykeysFrame.showError(ImportCertificateDialog.this,
 				"Renseignez un alias pour ce certificat");
 		    }
 		    kt.importX509Cert(alias, ksInfo, tfDirectory.getText(),
 			    typeCert, ((String) elements.get("pwd1"))
 				    .toCharArray());
 
-		    // ((KeyStoreUI)ImportCertificateDialog.this.getParent()).updateKeyStoreList();
+		    // ((MykeysFrame)ImportCertificateDialog.this.getParent()).updateKeyStoreList();
 		    ImportCertificateDialog.this.setVisible(false);
 		} catch (Exception e) {
 		    // TODO Auto-generated catch block
-		    KeyStoreUI.showError(ImportCertificateDialog.this, e
+		    MykeysFrame.showError(ImportCertificateDialog.this, e
 			    .getLocalizedMessage());
 		    // e.printStackTrace();
 

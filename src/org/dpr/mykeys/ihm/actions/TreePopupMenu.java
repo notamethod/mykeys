@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.menuaction;
+package org.dpr.mykeys.ihm.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +15,7 @@ import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.ihm.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.TypeAction;
+import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
 import org.dpr.mykeys.ihm.windows.ImportStoreDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -167,8 +166,8 @@ public class TreePopupMenu extends JPopupMenu {
 	add(addCert);
 	add(importCert);
 	add(exportCert);
-	//add(openStore);
-	//add(closeStore);
+	// add(openStore);
+	// add(closeStore);
 	add(removeStore);
 	add(deleteStore);
     }
@@ -209,7 +208,7 @@ public class TreePopupMenu extends JPopupMenu {
 		openStore.setVisible(true);
 	    }
 	    if (!ksInfo.getStoreType().equals(StoreType.INTERNAL))
-	    removeStore.setVisible(true);
+		removeStore.setVisible(true);
 
 	} else if (node.getUserObject() instanceof CertificateInfo) {
 	    CertificateInfo certInfo = (CertificateInfo) node.getUserObject();

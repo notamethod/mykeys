@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.menuaction;
+package org.dpr.mykeys.ihm.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.Locale;
@@ -17,19 +17,19 @@ import org.dpr.mykeys.ihm.windows.VerifSigDialog;
 
 public class MenuAction extends AbstractAction {
 
-    private MykeysFrame keyStoreUI;
+    private MykeysFrame MykeysFrame;
 
-    ResourceBundle messages = ResourceBundle.getBundle("org.dpr.mykeys.config.Messages",
-	    Locale.getDefault());
+    ResourceBundle messages = ResourceBundle.getBundle(
+	    "org.dpr.mykeys.config.Messages", Locale.getDefault());
 
-    public MenuAction(Object keyStoreUI, String string) {
+    public MenuAction(Object MykeysFrame, String string) {
 	super(string);
-	this.keyStoreUI = (MykeysFrame) keyStoreUI;
+	this.MykeysFrame = (MykeysFrame) MykeysFrame;
     }
 
-    public MenuAction(Object keyStoreUI, String nomImg, ImageIcon ic) {
+    public MenuAction(Object MykeysFrame, String nomImg, ImageIcon ic) {
 	super(nomImg, ic);
-	this.keyStoreUI = (MykeysFrame) keyStoreUI;
+	this.MykeysFrame = (MykeysFrame) MykeysFrame;
     }
 
     @Override
@@ -42,8 +42,8 @@ public class MenuAction extends AbstractAction {
 		    SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 			    CreateStoreDialog cs = new CreateStoreDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
+				    MykeysFrame, true);
+			    cs.setLocationRelativeTo(MykeysFrame);
 			    cs.setVisible(true);
 			}
 		    });
@@ -52,8 +52,8 @@ public class MenuAction extends AbstractAction {
 		    SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 			    ImportStoreDialog cs = new ImportStoreDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
+				    MykeysFrame, true);
+			    cs.setLocationRelativeTo(MykeysFrame);
 
 			    cs.setVisible(true);
 			}
@@ -63,8 +63,8 @@ public class MenuAction extends AbstractAction {
 		    SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 			    CreateCrlDialog cs = new CreateCrlDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
+				    MykeysFrame, true);
+			    cs.setLocationRelativeTo(MykeysFrame);
 			    cs.setVisible(true);
 			}
 		    });
@@ -72,15 +72,15 @@ public class MenuAction extends AbstractAction {
 		} else if (action.equals("signFile")) {
 		    SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-			    VerifSigDialog cs = new VerifSigDialog(
-				    keyStoreUI, true);
-			    cs.setLocationRelativeTo(keyStoreUI);
+			    VerifSigDialog cs = new VerifSigDialog(MykeysFrame,
+				    true);
+			    cs.setLocationRelativeTo(MykeysFrame);
 			    cs.setVisible(true);
-//			    SignDocumentDialog cs = new SignDocumentDialog(
-//			    keyStoreUI, true);
-//		    cs.setLocationRelativeTo(keyStoreUI);
-//		    cs.setVisible(true);			    
-			    
+			    // SignDocumentDialog cs = new SignDocumentDialog(
+			    // MykeysFrame, true);
+			    // cs.setLocationRelativeTo(MykeysFrame);
+			    // cs.setVisible(true);
+
 			}
 		    });
 
@@ -98,7 +98,7 @@ public class MenuAction extends AbstractAction {
 // }
 // });
 
-// CreateStoreDialog cs = new CreateStoreDialog(keyStoreUI,
+// CreateStoreDialog cs = new CreateStoreDialog(MykeysFrame,
 // true);
-// cs.setLocationRelativeTo(keyStoreUI);
+// cs.setLocationRelativeTo(MykeysFrame);
 // cs.setVisible(true);

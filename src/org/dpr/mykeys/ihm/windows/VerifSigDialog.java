@@ -26,7 +26,6 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.SignTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.mykeys.ihm.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -164,12 +163,12 @@ public class VerifSigDialog extends JDialog {
 	    } else if (command.equals("OK")) {
 //		if (tfDirectoryIn.getText().equals("")
 //			|| elements.get("pwd1") == null) {
-//		    KeyStoreUI.showError(VerifSigDialog.this,
+//		    MykeysFrame.showError(VerifSigDialog.this,
 //			    "Champs invalides");
 //		    return;
 //		}
 //		if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-//		    KeyStoreUI.showError(VerifSigDialog.this,
+//		    MykeysFrame.showError(VerifSigDialog.this,
 //			    "Mot de passe incorrect");
 //		    return;
 //		}

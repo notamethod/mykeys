@@ -23,7 +23,6 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -128,7 +127,7 @@ public class CopyOfImportStoreDialog extends JDialog {
 	    } else if (command.equals("OK")) {
 		if (tfDirectory.getText().equals("")
 			|| elements.get("pwd1") == null) {
-		    KeyStoreUI.showError(CopyOfImportStoreDialog.this,
+		    MykeysFrame.showError(CopyOfImportStoreDialog.this,
 			    "Champs invalides");
 		    return;
 		}
@@ -147,12 +146,12 @@ public class CopyOfImportStoreDialog extends JDialog {
 		    KSConfig.getUserCfg().addProperty(
 			    "store." +StoreModel.CERTSTORE+"." + format.toString(),
 			    tfDirectory.getText());		    
-		    ((KeyStoreUI) CopyOfImportStoreDialog.this.getParent())
+		    ((MykeysFrame) CopyOfImportStoreDialog.this.getParent())
 			    .updateKeyStoreList();
 		    CopyOfImportStoreDialog.this.setVisible(false);
 		} catch (Exception e) {
 		    // TODO Auto-generated catch block
-		    KeyStoreUI.showError(CopyOfImportStoreDialog.this, e
+		    MykeysFrame.showError(CopyOfImportStoreDialog.this, e
 			    .getLocalizedMessage());
 		    // e.printStackTrace();
 

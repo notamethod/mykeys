@@ -24,7 +24,6 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -138,12 +137,12 @@ public class CreateStoreDialog extends JDialog {
 	    } else if (command.equals("OK")) {
 		if (tfDirectory.getText().equals("")
 			|| elements.get("pwd1") == null) {
-		    KeyStoreUI.showError(CreateStoreDialog.this,
+		    MykeysFrame.showError(CreateStoreDialog.this,
 			    "Champs invalides");
 		    return;
 		}
 		if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-		    KeyStoreUI.showError(CreateStoreDialog.this,
+		    MykeysFrame.showError(CreateStoreDialog.this,
 			    "Mot de passe incorrect");
 		    return;
 		}
@@ -159,7 +158,7 @@ public class CreateStoreDialog extends JDialog {
 		    KSConfig.getUserCfg().addProperty(
 			    "store." +StoreModel.CERTSTORE+"." + format.toString(),
 			    tfDirectory.getText());
-		    ((KeyStoreUI) CreateStoreDialog.this.getParent())
+		    ((MykeysFrame) CreateStoreDialog.this.getParent())
 			    .updateKeyStoreList();
 		    CreateStoreDialog.this.setVisible(false);
 		} catch (Exception e) {

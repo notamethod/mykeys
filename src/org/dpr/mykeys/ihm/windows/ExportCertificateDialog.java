@@ -27,7 +27,6 @@ import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -138,7 +137,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 	    } else if (command.equals("OK")) {
 		if (tfDirectory.getText().equals("")) {
-		    KeyStoreUI.showError(ExportCertificateDialog.this,
+		    MykeysFrame.showError(ExportCertificateDialog.this,
 			    "Champs invalides");
 		    return;
 		}
@@ -147,7 +146,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		// saisie mot de passe
 		char[] password = null;
 		if (isExportCle) {
-		    password = KeyStoreUI.showPasswordDialog(null);
+		    password = MykeysFrame.showPasswordDialog(null);
 		}
 		
 		KeyTools kt = new KeyTools();
@@ -168,7 +167,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 		    } catch (Exception e) {
 
-			KeyStoreUI.showError(ExportCertificateDialog.this, e
+			MykeysFrame.showError(ExportCertificateDialog.this, e
 				.getLocalizedMessage());
 
 		    }
@@ -183,13 +182,13 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 		    } catch (Exception e) {
 
-			KeyStoreUI.showError(ExportCertificateDialog.this, e
+			MykeysFrame.showError(ExportCertificateDialog.this, e
 				.getLocalizedMessage());
 
 		    }
 		}		
 		ExportCertificateDialog.this.setVisible(false);
-		KeyStoreUI.showInfo(ExportCertificateDialog.this,
+		MykeysFrame.showInfo(ExportCertificateDialog.this,
 			"Exportation terminée");
 	    } else if (command.equals("CANCEL")) {
 		ExportCertificateDialog.this.setVisible(false);

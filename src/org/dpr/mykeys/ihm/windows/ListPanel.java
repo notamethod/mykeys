@@ -34,7 +34,6 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.ihm.KeyStoreUI;
 import org.dpr.mykeys.ihm.TypeAction;
 import org.dpr.mykeys.ihm.components.JImgList;
 import org.dpr.swingutils.ImageUtils;
@@ -451,7 +450,7 @@ public class ListPanel extends JPanel {
 			&& listCerts.getSelectedValue() instanceof CertificateInfo) {
 		    CertificateInfo certInfo = (CertificateInfo) listCerts
 			    .getSelectedValue();
-		    if (KeyStoreUI.askConfirmDialog(null,
+		    if (MykeysFrame.askConfirmDialog(null,
 			    "Suppression du certificat " + certInfo.getName())) {
 			deleteCertificate(ksInfo, certInfo);
 		    }
@@ -502,7 +501,7 @@ public class ListPanel extends JPanel {
 	    kt.deleteCertificate(ksInfo, certificateInfo);
 
 	} catch (Exception e1) {
-	    KeyStoreUI.showError(this, e1.getMessage());
+	    MykeysFrame.showError(this, e1.getMessage());
 	    e1.printStackTrace();
 	}
 	updateInfo(ksInfo);
@@ -542,7 +541,7 @@ public class ListPanel extends JPanel {
 	// }
 	// ask for password
 	if (ksInfo.getPassword() == null) {
-	    char[] password = KeyStoreUI.showPasswordDialog(this);
+	    char[] password = MykeysFrame.showPasswordDialog(this);
 
 	    if (password == null || password.length == 0) {
 		return false;
@@ -560,7 +559,7 @@ public class ListPanel extends JPanel {
 	    ksInfo.setOpen(true);
 
 	} catch (Exception e1) {
-	    KeyStoreUI.showError(this, e1.getMessage());
+	    MykeysFrame.showError(this, e1.getMessage());
 	    e1.printStackTrace();
 	    return false;
 	}

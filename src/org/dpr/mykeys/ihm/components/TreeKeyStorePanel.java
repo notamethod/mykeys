@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm;
+package org.dpr.mykeys.ihm.components;
 
 /*
  * Copyright (c) 1995 - 2008 Sun Microsystems, Inc. All rights reserved.
@@ -71,13 +71,14 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
-import org.dpr.mykeys.ihm.components.GradientTree;
-import org.dpr.mykeys.ihm.components.GradientTreeRenderer;
-import org.dpr.mykeys.ihm.menuaction.TreePopupMenu;
+import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.ihm.actions.TreePopupMenu;
+import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
+import org.dpr.mykeys.ihm.model.TreeModel;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.DetailPanel;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
@@ -89,30 +90,35 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	TreeExpansionListener, TreeWillExpandListener {
 
     public class TreeTransferHandler extends TransferHandler {
-	     DataFlavor nodesFlavor;
-	     DataFlavor[] flavors = new DataFlavor[1];
-	/* (non-Javadoc)
-	 * @see javax.swing.TransferHandler#canImport(javax.swing.TransferHandler.TransferSupport)
+	DataFlavor nodesFlavor;
+	DataFlavor[] flavors = new DataFlavor[1];
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.TransferHandler#canImport(javax.swing.TransferHandler
+	 * .TransferSupport)
 	 */
 	@Override
 	public boolean canImport(TransferSupport support) {
 
-	         if(!support.isDrop()) {
-	             return false;
-	         }
-	         support.setShowDropLocation(true);
-	         System.out.println(nodesFlavor.getHumanPresentableName());
-	         if(!support.isDataFlavorSupported(nodesFlavor)) {
-	             return false;
-	         }
-	         return true;
+	    if (!support.isDrop()) {
+		return false;
+	    }
+	    support.setShowDropLocation(true);
+	    System.out.println(nodesFlavor.getHumanPresentableName());
+	    if (!support.isDataFlavorSupported(nodesFlavor)) {
+		return false;
+	    }
+	    return true;
 	}
 
     }
 
     final static Log log = LogFactory.getLog(TreeKeyStorePanel.class);
     private DetailPanel detailPanel;
-    
+
     private ListPanel listePanel;
 
     private GradientTree tree;
@@ -122,12 +128,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
     DefaultMutableTreeNode cliNode;
 
     DefaultMutableTreeNode acNode;
-    
+
     DefaultMutableTreeNode crlNode;
-    
-    DefaultMutableTreeNode sandBoxNode;    
-    
-        
+
+    DefaultMutableTreeNode sandBoxNode;
 
     private TreeModel treeModel;
 
@@ -142,19 +146,19 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		"store.ac.name"));
 	cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
 		"store.cert.name"));
-	
-    crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-    "store.crl.name"));	
-    
-    sandBoxNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-    "store.sandbox.name"));	    
+
+	crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+		"store.crl.name"));
+
+	sandBoxNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+		"store.sandbox.name"));
 
 	treeModel = new TreeModel(rootNode);
 	treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
 
 	tree = new GradientTree(treeModel);
 	System.out.println(tree.getUI());
-	
+
 	GradientTreeRenderer renderer = new GradientTreeRenderer();
 
 	tree.setCellRenderer(renderer);
@@ -169,16 +173,17 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
 	treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
 	treeModel.insertNodeInto(crlNode, rootNode, rootNode.getChildCount());
-	treeModel.insertNodeInto(sandBoxNode, rootNode, rootNode.getChildCount());
+	treeModel.insertNodeInto(sandBoxNode, rootNode,
+		rootNode.getChildCount());
 
 	tree.setRootVisible(false);
 
 	tree.addMouseListener(this);
 	tree.addTreeWillExpandListener(this);
 	tree.addTreeExpansionListener(this);
-	//drop enabled
-        tree.setDropMode(DropMode.ON);
-        tree.setTransferHandler(new TreeTransferHandler());
+	// drop enabled
+	tree.setDropMode(DropMode.ON);
+	tree.setTransferHandler(new TreeTransferHandler());
 	// Create the scroll pane and add the tree to it.
 	JScrollPane treeView = new JScrollPane(tree);
 	JPanel leftPanel = new JPanel();
@@ -196,8 +201,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	splitPane.setTopComponent(treeView);
 	splitPane.setBottomComponent(splitLeftPanel);
 	splitPane.setDividerLocation(210);
-	
-	
+
 	// Add the split pane to this panel.
 	add(splitPane);
 
@@ -211,18 +215,22 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
     /**
      * .
      * 
-     *<BR><pre>
-     *<b>Algorithme : </b>
-     *DEBUT
-     *    
-     *FIN</pre>
-     *
+     * <BR>
+     * 
+     * <pre>
+     * <b>Algorithme : </b>
+     * DEBUT
+     *     
+     * FIN
+     * </pre>
+     * 
      * @param ksiInfo
      */
     private void displayKeystoreList(KeyStoreInfo info) {
 	listePanel.updateInfo(info);
-	
-    }    
+
+    }
+
     /**
      * Update nodes with keystores list
      * 
@@ -247,19 +255,19 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		node = addObject(cliNode, ksinfo, true);
 
 	    }
-	   // addObject(node, "[Vide]", false);
+	    // addObject(node, "[Vide]", false);
 	}
 	// tree.repaint();
 
     }
 
     private void addInternalKS() {
-	DefaultMutableTreeNode nodei = addObject(acNode, InternalKeystores
-		.getACKeystore(), true);
-	
-	//addObject(nodei, "[Vide]", false);
+	DefaultMutableTreeNode nodei = addObject(acNode,
+		InternalKeystores.getACKeystore(), true);
+
+	// addObject(nodei, "[Vide]", false);
 	nodei = addObject(cliNode, InternalKeystores.getCertKeystore(), true);
-	//addObject(nodei, "[Vide]", false);
+	// addObject(nodei, "[Vide]", false);
 
     }
 
@@ -310,7 +318,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	if (shouldBeVisible) {
 	    tree.scrollPathToVisible(new TreePath(childNode.getPath()));
 	}
-	
+
 	return childNode;
     }
 
@@ -365,30 +373,30 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	    e1.printStackTrace();
 	    return false;
 	}
-//	try {
-//	    Enumeration<String> enumKs = ks.aliases();
-//	    if (enumKs != null && enumKs.hasMoreElements()) {
-//		removeChildrenObjects(node);
-//		node.removeAllChildren();
-//		while (enumKs.hasMoreElements()) {
-//		    String alias = enumKs.nextElement();
-//		    if (log.isDebugEnabled()) {
-//			log.debug("alias:" + alias);
-//		    }
-//		    
-//		    CertificateInfo certInfo = new CertificateInfo(alias);
-//		    kt.fillCertInfo(ks, certInfo, alias);
-//		    addObject(node, certInfo, false);
-//		}
-//	    }
-//	} catch (KeyStoreException e) {
-//	    // TODO Auto-generated catch block
-//	    return false;
-//	}
-//	if (expand) {
-//	    ksInfo.setOpen(true);
-//	    tree.expandPath(new TreePath(node.getPath()));
-//	}
+	// try {
+	// Enumeration<String> enumKs = ks.aliases();
+	// if (enumKs != null && enumKs.hasMoreElements()) {
+	// removeChildrenObjects(node);
+	// node.removeAllChildren();
+	// while (enumKs.hasMoreElements()) {
+	// String alias = enumKs.nextElement();
+	// if (log.isDebugEnabled()) {
+	// log.debug("alias:" + alias);
+	// }
+	//
+	// CertificateInfo certInfo = new CertificateInfo(alias);
+	// kt.fillCertInfo(ks, certInfo, alias);
+	// addObject(node, certInfo, false);
+	// }
+	// }
+	// } catch (KeyStoreException e) {
+	// // TODO Auto-generated catch block
+	// return false;
+	// }
+	// if (expand) {
+	// ksInfo.setOpen(true);
+	// tree.expandPath(new TreePath(node.getPath()));
+	// }
 	return true;
 
     }
@@ -518,17 +526,17 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		if (object instanceof CertificateInfo) {
 		    CertificateInfo certInfo = ((CertificateInfo) object);
 		    displayCertDetail(certInfo);
-		    
+
 		} else {
 		    displayCertDetail(null);
-			if (object instanceof KeyStoreInfo) {
-			    KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
-			    if (ksiInfo != null)
+		    if (object instanceof KeyStoreInfo) {
+			KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
+			if (ksiInfo != null)
 			    displayKeystoreList(ksiInfo);
-			    
-			}else{
-			    displayKeystoreList(null);
-			}
+
+		    } else {
+			displayKeystoreList(null);
+		    }
 		}
 
 		System.out.println(selPath);
@@ -548,8 +556,6 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	    }
 	}
     }
-
-
 
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -637,7 +643,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * &lt;b&gt;Algorithme : &lt;/b&gt;
@@ -674,7 +680,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
     /**
      * .
      * 
-     *<BR>
+     * <BR>
      * 
      * <pre>
      * &lt;b&gt;Algorithme : &lt;/b&gt;

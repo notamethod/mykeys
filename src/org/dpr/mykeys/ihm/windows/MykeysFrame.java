@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm;
+package org.dpr.mykeys.ihm.windows;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -37,14 +37,16 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
+import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.ihm.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.menuaction.MenuAction;
 
 /**
  * 
  */
-public class KeyStoreUI extends JFrame implements WindowListener {
+public class MykeysFrame extends JFrame implements WindowListener {
 
-    private static final Log log = LogFactory.getLog(KeyStoreUI.class);
+    private static final Log log = LogFactory.getLog(MykeysFrame.class);
     JPanel p;// panel principal qui contient les images
 
     // répertoire des images
@@ -61,7 +63,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     /**
      * Constructeur
      */
-    public KeyStoreUI() {
+    public MykeysFrame() {
 	super("mykeys");
 	// Get toolkit
 	Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -274,7 +276,7 @@ public class KeyStoreUI extends JFrame implements WindowListener {
     public static void main(String[] args) {
 	SwingUtilities.invokeLater(new Runnable() {
 	    public void run() {
-		new KeyStoreUI();
+		new MykeysFrame();
 
 	    }
 	});
