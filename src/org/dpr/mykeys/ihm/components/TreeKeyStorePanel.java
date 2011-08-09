@@ -126,10 +126,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	DefaultMutableTreeNode cliNode;
 
 	DefaultMutableTreeNode acNode;
-
-	DefaultMutableTreeNode crlNode;
-
-	DefaultMutableTreeNode sandBoxNode;
+//
+//    DefaultMutableTreeNode crlNode;
+//
+//    DefaultMutableTreeNode sandBoxNode;
 
 	private TreeModel treeModel;
 
@@ -144,12 +144,12 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 				"store.ac.name"));
 		cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
 				"store.cert.name"));
-
-		crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-				"store.crl.name"));
-
-		sandBoxNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
-				"store.sandbox.name"));
+//
+//	crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+//		"store.crl.name"));
+//
+//	sandBoxNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+//		"store.sandbox.name"));
 
 		treeModel = new TreeModel(rootNode);
 		treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
@@ -170,9 +170,9 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
 		treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
-		treeModel.insertNodeInto(crlNode, rootNode, rootNode.getChildCount());
-		treeModel.insertNodeInto(sandBoxNode, rootNode,
-				rootNode.getChildCount());
+//	treeModel.insertNodeInto(crlNode, rootNode, rootNode.getChildCount());
+//	treeModel.insertNodeInto(sandBoxNode, rootNode,
+//		rootNode.getChildCount());
 
 		tree.setRootVisible(false);
 
