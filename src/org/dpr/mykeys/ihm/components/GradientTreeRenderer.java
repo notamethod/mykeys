@@ -116,7 +116,6 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 			return;
 		}
 		Graphics2D g2d = (Graphics2D) g;
-		System.out.println(jtree1.getBounds().width);
 		int w = getWidth();// jtree1.getBounds().width;//getWidth( );
 		int h = getHeight();
 

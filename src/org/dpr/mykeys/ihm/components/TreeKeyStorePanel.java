@@ -80,10 +80,8 @@ import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
-import org.dpr.mykeys.ihm.windows.DetailPanel;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.ListPanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
