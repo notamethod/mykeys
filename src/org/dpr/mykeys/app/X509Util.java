@@ -89,10 +89,10 @@ public class X509Util {
 		// true);
 		// this.setSubjectKeyIdentifier(skiString);
 		// } catch (Exception e) {
-		// System.out.println("exc");
+		// log.trace("exc");
 		//
 		// }
-		// System.out.println(obj);
+		// log.trace(obj);
 		// AuditIdentity
 		// AuthorityInfoAccess
 		// AuthorityKeyIdentifier
@@ -128,9 +128,9 @@ public class X509Util {
 
 	// public static String BiToHex(BigInteger bi) {
 	//
-	// System.out.println("max long   = " + Long.toHexString(Long.MAX_VALUE));
-	// System.out.println("bi as long = " + Long.toHexString(bi.longValue()));
-	// System.out.println("bi as hex  = " + bi.toString(16));
+	// log.trace("max long   = " + Long.toHexString(Long.MAX_VALUE));
+	// log.trace("bi as long = " + Long.toHexString(bi.longValue()));
+	// log.trace("bi as hex  = " + bi.toString(16));
 	// }
 
 	public static Map<DERObjectIdentifier, String> getSubjectMap(

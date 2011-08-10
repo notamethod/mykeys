@@ -12,8 +12,13 @@ import java.awt.event.MouseEvent;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.CertificateInfo;
+
 public class ExplorerTreeUI extends BasicTreeUI {
 
+	public static final Log log = LogFactory.getLog(ExplorerTreeUI.class);
 	private Color backgroundSelectionColor = null;
 	private Color backgroundNonSelectionColor = null;
 	private RowSelectionListener sf = new RowSelectionListener();
@@ -54,7 +59,7 @@ public class ExplorerTreeUI extends BasicTreeUI {
 				backgroundSelectionColor, 0, h, backgroundNonSelectionColor);
 		g2d.setPaint(gp);
 		g2d.fillRect(clipBounds.x, h * row, clipBounds.width, h);
-		System.out.println(h);
+		log.trace(h);
 		super.paintRow(g, clipBounds, insets, bounds, path, row, isExpanded,
 				hasBeenExpanded, isLeaf);
 

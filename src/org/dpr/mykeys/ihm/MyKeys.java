@@ -49,7 +49,7 @@ import org.dpr.mykeys.ihm.windows.MykeysFrame;
 public class MyKeys {
 
 	public static final Log log = LogFactory.getLog(MyKeys.class);
-	private static final String ACFileName = "ACKS.jks";
+	//private static final String ACFileName = "ACKS.jks";
 	// messages
 	private static ResourceBundle messages;
 
@@ -61,7 +61,8 @@ public class MyKeys {
 		mk.init();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				MykeysFrame frame = new MykeysFrame();
+				//MykeysFrame frame = new MykeysFrame();
+				new MykeysFrame();
 				// frame.addComponents();
 
 			}
@@ -73,6 +74,7 @@ public class MyKeys {
 
 		// Locale.setDefault(Locale.ENGLISH);
 		log.debug("loading configuration...");
+		
 		Locale currentLocale = Locale.getDefault();
 		try {
 			messages = ResourceBundle.getBundle(
@@ -106,7 +108,7 @@ public class MyKeys {
 
 	private void checkConfig() {
 
-		Iterator iter = KSConfig.getUserCfg().getKeys("store");
+		Iterator<?> iter = KSConfig.getUserCfg().getKeys("store");
 		boolean update = false;
 		Map<String, HashMap> typesKS = new HashMap<String, HashMap>();
 		while (iter.hasNext()) {

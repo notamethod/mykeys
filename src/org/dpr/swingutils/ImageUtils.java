@@ -7,16 +7,20 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.images.ImgRes;
 
 public class ImageUtils {
 
+	public static final Log log = LogFactory.getLog(ImageUtils.class);
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	public static ImageIcon createImageIcon(String path) {
-		System.out.println(path + " in");
+		log.trace(path + " in");
 		java.net.URL imgURL = ImgRes.class.getResource(path);
-		System.out.println(path + " out " + imgURL);
+		log.trace(path + " out " + imgURL);
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
 		} else {
@@ -26,11 +30,11 @@ public class ImageUtils {
 	}
 
 	public static Image createImage(String path) {
-		System.out.println(path + " in");
+		log.trace(path + " in");
 		Image img = Toolkit.getDefaultToolkit().getImage(
 				ImgRes.class.getResource(path));
 
-		System.out.println(path + " out " + img);
+		log.trace(path + " out " + img);
 		if (img != null) {
 			return img;
 		} else {

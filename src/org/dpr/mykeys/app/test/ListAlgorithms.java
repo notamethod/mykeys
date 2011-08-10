@@ -6,17 +6,22 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.CertificateInfo;
+
 public class ListAlgorithms {
+	public static final Log log = LogFactory.getLog(ListAlgorithms.class);
 	public static void printSet(String setName, Set algorithms) {
-		System.out.println(setName + ":");
+		log.trace(setName + ":");
 		if (algorithms.isEmpty()) {
-			System.out.println("            None available.");
+			log.trace("            None available.");
 		} else {
 			Iterator it = algorithms.iterator();
 			while (it.hasNext()) {
 				String name = (String) it.next();
 
-				System.out.println("            " + name);
+				log.trace("            " + name);
 			}
 		}
 	}
@@ -67,7 +72,7 @@ public class ListAlgorithms {
 					keyGenerator.add(entry.substring("KeyGenerator.".length()));
 
 				} else {
-					System.out.println(entry);
+					log.trace(entry);
 				}
 			}
 		}

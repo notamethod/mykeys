@@ -72,18 +72,18 @@ public class Test {
 		URL url = Test.class.getResource("data/test01.jks");
 
 		try {
-			System.out.println(url.toURI().getPath());
+			log.trace(url.toURI().getPath());
 		} catch (URISyntaxException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 
-		// System.out.println(String. Test.class.getPackage().getName());
+		// log.trace(String. Test.class.getPackage().getName());
 		// String name = Test.class.getPackage().getName().replace('.',
 		// File.separatorChar);
 		// File f = new File(path, name+File.separator+"data");
 		// f = new File(f.getAbsolutePath(), "test01.jks");
-		// System.out.println(f.getAbsolutePath());
+		// log.trace(f.getAbsolutePath());
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
 		String fileName = null;
@@ -173,7 +173,7 @@ public class Test {
 		}
 		try {
 			TimeStampToken tsp = TimeStampManager.getTimeStampToken(4);
-			System.out.println(tsp);
+			log.trace(tsp);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -29,6 +29,8 @@ import javax.swing.TransferHandler;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
@@ -44,6 +46,7 @@ import org.dpr.swingutils.ImageUtils;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ListPanel extends JPanel {
+	public static final Log log = LogFactory.getLog(ListPanel.class);
 	public class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 
@@ -55,7 +58,7 @@ public class ListPanel extends JPanel {
 						+ "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
-				System.out.println("ClassNotFound: " + e.getMessage());
+				log.trace("ClassNotFound: " + e.getMessage());
 			}
 		}
 	}
@@ -74,7 +77,7 @@ public class ListPanel extends JPanel {
 		public void valueChanged(ListSelectionEvent e) {
 			if (!e.getValueIsAdjusting()) {
 
-				System.out.println(e.getSource().getClass());
+				log.trace(e.getSource().getClass());
 				if (e.getSource() instanceof JList) {
 					if (((JList) e.getSource()).getSelectedValue() instanceof CertificateInfo) {
 						displayCertDetail((CertificateInfo) ((JList) e
@@ -268,7 +271,7 @@ public class ListPanel extends JPanel {
 		ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 				ksInfo.getPassword());
 
-		System.out.println("addcerts");
+		log.trace("addcerts");
 		Enumeration<String> enumKs;
 		try {
 			enumKs = ks.aliases();
@@ -296,7 +299,7 @@ public class ListPanel extends JPanel {
 		public void actionPerformed(ActionEvent event) {
 			String command = event.getActionCommand();
 			if (command.equals("CHECK_OCSP")) {
-				System.out.println("OCSP");
+				log.trace("OCSP");
 
 			} else if (command.equals("OK")) {
 

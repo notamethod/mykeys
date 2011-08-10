@@ -24,19 +24,22 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileSystemView;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class CreateCrlDialog extends JDialog {
-
+	public static final Log log = LogFactory.getLog(ListPanel.class);
 	// JTextField x509PrincipalC;
 	// JTextField x509PrincipalO;
 	// JTextField x509PrincipalL;
@@ -193,7 +196,7 @@ public class CreateCrlDialog extends JDialog {
 			} else if (command.equals("OK")) {
 
 				Map<String, Object> elements = infosPanel.getElements();
-				System.out.println(elements.get("alias"));
+				log.trace(elements.get("alias"));
 				Set<String> keys = elements.keySet();
 				Iterator<String> it = keys.iterator();
 				while (it.hasNext()) {

@@ -227,7 +227,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 		this.getContentPane().add(p);
 		this.getContentPane().getMaximumSize();
 		p.add(mainPanel);
-		System.out.println(this.getMaximizedBounds());
+		log.trace(this.getMaximizedBounds());
 
 	}
 

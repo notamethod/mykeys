@@ -12,6 +12,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyTools;
@@ -21,6 +23,8 @@ import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class DetailPanel extends JPanel {
+	
+	public static final Log log = LogFactory.getLog(DetailPanel.class);
 	// Map<String, String> elements = new HashMap<String, String>();
 	LabelValuePanel infosPanel;
 
@@ -156,7 +160,7 @@ public class DetailPanel extends JPanel {
 		public void actionPerformed(ActionEvent event) {
 			String command = event.getActionCommand();
 			if (command.equals("CHECK_OCSP")) {
-				System.out.println("OCSP");
+				log.trace("OCSP");
 
 			} else if (command.equals("OK")) {
 

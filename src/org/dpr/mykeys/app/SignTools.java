@@ -24,12 +24,15 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.dpr.swingutils.ImageUtils;
 
 
 /**
@@ -38,6 +41,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  */
 public class SignTools {
 
+	public static final Log log = LogFactory.getLog(ImageUtils.class);
 	public static void main(String[] args) {
 		Security.addProvider(new BouncyCastleProvider());
 		X509Certificate certs[] = null;
@@ -61,7 +65,7 @@ public class SignTools {
 		// kt.fillCertInfo(ks, certInfo,
 		// "{85B8BEBE-A752-4728-8A60-52E946A941B7}");
 		// // while (ks.aliases().hasMoreElements()){
-		// // System.out.println(ks.aliases().nextElement());
+		// // log.trace(ks.aliases().nextElement());
 		// // }
 		// } catch (KeyToolsException e) {
 		// // TODO Auto-generated catch block
@@ -179,7 +183,7 @@ public class SignTools {
 			byte[] data = (byte[]) sc.getContent();
 
 			// Verifie la signature
-			System.out.println(signer.verify(certificate, "BC"));
+			log.trace(signer.verify(certificate, "BC"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -230,7 +234,7 @@ public class SignTools {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(v);
+		log.trace(v);
 		// return v;
 
 	}

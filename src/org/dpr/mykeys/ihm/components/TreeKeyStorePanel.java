@@ -105,7 +105,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 				return false;
 			}
 			support.setShowDropLocation(true);
-			System.out.println(nodesFlavor.getHumanPresentableName());
+			log.trace(nodesFlavor.getHumanPresentableName());
 			if (!support.isDataFlavorSupported(nodesFlavor)) {
 				return false;
 			}
@@ -156,7 +156,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
 
 		tree = new GradientTree(treeModel);
-		System.out.println(tree.getUI());
+		log.trace(tree.getUI());
 
 		GradientTreeRenderer renderer = new GradientTreeRenderer();
 
@@ -445,27 +445,27 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	@Override
 	public void treeCollapsed(TreeExpansionEvent event) {
-		// System.out.println("collaps");
+		// log.trace("collaps");
 
 	}
 
 	@Override
 	public void treeExpanded(TreeExpansionEvent event) {
-		// System.out.println("expand");
+		// log.trace("expand");
 
 	}
 
 	@Override
 	public void treeWillCollapse(TreeExpansionEvent event)
 			throws ExpandVetoException {
-		// System.out.println("collapse1");
+		// log.trace("collapse1");
 
 	}
 
 	@Override
 	public void treeWillExpand(TreeExpansionEvent event)
 			throws ExpandVetoException {
-		// System.out.println("ask expand");
+		// log.trace("ask expand");
 		DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) event.getPath()
 				.getLastPathComponent();
 		if (tNode.getParent() != null) {
@@ -539,7 +539,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 					}
 				}
 
-				System.out.println(selPath);
+				log.trace(selPath);
 			} else if (e.getClickCount() == 2) {
 				// DefaultMutableTreeNode tNode = (DefaultMutableTreeNode)
 				// selPath
@@ -594,13 +594,13 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("popuprr");
+			log.trace("popuprr");
 			String ac = e.getActionCommand();
 			TreePath path = tree.getPathForLocation(loc.x, loc.y);
-			// //System.out.println("path = " + path);
+			// //log.trace("path = " + path);
 			// //System.out.printf("loc = [%d, %d]%n", loc.x, loc.y);
 			// if(ac.equals("ADD CHILD"))
-			// System.out.println("popuprr");
+			// log.trace("popuprr");
 			// if(ac.equals("ADD SIBLING"))
 			// addSibling(path);
 		}
