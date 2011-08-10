@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.ihm.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.ImageUtils;
 
 /**

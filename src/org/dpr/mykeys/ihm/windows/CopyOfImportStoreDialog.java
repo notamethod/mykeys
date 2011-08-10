@@ -20,9 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
+import org.dpr.mykeys.app.KeyTools;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

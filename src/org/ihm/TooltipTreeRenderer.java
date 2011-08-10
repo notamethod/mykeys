@@ -13,8 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.app.CertificateInfo;
-import org.app.KeyStoreInfo;
+import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.app.KeyStoreInfo;
+import org.dpr.mykeys.ihm.MyKeys;
 
 public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 	TreeCellRenderer {
@@ -121,7 +122,7 @@ public class TooltipTreeRenderer extends DefaultTreeCellRenderer implements
 
     /** Returns an ImageIcon, or null if the path was invalid. */
     protected static ImageIcon createImageIcon(String path) {
-	java.net.URL imgURL = TreeKeyStore.class.getResource(path);
+	java.net.URL imgURL = MyKeys.class.getResource(path);
 	if (imgURL != null) {
 	    return new ImageIcon(imgURL);
 	} else {

@@ -15,18 +15,14 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.app.InternalKeystores;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.SignTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.ihm.TreeKeyStorePanel;
+import org.dpr.mykeys.app.SignTools;
+import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

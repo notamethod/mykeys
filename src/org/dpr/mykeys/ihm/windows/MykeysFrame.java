@@ -38,7 +38,7 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.ihm.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.menuaction.MenuAction;
 
 /**

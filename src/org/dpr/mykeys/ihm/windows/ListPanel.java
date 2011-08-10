@@ -30,11 +30,11 @@ import javax.swing.event.ListSelectionListener;
 
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
+import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.ihm.TypeAction;
+import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.JImgList;
 import org.dpr.swingutils.ImageUtils;
 import org.dpr.swingutils.LabelValuePanel;
