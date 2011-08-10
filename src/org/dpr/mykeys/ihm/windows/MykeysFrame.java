@@ -38,8 +38,9 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.ihm.actions.MenuAction;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.menuaction.MenuAction;
+import org.dpr.swingutils.ImageUtils;
 
 /**
  * 
@@ -96,12 +97,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	private static List<? extends Image> createIConAppli() {
 		List<Image> images = new ArrayList<Image>();
 		// URL imgURL = null;
-		images.add(Toolkit.getDefaultToolkit().getImage(
-				TreeKeyStorePanel.class.getResource("images/mkico24.png")));
-		images.add(Toolkit.getDefaultToolkit().getImage(
-				TreeKeyStorePanel.class.getResource("images/mkico32.png")));
-		images.add(Toolkit.getDefaultToolkit().getImage(
-				TreeKeyStorePanel.class.getResource("images/mkico48.png")));
+		images.add(ImageUtils.createImage("mkico24.png"));
+		images.add(ImageUtils.createImage("mkico32.png"));
+		images.add(ImageUtils.createImage("mkico48.png"));
 
 		return images;
 	}
@@ -198,19 +196,22 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 		menuOptions.add(itemLog);
 
-		JMenuItem menu3 = new JMenuItem(new MenuAction(this, MyKeys
-				.getMessage().getString("crl.add")));
-		menu3.setActionCommand("addCrl");
+		// JMenuItem menu3 = new JMenuItem(new MenuAction(this, MyKeys
+		// .getMessage().getString("crl.add")));
+		// menu3.setActionCommand("addCrl");
 
 		JMenuItem menu4 = new JMenuItem(new MenuAction(this, MyKeys
 				.getMessage().getString("file.sign")));
 		menu4.setActionCommand("signFile");
 		menuBar.add(menu1);
 		menuBar.add(menuOptions);
-		menuBar.add(menu3);
-		menuBar.add(menu4);
+		// menuBar.add(menu3);
+		// menuBar.add(menu4);
+		// Create a toolbar and give it an etched border.
 
 		this.setJMenuBar(menuBar);
+		// JToolBar toolBar = new JToolBar();
+		// this.getContentPane().add(toolBar, BorderLayout.NORTH);
 
 	}
 
@@ -249,7 +250,6 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	 * @return
 	 */
 	public static char[] showPasswordDialog(Component parent) {
-		System.out.println("xxx");
 		final JPasswordField jpf = new JPasswordField();
 		JOptionPane jop = new JOptionPane(jpf, JOptionPane.QUESTION_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION);

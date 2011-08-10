@@ -3,21 +3,10 @@
  */
 package org.dpr.mykeys.app;
 
+
 /**
- * <pre>
- * <b></b>.
- *  
- * <b>Description :</b>
- * 
- * 
- * </pre>
- * 
- * @author C. Roger<BR>
- * <BR>
- *         Créé le 30 nov. 2010 <BR>
- * <BR>
- * <BR>
- *         <i>Copyright : Tessi Informatique </i><BR>
+ * @author Buck
+ *
  */
 public interface NodeInfo {
 

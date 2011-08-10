@@ -44,21 +44,10 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+
 /**
- * <pre>
- * <b>Utilitaires pour la gestion des AC x509</b>.
- *  
- * <b>Description :</b>
- * 
- * 
- * </pre>
- * 
- * @author C. Roger<BR>
- * <BR>
- *         Créé le 20 août 2010 <BR>
- * <BR>
- * <BR>
- *         <i>Copyright : Tessi Informatique </i><BR>
+ * @author Buck
+ *
  */
 public class TrustCertUtil {
 

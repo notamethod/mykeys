@@ -31,21 +31,10 @@ import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+
 /**
- * <pre>
- * <b></b>.
- * 
- * <b>Description :</b>
- * 
- * 
- * </pre>
- * 
- * @author C. Roger<BR>
- * <BR>
- *         Créé le 1 déc. 2010 <BR>
- * <BR>
- * <BR>
- *         <i>Copyright : Tessi Informatique </i><BR>
+ * @author Buck
+ *
  */
 public class SignTools {
 

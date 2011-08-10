@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.ihm.model;
 
 import java.util.List;
 
@@ -10,21 +10,10 @@ import javax.swing.event.ListDataListener;
 
 import org.dpr.mykeys.app.CertificateInfo;
 
+
 /**
- * <pre>
- * <b></b>.
- *  
- * <b>Description :</b>
- * 
- * 
- * </pre>
- * 
- * @author C. Roger<BR>
- * <BR>
- *         Créé le 16 sept. 2010 <BR>
- * <BR>
- * <BR>
- *         <i>Copyright : Tessi Informatique </i><BR>
+ * @author Buck
+ *
  */
 public class CertListModel implements ListModel {
 

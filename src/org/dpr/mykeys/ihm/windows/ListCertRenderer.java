@@ -13,21 +13,10 @@ import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.ImageUtils;
 
+
 /**
- * <pre>
- * <b></b>.
- *  
- * <b>Description :</b>
- * 
- * 
- * </pre>
- * 
- * @author C. Roger<BR>
- * <BR>
- *         Créé le 16 sept. 2010 <BR>
- * <BR>
- * <BR>
- *         <i>Copyright : Tessi Informatique </i><BR>
+ * @author Buck
+ *
  */
 public class ListCertRenderer extends DefaultListCellRenderer {
 

@@ -16,18 +16,22 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
+
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.CommonsActions;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.swingutils.JFieldsPanel;
+import org.dpr.swingutils.JLabel;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ExportCertificateDialog extends JDialog implements ItemListener {
@@ -59,7 +63,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 	public void init() {
 		DialogAction dAction = new DialogAction();
-		setTitle("Exportation de certificat");
+		setTitle(MyKeys.getMessage().getString("dialog.export.title"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -86,11 +90,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 		infosPanel.putEmptyLine();
 
-		JLabel jl4 = new JLabel("Emplacement");
 		tfDirectory = new JTextField(40);
-		FileSystemView fsv = FileSystemView.getFileSystemView();
-		File f = fsv.getDefaultDirectory();
-		tfDirectory.setText(f.getAbsolutePath());
+		// FileSystemView fsv = FileSystemView.getFileSystemView();
+		// File f = fsv.getDefaultDirectory();
+		// tfDirectory.setText(f.getAbsolutePath());
 		JButton jbChoose = new JButton("...");
 		jbChoose.addActionListener(dAction);
 		jbChoose.setActionCommand("CHOOSE_IN");
@@ -107,7 +110,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		jbCancel.setActionCommand("CANCEL");
 		JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
-		infosPanel.put("Emplacement", jpDirectory, true);
+		infosPanel.put(LabelValuePanel.getString("dialog.generic.fileout"),
+				jpDirectory, true);
 		// jp.add(jf0);
 		// jp.add(jf1);
 		// jp.add(jf2);
@@ -124,12 +128,23 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
 			if (command.equals("CHOOSE_IN")) {
-				JFileChooser jfc = new JFileChooser();
+				// if (StringUtils.isEmpty(tfDirectory.getText()){
+				//
+				// }
+				String pathOutput = KSConfig.getUserCfg().getString(
+						"output.path");
+				File f = null;
+				if (!StringUtils.isEmpty(pathOutput)) {
+					f = new File(pathOutput);
+				}
+				JFileChooser jfc = new JFileChooser(f);
 
 				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
 				// jPanel1.add(jfc);
 				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					KSConfig.getUserCfg().setProperty("output.path",
+							jfc.getSelectedFile().getParent());
 					tfDirectory
 							.setText(jfc.getSelectedFile().getAbsolutePath());
 
@@ -148,13 +163,13 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				if (isExportCle) {
 					password = MykeysFrame.showPasswordDialog(null);
 				}
-
 				KeyTools kt = new KeyTools();
 				String format = (String) infosPanel.getElements().get(
 						"formatCert");
 
 				if (format.equals("PKCS12")) {
 					CommonsActions cact = new CommonsActions();
+
 					cact.exportCert(StoreFormat.PKCS12, path, password,
 							certInfo);
 				} else if (format.equals("der")) {

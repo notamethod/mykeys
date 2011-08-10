@@ -28,6 +28,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
+import org.dpr.mykeys.ihm.MyKeys;
+
 public class LabelValuePanel extends JPanel implements DocumentListener {
 
 	int nbRows;
@@ -517,6 +519,15 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 		if (components.get(key) == null) {
 			components.put(key, comp);
 		}
+	}
+
+	public static String getString(String string) {
+		try {
+			string = MyKeys.getMessage().getString(string);
+		} catch (Exception e) {
+			//
+		}
+		return string;
 	}
 
 }
