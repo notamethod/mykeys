@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.components;
 
+import static org.dpr.swingutils.ImageUtils.createImageIcon;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -16,7 +17,7 @@ import javax.swing.tree.TreeCellRenderer;
 
 import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.swingutils.ImageUtils;
+
 
 public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 		TreeCellRenderer {
@@ -30,8 +31,8 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 		final JLabel rc = (JLabel) super.getTreeCellRendererComponent(tree,
 				value, isSelected, expanded, leaf, row, hasFocus);
 		String tooltip = null;
-		setOpenIcon(ImageUtils.createImageIcon("Go-down.png"));
-		setClosedIcon(ImageUtils.createImageIcon("Go-previous.png"));
+		setOpenIcon(createImageIcon("Go-down.png"));
+		setClosedIcon(createImageIcon("Go-previous.png"));
 
 		Color colorb = UIManager.getColor("Tree.textBackground");
 		Color colorf = UIManager.getColor("Tree.textForeground");
@@ -49,20 +50,20 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 				// setTextNonSelectionColor( Color.green);
 				switch (kInfo.getStoreModel()) {
 				case CERTSTORE:
-					icon = ImageUtils.createImageIcon("keystoreblue.png");
+					icon = createImageIcon("keystoreblue.png");
 					// icon = createImageIcon("keystoreblueo.png");
 					break;
 				case CASTORE:
 					// icon = ImageUtils.createImageIcon("keystorered.png");
 					break;
 				default:
-					icon = ImageUtils.createImageIcon("keystoreblue.png");
+					icon = createImageIcon("keystoreblue.png");
 					break;
 				}
 
 				switch (kInfo.getStoreType()) {
 				case INTERNAL:
-					icon = ImageUtils.createImageIcon("keystorered.png");
+					icon = createImageIcon("keystorered.png");
 					break;
 				default:
 					break;
@@ -84,7 +85,7 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 				// if (kInfo.isOpen()) {
 				ImageIcon icon = null;
 
-				icon = ImageUtils.createImageIcon("keystorered.png");
+				icon = createImageIcon("keystorered.png");
 
 				if (icon != null) {
 

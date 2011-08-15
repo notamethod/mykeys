@@ -5,17 +5,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -90,13 +95,26 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 		JLabel jl = new JLabel(label);
 
 		JComponent component = null;
+		List<JComponent> components = null;
 		if (class1.getName().equals(JComboBox.class.getName())) {
 			component = putCombo(keyValue, values, defaultValue);
+		} else if (class1.getName().equals(ButtonGroup.class.getName())) {
+			components = putRadios(keyValue, values, defaultValue);
 		}
 
-		this.add(jl);
-		this.add(component);
-		nbRows++;
+		if (component != null) {
+			this.add(jl);
+			this.add(component);
+			nbRows++;
+		} else {
+			for (int i = 0; i < components.size(); i++) {
+				this.add(i == 0 ? new JLabel(label) : new JLabel(""));
+				this.add(components.get(i));
+
+				nbRows++;
+			}
+		}
+
 		SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
 
 	}
@@ -126,6 +144,48 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 		});
 		combo.setSelectedItem(defaultValue);
 		return combo;
+	}
+
+	public List<JComponent> putRadios(String keyValue,
+			Map<String, String> values, String defaultValue) {
+
+		final String globalKey = keyValue;
+		final Map<String, String> map = values;
+		// JComboBox combo = new JComboBox();
+		ButtonGroup bg = new ButtonGroup();
+
+		List<JComponent> radios = new ArrayList<JComponent>();
+		Set<String> keys = values.keySet();
+		Iterator<String> it = keys.iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			JRadioButton jradio = new JRadioButton(key);
+			radios.add(jradio);
+			if (elements.get(globalKey) == null) {
+				elements.put(globalKey, map.get(key));
+				jradio.setSelected(true);
+			}
+			jradio.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JRadioButton radio = (JRadioButton) e.getSource();
+					if (radio.isSelected()) {
+						String key = (String) radio.getText();
+						elements.put(globalKey, map.get(key));
+					}
+				}
+			});
+			bg.add(jradio);
+		}
+
+		// combo.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// JComboBox combo = (JComboBox) e.getSource();
+		// String key = (String) combo.getSelectedItem();
+		// elements.put(globalKey, map.get(key));
+		// }
+		// });
+		// combo.setSelectedItem(defaultValue);
+		return radios;
 	}
 
 	public void put(String label, Class<?> class1, String keyValue,
@@ -293,6 +353,22 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 			});
 
 			component = spinner;
+		} else if (class1.getName().equals(JCheckBox.class.getName())) {
+
+			boolean valCheck = Boolean.parseBoolean(strValue);
+			JCheckBox checkbox = new JCheckBox("", valCheck);
+
+			elements.put(globalKey, checkbox.isSelected());
+
+			checkbox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JCheckBox checkbox = (JCheckBox) e.getSource();
+
+					elements.put(globalKey, checkbox.isSelected());
+				}
+			});
+
+			component = checkbox;
 		}
 
 		// component.setName(globalKey);

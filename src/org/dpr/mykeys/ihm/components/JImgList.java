@@ -1,5 +1,7 @@
 package org.dpr.mykeys.ihm.components;
 
+import static org.dpr.swingutils.ImageUtils.createImageIcon;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,11 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
-import org.dpr.swingutils.ImageUtils;
-
 public class JImgList extends JList {
 
-	final ImageIcon icon = ImageUtils.createImageIcon("cad1.png");
+	final ImageIcon icon = createImageIcon("cad1.png");
 	Image grayImage = GrayFilter.createDisabledImage(icon.getImage());
 	boolean showImage = false;
 

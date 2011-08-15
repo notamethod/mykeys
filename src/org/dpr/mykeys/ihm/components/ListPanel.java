@@ -1,7 +1,8 @@
 package org.dpr.mykeys.ihm.components;
 
+import static org.dpr.swingutils.ImageUtils.createImageIcon;
+
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,16 +34,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
+import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.swingutils.ImageUtils;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ListPanel extends JPanel {
@@ -131,7 +131,7 @@ public class ListPanel extends JPanel {
 		// titre = new GradientLabel("Gestion des certificats");
 		// add(titre);
 		jp = new JPanel(new BorderLayout());
-		final ImageIcon icon = ImageUtils.createImageIcon("Locked.png");
+		final ImageIcon icon = createImageIcon("Locked.png");
 
 		JToolBar toolBar = new JToolBar("Still draggable");
 		toolBar.setFloatable(false);
@@ -148,13 +148,13 @@ public class ListPanel extends JPanel {
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
 		listCerts.setTransferHandler(new ListTransferHandler());
-		addCertButton = new JButton(ImageUtils.createImageIcon("add-cert.png"));
+		addCertButton = new JButton(createImageIcon("add-cert.png"));
 		unlockButton = new JToggleButton(
-				ImageUtils.createImageIcon("Locked.png"));
+				createImageIcon("Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
-		// unlockButton.setIcon(ImageUtils.createImageIcon("Locked.png"));
+		// unlockButton.setIcon(createImageIcon("Locked.png"));
 		unlockButton
-				.setDisabledIcon(ImageUtils.createImageIcon("Unlocked.png"));
+				.setDisabledIcon(createImageIcon("Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		importButton = new JButton("Import");
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
@@ -216,9 +216,9 @@ public class ListPanel extends JPanel {
 		addCertButton.removeActionListener(actions);
 		if (ksInfo.isOpen()) {
 			unlockButton.setSelected(false);
-			// unlockButton.setIcon(ImageUtils.createImageIcon("Unlocked.png"));
+			// unlockButton.setIcon(createImageIcon("Unlocked.png"));
 			unlockButton.setEnabled(false);
-			// unlockButton.setDisabledIcon(ImageUtils.createImageIcon("Unlocked.png"));
+			// unlockButton.setDisabledIcon(createImageIcon("Unlocked.png"));
 			addCertButton.setEnabled(true);
 			importButton.setEnabled(true);
 
@@ -232,7 +232,7 @@ public class ListPanel extends JPanel {
 			deleteButton.setEnabled(false);
 			addCertButton.setEnabled(false);
 			unlockButton.setSelected(false);
-			// unlockButton.setIcon(ImageUtils.createImageIcon("Locked.png"));
+			// unlockButton.setIcon(createImageIcon("Locked.png"));
 			unlockButton.setEnabled(true);
 			listCerts.setShowImage(true);
 		}

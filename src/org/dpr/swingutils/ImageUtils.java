@@ -29,7 +29,7 @@ public class ImageUtils {
 		}
 	}
 
-	public static Image createImage(String path) {
+	public static Image getImage(String path) {
 		log.trace(path + " in");
 		Image img = Toolkit.getDefaultToolkit().getImage(
 				ImgRes.class.getResource(path));

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -22,7 +23,11 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KSConfig;
@@ -30,12 +35,15 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JLabel;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ExportCertificateDialog extends JDialog implements ItemListener {
 
+	public static final Log log = LogFactory
+			.getLog(ExportCertificateDialog.class);
 	private JTextField tfDirectory;
 
 	public static final String PEM_KEY_EXT = ".key";
@@ -78,19 +86,22 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 		infosPanel = new LabelValuePanel();
 
-		infosPanel.put("Format", JComboBox.class, "formatCert", mapType);
-
+		// infosPanel.put("Format", JComboBox.class, "formatCert", mapType);
+		infosPanel.put("Format", ButtonGroup.class, "formatCert", mapType, "");
 		// infosPanel.put("Export de la clé privée", JCheckBox, "");
 		if (certInfo.isContainsPrivateKey()) {
-			JCheckBox jc = new JCheckBox("Exporter la clé privée");
-			jc.addItemListener(this);
+			// JCheckBox jc = new JCheckBox("Exporter la clé privée");
+			// jc.addItemListener(this);
+			//
+			// jp.add(jc);
+			infosPanel.put("Exporter la clé privée", JCheckBox.class,
+					"isExportKey", "true", true);
 
-			jp.add(jc);
 		}
 
 		infosPanel.putEmptyLine();
 
-		tfDirectory = new JTextField(40);
+		tfDirectory = new JTextField(35);
 		// FileSystemView fsv = FileSystemView.getFileSystemView();
 		// File f = fsv.getDefaultDirectory();
 		// tfDirectory.setText(f.getAbsolutePath());
@@ -139,7 +150,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				}
 				JFileChooser jfc = new JFileChooser(f);
 
-				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
+				jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
 				// jPanel1.add(jfc);
 				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -160,6 +171,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				String path = tfDirectory.getText();
 				// saisie mot de passe
 				char[] password = null;
+				boolean isExportCle = (Boolean) infosPanel.getElements().get(
+						"isExportKey");
 				if (isExportCle) {
 					password = MykeysFrame.showPasswordDialog(null);
 				}
@@ -170,8 +183,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				if (format.equals("PKCS12")) {
 					CommonsActions cact = new CommonsActions();
 
-					cact.exportCert(StoreFormat.PKCS12, path, password,
-							certInfo);
+					try {
+						cact.exportCert(ksInfo, StoreFormat.PKCS12, path,
+								password, certInfo, isExportCle);
+					} catch (Exception e) {
+						log.error(e);
+						MykeysFrame.showError(ExportCertificateDialog.this,
+								e.getLocalizedMessage());
+					}
 				} else if (format.equals("der")) {
 					try {
 						kt.exportDer(certInfo, path);
@@ -225,9 +244,22 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 		 */
 		@Override
-		public boolean accept(File arg0) {
-			// TODO Auto-generated method stub
-			return true;
+		public boolean accept(File f) {
+			if (f.isDirectory()) {
+				return true;
+			}
+
+			String extension = FilenameUtils.getExtension(f.getName());
+			if (extension != null) {
+				if (extension.equals("der") || extension.equals("p12")
+						|| extension.equals("pem")) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			return false;
 		}
 
 		/*
@@ -238,7 +270,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		@Override
 		public String getDescription() {
 			// TODO Auto-generated method stub
-			return null;
+			return "ddd";
 		}
 
 	}

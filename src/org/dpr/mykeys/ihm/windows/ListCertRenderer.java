@@ -3,15 +3,13 @@
  */
 package org.dpr.mykeys.ihm.windows;
 
+import static org.dpr.swingutils.ImageUtils.createImageIcon;
 import java.awt.Component;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.swingutils.ImageUtils;
 
 
 /**
@@ -54,9 +52,9 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 			CertificateInfo cert = ((CertificateInfo) value);
 			ImageIcon icon = null;
 			if (cert.isContainsPrivateKey()) {
-				icon = ImageUtils.createImageIcon("certificatekey.png");
+				icon = createImageIcon("certificatekey.png");
 			} else {
-				icon = ImageUtils.createImageIcon("certificate2.png");
+				icon = createImageIcon("certificate2.png");
 			}
 			if (icon != null) {
 
@@ -71,14 +69,6 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 		return retValue;
 	}
 
-	protected static ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = TreeKeyStorePanel.class.getResource(path);
-		if (imgURL != null) {
-			return new ImageIcon(imgURL);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
-	}
+
 
 }

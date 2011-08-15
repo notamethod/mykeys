@@ -1,5 +1,7 @@
 package org.dpr.mykeys.ihm.windows;
 
+import static org.dpr.swingutils.ImageUtils.getImage;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -40,7 +42,6 @@ import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.MenuAction;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.swingutils.ImageUtils;
 
 /**
  * 
@@ -97,9 +98,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	private static List<? extends Image> createIConAppli() {
 		List<Image> images = new ArrayList<Image>();
 		// URL imgURL = null;
-		images.add(ImageUtils.createImage("mkico24.png"));
-		images.add(ImageUtils.createImage("mkico32.png"));
-		images.add(ImageUtils.createImage("mkico48.png"));
+		images.add(getImage("mkico24.png"));
+		images.add(getImage("mkico32.png"));
+		images.add(getImage("mkico48.png"));
 
 		return images;
 	}
@@ -371,17 +372,6 @@ public class MykeysFrame extends JFrame implements WindowListener {
 		java.net.URL imgURL = TreeKeyStorePanel.class.getResource(path);
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
-	}
-
-	protected static Image createImage(String path) {
-		java.net.URL imgURL = TreeKeyStorePanel.class.getResource(path);
-
-		if (imgURL != null) {
-			return Toolkit.getDefaultToolkit().getImage(imgURL);
 		} else {
 			System.err.println("Couldn't find file: " + path);
 			return null;

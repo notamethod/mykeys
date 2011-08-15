@@ -3,6 +3,7 @@
  */
 package org.dpr.mykeys.app;
 
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -13,29 +14,55 @@ import java.security.cert.X509CRL;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 
-
-
 /**
  * @author Buck
- *
+ * 
  */
 public class CommonsActions {
 
 	public void exportCert(StoreFormat storeFormat, String path,
-			char[] password, CertificateInfo certInfo) {
-		StoreModel storeModel = StoreModel.P12STORE;
-		KeyStoreInfo ksInfo = new KeyStoreInfo("store", path, storeModel,
-				storeFormat);
-		ksInfo.setPassword(password);
-		KeyTools kt = new KeyTools();
+			char[] password, CertificateInfo certInfo) throws Exception {
+		exportCert(null, storeFormat, path, password, certInfo, false);
+	}
 
+	public void exportCert(KeyStoreInfo ksInfoIn, StoreFormat storeFormat,
+			String path, char[] password, CertificateInfo certInfo,
+			boolean isExportCle) throws Exception {
+		StoreModel storeModel = StoreModel.P12STORE;
+		KeyStoreInfo ksInfoOut = new KeyStoreInfo("store", path, storeModel,
+				storeFormat);
+		ksInfoOut.setPassword(password);
+		KeyTools kt = new KeyTools();
+		if (isExportCle && certInfo.getPrivateKey() == null) {
+			CertificateInfo certInfoEx = new CertificateInfo();
+			certInfoEx.setAlias(certInfo.getAlias());
+			certInfoEx.setCertificate(certInfo.getCertificate());
+			certInfoEx.setCertificateChain(certInfo.getCertificateChain());
+			certInfoEx.setPassword(password);
+			KeyStore kstore;
+
+			kstore = kt.loadKeyStore(ksInfoIn.getPath(),
+					ksInfoIn.getStoreFormat(), ksInfoIn.getPassword());
+			if (kstore.isKeyEntry(certInfoEx.getAlias())) {
+				// log.
+
+			}
+			certInfoEx.setPrivateKey(kt.getPrivateKey(certInfoEx.getAlias(),
+					kstore, ksInfoIn.getPassword()));
+
+			certInfo = certInfoEx;
+		}
 		try {
 			KeyStore ks = kt.createKeyStore(storeFormat, path, password);
-			kt.addCertToKeyStoreNew(certInfo.getCertificate(), ksInfo, certInfo);
+			// cloner le certinfo
+
+			kt.addCertToKeyStoreNew(certInfo.getCertificate(), ksInfoOut,
+					certInfo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 	public void signData(KeyStoreInfo kInfo, char[] password,
@@ -125,4 +152,5 @@ public class CommonsActions {
 		}
 
 	}
+
 }

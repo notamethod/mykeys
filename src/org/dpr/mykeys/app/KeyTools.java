@@ -738,6 +738,18 @@ public class KeyTools {
 			return ("Clé privée absente ");
 		}
 	}
+	
+	public PrivateKey getPrivateKey(String alias, KeyStore keyStore, char[] motDePasse)
+			throws GeneralSecurityException {
+
+		PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
+		if (privateKey != null) {
+			return privateKey;
+		} else {
+			throw new GeneralSecurityException("Clé privée absente ");
+		
+		}
+	}	
 
 	/**
 	 * Chargement certificat X509 à partir d'un flux.
@@ -1275,4 +1287,6 @@ public class KeyTools {
 		IOUtils.write(crl.getEncoded(), output);
 
 	}
+
+
 }
