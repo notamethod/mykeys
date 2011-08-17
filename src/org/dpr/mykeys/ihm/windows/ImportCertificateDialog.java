@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.windows;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -16,17 +17,19 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.swingutils.JDropTextField;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ImportCertificateDialog extends JDialog {
 
-	private JTextField tfDirectory;
+	private JDropTextField tfDirectory;
 
 	public static final String CERTTYPE_KEY_DER = "der";
 
@@ -75,7 +78,10 @@ public class ImportCertificateDialog extends JDialog {
 		infosPanel.putEmptyLine();
 
 		JLabel jl4 = new JLabel("Emplacement");
-		tfDirectory = new JTextField(20);
+		tfDirectory = new JDropTextField(20);
+		DocumentListener myListener = new TextListener();
+		tfDirectory.getDocument().addDocumentListener(myListener);
+		DropTarget dropTarget = new DropTarget(tfDirectory, tfDirectory);
 		JButton jbChoose = new JButton("...");
 		jbChoose.addActionListener(dAction);
 		jbChoose.setActionCommand("CHOOSE_IN");
@@ -206,6 +212,31 @@ public class ImportCertificateDialog extends JDialog {
 	}
 
 	public void updateKeyStoreList() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public class TextListener implements DocumentListener {
+
+		public void changedUpdate(DocumentEvent e) {
+			updateFields();
+
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+
+			updateFields();
+
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			updateFields();
+
+		}
+
+	}
+
+	public void updateFields() {
 		// TODO Auto-generated method stub
 
 	}
