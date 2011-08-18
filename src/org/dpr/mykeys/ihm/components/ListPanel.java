@@ -4,6 +4,12 @@ import static org.dpr.swingutils.ImageUtils.createImageIcon;
 
 import java.awt.BorderLayout;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.KeyStore;
@@ -45,23 +51,24 @@ import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class ListPanel extends JPanel {
+@SuppressWarnings("serial")
+public class ListPanel extends JPanel implements DropTargetListener {
 	public static final Log log = LogFactory.getLog(ListPanel.class);
-	public class ListTransferHandler extends TransferHandler {
-		DataFlavor certFlavor;
-
-		public ListTransferHandler() {
-			try {
-				String certType = DataFlavor.javaJVMLocalObjectMimeType
-						+ ";class=\""
-						+ org.dpr.mykeys.app.CertificateInfo.class.getName()
-						+ "\"";
-				certFlavor = new DataFlavor(certType);
-			} catch (ClassNotFoundException e) {
-				log.trace("ClassNotFound: " + e.getMessage());
-			}
-		}
-	}
+//	public class ListTransferHandler extends TransferHandler {
+//		DataFlavor certFlavor;
+//
+//		public ListTransferHandler() {
+//			try {
+//				String certType = DataFlavor.javaJVMLocalObjectMimeType
+//						+ ";class=\""
+//						+ org.dpr.mykeys.app.CertificateInfo.class.getName()
+//						+ "\"";
+//				certFlavor = new DataFlavor(certType);
+//			} catch (ClassNotFoundException e) {
+//				log.trace("ClassNotFound: " + e.getMessage());
+//			}
+//		}
+//	}
 
 	private DetailPanel detailPanel;
 	KeysAction actions;
@@ -114,6 +121,7 @@ public class ListPanel extends JPanel {
 
 	DefaultListModel listModel;
 	JImgList listCerts;
+	DropTarget dropTarget;
 
 	public ListPanel() {
 		super(new BorderLayout());
@@ -123,6 +131,10 @@ public class ListPanel extends JPanel {
 	}
 
 	private void init() {
+		   // Create the DropTarget and register
+	    // it with the JPanel.
+	    dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE,
+	        this, true, null);		
 		dAction = new ActionPanel();
 		// setBackground(new Color(125,0,0));
 		// BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
@@ -147,7 +159,7 @@ public class ListPanel extends JPanel {
 		listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
-		listCerts.setTransferHandler(new ListTransferHandler());
+		//listCerts.setTransferHandler(new ListTransferHandler());
 		addCertButton = new JButton(createImageIcon("add-cert.png"));
 		unlockButton = new JToggleButton(
 				createImageIcon("Locked.png"));
@@ -524,6 +536,36 @@ public class ListPanel extends JPanel {
 
 		return true;
 
+	}
+
+	@Override
+	public void dragEnter(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragExit(DropTargetEvent dte) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragOver(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drop(DropTargetDropEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dropActionChanged(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
