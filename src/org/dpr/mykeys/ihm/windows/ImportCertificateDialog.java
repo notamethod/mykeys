@@ -23,13 +23,13 @@ import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.swingutils.JDropTextField;
+import org.dpr.swingutils.JDropText;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ImportCertificateDialog extends JDialog {
 
-	private JDropTextField tfDirectory;
+	private JDropText tfDirectory;
 
 	public static final String CERTTYPE_KEY_DER = "der";
 
@@ -78,18 +78,13 @@ public class ImportCertificateDialog extends JDialog {
 		infosPanel.putEmptyLine();
 
 		JLabel jl4 = new JLabel("Emplacement");
-		tfDirectory = new JDropTextField(20);
-		DocumentListener myListener = new TextListener();
-		tfDirectory.getDocument().addDocumentListener(myListener);
-		DropTarget dropTarget = new DropTarget(tfDirectory, tfDirectory);
-		JButton jbChoose = new JButton("...");
-		jbChoose.addActionListener(dAction);
-		jbChoose.setActionCommand("CHOOSE_IN");
+		tfDirectory = new JDropText();
+
 
 		JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		// jpDirectory.add(jl4);
 		jpDirectory.add(tfDirectory);
-		jpDirectory.add(jbChoose);
+
 		JButton jbOK = new JButton("Valider");
 		jbOK.addActionListener(dAction);
 		jbOK.setActionCommand("OK");
@@ -115,12 +110,7 @@ public class ImportCertificateDialog extends JDialog {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
 			if (command.equals("CHOOSE_IN")) {
-				JFileChooser jfc = new JFileChooser();
-				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					tfDirectory
-							.setText(jfc.getSelectedFile().getAbsolutePath());
 
-				}
 
 			} else if (command.equals("OK")) {
 				if (tfDirectory.getText().equals("")
