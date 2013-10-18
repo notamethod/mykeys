@@ -83,6 +83,8 @@ import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 
 public class KeyTools {
+	//FIXME:en création de magasin si l'extension est saisie ne pas la mettre 2 fois.
+	//FIXME: ne pas autoriser la saisie de la clé privée dans les magasins internes
 	final Log log = LogFactory.getLog(KeyTools.class);
 
 	static String PUBKEYSTORE = "keystorePub.p12";
@@ -741,7 +743,9 @@ public class KeyTools {
 	
 	public PrivateKey getPrivateKey(String alias, KeyStore keyStore, char[] motDePasse)
 			throws GeneralSecurityException {
-
+//
+//		PrivateKeyEntry pkEntry = (PrivateKeyEntry) keyStore.getEntry(alias,
+//                new KeyStore.PasswordProtection(motDePasse));
 		PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
 		if (privateKey != null) {
 			return privateKey;
