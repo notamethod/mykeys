@@ -105,7 +105,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 				return false;
 			}
 			support.setShowDropLocation(true);
-			log.trace(nodesFlavor.getHumanPresentableName());
+			//log.trace(nodesFlavor.getHumanPresentableName());
 			if (!support.isDataFlavorSupported(nodesFlavor)) {
 				return false;
 			}
@@ -117,7 +117,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	final static Log log = LogFactory.getLog(TreeKeyStorePanel.class);
 	private DetailPanel detailPanel;
 
-	private ListPanel listePanel;
+	private ListPanel listePanel; 
 
 	private GradientTree tree;
 

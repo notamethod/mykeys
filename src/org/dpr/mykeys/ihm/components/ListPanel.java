@@ -4,6 +4,8 @@ import static org.dpr.swingutils.ImageUtils.createImageIcon;
 
 import java.awt.BorderLayout;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
@@ -12,6 +14,9 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.util.ArrayList;
@@ -54,21 +59,22 @@ import org.dpr.swingutils.LabelValuePanel;
 @SuppressWarnings("serial")
 public class ListPanel extends JPanel implements DropTargetListener {
 	public static final Log log = LogFactory.getLog(ListPanel.class);
-//	public class ListTransferHandler extends TransferHandler {
-//		DataFlavor certFlavor;
-//
-//		public ListTransferHandler() {
-//			try {
-//				String certType = DataFlavor.javaJVMLocalObjectMimeType
-//						+ ";class=\""
-//						+ org.dpr.mykeys.app.CertificateInfo.class.getName()
-//						+ "\"";
-//				certFlavor = new DataFlavor(certType);
-//			} catch (ClassNotFoundException e) {
-//				log.trace("ClassNotFound: " + e.getMessage());
-//			}
-//		}
-//	}
+	
+	public class ListTransferHandler extends TransferHandler {
+		DataFlavor certFlavor;
+
+		public ListTransferHandler() {
+			try {
+				String certType = DataFlavor.javaJVMLocalObjectMimeType
+						+ ";class=\""
+						+ org.dpr.mykeys.app.CertificateInfo.class.getName()
+						+ "\"";
+				certFlavor = new DataFlavor(certType);
+			} catch (ClassNotFoundException e) {
+				log.trace("ClassNotFound: " + e.getMessage());
+			}
+		}
+	}
 
 	private DetailPanel detailPanel;
 	KeysAction actions;
@@ -558,8 +564,39 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		// TODO Auto-generated method stub
-		
+		 if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0)
+	        {
+	            // Accept the drop and get the transfer data
+	            dtde.acceptDrop(dtde.getDropAction());
+	            Transferable transferable = dtde.getTransferable();
+
+	            try
+	            {
+	                boolean result = false;
+
+	                if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+	                {
+	                    result = dropFile(transferable);
+	                }
+	                else
+	                {
+	                    result = false;
+	                }
+
+	                dtde.dropComplete(result);
+
+	            }
+	            catch (Exception e)
+	            {
+	                System.out.println("Exception while handling drop " + e);
+	                dtde.rejectDrop();
+	            }
+	        }
+	        else
+	        {
+	            System.out.println("Drop target rejected drop");
+	            dtde.dropComplete(false);
+	        }
 	}
 
 	@Override
@@ -567,5 +604,19 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+    // This method handles a drop for a list of files
+    protected boolean dropFile(Transferable transferable) throws IOException, UnsupportedFlavorException,
+            MalformedURLException
+    {
+        List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+        File transferFile = (File) fileList.get(0);
+
+        final String transferURL = transferFile.getAbsolutePath();
+        //System.out.println("File URL is " + transferURL);
+        
+
+        return true;
+    }	
 
 }
