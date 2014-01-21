@@ -17,10 +17,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.io.FileUtils;
@@ -79,8 +79,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 		Map<String, String> mapType = new LinkedHashMap<String, String>();
 		mapType.put("der", "der");
-		mapType.put("pem", "pem/key");
-		mapType.put("pkcs12", "PKCS12");
+		mapType.put("pem", "pem");
+		mapType.put("pkcs12", "pkcs12");
 
 		// mapType.put("der", "der");
 
@@ -90,10 +90,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		infosPanel.put("Format", ButtonGroup.class, "formatCert", mapType, "");
 		// infosPanel.put("Export de la clé privée", JCheckBox, "");
 		if (certInfo.isContainsPrivateKey()) {
-			// JCheckBox jc = new JCheckBox("Exporter la clé privée");
-			// jc.addItemListener(this);
-			//
-			// jp.add(jc);
+
 			infosPanel.put("Exporter la clé privée", JCheckBox.class,
 					"isExportKey", "true", true);
 
@@ -102,6 +99,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		infosPanel.putEmptyLine();
 
 		tfDirectory = new JTextField(35);
+		
 		// FileSystemView fsv = FileSystemView.getFileSystemView();
 		// File f = fsv.getDefaultDirectory();
 		// tfDirectory.setText(f.getAbsolutePath());
@@ -142,18 +140,22 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				// if (StringUtils.isEmpty(tfDirectory.getText()){
 				//
 				// }
-				String pathOutput = KSConfig.getUserCfg().getString(
-						"output.path");
-				File f = null;
-				if (!StringUtils.isEmpty(pathOutput)) {
-					f = new File(pathOutput);
-				}
-				JFileChooser jfc = new JFileChooser(f);
-
-				jfc.addChoosableFileFilter(new KeyStoreFileFilter());
-
+				String format = (String) infosPanel.getElements().get(
+						"formatCert");
+				File outputFile=getTargetFile(format);
+		
+				JFileChooser jfc = new JFileChooser(outputFile);
+				// the first, only, and selected filter is 'All Files'
+				jfc.removeChoosableFileFilter(jfc.getFileFilter());
+				//add filters
+				jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers der (*.der)"));
+				jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers PKCS12 (*.p12)"));
+				jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers pem (*.pem)"));
+				jfc.setSelectedFile(outputFile);
 				// jPanel1.add(jfc);
-				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					
+					//TODO: remove or not ?
 					KSConfig.getUserCfg().setProperty("output.path",
 							jfc.getSelectedFile().getParent());
 					tfDirectory
@@ -180,7 +182,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				String format = (String) infosPanel.getElements().get(
 						"formatCert");
 
-				if (format.equals("PKCS12")) {
+				if (format.equalsIgnoreCase("pkcs12")) {
 					CommonsActions cact = new CommonsActions();
 
 					try {
@@ -238,6 +240,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 	 */
 	public class KeyStoreFileFilter extends FileFilter {
 
+		private String filterExtension;
+		private String filterDescription;
+
+		private KeyStoreFileFilter(String extension, String descrip) {
+			this.filterExtension=extension;
+			this.filterDescription=descrip;
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -251,8 +261,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 			String extension = FilenameUtils.getExtension(f.getName());
 			if (extension != null) {
-				if (extension.equals("der") || extension.equals("p12")
-						|| extension.equals("pem")) {
+				if (extension.equalsIgnoreCase(filterExtension)) {
 					return true;
 				} else {
 					return false;
@@ -261,6 +270,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 			return false;
 		}
+		
+		
 
 		/*
 		 * (non-Javadoc)
@@ -270,13 +281,39 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		@Override
 		public String getDescription() {
 			// TODO Auto-generated method stub
-			return "ddd";
+			return filterDescription;
 		}
 
 	}
 
 	public void updateKeyStoreList() {
 		// TODO Auto-generated method stub
+
+	}
+
+	public File getTargetFile(String format) {
+		String pathOutput = KSConfig.getUserCfg().getString(
+				"output.path");
+		File f = null;
+//		if (!StringUtils.isEmpty(pathOutput)) {
+//			f = new File(pathOutput);
+//		}
+		File pathSrc = new File(ksInfo.getPath());
+		if (pathSrc!= null && !pathSrc.isDirectory()){
+			pathSrc=new File(pathSrc.getParent());
+		}
+		String fileName=null;
+		//FilenameUtils.getBaseName(//ksInfo)
+		if (format.equalsIgnoreCase("pkcs12")) {
+			 fileName=certInfo.getAlias()+KeyTools.EXT_P12;
+		} else if (format.equalsIgnoreCase("der")) {
+			 fileName=certInfo.getAlias()+KeyTools.EXT_DER;
+		}
+		else  {
+			 fileName=certInfo.getAlias()+KeyTools.EXT_PEM;
+		}
+		return new File(pathSrc, fileName);
+
 
 	}
 
@@ -292,5 +329,26 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 		// }
 		// }
 
+	}
+	
+	/**
+	 * Works around a JFileChooser limitation, that the selected file when saving
+	 * is returned exactly as typed and doesn't take into account the selected
+	 * file filter.
+	 */
+	public static File getSelectedFileWithExtension(JFileChooser c) {
+	    File file = c.getSelectedFile();
+	    if (c.getFileFilter() instanceof FileNameExtensionFilter) {
+	        String[] exts = ((FileNameExtensionFilter)c.getFileFilter()).getExtensions();
+	        String nameLower = file.getName().toLowerCase();
+	        for (String ext : exts) { // check if it already has a valid extension
+	            if (nameLower.endsWith('.' + ext.toLowerCase())) {
+	                return file; // if yes, return as-is
+	            }
+	        }
+	        // if not, append the first one from the selected filter
+	        file = new File(file.toString() + '.' + exts[0]);
+	    }
+	    return file;
 	}
 }

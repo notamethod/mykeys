@@ -95,7 +95,9 @@ public class KeyTools {
 
 	static String EXT_JKS = ".jks";
 
-	static String EXT_P12 = ".p12";
+	public static String EXT_P12 = ".p12";
+	public static String EXT_PEM = ".pem";
+	public static String EXT_DER = ".der";
 
 	static String X509_TYPE = "X.509";
 
