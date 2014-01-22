@@ -13,6 +13,7 @@ import java.security.cert.X509CRL;
 
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
+import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 
 /**
  * @author Buck
@@ -47,8 +48,12 @@ public class CommonsActions {
 				// log.
 
 			}
+			char pwd[]=ksInfoIn.getPassword();
+			if(ksInfoIn.getStoreType().equals(StoreType.INTERNAL)){
+				pwd=certInfoEx.getPassword();
+			}
 			certInfoEx.setPrivateKey(kt.getPrivateKey(certInfoEx.getAlias(),
-					kstore, ksInfoIn.getPassword()));
+					kstore, pwd));
 
 			certInfo = certInfoEx;
 		}

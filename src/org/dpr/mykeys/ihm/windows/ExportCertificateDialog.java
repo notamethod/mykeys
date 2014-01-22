@@ -211,10 +211,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				} else {
 					try {
 						kt.exportPem(certInfo, path);
-						// if (isExportCle) {
-						// kt.exportPrivateKey(certInfo, ksInfo, password,
-						// tfDirectory.getText());
-						// }
+						 if (isExportCle) {
+						 kt.exportPrivateKeyPEM(certInfo, ksInfo, password,
+						 tfDirectory.getText());
+						 }
 
 					} catch (Exception e) {
 

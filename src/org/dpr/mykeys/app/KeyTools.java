@@ -103,6 +103,10 @@ public class KeyTools {
 
 	static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
 	static final String END_PEM = "-----END CERTIFICATE-----";
+	
+	static final String BEGIN_KEY  = "-----BEGIN RSA PRIVATE KEY-----" ;
+	
+	static final String END_KEY  =  "-----END RSA PRIVATE KEY-----";
 
 	private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
 
@@ -930,6 +934,56 @@ public class KeyTools {
 						password);
 			}
 			byte[] privKey = privateKey.getEncoded();
+			FileOutputStream keyfos = new FileOutputStream(new File(fName
+					+ ".key"));
+			keyfos.write(privKey);
+			keyfos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+			throw new KeyToolsException("Export de la clé privée impossible:"
+					+ certInfo.getAlias(), e);
+		}
+	}
+	
+	public void exportPrivateKeyPEM(CertificateInfo certInfo, KeyStoreInfo ksInfo,
+			char[] password, String fName) throws KeyToolsException {
+		/* save the private key in a file */
+
+		try {
+			KeyStore ks = loadKeyStore(ksInfo.getPath(),
+					ksInfo.getStoreFormat(), ksInfo.getPassword());
+			PrivateKey privateKey = null;
+			if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+				privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
+						ksInfo.getPassword());
+			} else {
+				privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(),
+						password);
+			}
+			byte[] privKey = privateKey.getEncoded();
+			
+	
+				List<String> lines = new ArrayList<String>();
+				lines.add(BEGIN_KEY);
+				// FileUtils.writeLines(file, lines)
+				File f = new File(fName + ".pem.key");
+				// FileOutputStream keyfos = new FileOutputStream(new File(fName
+				// + ".pem"));
+				byte[] b = Base64.encodeBase64(privKey);
+				String tmpString = new String(b);
+				String[] datas = tmpString.split("(?<=\\G.{64})");
+				for (String data : datas) {
+					lines.add(data);
+				}
+
+				lines.add(END_KEY);
+				FileUtils.writeLines(f, lines);
+			
+			
+			
+			
+			
 			FileOutputStream keyfos = new FileOutputStream(new File(fName
 					+ ".key"));
 			keyfos.write(privKey);
