@@ -116,7 +116,7 @@ public class KeyStoreInfo implements NodeInfo {
 	}
 
 	public enum StoreFormat {
-		JKS, PKCS12, UNKNOWN;
+		JKS, PKCS12, UNKNOWN, SIMPLE_CERT;
 		public static StoreFormat fromValue(String v) {
 			StoreFormat fmt = null;
 			try {

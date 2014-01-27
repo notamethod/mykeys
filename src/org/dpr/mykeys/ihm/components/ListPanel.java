@@ -43,6 +43,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.CertificatManager;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
@@ -278,34 +279,14 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 */
 	private List<CertificateInfo> getCertificates(KeyStoreInfo ksInfo2)
 			throws KeyToolsException {
-		List<CertificateInfo> certs = new ArrayList<CertificateInfo>();
-		KeyTools kt = new KeyTools();
-		KeyStore ks = null;
-		if (ksInfo.getPassword() == null
-				&& ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)) {
-			return certs;
-		}
 
-		ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-				ksInfo.getPassword());
-
-		log.trace("addcerts");
-		Enumeration<String> enumKs;
+		List<CertificateInfo> certs;
 		try {
-			enumKs = ks.aliases();
-			if (enumKs != null && enumKs.hasMoreElements()) {
-
-				while (enumKs.hasMoreElements()) {
-					String alias = enumKs.nextElement();
-
-					CertificateInfo certInfo = new CertificateInfo(alias);
-					kt.fillCertInfo(ks, certInfo, alias);
-					certs.add(certInfo);
-				}
-			}
-		} catch (KeyStoreException e) {
+			certs = CertificatManager.getCertificates(ksInfo2);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			certs=new ArrayList<CertificateInfo>();
 		}
 		return certs;
 

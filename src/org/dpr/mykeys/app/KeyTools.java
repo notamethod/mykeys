@@ -235,7 +235,7 @@ public class KeyTools {
 	public KeyStore loadKeyStore(String ksName, String type, char[] pwd)
 			throws KeyToolsException {
 		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-
+  
 		KeyStore ks = null;
 		try {
 			try {
@@ -788,7 +788,7 @@ public class KeyTools {
 		return cert;
 	}
 
-	private static Set<X509Certificate> loadX509Certs(InputStream aCertStream)
+	public static Set<X509Certificate> loadX509Certs(InputStream aCertStream)
 			throws GeneralSecurityException {
 
 		CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
@@ -852,11 +852,12 @@ public class KeyTools {
 
 	}
 
-	public void loadX509Certs(String fileName) throws KeyToolsException,
+	public List<CertificateInfo> loadX509Certs(String fileName) throws KeyToolsException,
 			KeyStoreException, UnrecoverableKeyException,
 			NoSuchAlgorithmException {
 
 		NodeInfo nInfo = new BagInfo(fileName);
+		List<CertificateInfo> certsRetour = new ArrayList<CertificateInfo>();
 
 		InputStream is = null;
 		try {
@@ -866,6 +867,7 @@ public class KeyTools {
 			for (X509Certificate cert : certs) {
 				CertificateInfo certInfo = new CertificateInfo();
 				fillCertInfo(certInfo, cert);
+				certsRetour.add(certInfo);
 			}
 
 		} catch (FileNotFoundException e) {
@@ -882,6 +884,7 @@ public class KeyTools {
 				e.printStackTrace();
 			}
 		}
+		return certsRetour;
 
 	}
 
