@@ -37,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -49,6 +50,8 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.app.PkiTools;
+import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
@@ -142,6 +145,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	    // it with the JPanel.
 	    dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE,
 	        this, true, null);		
+	    //FIXME: check flavor
 		dAction = new ActionPanel();
 		// setBackground(new Color(125,0,0));
 		// BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
@@ -166,6 +170,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
+		ToolTipManager.sharedInstance().registerComponent(listCerts);
 		//listCerts.setTransferHandler(new ListTransferHandler());
 		addCertButton = new JButton(createImageIcon("add-cert.png"));
 		unlockButton = new JToggleButton(
@@ -545,8 +550,10 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
+		System.out.println("drop");
 		 if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0)
 	        {
+			 System.out.println("dropxx");
 	            // Accept the drop and get the transfer data
 	            dtde.acceptDrop(dtde.getDropAction());
 	            Transferable transferable = dtde.getTransferable();
@@ -594,10 +601,20 @@ public class ListPanel extends JPanel implements DropTargetListener {
         File transferFile = (File) fileList.get(0);
 
         final String transferURL = transferFile.getAbsolutePath();
-        //System.out.println("File URL is " + transferURL);
-        
+        System.out.println("File URL is " + transferURL);
+        TypeObject typeObject = PkiTools.getTypeObject(transferFile);
+        if (listModel.isEmpty()){
+        	System.out.println("liste vide");
+        	if (this.getKsInfo()!=null){
+        		//TODO/create temp mag
+        	}
+        }
+        System.out.println(typeObject);
+//        if(!TypeObject.UNKNOWN.equals(typeObject)){
+//        	importFile(transferFile, typeObject, true);
+//        }
 
-        return true;
+        return !TypeObject.UNKNOWN.equals(typeObject);
     }	
 
 }

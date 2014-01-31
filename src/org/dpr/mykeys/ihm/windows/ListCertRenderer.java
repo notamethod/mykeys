@@ -62,6 +62,17 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 
 			}
 			setText(cert.getName());
+			StringBuilder sb = new StringBuilder();
+			sb.append("<html>Certificat ").append(cert.getName());
+			if (cert.getAlias()!=null) 
+			    sb.append(" (").append(cert.getAlias()).append(")");
+			 sb.append("<br>Numéro de série ").append(cert.getCertificate().getSerialNumber());
+			 sb.append("<br>Emetteur ").append(cert.getCertificate().getIssuerDN());
+			if (cert.isContainsPrivateKey()){
+			    sb.append("<br>Clé privée présente");
+			}
+			sb.append("</html>");
+			this.setToolTipText(sb.toString());
 
 		}
 		// return super.getListCellRendererComponent(list, value, index,
