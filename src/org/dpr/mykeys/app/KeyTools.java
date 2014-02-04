@@ -47,6 +47,7 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -856,7 +857,7 @@ public class KeyTools {
 			KeyStoreException, UnrecoverableKeyException,
 			NoSuchAlgorithmException {
 
-		NodeInfo nInfo = new BagInfo(fileName);
+		NodeInfo nInfo = new KeyStoreInfo(new File(fileName));
 		List<CertificateInfo> certsRetour = new ArrayList<CertificateInfo>();
 
 		InputStream is = null;
@@ -1191,7 +1192,7 @@ public class KeyTools {
 	public KeyStore importStore(String path, StoreFormat storeFormat,
 			char[] password) throws KeyToolsException,
 			UnrecoverableKeyException, KeyStoreException,
-			NoSuchAlgorithmException {
+			NoSuchAlgorithmException {  
 		// TODO Auto-generated method stub
 		switch (storeFormat) {
 		case JKS:
@@ -1206,6 +1207,12 @@ public class KeyTools {
 		}
 	}
 
+	public void importStore(File transferFile, StoreFormat format,
+			char[] charArray) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, KeyToolsException {
+		importStore(transferFile.getPath(), format,
+				charArray);
+		
+	}
 	public X509CRL generateCrl(X509Certificate certSign, CrlInfo crlInfo,
 			Key privateKey) throws KeyStoreException, NoSuchProviderException,
 			NoSuchAlgorithmException, CertificateException, IOException,
@@ -1350,6 +1357,8 @@ public class KeyTools {
 		IOUtils.write(crl.getEncoded(), output);
 
 	}
+
+
 
 
 }

@@ -3,6 +3,10 @@
  */
 package org.dpr.mykeys.app;
 
+import java.io.File;
+
+import org.apache.commons.io.FilenameUtils;
+
 
 /**
  * @author Buck
@@ -31,6 +35,16 @@ public class BagInfo implements NodeInfo {
 		this.path = fileName;
 		this.name = name;
 	}
+
+	public BagInfo(File file) {
+	    String path=file.getPath();
+        setPath(FilenameUtils.getPath(path));
+        setName(FilenameUtils.getName(path));
+	}
+	
+	   public BagInfo() {
+
+	    }
 
 	/**
 	 * .

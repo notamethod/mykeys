@@ -1,6 +1,11 @@
 package org.dpr.mykeys.app;
 
-public class KeyStoreInfo implements NodeInfo {
+import java.io.File;
+
+import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
+import org.dpr.mykeys.app.PkiTools.TypeObject;
+
+public class KeyStoreInfo extends BagInfo implements NodeInfo {
 
 	private String name;
 
@@ -13,6 +18,10 @@ public class KeyStoreInfo implements NodeInfo {
 	private StoreFormat storeFormat;
 
 	private StoreType storeType = StoreType.EXTERNAL;
+    //TODO	
+	private boolean isTemp =false;
+	//TODO
+	private boolean isProtected =false;
 
 	private char[] password;
 
@@ -31,6 +40,22 @@ public class KeyStoreInfo implements NodeInfo {
 		this.storeModel = storeModel;
 		this.storeFormat = storeFormat;
 		this.storeType = storeType;
+	}
+
+
+
+	/**
+	 * .
+	 *<BR><pre>
+	 *<b>Algorithme : </b>
+	 *DEBUT
+	 *    
+	 *FIN</pre>
+	 *
+	 * @param file
+	 */
+	KeyStoreInfo(File file) {
+		super(file);
 	}
 
 	/*
@@ -116,7 +141,7 @@ public class KeyStoreInfo implements NodeInfo {
 	}
 
 	public enum StoreFormat {
-		JKS, PKCS12, UNKNOWN, SIMPLE_CERT;
+		JKS, PKCS12, UNKNOWN, CER, DER, SIMPLE_CERT;
 		public static StoreFormat fromValue(String v) {
 			StoreFormat fmt = null;
 			try {
@@ -130,6 +155,19 @@ public class KeyStoreInfo implements NodeInfo {
 
 		public static String getValue(StoreFormat format) {
 			return format.toString();
+		}
+
+		public static StoreFormat fromValue(TypeObject typeObject) {
+			switch (typeObject) {
+			case MAGP12:
+				return PKCS12;
+
+            case MAGCER:
+            	return CER;
+  
+			default:
+				return UNKNOWN;
+			}
 		}
 	}
 
