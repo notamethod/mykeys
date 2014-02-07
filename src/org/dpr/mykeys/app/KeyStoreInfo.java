@@ -2,6 +2,7 @@ package org.dpr.mykeys.app;
 
 import java.io.File;
 
+import org.apache.commons.io.FilenameUtils;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 
@@ -13,7 +14,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 
 	private boolean isOpen = false;
 
-	private StoreModel storeModel;
+	private StoreModel storeModel = StoreModel.CERTSTORE;
 
 	private StoreFormat storeFormat;
 
@@ -41,22 +42,13 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 		this.storeFormat = storeFormat;
 		this.storeType = storeType;
 	}
-
-
-
-	/**
-	 * .
-	 *<BR><pre>
-	 *<b>Algorithme : </b>
-	 *DEBUT
-	 *    
-	 *FIN</pre>
-	 *
-	 * @param file
-	 */
-	KeyStoreInfo(File file) {
-		super(file);
-	}
+	
+	   public KeyStoreInfo(File fic, StoreFormat storeFormat, char[] cs) {
+	               this.name = FilenameUtils.getName(fic.getPath());
+	               this.path = fic.getPath();
+	               this.storeFormat = storeFormat;
+	               password=cs;
+	           }
 
 	/*
 	 * (non-Javadoc)
@@ -141,7 +133,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	}
 
 	public enum StoreFormat {
-		JKS, PKCS12, UNKNOWN, CER, DER, SIMPLE_CERT;
+		JKS, PKCS12, PEM, DER, UNKNOWN;
 		public static StoreFormat fromValue(String v) {
 			StoreFormat fmt = null;
 			try {
@@ -163,7 +155,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 				return PKCS12;
 
             case MAGCER:
-            	return CER;
+            	return DER;
   
 			default:
 				return UNKNOWN;

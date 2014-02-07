@@ -857,7 +857,7 @@ public class KeyTools {
 			KeyStoreException, UnrecoverableKeyException,
 			NoSuchAlgorithmException {
 
-		NodeInfo nInfo = new KeyStoreInfo(new File(fileName));
+		//NodeInfo nInfo = new KeyStoreInfo(new File(fileName));
 		List<CertificateInfo> certsRetour = new ArrayList<CertificateInfo>();
 
 		InputStream is = null;

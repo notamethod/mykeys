@@ -220,6 +220,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	public void updateInfo(KeyStoreInfo info) {
+		//FIXME: ajout bouron entete liste pour fermer liste 
 		jp.setVisible(false);
 		// jp.removeAll();
 		// jp.revalidate();
@@ -561,8 +562,12 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 			try {
 				boolean result = false;
-
-				if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+				List fileList = (List) transferable
+						.getTransferData(DataFlavor.javaFileListFlavor);
+				File transferFile = (File) fileList.get(0);
+				TypeObject typeObject = PkiTools.getTypeObject(transferFile);
+				if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor) && typeObject!=TypeObject.UNKNOWN && typeObject!=null) {
+					
 					result = dropFile(transferable);
 				} else {
 					result = false;
@@ -604,9 +609,23 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		}
 		KeyTools kt = new KeyTools();
 		StoreFormat format = StoreFormat.fromValue(typeObject);
-		
-		if (this.getKsInfo() != null) {
+		char[] truck=null;
+		boolean isOpen=false;
+		boolean createTempKS=false;
+		switch (format) {
+		case PKCS12:
+			truck=MykeysFrame.showPasswordDialog(null);
+			break;
+		case DER:
+		case PEM:
+			isOpen=true;
+			break;
+		default:
+			break;
+		}
 
+		if (this.getKsInfo() != null) {
+//			FIXME check compatibility
 			int retour = JOptionPane.showConfirmDialog(null,
 					MessageUtils.getStringMessage("dialog.import_merge"));
 
@@ -616,17 +635,25 @@ public class ListPanel extends JPanel implements DropTargetListener {
 				break;
 			case JOptionPane.NO_OPTION:
 				// TODO: creer nouveau magasin
-				kt.importStore(transferFile, format, "".toCharArray());
+				//kt.importStore(transferFile, format, "".toCharArray());
+				createTempKS=true;
+
 				break;
 			default:
 				break;
 			}
 
 		} else {
+			createTempKS=true;
 
 
-				kt.importStore(transferFile, format, "".toCharArray());
-
+		}
+		if (createTempKS){
+			KeyStoreInfo newKsinfo = new KeyStoreInfo(transferFile, format, truck); //TODO:ksinfo.settemp
+			newKsinfo.setOpen(isOpen);
+				setKsInfo(newKsinfo);
+				//kt.importStore(transferFile.getPath(), ksinfo.getStoreFormat(), ksinfo.getPassword());
+				updateInfo(newKsinfo);
 		}
 
 		// if(!TypeObject.UNKNOWN.equals(typeObject)){

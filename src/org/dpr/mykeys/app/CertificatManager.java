@@ -35,7 +35,7 @@ public class CertificatManager {
 					ksInfo.getPassword());
 			return getCertificatesFromKeystore(kt, ks);
 		} catch (KeyToolsException e1) {
-			log.error(e1);
+			log.warn(e1);
 			return getCertificatesFromFactory(kt, ksInfo);
 		}
 
