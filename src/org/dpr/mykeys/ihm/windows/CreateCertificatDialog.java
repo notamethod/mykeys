@@ -170,7 +170,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 
 		if (isAC) {
 			infosPanel.put("Alias (nom du certificat)", "alias",
-					"MyKeys Root CA");
+					"");
 			infosPanel.putEmptyLine();
 			infosPanel.put("Taille clé publique", JComboBox.class, "keyLength",
 					mapKeyLength, "2048 bits");
@@ -188,12 +188,12 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 			infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
 					JSpinnerDate.class, "notAfter", calendar.getTime(), true);
 			infosPanel.putEmptyLine();
-			infosPanel.put("Nom (CN)", "CN", "MyKeys Root CA");
+			infosPanel.put("Nom (CN)", "CN", "myrootca");
 			infosPanel.put("Pays (C)", "C", "FR");
-			infosPanel.put("Organisation (O)", "O", "MyKeys");
+			infosPanel.put("Organisation (O)", "O", "my organisation");
 			infosPanel.put("Section (OU)", "OU", "");
 			infosPanel.put("Localité (L)", "L", "");
-			infosPanel.put("Rue (ST)", "SR", "");
+			infosPanel.put("Rue (ST)", "ST", "");
 			infosPanel.put("Email (E)", "E", "");
 
 			infosPanel.putEmptyLine();
@@ -257,13 +257,19 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 				Map<String, Object> elements = infosPanel.getElements();
 				Set<String> keys = elements.keySet();
 				Iterator<String> it = keys.iterator();
-				while (it.hasNext()) {
-					String key = it.next();
-				}
+//				while (it.hasNext()) {
+//					String key = it.next();
+//				}
+				
+                if (elements.get("alias") == null && elements.get("CN") != null)
+                         {
+                    elements.put("alias", elements.get("CN"));
+                }
+                
 				if (elements.get("alias") == null
 						|| elements.get("pwd1") == null) {
 					MykeysFrame.showError(CreateCertificatDialog.this,
-							"Champs obligatoires");
+							"Champs obligatoires non renseignés");
 					return;
 				}
 
