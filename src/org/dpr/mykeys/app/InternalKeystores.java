@@ -50,7 +50,7 @@ public class InternalKeystores {
 			try {
 
 				InputStream is = (InternalKeystores.class
-						.getResourceAsStream("/org.dpr.mykeys/config/mykeysAc.jks"));
+						.getResourceAsStream("/org/dpr/mykeys/config/mykeysAc.jks"));
 				copyFile(is, f);
 				// InternalKeystores.class.getResource("/org.dpr.mykeys/config/myKeysAc.jks").getFile()getChannel();
 
