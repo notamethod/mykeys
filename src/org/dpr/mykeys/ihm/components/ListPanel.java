@@ -553,9 +553,12 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
+		boolean isActionCopy=false;
 		System.out.println("drop");
 		if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
-			System.out.println("dropxx");
+			if ((dtde.getDropAction() & DnDConstants.ACTION_COPY) != 0) {
+				isActionCopy=true;
+			}
 			// Accept the drop and get the transfer data
 			dtde.acceptDrop(dtde.getDropAction());
 			Transferable transferable = dtde.getTransferable();
@@ -568,7 +571,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 				TypeObject typeObject = PkiTools.getTypeObject(transferFile);
 				if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor) && typeObject!=TypeObject.UNKNOWN && typeObject!=null) {
 					
-					result = dropFile(transferable);
+					result = dropFile(transferable, isActionCopy);
 				} else {
 					result = false;
 				}
@@ -592,7 +595,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	// This method handles a drop for a list of files
-	protected boolean dropFile(Transferable transferable) throws IOException,
+	protected boolean dropFile(Transferable transferable, boolean isActionCopy) throws IOException,
 			UnsupportedFlavorException, MalformedURLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, KeyToolsException {
 		List fileList = (List) transferable
 				.getTransferData(DataFlavor.javaFileListFlavor);
@@ -624,7 +627,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			break;
 		}
 
-		if (this.getKsInfo() != null) {
+		if (this.getKsInfo() != null && isActionCopy) {
 //			FIXME check compatibility
 			int retour = JOptionPane.showConfirmDialog(null,
 					MessageUtils.getStringMessage("dialog.import_merge"));

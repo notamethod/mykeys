@@ -33,16 +33,24 @@ package org.dpr.mykeys.ihm.components;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -57,6 +65,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
+import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeWillExpandListener;
@@ -71,8 +80,10 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo;
+import org.dpr.mykeys.app.PkiTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
+import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.ihm.MyKeys;
@@ -85,9 +96,29 @@ import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
-		TreeExpansionListener, TreeWillExpandListener {
+		TreeExpansionListener, TreeWillExpandListener, DropTargetListener {
 
 	public class TreeTransferHandler extends TransferHandler {
+		/**
+		 * .
+		 * 
+		 *<BR><pre>
+		 *<b>Algorithme : </b>
+		 *DEBUT
+		 *    
+		 *FIN</pre>
+		 *
+		 * @param arg0
+		 * @return
+		 * 
+		 * @see javax.swing.TransferHandler#importData(javax.swing.TransferHandler.TransferSupport)
+		 */
+		@Override
+		public boolean importData(TransferSupport arg0) {
+			// TODO Auto-generated method stub
+			return super.importData(arg0);
+		}
+
 		DataFlavor nodesFlavor;
 		DataFlavor[] flavors = new DataFlavor[1];
 
@@ -107,7 +138,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 			support.setShowDropLocation(true);
 			//log.trace(nodesFlavor.getHumanPresentableName());
 			if (!support.isDataFlavorSupported(nodesFlavor)) {
-				return false;
+				//return false;
 			}
 			return true;
 		}
@@ -730,6 +761,74 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		return certsAC;
 
+	}
+
+	@Override
+	public void dragEnter(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragExit(DropTargetEvent dte) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragOver(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		System.out.println("dragover");
+		
+	}
+
+	@Override
+	public void drop(DropTargetDropEvent dtde) {
+		boolean isActionCopy=false;
+		System.out.println("drop");
+		if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
+			if ((dtde.getDropAction() & DnDConstants.ACTION_COPY) != 0) {
+				isActionCopy=true;
+			}
+			// Accept the drop and get the transfer data
+			dtde.acceptDrop(dtde.getDropAction());
+			Transferable transferable = dtde.getTransferable();
+
+			try {
+				boolean result = false;
+				List fileList = (List) transferable
+						.getTransferData(DataFlavor.javaFileListFlavor);
+				File transferFile = (File) fileList.get(0);
+				TypeObject typeObject = PkiTools.getTypeObject(transferFile);
+				if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor) && typeObject!=TypeObject.UNKNOWN && typeObject!=null) {
+					
+					result = dropFile(transferable, isActionCopy);
+				} else {
+					result = false;
+				}
+
+				dtde.dropComplete(result);
+
+			} catch (Exception e) {
+				System.out.println("Exception while handling drop " + e);
+				dtde.rejectDrop();
+			}
+		} else {
+			System.out.println("Drop target rejected drop");
+			dtde.dropComplete(false);
+		}
+		
+	}
+
+	private boolean dropFile(Transferable transferable, boolean isActionCopy) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void dropActionChanged(DropTargetDragEvent dtde) {
+		System.out.println("dropevent");
+		
 	}
 
 }
