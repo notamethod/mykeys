@@ -650,7 +650,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		cs.setResizable(false);
 		cs.setVisible(true);
 		openStore(node, true, true);
-
+		displayKeystoreList(ksInfo);
 		return;
 
 	}

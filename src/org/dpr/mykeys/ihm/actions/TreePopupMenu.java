@@ -26,7 +26,7 @@ public class TreePopupMenu extends JPopupMenu {
 
 	JMenuItem importStore;
 
-	JMenuItem addCert;
+	JMenuItem addCertMenu;
 
 	JMenuItem importCert;
 
@@ -127,10 +127,10 @@ public class TreePopupMenu extends JPopupMenu {
 		importStore.setActionCommand(TypeAction.IMPORT_STORE.getValue());
 		importStore.setVisible(false);
 
-		addCert = new JMenuItem("Ajouter certificat");
-		addCert.addActionListener(new TreePopupAction());
-		addCert.setActionCommand(TypeAction.ADD_CERT.getValue());
-		addCert.setVisible(false);
+		addCertMenu = new JMenuItem("Ajouter certificat");
+		addCertMenu.addActionListener(new TreePopupAction());
+		addCertMenu.setActionCommand(TypeAction.ADD_CERT.getValue());
+		addCertMenu.setVisible(false);
 		importCert = new JMenuItem(MyKeys.getMessage().getString(
 				"certificat.import"));
 		importCert.addActionListener(new TreePopupAction());
@@ -163,7 +163,7 @@ public class TreePopupMenu extends JPopupMenu {
 		deleteStore.setVisible(false);
 		add(addStore);
 		add(importStore);
-		add(addCert);
+		add(addCertMenu);
 		add(importCert);
 		add(exportCert);
 		// add(openStore);
@@ -185,7 +185,7 @@ public class TreePopupMenu extends JPopupMenu {
 	 */
 	public void setNode(DefaultMutableTreeNode node) {
 		addStore.setVisible(false);
-		addCert.setVisible(false);
+		addCertMenu.setVisible(false);
 		importCert.setVisible(false);
 		exportCert.setVisible(false);
 		openStore.setVisible(false);
@@ -201,7 +201,7 @@ public class TreePopupMenu extends JPopupMenu {
 			KeyStoreInfo ksInfo = (KeyStoreInfo) node.getUserObject();
 
 			if (ksInfo.isOpen()) {
-				addCert.setVisible(true);
+				addCertMenu.setVisible(true);
 				importCert.setVisible(true);
 				closeStore.setVisible(true);
 			} else {

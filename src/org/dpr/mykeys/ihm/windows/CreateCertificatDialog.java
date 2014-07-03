@@ -166,12 +166,30 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 			mapAC = new HashMap<String, String>();
 		}
 		mapAC.put(" ", " ");
-		infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
+		infosPanel.put("AC émettrice", JComboBox.class, "emetteur", mapAC, "");
 
 		if (isAC) {
+		    infosPanel.put("Nom (CN)", "CN", "myrootca");
+            infosPanel.put("Pays (C)", "C", "FR");
+            infosPanel.put("Organisation (O)", "O", "my organisation");
+            infosPanel.put("Section (OU)", "OU", "");
+            infosPanel.put("Localité (L)", "L", "");
+            infosPanel.put("Rue (ST)", "ST", "");
+            infosPanel.put("Email (E)", "E", "");
+            infosPanel.putEmptyLine();
 			infosPanel.put("Alias (nom du certificat)", "alias",
 					"");
 			infosPanel.putEmptyLine();
+			
+	         Calendar calendar = Calendar.getInstance();
+
+	            infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
+	                    JSpinnerDate.class, "notBefore", calendar.getTime(), true);
+	            calendar.add(Calendar.YEAR, 5);
+	            infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
+	                    JSpinnerDate.class, "notAfter", calendar.getTime(), true);
+	            
+	            
 			infosPanel.put("Taille clé publique", JComboBox.class, "keyLength",
 					mapKeyLength, "2048 bits");
 			infosPanel.put("Algorithme clé publique", JComboBox.class,
@@ -180,21 +198,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 					"algoSig", mapAlgoSig, "SHA256WithRSAEncryption");
 			// subject
 			infosPanel.putEmptyLine();
-			Calendar calendar = Calendar.getInstance();
 
-			infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
-					JSpinnerDate.class, "notBefore", calendar.getTime(), true);
-			calendar.add(Calendar.YEAR, 5);
-			infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
-					JSpinnerDate.class, "notAfter", calendar.getTime(), true);
-			infosPanel.putEmptyLine();
-			infosPanel.put("Nom (CN)", "CN", "myrootca");
-			infosPanel.put("Pays (C)", "C", "FR");
-			infosPanel.put("Organisation (O)", "O", "my organisation");
-			infosPanel.put("Section (OU)", "OU", "");
-			infosPanel.put("Localité (L)", "L", "");
-			infosPanel.put("Rue (ST)", "ST", "");
-			infosPanel.put("Email (E)", "E", "");
 
 			infosPanel.putEmptyLine();
 			infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib",
@@ -207,6 +211,14 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 			infosPanel.put("Confirmer le mot de passe", JPasswordField.class,
 					"pwd2", InternalKeystores.password, false);
 		} else {
+	          infosPanel.put("Nom (CN)", "CN", "Nom");
+	            infosPanel.put("Pays (C)", "C", "FR");
+	            infosPanel.put("Organisation (O)", "O", "Orga");
+	            infosPanel.put("Section (OU)", "OU", "Développement");
+	            infosPanel.put("Localité (L)", "L", "Saint-Etienne");
+	            infosPanel.put("Rue (ST)", "SR", "");
+	            infosPanel.put("Email (E)", "E", "");
+	            infosPanel.putEmptyLine();
 			infosPanel.put("Alias (nom du certificat)", "alias", "");
 			infosPanel.putEmptyLine();
 			infosPanel.put("Taille clé publique", JComboBox.class, "keyLength",
@@ -225,14 +237,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 			infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
 					JSpinnerDate.class, "notAfter", calendar.getTime(), true);
 			infosPanel.putEmptyLine();
-			infosPanel.put("Nom (CN)", "CN", "Nom");
-			infosPanel.put("Pays (C)", "C", "FR");
-			infosPanel.put("Organisation (O)", "O", "Orga");
-			infosPanel.put("Section (OU)", "OU", "Développement");
-			infosPanel.put("Localité (L)", "L", "Saint-Etienne");
-			infosPanel.put("Rue (ST)", "SR", "");
-			infosPanel.put("Email (E)", "E", "");
-			infosPanel.putEmptyLine();
+
 			infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib",
 					"");
 			infosPanel.put("Policy notice", "PolicyNotice", "");
@@ -273,8 +278,7 @@ public class CreateCertificatDialog extends JDialog implements ItemListener {
 					return;
 				}
 
-				// certInfo.setX509PrincipalMap(elements);
-				HashMap<String, String> subjectMap = new HashMap<String, String>();
+			
 				certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
 				certInfo.setAlgoSig((String) elements.get("algoSig"));
 				certInfo.setKeyLength((String) elements.get("keyLength"));
