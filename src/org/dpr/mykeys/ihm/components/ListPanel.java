@@ -3,7 +3,6 @@ package org.dpr.mykeys.ihm.components;
 import static org.dpr.swingutils.ImageUtils.createImageIcon;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -20,8 +19,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -35,40 +32,35 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
-import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.CertificatManager;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.PkiTools;
-import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.utils.MessageUtils;
+import org.dpr.mykeys.ihm.windows.SuperCreate;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
 public class ListPanel extends JPanel implements DropTargetListener {
 	public static final Log log = LogFactory.getLog(ListPanel.class);
-
+	
 	public class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 
@@ -88,9 +80,10 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	private DetailPanel detailPanel;
 	KeysAction actions;
 
+
 	/**
 	 * @author Buck
-	 * 
+	 *
 	 */
 	public class CertListListener implements ListSelectionListener {
 
@@ -145,11 +138,10 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	private void init() {
-		// Create the DropTarget and register
-		// it with the JPanel.
-		dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE,
-				this, true, null);
-		// FIXME: check flavor
+		   // Create the DropTarget and register
+	    // it with the JPanel.
+	    dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE,
+	        this, true, null);		
 		dAction = new ActionPanel();
 		// setBackground(new Color(125,0,0));
 		// BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
@@ -174,13 +166,14 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
-		ToolTipManager.sharedInstance().registerComponent(listCerts);
-		// listCerts.setTransferHandler(new ListTransferHandler());
+		//listCerts.setTransferHandler(new ListTransferHandler());
 		addCertButton = new JButton(createImageIcon("add-cert.png"));
-		unlockButton = new JToggleButton(createImageIcon("Locked.png"));
+		unlockButton = new JToggleButton(
+				createImageIcon("Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
 		// unlockButton.setIcon(createImageIcon("Locked.png"));
-		unlockButton.setDisabledIcon(createImageIcon("Unlocked.png"));
+		unlockButton
+				.setDisabledIcon(createImageIcon("Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		importButton = new JButton("Import");
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
@@ -220,7 +213,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	public void updateInfo(KeyStoreInfo info) {
-		//FIXME: ajout bouron entete liste pour fermer liste 
 		jp.setVisible(false);
 		// jp.removeAll();
 		// jp.revalidate();
@@ -287,14 +279,34 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 */
 	private List<CertificateInfo> getCertificates(KeyStoreInfo ksInfo2)
 			throws KeyToolsException {
+		List<CertificateInfo> certs = new ArrayList<CertificateInfo>();
+		KeyTools kt = new KeyTools();
+		KeyStore ks = null;
+		if (ksInfo.getPassword() == null
+				&& ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)) {
+			return certs;
+		}
 
-		List<CertificateInfo> certs;
+		ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+				ksInfo.getPassword());
+
+		log.trace("addcerts");
+		Enumeration<String> enumKs;
 		try {
-			certs = CertificatManager.getCertificates(ksInfo2);
-		} catch (Exception e) {
+			enumKs = ks.aliases();
+			if (enumKs != null && enumKs.hasMoreElements()) {
+
+				while (enumKs.hasMoreElements()) {
+					String alias = enumKs.nextElement();
+
+					CertificateInfo certInfo = new CertificateInfo(alias);
+					kt.fillCertInfo(ks, certInfo, alias);
+					certs.add(certInfo);
+				}
+			}
+		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			certs = new ArrayList<CertificateInfo>();
 		}
 		return certs;
 
@@ -433,7 +445,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	public void addCertificate(KeyStoreInfo ksInfo, boolean b) {
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
-		CreateCertificatDialog cs = new CreateCertificatDialog(frame, ksInfo,
+		SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
 				true);
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
@@ -536,134 +548,76 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void dragExit(DropTargetEvent dte) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void dragOver(DropTargetDragEvent dtde) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		boolean isActionCopy=false;
-		System.out.println("drop");
-		if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
-			if ((dtde.getDropAction() & DnDConstants.ACTION_COPY) != 0) {
-				isActionCopy=true;
-			}
-			// Accept the drop and get the transfer data
-			dtde.acceptDrop(dtde.getDropAction());
-			Transferable transferable = dtde.getTransferable();
+		 if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0)
+	        {
+	            // Accept the drop and get the transfer data
+	            dtde.acceptDrop(dtde.getDropAction());
+	            Transferable transferable = dtde.getTransferable();
 
-			try {
-				boolean result = false;
-				List fileList = (List) transferable
-						.getTransferData(DataFlavor.javaFileListFlavor);
-				File transferFile = (File) fileList.get(0);
-				TypeObject typeObject = PkiTools.getTypeObject(transferFile);
-				if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor) && typeObject!=TypeObject.UNKNOWN && typeObject!=null) {
-					
-					result = dropFile(transferable, isActionCopy);
-				} else {
-					result = false;
-				}
+	            try
+	            {
+	                boolean result = false;
 
-				dtde.dropComplete(result);
+	                if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+	                {
+	                    result = dropFile(transferable);
+	                }
+	                else
+	                {
+	                    result = false;
+	                }
 
-			} catch (Exception e) {
-				System.out.println("Exception while handling drop " + e);
-				dtde.rejectDrop();
-			}
-		} else {
-			System.out.println("Drop target rejected drop");
-			dtde.dropComplete(false);
-		}
+	                dtde.dropComplete(result);
+
+	            }
+	            catch (Exception e)
+	            {
+	                System.out.println("Exception while handling drop " + e);
+	                dtde.rejectDrop();
+	            }
+	        }
+	        else
+	        {
+	            System.out.println("Drop target rejected drop");
+	            dtde.dropComplete(false);
+	        }
 	}
 
 	@Override
 	public void dropActionChanged(DropTargetDragEvent dtde) {
 		// TODO Auto-generated method stub
-
+		
 	}
+	
+    // This method handles a drop for a list of files
+    protected boolean dropFile(Transferable transferable) throws IOException, UnsupportedFlavorException,
+            MalformedURLException
+    {
+        List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+        File transferFile = (File) fileList.get(0);
 
-	// This method handles a drop for a list of files
-	protected boolean dropFile(Transferable transferable, boolean isActionCopy) throws IOException,
-			UnsupportedFlavorException, MalformedURLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, KeyToolsException {
-		List fileList = (List) transferable
-				.getTransferData(DataFlavor.javaFileListFlavor);
-		File transferFile = (File) fileList.get(0);
+        final String transferURL = transferFile.getAbsolutePath();
+        //System.out.println("File URL is " + transferURL);
+        
 
-		final String transferURL = transferFile.getAbsolutePath();
-		System.out.println("File URL is " + transferURL);
-		TypeObject typeObject = PkiTools.getTypeObject(transferFile);
-		if (listModel.isEmpty()) {
-			System.out.println("liste vide");
-			if (this.getKsInfo() != null) {
-				// TODO/create temp mag
-			}
-		}
-		KeyTools kt = new KeyTools();
-		StoreFormat format = StoreFormat.fromValue(typeObject);
-		char[] truck=null;
-		boolean isOpen=false;
-		boolean createTempKS=false;
-		switch (format) {
-		case PKCS12:
-			truck=MykeysFrame.showPasswordDialog(null);
-			break;
-		case DER:
-		case PEM:
-			isOpen=true;
-			break;
-		default:
-			break;
-		}
-
-		if (this.getKsInfo() != null && isActionCopy) {
-//			FIXME check compatibility
-			int retour = JOptionPane.showConfirmDialog(null,
-					MessageUtils.getStringMessage("dialog.import_merge"));
-
-			switch (retour) {
-			case JOptionPane.YES_OPTION:
-				// TODO: merge
-				break;
-			case JOptionPane.NO_OPTION:
-				// TODO: creer nouveau magasin
-				//kt.importStore(transferFile, format, "".toCharArray());
-				createTempKS=true;
-
-				break;
-			default:
-				break;
-			}
-
-		} else {
-			createTempKS=true;
-
-
-		}
-		if (createTempKS){
-			KeyStoreInfo newKsinfo = new KeyStoreInfo(transferFile, format, truck); //TODO:ksinfo.settemp
-			newKsinfo.setOpen(isOpen);
-				setKsInfo(newKsinfo);
-				//kt.importStore(transferFile.getPath(), ksinfo.getStoreFormat(), ksinfo.getPassword());
-				updateInfo(newKsinfo);
-		}
-
-		// if(!TypeObject.UNKNOWN.equals(typeObject)){
-		// importFile(transferFile, typeObject, true);
-		// }
-
-		return !TypeObject.UNKNOWN.equals(typeObject);
-	}
+        return true;
+    }	
 
 }

@@ -12,6 +12,7 @@ import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
 import org.dpr.mykeys.ihm.windows.ImportStoreDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.Preferences;
 import org.dpr.mykeys.ihm.windows.SignDocumentDialog;
 import org.dpr.mykeys.ihm.windows.VerifSigDialog;
 
@@ -68,7 +69,14 @@ public class MenuAction extends AbstractAction {
 							cs.setVisible(true);
 						}
 					});
-
+				} else if (action.equals("options")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							Preferences cs = new Preferences();
+							cs.setLocationRelativeTo(MykeysFrame);
+							cs.setVisible(true);
+						}
+					});
 				} else if (action.equals("signFile")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {

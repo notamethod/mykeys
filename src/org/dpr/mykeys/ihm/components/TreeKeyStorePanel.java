@@ -94,6 +94,7 @@ import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.SuperCreate;
 
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		TreeExpansionListener, TreeWillExpandListener, DropTargetListener {
@@ -644,7 +645,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		if (object instanceof KeyStoreInfo) {
 			ksInfo = ((KeyStoreInfo) object);
 		}
-		CreateCertificatDialog cs = new CreateCertificatDialog(frame, ksInfo,
+		SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
 				true);
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
@@ -730,7 +731,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		if (object instanceof KeyStoreInfo) {
 			ksInfo = ((KeyStoreInfo) object);
 		}
-		CreateCertificatDialog cs = new CreateCertificatDialog(frame, ksInfo,
+		SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
 				true);
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);

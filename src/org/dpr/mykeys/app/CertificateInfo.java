@@ -4,10 +4,12 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -15,6 +17,7 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.DERObjectIdentifier;
+import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
 
@@ -39,6 +42,8 @@ public class CertificateInfo {
 	private Hashtable x509PrincipalMap = new Hashtable();
 
 	private Map<String, String> subjectMap = new LinkedHashMap<String, String>();
+	
+	private final List<GeneralName> subjectNames = new ArrayList<GeneralName>();
 
 	private String alias;
 
@@ -586,5 +591,38 @@ public class CertificateInfo {
 		}
 		return alias;
 	}
-
+	
+	public CertificateInfo setDnsNames(String... dnsNames) {
+        for (String name : dnsNames) {
+            subjectNames.add(new GeneralName(GeneralName.dNSName, name));
+        }
+        return this;
+    }
+	
+    /**
+     * Set subject's IP Address (server).
+     *
+     * @param ipAddresses
+     * @return
+     */
+    public CertificateInfo setIpAddresses(String... ipAddresses) {
+        for (String address : ipAddresses) {
+            subjectNames.add(new GeneralName(GeneralName.iPAddress, address));
+        }
+        return this;
+    }
+ 
+    /**
+     * Set subject's directory names. I think this refers to alternate X.500
+     * principal names, not filesystem directories.
+     *
+     * @param dirNames
+     * @return
+     */
+    public CertificateInfo setDirectoryNames(String... dirNames) {
+        for (String name : dirNames) {
+            subjectNames.add(new GeneralName(GeneralName.directoryName, name));
+        }
+        return this;
+    }
 }

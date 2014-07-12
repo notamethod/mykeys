@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="lib/liquidlnf.jar"/>
 	<classpathentry kind="lib" path="lib/substance.jar"/>
 	<classpathentry kind="lib" path="lib/trident.jar"/>
-	<classpathentry kind="lib" path="lib/bcprov-jdk15-145.jar"/>
+	<classpathentry kind="lib" path="lib/bcprov-jdk15-145.jar" sourcepath="C:/Users/buck/.m2/repository/org/bouncycastle/bcprov-jdk15/1.45/bcprov-jdk15-1.45-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/bctsp-jdk15-145.jar"/>
 	<classpathentry kind="lib" path="lib/bcmail-jdk15-145.jar"/>

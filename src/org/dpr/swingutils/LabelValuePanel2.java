@@ -35,7 +35,7 @@ import javax.swing.text.BadLocationException;
 
 import org.dpr.mykeys.ihm.MyKeys;
 
-public class LabelValuePanel extends JPanel implements DocumentListener {
+public class LabelValuePanel2 extends JPanel implements DocumentListener {
 
 	/**
 	 * 
@@ -63,7 +63,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 
 	Map<String, Object> components;
 
-	public LabelValuePanel() {
+	public LabelValuePanel2() {
 		super();
 		this.setLayout(new SpringLayout());
 		this.elements = new HashMap<String, Object>();
@@ -71,7 +71,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 
 	}
 
-	public LabelValuePanel(Map<String, String> elements2, int cols) {
+	public LabelValuePanel2(Map<String, String> elements2, int cols) {
 		this.nbCols = cols;
 	}
 

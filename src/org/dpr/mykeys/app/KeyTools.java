@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -63,8 +64,10 @@ import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.asn1.x509.DisplayText;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.DistributionPointName;
+import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.PolicyQualifierId;
@@ -320,10 +323,16 @@ public class KeyTools {
 
 		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
 		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
-
+        int maxLength=-1;
 		if (isAC) {
+			//TODO: pass as parameter for server certificate
+			if (maxLength>=0){
 			certGen.addExtension(X509Extensions.BasicConstraints, true,
-					new BasicConstraints(true));
+					new BasicConstraints(true, maxLength));
+			}else{
+				certGen.addExtension(X509Extensions.BasicConstraints, true,
+						new BasicConstraints(true));
+			}
 		} else {
 			certGen.addExtension(X509Extensions.BasicConstraints, true,
 					new BasicConstraints(false));
@@ -341,15 +350,20 @@ public class KeyTools {
 		DERSequence seq = new DERSequence(pi);
 		certGen.addExtension(X509Extensions.CertificatePolicies.getId(), false,
 				seq);
-
+		
 		if (certModel.getCrlDistributionURL() != null) {
 			DistributionPoint[] dp = new DistributionPoint[1];
 			DEROctetString oct = new DEROctetString(certModel
 					.getCrlDistributionURL().getBytes());
+			//TODO: check which dpn to use
 			DistributionPointName dpn = new DistributionPointName(
 					new GeneralNames(new GeneralName(GeneralName.dNSName,
 							certModel.getCrlDistributionURL())));
+//			DistributionPointName dpn = new DistributionPointName(
+//					new GeneralNames(new GeneralName(GeneralName.uniformResourceIdentifier,
+//							certModel.getCrlDistributionURL())));
 			dp[0] = new DistributionPoint(dpn, null, null);
+			//TODO: add parameter
 			certGen.addExtension(X509Extensions.CRLDistributionPoints, true,
 					new CRLDistPoint(dp));
 		}
@@ -419,10 +433,16 @@ public class KeyTools {
 
 		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
 		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
-
+		int maxLength=-1;
 		if (isAC) {
+			//TODO: pass as parameter for server certificate
+			if (maxLength>=0){
 			certGen.addExtension(X509Extensions.BasicConstraints, true,
-					new BasicConstraints(true));
+					new BasicConstraints(true, maxLength));
+			}else{
+				certGen.addExtension(X509Extensions.BasicConstraints, true,
+						new BasicConstraints(true));
+			}
 		} else {
 			certGen.addExtension(X509Extensions.BasicConstraints, true,
 					new BasicConstraints(false));
@@ -433,7 +453,22 @@ public class KeyTools {
 		// new AuthorityKeyIdentifierStructure( caCert));
 		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
 				new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
-
+		//X509Extensions.ExtendedKeyUsage.
+		
+		//FIXME: extensions to fix
+//		KeyPurposeId kpid[]=new KeyPurposeId[2];
+//		
+//		kpid[0]=KeyPurposeId.id_kp_clientAuth;
+//		kpid[1]=KeyPurposeId.id_kp_serverAuth;
+//		Vector v = new Vector<KeyPurposeId>();
+//		v.add(kpid[0]);
+//		v.add(kpid[1]);
+//		
+//		certGen.addExtension(X509Extensions.ExtendedKeyUsage, false,
+//				new ExtendedKeyUsage(v));
+		
+		
+		
 		// FIXME: à vérifier en cas de auto signé
 		if (certIssuer.getCertificate() != null) {
 			certGen.addExtension(
@@ -466,9 +501,14 @@ public class KeyTools {
 			DistributionPoint[] dp = new DistributionPoint[1];
 			DEROctetString oct = new DEROctetString(certModel
 					.getCrlDistributionURL().getBytes());
+			//TODO: check which dpn to use
 			DistributionPointName dpn = new DistributionPointName(
 					new GeneralNames(new GeneralName(GeneralName.dNSName,
 							certModel.getCrlDistributionURL())));
+			
+//			DistributionPointName dpn = new DistributionPointName(
+//					new GeneralNames(new GeneralName(GeneralName.uniformResourceIdentifier,
+//							certModel.getCrlDistributionURL())));
 			dp[0] = new DistributionPoint(dpn, null, null);
 			certGen.addExtension(X509Extensions.CRLDistributionPoints, true,
 					new CRLDistPoint(dp));
