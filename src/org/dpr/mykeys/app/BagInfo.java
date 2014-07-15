@@ -18,14 +18,7 @@ public class BagInfo implements NodeInfo {
 	String path;
 
 	/**
-	 * . <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
+	 * //TODO
 	 * 
 	 * @param fileName
 	 */
@@ -51,12 +44,6 @@ public class BagInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @return
 	 * 
@@ -73,12 +60,6 @@ public class BagInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param isOpen
 	 * 

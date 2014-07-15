@@ -158,15 +158,6 @@ public class MyKeys {
 	/**
 	 * .
 	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
-	 * 
 	 */
 	private static KeyStoreInfo getACKeystore() {
 		String path = InternalKeystores.getACPath();

@@ -177,12 +177,8 @@ public class TimeStampManager {
 	private final static String TSA_POLICY_ID = "0.0";
 
 	/**
-	 * Cr√©ation d'un jeton d'horodatage via la date du systeme pour nos test
-	 * c'est tout a fait valable nous avons bien un jeton conforme √ la norme si
-	 * ce n'est que la date n'est pas probante. et accessoirement nous utilison
-	 * aussi un certificat autosign√© pour obtenir un jeton ayant valeur l√©gale
-	 * vous devez obtenir le temps par un serveur NTP et utiliser une pair de
-	 * clef fournie aupres d"une PKI
+	 * Cr√©ation d'un jeton d'horodatage via la date du systeme.
+	 * prÈfÈrer la rÈcup du  temps par un serveur NTP
 	 * 
 	 * @param empreinte
 	 * @param idJeton

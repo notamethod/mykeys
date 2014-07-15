@@ -581,14 +581,6 @@ public class KeyTools {
 	/**
 	 * .
 	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param kstore
 	 * @param xCerts
@@ -807,12 +799,6 @@ public class KeyTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * b&gt;Algorithme : &lt;/b&gt;
-	 * EBUT
-	 *    
-	 * IN
-	 * </pre>
 	 * 
 	 * @param aCertStream
 	 * @return
@@ -1125,12 +1111,6 @@ public class KeyTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certInfo
 	 * @param string
@@ -1210,12 +1190,6 @@ public class KeyTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param path
 	 * @param storeFormat
@@ -1334,13 +1308,6 @@ public class KeyTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
-	 * 
 	 * @param certSign
 	 * @param crlInfo
 	 * @return
@@ -1380,12 +1347,6 @@ public class KeyTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param xCerts
 	 * @throws IOException

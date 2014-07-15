@@ -81,12 +81,6 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @return
 	 * 
@@ -103,12 +97,6 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @return
 	 * 
@@ -125,12 +113,6 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param name
 	 * 
@@ -147,12 +129,6 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param path
 	 * 
@@ -169,12 +145,6 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @return
 	 * 
@@ -191,12 +161,6 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param isOpen
 	 * 

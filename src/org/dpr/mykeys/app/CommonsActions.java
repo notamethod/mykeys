@@ -103,12 +103,6 @@ public class CommonsActions {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param pwd
 	 * @param string

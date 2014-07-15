@@ -172,14 +172,6 @@ public class SuperCreate extends JDialog implements ItemListener {
 	/**
 	 * .
 	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param mapKeyLength
 	 * @param mapAlgoKey

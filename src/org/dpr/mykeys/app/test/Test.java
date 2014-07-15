@@ -25,15 +25,6 @@ public class Test {
 	/**
 	 * .
 	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
-	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {

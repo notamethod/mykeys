@@ -57,15 +57,7 @@ public class TrustCertUtil {
 
 	/**
 	 * .
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+	 *
 	 * 
 	 * @return
 	 * @throws GeneralSecurityException
@@ -94,15 +86,7 @@ public class TrustCertUtil {
 
 	/**
 	 * Récupération des AC reconnues à partir d'un keystore.
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+	 *
 	 * 
 	 * @return
 	 * @throws GeneralSecurityException
@@ -127,15 +111,7 @@ public class TrustCertUtil {
 	/**
 	 * Concatene des fichiers .cer dans un fichier unique, en supprimant les
 	 * doublons.
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+	 *
 	 * 
 	 * @return
 	 * @throws GeneralSecurityException
@@ -170,15 +146,7 @@ public class TrustCertUtil {
 
 	/**
 	 * Vérification chaine de certificats.
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+	 *
 	 * 
 	 * @param password
 	 * @param anchors
@@ -296,15 +264,7 @@ public class TrustCertUtil {
 
 	/**
 	 * Récupère une liste de certificats à partir d'un fichier .cer.
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+	 *
 	 * 
 	 * @param aCertStream
 	 * @return
@@ -325,15 +285,7 @@ public class TrustCertUtil {
 
 	/**
 	 * Vérifie le chemin de certification d'un certificat.
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+
 	 * 
 	 * @param trusted
 	 *            : liste des certificats reconnus
@@ -349,15 +301,7 @@ public class TrustCertUtil {
 
 	/**
 	 * Récupère les AC reconnues à partir d'un Stream.
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+	 *
 	 * 
 	 * @param is
 	 *            le inputStream à lire
@@ -385,15 +329,7 @@ public class TrustCertUtil {
 
 	/**
 	 * .
-	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
+	 *
 	 * 
 	 * @param repertoireAC
 	 * @param provider

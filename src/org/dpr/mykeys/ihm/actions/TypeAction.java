@@ -27,13 +27,6 @@ public enum TypeAction {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 * 
-	 * FIN
-	 * </pre>
-	 * 
 	 * @param value
 	 *            valeur de l'objet EtatSignature
 	 * 

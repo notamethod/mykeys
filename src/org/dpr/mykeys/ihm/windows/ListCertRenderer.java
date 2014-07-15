@@ -23,13 +23,6 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
-	 * 
 	 * @param arg0
 	 * @param arg1
 	 * @param arg2

@@ -366,12 +366,6 @@ public class SignTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certifs
 	 * @param crls

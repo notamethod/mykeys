@@ -249,13 +249,6 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
-	 * 
 	 * @param ksiInfo
 	 */
 	private void displayKeystoreList(KeyStoreInfo info) {
@@ -677,12 +670,6 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * &lt;b&gt;Algorithme : &lt;/b&gt;
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param node
 	 * @param b
@@ -714,12 +701,6 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * &lt;b&gt;Algorithme : &lt;/b&gt;
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param node
 	 * @param b

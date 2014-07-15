@@ -579,14 +579,6 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 	/**
 	 * .
 	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param comp
 	 * @param constraints

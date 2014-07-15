@@ -48,12 +48,6 @@ public class CRLManager {
 	/**
 	 * . <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param securityProvider
 	 */
@@ -66,12 +60,6 @@ public class CRLManager {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certX509
 	 * @param uriMap
@@ -160,12 +148,6 @@ public class CRLManager {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param crlFile
 	 *            : fichier de CRL
@@ -247,13 +229,6 @@ public class CRLManager {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
-	 * 
 	 * @param x509Certificate
 	 * @throws FileNotFoundException
 	 * @throws NoSuchProviderException
@@ -296,12 +271,6 @@ public class CRLManager {
 	 * chemin de CRL=[pki.crl.directory]/[valeur du champ 'O' de l'AC]/[valeur
 	 * du champCN de l'AC].crl
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certificate
 	 * @return
@@ -332,12 +301,6 @@ public class CRLManager {
 	 * chemin de CRL=[pki.crl.directory]/[valeur du champ 'O' de l'AC]/[valeur
 	 * du champCN de l'AC].crl
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certificate
 	 * @return
@@ -366,12 +329,6 @@ public class CRLManager {
 	 * chemin de CRL=[pki.crl.directory]/[valeur du champ 'O' de l'AC]/[valeur
 	 * du champCN de l'AC].crl
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certificate
 	 * @return
@@ -392,12 +349,6 @@ public class CRLManager {
 	 * chemin de CRL=[pki.crl.directory]/[valeur du champ 'O' de l'AC]/[valeur
 	 * du champCN de l'AC].crl
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certificate
 	 * @return

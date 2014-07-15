@@ -121,14 +121,6 @@ public class CreateCrlDialog extends JDialog {
 	/**
 	 * .
 	 * 
-	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param mapKeyLength
 	 * @param mapAlgoKey

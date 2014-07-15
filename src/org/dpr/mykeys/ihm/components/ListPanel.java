@@ -266,12 +266,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * &lt;b&gt;Algorithme : &lt;/b&gt;
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param ksInfo2
 	 * @return
@@ -461,12 +455,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param ksInfo2
 	 * @param certificateInfo

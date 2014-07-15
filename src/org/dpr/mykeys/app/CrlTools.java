@@ -56,12 +56,6 @@ public class CrlTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * b&gt;Algorithme : &lt;/b&gt;
-	 * EBUT
-	 *    
-	 * IN
-	 * </pre>
 	 * 
 	 * @param aCertStream
 	 * @return
@@ -150,13 +144,6 @@ public class CrlTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
-	 * 
 	 * @param certSign
 	 * @param crlInfo
 	 * @return
@@ -196,12 +183,6 @@ public class CrlTools {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param xCerts
 	 * @throws IOException

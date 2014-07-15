@@ -454,20 +454,13 @@ public class CertificateInfo {
 	}
 
 	// public String getCrlDistributionURL() {
-	// return el "http://dev.tess2i.fr/ebics/crl";
+	// return el "http://xxx.crl";
 	// }
 
 	/**
 	 * .
 	 * 
 	 * <BR>
-	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @return
 	 */
@@ -481,12 +474,6 @@ public class CertificateInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *    
-	 * FIN
-	 * </pre>
 	 * 
 	 * @param certificateChain2
 	 */
@@ -576,12 +563,6 @@ public class CertificateInfo {
 	 * 
 	 * <BR>
 	 * 
-	 * <pre>
-	 * <b>Algorithme : </b>
-	 * DEBUT
-	 *     
-	 * FIN
-	 * </pre>
 	 * 
 	 * @return
 	 */
