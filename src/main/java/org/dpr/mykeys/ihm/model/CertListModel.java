@@ -94,7 +94,7 @@ public class CertListModel implements ListModel {
 	 * Affecte le data.
 	 * 
 	 * @param data
-	 *            le data à affecter.
+	 *            le data Ã  affecter.
 	 */
 	public void setData(List<CertificateInfo> data) {
 		this.data = data;

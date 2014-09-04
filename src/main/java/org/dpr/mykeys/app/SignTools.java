@@ -108,7 +108,7 @@ public class SignTools {
 			KeyTools kt = new KeyTools();
 			X509Certificate cert = certInfo.getCertificate();
 			PrivateKey privatekey = certInfo.getPrivateKey();
-			// Chargement du fichier qui va être signé
+			// Chargement du fichier qui va Ãªtre signÃ©
 
 			File file_to_sign = new File(file);
 			byte[] buffer = new byte[(int) file_to_sign.length()];
@@ -117,7 +117,7 @@ public class SignTools {
 			in.readFully(buffer);
 			in.close();
 
-			// Chargement des certificats qui seront stockés dans le fichier .p7
+			// Chargement des certificats qui seront stockÃ©s dans le fichier .p7
 			// Soit le certificat perso seul, soit la chaine de certification.
 			ArrayList certList = new ArrayList();
 			Certificate[] certsTmp = certInfo.getCertificateChain();
@@ -129,10 +129,10 @@ public class SignTools {
 
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 
-			// privatekey correspond à notre clé privée récupérée du fichier
+			// privatekey correspond Ã  notre clÃ© privÃ©e rÃ©cupÃ©rÃ©e du fichier
 			// PKCS#12
 			// cert correspond au certificat publique personnal_nyal.cer
-			// Le dernier argument est l'algorithme de hachage qui sera utilisé
+			// Le dernier argument est l'algorithme de hachage qui sera utilisÃ©
 
 			// Ajout des CRLS ??
 			// a voir
@@ -143,10 +143,10 @@ public class SignTools {
 			CMSProcessable content = new CMSProcessableByteArray(buffer);
 
 			// Generation du fichier CMS/PKCS#7
-			// L'argument deux permet de signifier si le document doit être
-			// attaché avec la signature
-			// Valeur true: le fichier est attaché (c'est le cas ici)
-			// Valeur false: le fichier est détaché
+			// L'argument deux permet de signifier si le document doit Ãªtre
+			// attachÃ© avec la signature
+			// Valeur true: le fichier est attachÃ© (c'est le cas ici)
+			// Valeur false: le fichier est dÃ©tachÃ©
 
 			CMSSignedData signedData = signGen.generate(content, addFile, "BC");
 			byte[] signeddata = signedData.getEncoded();
@@ -165,7 +165,7 @@ public class SignTools {
 
 	public void verify(String signatureFile) {
 		try {
-			// Chargement du fichier signé
+			// Chargement du fichier signÃ©
 			File f = new File(signatureFile);
 			byte[] buffer = new byte[(int) f.length()];
 			DataInputStream in = new DataInputStream(new FileInputStream(f));
@@ -248,7 +248,7 @@ public class SignTools {
 			KeyTools kt = new KeyTools();
 			// X509Certificate cert = certInfo.getCertificate();
 			// PrivateKey privatekey = certInfo.getPrivateKey();
-			// Chargement du fichier qui va être signé
+			// Chargement du fichier qui va Ãªtre signÃ©
 
 			File file_to_sign = new File(file);
 			byte[] buffer = new byte[(int) file_to_sign.length()];
@@ -257,7 +257,7 @@ public class SignTools {
 			in.readFully(buffer);
 			in.close();
 
-			// Chargement des certificats qui seront stockés dans le fichier .p7
+			// Chargement des certificats qui seront stockÃ©s dans le fichier .p7
 			// Soit le certificat perso seul, soit la chaine de certification.
 			ArrayList certList = new ArrayList();
 			// Certificate[] certsTmp = certInfo.getCertificateChain();
@@ -269,10 +269,10 @@ public class SignTools {
 
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 
-			// privatekey correspond à notre clé privée récupérée du fichier
+			// privatekey correspond Ã  notre clÃ© privÃ©e rÃ©cupÃ©rÃ©e du fichier
 			// PKCS#12
 			// cert correspond au certificat publique personnal_nyal.cer
-			// Le dernier argument est l'algorithme de hachage qui sera utilisé
+			// Le dernier argument est l'algorithme de hachage qui sera utilisÃ©
 
 			// Ajout des CRLS ??
 			// a voir
@@ -283,10 +283,10 @@ public class SignTools {
 			CMSProcessable content = new CMSProcessableByteArray(buffer);
 
 			// Generation du fichier CMS/PKCS#7
-			// L'argument deux permet de signifier si le document doit être
-			// attaché avec la signature
-			// Valeur true: le fichier est attaché (c'est le cas ici)
-			// Valeur false: le fichier est détaché
+			// L'argument deux permet de signifier si le document doit Ãªtre
+			// attachÃ© avec la signature
+			// Valeur true: le fichier est attachÃ© (c'est le cas ici)
+			// Valeur false: le fichier est dÃ©tachÃ©
 
 			CMSSignedData signedData = signGen.generate(content, addFile, "BC");
 			byte[] signeddata = signedData.getEncoded();
@@ -308,7 +308,7 @@ public class SignTools {
 
 		try {
 
-			// Chargement des certificats qui seront stockés dans le fichier .p7
+			// Chargement des certificats qui seront stockÃ©s dans le fichier .p7
 			// Soit le certificat perso seul, soit la chaine de certification.
 			ArrayList certList = new ArrayList();
 			ArrayList crlList = new ArrayList();
@@ -327,10 +327,10 @@ public class SignTools {
 
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 
-			// privatekey correspond à notre clé privée récupérée du fichier
+			// privatekey correspond Ã  notre clÃ© privÃ©e rÃ©cupÃ©rÃ©e du fichier
 			// PKCS#12
 			// cert correspond au certificat publique personnal_nyal.cer
-			// Le dernier argument est l'algorithme de hachage qui sera utilisé
+			// Le dernier argument est l'algorithme de hachage qui sera utilisÃ©
 
 			// Ajout des CRLS
 
@@ -341,10 +341,10 @@ public class SignTools {
 			// CMSProcessable content = new CMSProcessableByteArray(buffer);
 
 			// Generation du fichier CMS/PKCS#7
-			// L'argument deux permet de signifier si le document doit être
-			// attaché avec la signature
-			// Valeur true: le fichier est attaché (c'est le cas ici)
-			// Valeur false: le fichier est détaché
+			// L'argument deux permet de signifier si le document doit Ãªtre
+			// attachÃ© avec la signature
+			// Valeur true: le fichier est attachÃ© (c'est le cas ici)
+			// Valeur false: le fichier est dÃ©tachÃ©
 
 			CMSSignedData signedData = signGen.generate(null, false, "BC");
 			byte[] signeddata = signedData.getEncoded();
@@ -361,7 +361,7 @@ public class SignTools {
 	}
 
 	/**
-	 * Génération d'une enveloppe CMS non signée. Pour stockage des AC et des
+	 * GÃ©nÃ©ration d'une enveloppe CMS non signÃ©e. Pour stockage des AC et des
 	 * CRL
 	 * 
 	 * <BR>
@@ -395,10 +395,10 @@ public class SignTools {
 
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 
-			// privatekey correspond à notre clé privée récupérée du fichier
+			// privatekey correspond Ã  notre clÃ© privÃ©e rÃ©cupÃ©rÃ©e du fichier
 			// PKCS#12
 			// cert correspond au certificat publique personnal_nyal.cer
-			// Le dernier argument est l'algorithme de hachage qui sera utilisé
+			// Le dernier argument est l'algorithme de hachage qui sera utilisÃ©
 
 			// Ajout des CRLS
 
@@ -409,10 +409,10 @@ public class SignTools {
 			// CMSProcessable content = new CMSProcessableByteArray(buffer);
 
 			// Generation du fichier CMS/PKCS#7
-			// L'argument deux permet de signifier si le document doit être
-			// attaché avec la signature
-			// Valeur true: le fichier est attaché (c'est le cas ici)
-			// Valeur false: le fichier est détaché
+			// L'argument deux permet de signifier si le document doit Ãªtre
+			// attachÃ© avec la signature
+			// Valeur true: le fichier est attachÃ© (c'est le cas ici)
+			// Valeur false: le fichier est dÃ©tachÃ©
 
 			CMSSignedData signedData = signGen.generate(null, false, "BC");
 			byte[] signeddata = signedData.getEncoded();

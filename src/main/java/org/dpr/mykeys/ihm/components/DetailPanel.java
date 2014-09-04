@@ -60,7 +60,7 @@ public class DetailPanel extends JPanel {
 
 		add(jtab);
 		jtab.add(jp, "Informations principales");
-		jtab.add(jpExt, "Informations étendues");
+		jtab.add(jpExt, "Informations Ã©tendues");
 		// jp.add();
 		// jp.add(new JLabel("Contenu du certificat"));
 		jtab.setVisible(false);
@@ -81,7 +81,7 @@ public class DetailPanel extends JPanel {
 				String.valueOf(info.getKeyLength()), false);
 		infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"),
 				JTextField.class, "algoPubKey", info.getAlgoPubKey(), false);
-		// infosPanel.put("Clé publique", JTextArea.class, "pubKey",
+		// infosPanel.put("ClÃ© publique", JTextArea.class, "pubKey",
 		// X509Util.toHexString(info.getPublicKey().getEncoded()," ",
 		// false),false);
 		infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"),

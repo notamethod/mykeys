@@ -88,10 +88,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
 		// infosPanel.put("Format", JComboBox.class, "formatCert", mapType);
 		infosPanel.put("Format", ButtonGroup.class, "formatCert", mapType, "");
-		// infosPanel.put("Export de la clé privée", JCheckBox, "");
+		// infosPanel.put("Export de la clÃ© privÃ©e", JCheckBox, "");
 		if (certInfo.isContainsPrivateKey()) {
 
-			infosPanel.put("Exporter la clé privée", JCheckBox.class,
+			infosPanel.put("Exporter la clÃ© privÃ©e", JCheckBox.class,
 					"isExportKey", "true", true);
 
 		}
@@ -225,7 +225,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 				}
 				ExportCertificateDialog.this.setVisible(false);
 				MykeysFrame.showInfo(ExportCertificateDialog.this,
-						"Exportation terminée");
+						"Exportation terminÃ©e");
 			} else if (command.equals("CANCEL")) {
 				ExportCertificateDialog.this.setVisible(false);
 			}

@@ -87,8 +87,8 @@ import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 
 public class KeyTools {
-	//FIXME:en création de magasin si l'extension est saisie ne pas la mettre 2 fois.
-	//FIXME: ne pas autoriser la saisie de la clé privée dans les magasins internes
+	//FIXME:en crÃ©ation de magasin si l'extension est saisie ne pas la mettre 2 fois.
+	//FIXME: ne pas autoriser la saisie de la clÃ© privÃ©e dans les magasins internes
 	final Log log = LogFactory.getLog(KeyTools.class);
 
 	static String PUBKEYSTORE = "keystorePub.p12";
@@ -257,7 +257,7 @@ public class KeyTools {
 			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
 
 		} catch (FileNotFoundException e) {
-			throw new KeyToolsException("Fichier non trouvé:" + ksName + ", "
+			throw new KeyToolsException("Fichier non trouvÃ©:" + ksName + ", "
 					+ e.getCause(), e);
 		} catch (NoSuchAlgorithmException e) {
 			throw new KeyToolsException("Format inconnu:" + ksName + ", "
@@ -294,7 +294,7 @@ public class KeyTools {
 			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
 
 		} catch (FileNotFoundException e) {
-			throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
+			throw new KeyToolsException("Fichier non trouvÃ©:" + ksName, e);
 		} catch (NoSuchAlgorithmException e) {
 			throw new KeyToolsException("Format inconnu:" + ksName, e);
 		} catch (CertificateException e) {
@@ -469,7 +469,7 @@ public class KeyTools {
 		
 		
 		
-		// FIXME: à vérifier en cas de auto signé
+		// FIXME: Ã  vÃ©rifier en cas de auto signÃ©
 		if (certIssuer.getCertificate() != null) {
 			certGen.addExtension(
 					X509Extensions.AuthorityKeyIdentifier,
@@ -528,7 +528,7 @@ public class KeyTools {
 
 		cert.verify(certIssuer.getPublicKey());
 		X509Certificate[] certChain = null;
-		// FIXME: gérer la chaine de l'émetteur
+		// FIXME: gÃ©rer la chaine de l'Ã©metteur
 		if (certIssuer.getCertificate() != null) {
 			certChain = new X509Certificate[2];
 			certChain[0] = cert;
@@ -774,9 +774,9 @@ public class KeyTools {
 
 		PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
 		if (privateKey != null) {
-			return ("Clé privée  trouvée");
+			return ("ClÃ© privÃ©e  trouvÃ©e");
 		} else {
-			return ("Clé privée absente ");
+			return ("ClÃ© privÃ©e absente ");
 		}
 	}
 	
@@ -789,13 +789,13 @@ public class KeyTools {
 		if (privateKey != null) {
 			return privateKey;
 		} else {
-			throw new GeneralSecurityException("Clé privée absente ");
+			throw new GeneralSecurityException("ClÃ© privÃ©e absente ");
 		
 		}
 	}	
 
 	/**
-	 * Chargement certificat X509 à partir d'un flux.
+	 * Chargement certificat X509 Ã  partir d'un flux.
 	 * 
 	 * <BR>
 	 * 
@@ -806,7 +806,7 @@ public class KeyTools {
 	 */
 	private static X509Certificate loadX509Cert(InputStream aCertStream)
 			throws GeneralSecurityException {
-		// création d'une fabrique de certificat X509
+		// crÃ©ation d'une fabrique de certificat X509
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
 		// chargement du certificat
@@ -971,7 +971,7 @@ public class KeyTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
-			throw new KeyToolsException("Export de la clé privée impossible:"
+			throw new KeyToolsException("Export de la clÃ© privÃ©e impossible:"
 					+ certInfo.getAlias(), e);
 		}
 	}
@@ -1021,7 +1021,7 @@ public class KeyTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
-			throw new KeyToolsException("Export de la clé privée impossible:"
+			throw new KeyToolsException("Export de la clÃ© privÃ©e impossible:"
 					+ certInfo.getAlias(), e);
 		}
 	}
@@ -1039,7 +1039,7 @@ public class KeyTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
-			throw new KeyToolsException("Export de la clé publique impossible:"
+			throw new KeyToolsException("Export de la clÃ© publique impossible:"
 					+ certInfo.getAlias(), e);
 		}
 	}
@@ -1056,7 +1056,7 @@ public class KeyTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
-			throw new KeyToolsException("Export de la clé publique impossible:"
+			throw new KeyToolsException("Export de la clÃ© publique impossible:"
 					+ certInfo.getAlias(), e);
 		}
 	}
@@ -1086,7 +1086,7 @@ public class KeyTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);
-			throw new KeyToolsException("Export de la clé publique impossible:"
+			throw new KeyToolsException("Export de la clÃ© publique impossible:"
 					+ certInfo.getAlias(), e);
 		}
 	}

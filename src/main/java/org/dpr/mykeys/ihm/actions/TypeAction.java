@@ -9,21 +9,21 @@ public enum TypeAction {
 			"RemoveStore"), DELETE_STORE("DeleteStore"), ADD_CERT_AC(
 			"AddCertAC"), DELETE_CERT("DeleteCert");
 
-	/** L'attribut qui contient la valeur associé à l'enum */
+	/** L'attribut qui contient la valeur associÃ© Ã  l'enum */
 	private final String value;
 
-	/** Le constructeur qui associe une valeur à l'enum */
+	/** Le constructeur qui associe une valeur Ã  l'enum */
 	private TypeAction(String value) {
 		this.value = value;
 	}
 
-	/** La méthode accesseur qui renvoit la valeur de l'enum */
+	/** La mÃ©thode accesseur qui renvoit la valeur de l'enum */
 	public String getValue() {
 		return this.value;
 	}
 
 	/**
-	 * Permet de recuperer un <code>EtatSignature</code> à partir de sa valeur.
+	 * Permet de recuperer un <code>EtatSignature</code> Ã  partir de sa valeur.
 	 * 
 	 * <BR>
 	 * 

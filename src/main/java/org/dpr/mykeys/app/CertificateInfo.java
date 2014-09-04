@@ -84,7 +84,7 @@ public class CertificateInfo {
 	 * Affecte le hasPrivateKey.
 	 * 
 	 * @param hasPrivateKey
-	 *            le hasPrivateKey à affecter.
+	 *            le hasPrivateKey Ã  affecter.
 	 */
 	public void setContainsPrivateKey(boolean hasPrivateKey) {
 		this.containsPrivateKey = hasPrivateKey;
@@ -103,7 +103,7 @@ public class CertificateInfo {
 	 * Affecte le certChain.
 	 * 
 	 * @param certChain
-	 *            le certChain à affecter.
+	 *            le certChain Ã  affecter.
 	 */
 	public void setCertChain(String certChain) {
 		this.certChain = certChain;
@@ -495,7 +495,7 @@ public class CertificateInfo {
 	 * Affecte le crlDistributionURL.
 	 * 
 	 * @param crlDistributionURL
-	 *            le crlDistributionURL à affecter.
+	 *            le crlDistributionURL Ã  affecter.
 	 */
 	public void setCrlDistributionURL(String crlDistributionURL) {
 		this.crlDistributionURL = crlDistributionURL;
@@ -514,7 +514,7 @@ public class CertificateInfo {
 	 * Affecte le certificate.
 	 * 
 	 * @param certificate
-	 *            le certificate à affecter.
+	 *            le certificate Ã  affecter.
 	 */
 	public void setCertificate(X509Certificate certificate) {
 		this.certificate = certificate;
@@ -533,7 +533,7 @@ public class CertificateInfo {
 	 * Affecte le policyNotice.
 	 * 
 	 * @param policyNotice
-	 *            le policyNotice à affecter.
+	 *            le policyNotice Ã  affecter.
 	 */
 	public void setPolicyNotice(String policyNotice) {
 		this.policyNotice = policyNotice;
@@ -552,7 +552,7 @@ public class CertificateInfo {
 	 * Affecte le policyCPS.
 	 * 
 	 * @param policyCPS
-	 *            le policyCPS à affecter.
+	 *            le policyCPS Ã  affecter.
 	 */
 	public void setPolicyCPS(String policyCPS) {
 		this.policyCPS = policyCPS;

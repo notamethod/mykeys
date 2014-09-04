@@ -51,7 +51,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	private static final Log log = LogFactory.getLog(MykeysFrame.class);
 	JPanel p;// panel principal qui contient les images
 
-	// répertoire des images
+	// rÃ©pertoire des images
 	String magRep = ".\\";
 
 	String nomImage = "";

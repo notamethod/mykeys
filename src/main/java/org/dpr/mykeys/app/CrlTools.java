@@ -52,7 +52,7 @@ public class CrlTools {
 	private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
 
 	/**
-	 * Chargement certificat X509 à partir d'un flux.
+	 * Chargement certificat X509 Ã  partir d'un flux.
 	 * 
 	 * <BR>
 	 * 
@@ -63,7 +63,7 @@ public class CrlTools {
 	 */
 	private static X509Certificate loadX509Cert(InputStream aCertStream)
 			throws GeneralSecurityException {
-		// création d'une fabrique de certificat X509
+		// crÃ©ation d'une fabrique de certificat X509
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
 		// chargement du certificat

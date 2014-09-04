@@ -32,7 +32,7 @@ public class CrlInfo implements NodeInfo {
 	 * Affecte le thisUpdate.
 	 * 
 	 * @param thisUpdate
-	 *            le thisUpdate à affecter.
+	 *            le thisUpdate Ã  affecter.
 	 */
 	public void setThisUpdate(Date thisUpdate) {
 		this.thisUpdate = thisUpdate;
@@ -51,7 +51,7 @@ public class CrlInfo implements NodeInfo {
 	 * Affecte le nextUpdate.
 	 * 
 	 * @param nextUpdate
-	 *            le nextUpdate à affecter.
+	 *            le nextUpdate Ã  affecter.
 	 */
 	public void setNextUpdate(Date nextUpdate) {
 		this.nextUpdate = nextUpdate;
@@ -70,7 +70,7 @@ public class CrlInfo implements NodeInfo {
 	 * Affecte le number.
 	 * 
 	 * @param number
-	 *            le number à affecter.
+	 *            le number Ã  affecter.
 	 */
 	public void setNumber(BigInteger number) {
 		this.number = number;

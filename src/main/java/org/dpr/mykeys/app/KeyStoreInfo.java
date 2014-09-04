@@ -187,7 +187,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	 * Affecte le storeType.
 	 * 
 	 * @param storeType
-	 *            le storeType à affecter.
+	 *            le storeType Ã  affecter.
 	 */
 	public void setStoreModel(StoreModel storeType) {
 		this.storeModel = storeType;
@@ -206,7 +206,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	 * Affecte le storeFormat.
 	 * 
 	 * @param storeFormat
-	 *            le storeFormat à affecter.
+	 *            le storeFormat Ã  affecter.
 	 */
 	public void setStoreFormat(StoreFormat storeFormat) {
 		this.storeFormat = storeFormat;

@@ -50,7 +50,7 @@ public class VerifSigDialog extends JDialog {
 
 	public void init() {
 		DialogAction dAction = new DialogAction();
-		setTitle("Vérification signature de document");
+		setTitle("VÃ©rification signature de document");
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -81,7 +81,7 @@ public class VerifSigDialog extends JDialog {
 				mapCerts, "");
 		infosPanel.putEmptyLine();
 
-		JLabel jl4 = new JLabel("Fichier à signer");
+		JLabel jl4 = new JLabel("Fichier Ã  signer");
 		JLabel jl5 = new JLabel("Fichier en sortie");
 
 		FileSystemView fsv = FileSystemView.getFileSystemView();

@@ -77,7 +77,7 @@ public class TrustCertUtil {
 			}
 		} catch (IOException ioe) {
 			throw new GeneralSecurityException(
-					"Problème de lecture des certificats de confiance de "
+					"ProblÃ¨me de lecture des certificats de confiance de "
 							+ repertoireAC, ioe);
 		}
 
@@ -85,7 +85,7 @@ public class TrustCertUtil {
 	}
 
 	/**
-	 * Récupération des AC reconnues à partir d'un keystore.
+	 * RÃ©cupÃ©ration des AC reconnues Ã  partir d'un keystore.
 	 *
 	 * 
 	 * @return
@@ -145,7 +145,7 @@ public class TrustCertUtil {
 	}
 
 	/**
-	 * Vérification chaine de certificats.
+	 * VÃ©rification chaine de certificats.
 	 *
 	 * 
 	 * @param password
@@ -230,7 +230,7 @@ public class TrustCertUtil {
 			boolean recursive) throws IOException, GeneralSecurityException {
 		List<X509Certificate> lstCert = new ArrayList<X509Certificate>();
 		// Set<X509Certificate> lstCert = new HashSet<X509Certificate>();
-		// recherche des certificats dans le répertoire (*.cer ou *.CER)
+		// recherche des certificats dans le rÃ©pertoire (*.cer ou *.CER)
 
 		IOFileFilter fileFilter = new WildcardFileFilter(
 				FILTRE_CERTIFICAT_X509, IOCase.INSENSITIVE);
@@ -240,7 +240,7 @@ public class TrustCertUtil {
 				aCertificatesDirectory), fileFilter, dirFilter);
 
 		if (lstFichiers != null) {
-			// boucle sur les certificats trouvés
+			// boucle sur les certificats trouvÃ©s
 			for (File fichier : lstFichiers) {
 				InputStream certStream = new FileInputStream(fichier);
 				// remarque: un fichier .cer peut contenir plus d'un certificat
@@ -263,7 +263,7 @@ public class TrustCertUtil {
 	}
 
 	/**
-	 * Récupère une liste de certificats à partir d'un fichier .cer.
+	 * RÃ©cupÃ¨re une liste de certificats Ã  partir d'un fichier .cer.
 	 *
 	 * 
 	 * @param aCertStream
@@ -273,7 +273,7 @@ public class TrustCertUtil {
 	private static Collection<X509Certificate> chargerCertificatsX509(
 			InputStream aCertStream, String typeCert, String provider)
 			throws GeneralSecurityException {
-		// création d'une fabrique de certificat X509
+		// crÃ©ation d'une fabrique de certificat X509
 		CertificateFactory cf = CertificateFactory.getInstance(typeCert,
 				provider);
 
@@ -284,13 +284,13 @@ public class TrustCertUtil {
 	}
 
 	/**
-	 * Vérifie le chemin de certification d'un certificat.
+	 * VÃ©rifie le chemin de certification d'un certificat.
 
 	 * 
 	 * @param trusted
 	 *            : liste des certificats reconnus
 	 * @param certs
-	 *            : chaîne de certification du certificat à contrôler
+	 *            : chaÃ®ne de certification du certificat Ã  contrÃ´ler
 	 * @throws IOException
 	 */
 	public static void validate(X509Certificate[] trusted, Certificate[] certs,
@@ -300,11 +300,11 @@ public class TrustCertUtil {
 	}
 
 	/**
-	 * Récupère les AC reconnues à partir d'un Stream.
+	 * RÃ©cupÃ¨re les AC reconnues Ã  partir d'un Stream.
 	 *
 	 * 
 	 * @param is
-	 *            le inputStream à lire
+	 *            le inputStream Ã  lire
 	 * @param securityProvider
 	 * @throws GeneralSecurityException
 	 */
@@ -350,7 +350,7 @@ public class TrustCertUtil {
 			}
 		} catch (IOException ioe) {
 			throw new GeneralSecurityException(
-					"Problème de lecture des certificats de confiance de "
+					"ProblÃ¨me de lecture des certificats de confiance de "
 							+ repertoireAC, ioe);
 		}
 

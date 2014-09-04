@@ -69,7 +69,7 @@ public class CreateCrlDialog extends JDialog {
 		DialogAction dAction = new DialogAction();
 		// FIXME:
 
-		setTitle("Création d'une liste de révocation");
+		setTitle("CrÃ©ation d'une liste de rÃ©vocation");
 
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);

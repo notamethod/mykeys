@@ -71,7 +71,7 @@ public class ImportCertificateDialog extends JDialog {
 		infosPanel.put("Type de Certificat", JComboBox.class, "typeCert",
 				mapType);
 		infosPanel.putEmptyLine();
-		infosPanel.put("Alias  à affecter", "alias", "");
+		infosPanel.put("Alias  Ã  affecter", "alias", "");
 
 		infosPanel.put("Mot de passe", JPasswordField.class, "pwd1", "", true);
 

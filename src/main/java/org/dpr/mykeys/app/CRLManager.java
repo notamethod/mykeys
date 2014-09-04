@@ -56,7 +56,7 @@ public class CRLManager {
 	}
 
 	/**
-	 * Récupération des points de distribution des CRL.
+	 * RÃ©cupÃ©ration des points de distribution des CRL.
 	 * 
 	 * <BR>
 	 * 
@@ -133,7 +133,7 @@ public class CRLManager {
 					distPointSet.add(distPointName);
 
 					if (log.isDebugEnabled()) {
-						log.debug("récupération url: " + distPointName);
+						log.debug("rÃ©cupÃ©ration url: " + distPointName);
 					}
 
 				}
@@ -171,12 +171,12 @@ public class CRLManager {
 	}
 
 	/**
-	 * Contrôle la validité d'une liste de révocation.
+	 * ContrÃ´le la validitÃ© d'une liste de rÃ©vocation.
 	 * 
 	 * <BR>
 	 * 
 	 * @param date
-	 *            : date sur laquelle tester la validité
+	 *            : date sur laquelle tester la validitÃ©
 	 * @param crlFile
 	 *            : fichier de crl
 	 * @return
@@ -196,12 +196,12 @@ public class CRLManager {
 	}
 
 	/**
-	 * Contrôle la validité d'une liste de révocation.
+	 * ContrÃ´le la validitÃ© d'une liste de rÃ©vocation.
 	 * 
 	 * <BR>
 	 * 
 	 * @param date
-	 *            : date sur laquelle tester la validité
+	 *            : date sur laquelle tester la validitÃ©
 	 * @param crlFile
 	 *            : fichier de crl
 	 * @return
@@ -225,7 +225,7 @@ public class CRLManager {
 	}
 
 	/**
-	 * Retourne un objet X509CRL à partir d'un fichier.
+	 * Retourne un objet X509CRL Ã  partir d'un fichier.
 	 * 
 	 * <BR>
 	 * 
@@ -279,7 +279,7 @@ public class CRLManager {
 			boolean isAC) {
 
 		Map<DERObjectIdentifier, String> map = null;
-		// si c'est un certificat d'AC, on récupére les identifiant du sujet,
+		// si c'est un certificat d'AC, on rÃ©cupÃ©re les identifiant du sujet,
 		// sinon les identifiants de l'emetteur
 		if (isAC) {
 			map = X509Util.getSubjectMap(certificate);
@@ -309,7 +309,7 @@ public class CRLManager {
 			boolean isAC) {
 
 		Map<DERObjectIdentifier, String> map = null;
-		// si c'est un certificat d'AC, on récupére les identifiant du sujet,
+		// si c'est un certificat d'AC, on rÃ©cupÃ©re les identifiant du sujet,
 		// sinon les identifiants de l'emetteur
 		if (isAC) {
 			map = X509Util.getSubjectMap(certificate);

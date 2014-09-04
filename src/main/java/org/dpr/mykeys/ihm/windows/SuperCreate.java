@@ -118,9 +118,9 @@ public class SuperCreate extends JDialog implements ItemListener {
 
 		DialogAction dAction = new DialogAction();
 		if (isAC) {
-			setTitle("Création d'une autorité de certification");
+			setTitle("CrÃ©ation d'une autoritÃ© de certification");
 		} else {
-			setTitle("Création de Certificat");
+			setTitle("CrÃ©ation de Certificat");
 		}
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
@@ -200,8 +200,8 @@ public class SuperCreate extends JDialog implements ItemListener {
 			if (isAC) {
 				infosPanel.put("Alias (nom du certificat)", "alias", "MyKeys Root CA");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Taille clé publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
-				infosPanel.put("Algorithme clé publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
+				infosPanel.put("Taille clÃ© publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
+				infosPanel.put("Algorithme clÃ© publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
 				infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig", mapAlgoSig,
 						"SHA256WithRSAEncryption");
 				// subject
@@ -218,7 +218,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Pays (C)", "C", "FR");
 				infosPanel.put("Organisation (O)", "O", "MyKeys");
 				infosPanel.put("Section (OU)", "OU", "");
-				infosPanel.put("Localité (L)", "L", "");
+				infosPanel.put("LocalitÃ© (L)", "L", "");
 				infosPanel.put("Rue (ST)", "SR", "");
 				infosPanel.put("Email (E)", "E", "");
 
@@ -227,15 +227,15 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy notice", "PolicyNotice", "");
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
+				infosPanel.put("Mot de passe clÃ© privÃ©e", JPasswordField.class, "pwd1", InternalKeystores.password,
 						false);
 				infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2", InternalKeystores.password,
 						false);
 			} else {
 				infosPanel.put("Alias (nom du certificat)", "alias", "");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Taille clé publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
-				infosPanel.put("Algorithme clé publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
+				infosPanel.put("Taille clÃ© publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
+				infosPanel.put("Algorithme clÃ© publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
 				infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig", mapAlgoSig,
 						"SHA256WithRSAEncryption");
 				// subject
@@ -251,8 +251,8 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Nom (CN)", "CN", "Nom");
 				infosPanel.put("Pays (C)", "C", "FR");
 				infosPanel.put("Organisation (O)", "O", "Orga");
-				infosPanel.put("Section (OU)", "OU", "Développement");
-				infosPanel.put("Localité (L)", "L", "Saint-Etienne");
+				infosPanel.put("Section (OU)", "OU", "DÃ©veloppement");
+				infosPanel.put("LocalitÃ© (L)", "L", "Saint-Etienne");
 				infosPanel.put("Rue (ST)", "SR", "");
 				infosPanel.put("Email (E)", "E", "");
 				infosPanel.putEmptyLine();
@@ -260,7 +260,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy notice", "PolicyNotice", "");
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", "", true);
+				infosPanel.put("Mot de passe clÃ© privÃ©e", JPasswordField.class, "pwd1", "", true);
 				infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2", "", true);
 			}
 		}

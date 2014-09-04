@@ -177,8 +177,8 @@ public class TimeStampManager {
 	private final static String TSA_POLICY_ID = "0.0";
 
 	/**
-	 * Création d'un jeton d'horodatage via la date du systeme.
-	 * pr�f�rer la r�cup du  temps par un serveur NTP
+	 * CrÃ©ation d'un jeton d'horodatage via la date du systeme.
+	 * prï¿½fï¿½rer la rï¿½cup du  temps par un serveur NTP
 	 * 
 	 * @param empreinte
 	 * @param idJeton

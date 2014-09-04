@@ -77,7 +77,7 @@ public class SignDocumentDialog extends JDialog {
 				mapCerts, "");
 		infosPanel.putEmptyLine();
 
-		JLabel jl4 = new JLabel("Fichier à signer");
+		JLabel jl4 = new JLabel("Fichier Ã  signer");
 		JLabel jl5 = new JLabel("Fichier en sortie");
 
 		FileSystemView fsv = FileSystemView.getFileSystemView();

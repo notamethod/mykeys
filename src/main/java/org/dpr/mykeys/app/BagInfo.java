@@ -84,7 +84,7 @@ public class BagInfo implements NodeInfo {
 	 * Affecte le name.
 	 * 
 	 * @param name
-	 *            le name à affecter.
+	 *            le name Ã  affecter.
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -103,7 +103,7 @@ public class BagInfo implements NodeInfo {
 	 * Affecte le path.
 	 * 
 	 * @param path
-	 *            le path à affecter.
+	 *            le path Ã  affecter.
 	 */
 	public void setPath(String path) {
 		this.path = path;

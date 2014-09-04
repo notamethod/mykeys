@@ -44,7 +44,7 @@ import org.dpr.mykeys.ihm.windows.MykeysFrame;
 /**
  * @author Christophe Roger
  * @date 18 mai 2009 TODO: mode autonome: pas de stockage Mode sur: stockage des
- *       cl�s avec un mot de passe maitre
+ *       clï¿½s avec un mot de passe maitre
  */
 public class MyKeys {
 
