@@ -20,8 +20,8 @@ import java.util.Iterator;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
-
 import org.apache.log4j.Logger;
+import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.DEREncodableVector;
 import org.bouncycastle.asn1.DERObject;
@@ -80,7 +80,7 @@ public class TimeStampManager {
 		DERObject tstDER = asn1InputStream.readObject();
 		DERSet ds = new DERSet(tstDER);
 		Attribute a = new Attribute(new DERObjectIdentifier("r"), ds);
-		DEREncodableVector dv = new DEREncodableVector();
+		ASN1EncodableVector dv = new ASN1EncodableVector();
 		dv.add(a);
 		AttributeTable at = new AttributeTable(dv);
 		si = SignerInformation.replaceUnsignedAttributes(si, at);
@@ -178,7 +178,7 @@ public class TimeStampManager {
 
 	/**
 	 * CrÃ©ation d'un jeton d'horodatage via la date du systeme.
-	 * préférer la récup du  temps par un serveur NTP
+	 * prï¿½fï¿½rer la rï¿½cup du  temps par un serveur NTP
 	 * 
 	 * @param empreinte
 	 * @param idJeton
