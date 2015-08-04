@@ -14,7 +14,9 @@ import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class ProviderUtil {
-	public static List<String> KeyPairGeneratorList;
+	private static List<String> KeyPairGeneratorList;
+
+
 
 	final static Log log = LogFactory.getLog(ProviderUtil.class);
 
@@ -91,5 +93,13 @@ public class ProviderUtil {
 				}
 			}
 		}
+	}
+	
+	public static List<String> getKeyPairGeneratorList() {
+		if (KeyPairGeneratorList==null){
+		Security.addProvider(new BouncyCastleProvider());
+		ProviderUtil.init("BC");
+		}
+				return KeyPairGeneratorList;
 	}
 }

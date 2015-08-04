@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.windows;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.security.cert.X509Certificate;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
+
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
@@ -22,13 +24,23 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
 
 		super(owner, modal);
 		this.ksInfo = ksInfo;
+		if (ksInfo==null){
+			isAC = false;
+		}else
 		if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
 			isAC = true;
 		}
 		init();
 		this.pack();
+		this.setVisible(true);
 
 	}
+	
+public static void main(String[] args) {
+	JFrame f=null;
+	CreateCertificatDialog cr = new CreateCertificatDialog(f, null,
+			false);
+}
 
 	public class DialogAction extends AbstractAction {
 

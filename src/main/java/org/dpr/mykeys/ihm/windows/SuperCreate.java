@@ -137,7 +137,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 		mapKeyLength.put("4096 bits", "4096");
 		// fill with provider's available algorithms
 		Map<String, String> mapAlgoKey = new LinkedHashMap<String, String>();
-		for (String algo : ProviderUtil.KeyPairGeneratorList) {
+		for (String algo : ProviderUtil.getKeyPairGeneratorList()) {
 			mapAlgoKey.put(algo, algo);
 		}
 		// fill with provider's available algorithms

@@ -16,6 +16,7 @@ public class BagInfo implements NodeInfo {
 
 	String name;
 	String path;
+	//test
 
 	/**
 	 * //TODO
