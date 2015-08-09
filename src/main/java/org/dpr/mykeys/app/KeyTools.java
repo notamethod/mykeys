@@ -303,110 +303,8 @@ public class KeyTools {
 			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
 		}
 		return ks;
-
 	}
-
-	public X509Certificate genererX509(CertificateInfo certModel, boolean isAC)
-			throws Exception {
-
-		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(),
-				certModel);
-
-		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
-
-		certGen.setSerialNumber(RandomBI(30));
-		certGen.setIssuerDN(new X509Principal(new X509Principal(certModel
-				.subjectMapToX509Name())));
-		certGen.setPublicKey(certModel.getPublicKey());
-		certGen.setNotBefore(certModel.getNotBefore());
-		certGen.setNotAfter(certModel.getNotAfter());
-
-		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
-		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
-        int maxLength=-1;
-		if (isAC) {
-			//TODO: pass as parameter for server certificate
-			if (maxLength>=0){
-			certGen.addExtension(X509Extensions.BasicConstraints, true,
-					new BasicConstraints(true, maxLength));
-			}else{
-				certGen.addExtension(X509Extensions.BasicConstraints, true,
-						new BasicConstraints(true));
-			}
-		} else {
-			certGen.addExtension(X509Extensions.BasicConstraints, true,
-					new BasicConstraints(false));
-		}
-		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
-				certModel.getIntKeyUsage()));
-		// certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
-		// new AuthorityKeyIdentifierStructure( caCert));
-		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
-				new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
-
-		PolicyInformation pi = getPolicyInformation(certModel.getPolicyID(),
-				certModel.getPolicyCPS(), certModel.getPolicyNotice());
-
-		DERSequence seq = new DERSequence(pi);
-		certGen.addExtension(X509Extensions.CertificatePolicies.getId(), false,
-				seq);
-		
-		if (certModel.getCrlDistributionURL() != null) {
-			DistributionPoint[] dp = new DistributionPoint[1];
-			DEROctetString oct = new DEROctetString(certModel
-					.getCrlDistributionURL().getBytes());
-			//TODO: check which dpn to use
-			DistributionPointName dpn = new DistributionPointName(
-					new GeneralNames(new GeneralName(GeneralName.dNSName,
-							certModel.getCrlDistributionURL())));
-//			DistributionPointName dpn = new DistributionPointName(
-//					new GeneralNames(new GeneralName(GeneralName.uniformResourceIdentifier,
-//							certModel.getCrlDistributionURL())));
-			dp[0] = new DistributionPoint(dpn, null, null);
-			//TODO: add parameter
-			certGen.addExtension(X509Extensions.CRLDistributionPoints, true,
-					new CRLDistPoint(dp));
-		}
-
-		// certGen.addExtension(X509Extensions.CertificatePolicies, false,
-		// pi);
-		// PolicyInformation pi = new PolicyInformation(new
-		// DERObjectIdentifier(certProfile.getCertificatePolicyId()));
-
-		// -- Parche para el policyNotice
-		// PolicyInformation pi =
-		// getPolicyInformation(certProfile.getCertificatePolicyId(),
-		// certProfile.getCpsUrl(), certProfile.getUserNoticeText());
-		// -- /Parche para el policyNotice
-
-		// PolicyInformation pol = new
-		// PolicyInformation(X509Extensions.AuthorityKeyIdentifier);
-
-		// certGen.addExtension(X509Extensions.CertificatePolicies, false,
-		// new CertificatePolicies( certModel.getPublicKey()));
-
-		// gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
-		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
-
-		X509Certificate cert = certGen.generate(certModel.getPrivateKey());
-		try {
-			cert.checkValidity(new Date());
-		} catch (CertificateExpiredException e) {
-			if (log.isErrorEnabled()) {
-				log.error(e);
-			}
-		} catch (CertificateNotYetValidException e) {
-			if (log.isErrorEnabled()) {
-				log.error(e);
-			}
-		}
-
-		cert.verify(certModel.getPublicKey());
-
-		return cert;
-
-	}
-
+	
 	public X509Certificate[] genererX509(CertificateInfo certModel,
 			CertificateInfo certIssuer, boolean isAC) throws Exception {
 
@@ -524,8 +422,8 @@ public class KeyTools {
 		}
 
 		X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
+		//TODO: let generate expired certificate for test purpose ?
 		cert.checkValidity(new Date());
-
 		cert.verify(certIssuer.getPublicKey());
 		X509Certificate[] certChain = null;
 		// FIXME: gérer la chaine de l'émetteur

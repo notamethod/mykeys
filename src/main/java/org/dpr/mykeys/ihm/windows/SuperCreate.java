@@ -28,6 +28,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.dpr.mykeys.app.CertificateInfo;
@@ -213,6 +214,9 @@ public class SuperCreate extends JDialog implements ItemListener {
 				calendar.add(Calendar.YEAR, 5);
 				infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
 						calendar.getTime(), true);
+				infosPanel.put("aaa", JTextField.class, "notAfter",
+						calendar.getTime(), true);
+				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "3");
 				infosPanel.putEmptyLine();
 				infosPanel.put("Nom (CN)", "CN", "MyKeys Root CA");
 				infosPanel.put("Pays (C)", "C", "FR");
@@ -247,6 +251,9 @@ public class SuperCreate extends JDialog implements ItemListener {
 				calendar.add(Calendar.DAY_OF_YEAR, 60);
 				infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
 						calendar.getTime(), true);
+				infosPanel.put("aaa", JTextField.class, "notAfter",
+						calendar.getTime(), true);
+				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "3");
 				infosPanel.putEmptyLine();
 				infosPanel.put("Nom (CN)", "CN", "Nom");
 				infosPanel.put("Pays (C)", "C", "FR");

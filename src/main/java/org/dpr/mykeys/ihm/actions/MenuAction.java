@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
+import org.dpr.mykeys.ihm.windows.CreateProfilDialog;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
 import org.dpr.mykeys.ihm.windows.ImportStoreDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -73,6 +74,14 @@ public class MenuAction extends AbstractAction {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							Preferences cs = new Preferences();
+							cs.setLocationRelativeTo(MykeysFrame);
+							cs.setVisible(true);
+						}
+					});
+				} else if (action.equals("profil")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							CreateProfilDialog cs = new CreateProfilDialog(MykeysFrame, true);
 							cs.setLocationRelativeTo(MykeysFrame);
 							cs.setVisible(true);
 						}

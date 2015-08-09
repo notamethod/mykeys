@@ -32,7 +32,7 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
 		}
 		init();
 		this.pack();
-		this.setVisible(true);
+		//this.setVisible(true);
 
 	}
 	
