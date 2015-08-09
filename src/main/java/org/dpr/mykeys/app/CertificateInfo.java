@@ -52,6 +52,8 @@ public class CertificateInfo {
 	private Date notBefore;
 
 	private Date notAfter;
+	
+	private int duration ;
 
 	private byte[] digestSHA1;
 
@@ -606,4 +608,12 @@ public class CertificateInfo {
         }
         return this;
     }
+
+	public void setDuration(Integer dur) {
+		if(dur==null){
+			dur=0;
+		}
+		this.duration=dur;
+		
+	}
 }

@@ -10,6 +10,10 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
@@ -32,8 +37,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.InternalKeystores;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
@@ -51,18 +58,16 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 	protected LabelValuePanel infosPanel;
 
 	protected CertificateInfo certInfo = new CertificateInfo();
-	
 
 	public CreateProfilDialog(Frame owner, boolean modal) {
 
 		super(owner, true);
-	
 
-	
 		init();
 		this.pack();
 
 	}
+
 	public CreateProfilDialog() {
 		super();
 	}
@@ -70,10 +75,6 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 	public CreateProfilDialog(Frame owner) {
 		super(owner);
 	}
-
-	
-
-
 
 	public static void main(String[] args) {
 		JFrame f = null;
@@ -119,7 +120,7 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 		for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
 			JCheckBox item = new JCheckBox(X509Constants.keyUsageLabel[i]);
 			item.addItemListener(this);
-	
+
 			checkPanel.add(item);
 		}
 
@@ -140,15 +141,13 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 	 * @param isAC2
 	 * @return
 	 */
-	private LabelValuePanel createInfoPanel(
-			Map<String, String> mapKeyLength, Map<String, String> mapAlgoKey,
+	private LabelValuePanel createInfoPanel(Map<String, String> mapKeyLength, Map<String, String> mapAlgoKey,
 			Map<String, String> mapAlgoSig) {
 		if (infosPanel == null) {
 			infosPanel = new LabelValuePanel();
 			Map<String, String> mapAC = null;
 			try {
-				mapAC = TreeKeyStorePanel.getListCerts(
-						InternalKeystores.getACPath(), "JKS",
+				mapAC = TreeKeyStorePanel.getListCerts(InternalKeystores.getACPath(), "JKS",
 						InternalKeystores.password);
 			} catch (Exception e) {
 				//
@@ -157,49 +156,36 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 				mapAC = new HashMap<String, String>();
 			}
 			mapAC.put(" ", " ");
-			
-			
-			infosPanel.put(MyKeys.getMessage().getString("label.name"), "name", "");
-					
-		
-				infosPanel.putEmptyLine();
-				infosPanel.put("Emetteur", JComboBox.class, MyKeys.getMessage().getString("x509.issuer"), mapAC, "");
-				infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), JComboBox.class,
-						"keyLength", mapKeyLength, "2048 bits");
-				infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), JComboBox.class,
-						"algoPubKey", mapAlgoKey, "RSA");
-				infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), JComboBox.class,
-						"algoSig", mapAlgoSig, "SHA256WithRSAEncryption");
-				// subject
-				infosPanel.putEmptyLine();
-				Calendar calendar = Calendar.getInstance();
 
-				
-				infosPanel.put(
-						MyKeys.getMessage().getString("certinfo.duration"),
-						"Duration", "3");
-				infosPanel.putEmptyLine();
-		
-				
-				
-				
-				
-				
-				
-				infosPanel.put(MyKeys.getMessage().getString("x509.subject.country"), "C", "FR");
-				infosPanel.put(MyKeys.getMessage().getString("x509.subject.organisation"), "O", "Orga");
-				infosPanel.put(MyKeys.getMessage().getString("x509.subject.organisationUnit"), "OU", "Développement");
-				infosPanel.put(MyKeys.getMessage().getString("x509.subject.location"), "L", "Saint-Etienne");
-				infosPanel.put(MyKeys.getMessage().getString("x509.subject.street"), "SR", "");
-			
-				infosPanel.putEmptyLine();
-				infosPanel.put(MyKeys.getMessage().getString("x509.cdp"),
-						"CrlDistrib", "");
-				infosPanel.put(MyKeys.getMessage().getString("x509.policynotice"), "PolicyNotice", "");
-				infosPanel.put(MyKeys.getMessage().getString("x509.policycps"), "PolicyCPS", "");
-			
-			}
-		
+			infosPanel.put(MyKeys.getMessage().getString("label.name"), "name", "");
+
+			infosPanel.putEmptyLine();
+			infosPanel.put(MyKeys.getMessage().getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
+			infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), JComboBox.class, "keyLength", mapKeyLength,
+					"2048 bits");
+			infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey,
+					"RSA");
+			infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), JComboBox.class, "algoSig", mapAlgoSig,
+					"SHA256WithRSAEncryption");
+			// subject
+			infosPanel.putEmptyLine();
+			Calendar calendar = Calendar.getInstance();
+
+			infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "3");
+			infosPanel.putEmptyLine();
+
+			infosPanel.put(MyKeys.getMessage().getString("x509.subject.country"), "C", "FR");
+			infosPanel.put(MyKeys.getMessage().getString("x509.subject.organisation"), "O", "Orga");
+			infosPanel.put(MyKeys.getMessage().getString("x509.subject.organisationUnit"), "OU", "Développement");
+			infosPanel.put(MyKeys.getMessage().getString("x509.subject.location"), "L", "Saint-Etienne");
+			infosPanel.put(MyKeys.getMessage().getString("x509.subject.street"), "SR", "");
+
+			infosPanel.putEmptyLine();
+			infosPanel.put(MyKeys.getMessage().getString("x509.cdp"), "CrlDistrib", "");
+			infosPanel.put(MyKeys.getMessage().getString("x509.policynotice"), "PolicyNotice", "");
+			infosPanel.put(MyKeys.getMessage().getString("x509.policycps"), "PolicyCPS", "");
+
+		}
 
 		return infosPanel;
 
@@ -229,18 +215,12 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 			} else if (command.equals("OK")) {
 				try {
 					fillCertInfo();
-					X509Certificate[] xCerts = null;
-					KeyTools ktools = new KeyTools();
-					xCerts = ktools.genererX509(certInfo, (String) infosPanel
-							.getElements().get("emetteur"), false);
-
-					//ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
+					saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"));
 					CreateProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {
 
-					MykeysFrame.showError(CreateProfilDialog.this,
-							e.getMessage());
+					MykeysFrame.showError(CreateProfilDialog.this, e.getMessage());
 					e.printStackTrace();
 				}
 
@@ -250,7 +230,7 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 
 		}
 
-		public void fillCertInfo() {
+		void fillCertInfo() {
 			Map<String, Object> elements = infosPanel.getElements();
 			Set<String> keys = elements.keySet();
 			Iterator<String> it = keys.iterator();
@@ -258,26 +238,37 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 				String key = it.next();
 			}
 
-
 			// certInfo.setX509PrincipalMap(elements);
 			HashMap<String, String> subjectMap = new HashMap<String, String>();
+			
 			certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
 			certInfo.setAlgoSig((String) elements.get("algoSig"));
 			certInfo.setKeyLength((String) elements.get("keyLength"));
-			certInfo.setAlias((String) elements.get("alias"));
-			certInfo.setNotBefore((Date) elements.get("notBefore"));
-			certInfo.setNotAfter((Date) elements.get("notAfter"));
-
-			char[] pkPassword = ((String) elements.get("pwd1")).toCharArray();
+			certInfo.setDuration((Integer) elements.get("duration"));
 
 			certInfo.setSubjectMap(elements);
-			certInfo.setPassword(pkPassword);
 
 			certInfo.setCrlDistributionURL(((String) elements.get("CrlDistrib")));
 			certInfo.setPolicyNotice(((String) elements.get("PolicyNotice")));
 			certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
-
 		}
+
+	}
+
+	public void saveToFile(Map<String, Object> elements, String name) throws ManageProfilException, IOException {
+		if (StringUtils.isBlank(name)) {
+			throw new ManageProfilException("nom obligatoire");
+		}
+		File f = new File(KSConfig.getCfgPath(), name+".mkprof");
+		if (f.exists()) {
+			throw new ManageProfilException("Le profil existe déjà");
+		}
+		Properties p = new Properties();
+		for (Map.Entry<String, Object> entry : elements.entrySet()) {
+			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+			p.setProperty(entry.getKey(), (String)entry.getValue());
+		}
+		p.store(new FileOutputStream(f), "");
 
 	}
 

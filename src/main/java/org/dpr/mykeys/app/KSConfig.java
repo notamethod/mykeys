@@ -55,7 +55,7 @@ public class KSConfig {
 
 	}
 
-	static String getCfgPath() {
+	public static String getCfgPath() {
 		return System.getProperty("user.home") + File.separator + cfgPathName;
 	}
 
