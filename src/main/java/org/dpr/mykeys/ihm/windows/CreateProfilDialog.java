@@ -32,6 +32,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -124,8 +125,21 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 			checkPanel.add(item);
 		}
 
+		  JPanel checkPanelExt = new JPanel(new GridLayout(0, 3));
+
+	         border = BorderFactory.createTitledBorder("Extended Key usage");
+	         checkPanelExt.setBorder(border);
+	        for (int i = 0; i < X509Constants.ExtendedkeyUsageLabel.length; i++) {
+	            JCheckBox item = new JCheckBox(X509Constants.ExtendedkeyUsageLabel[i]);
+	            item.addItemListener(this);
+
+	            checkPanelExt.add(item);
+	        }
+	        
 		jp.add(panelInfo);
 		jp.add(checkPanel);
+		jp.add(checkPanelExt);
+	
 		jp.add(new OkCancelPanel(dAction, FlowLayout.RIGHT));
 
 	}
@@ -181,6 +195,7 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 			infosPanel.put(MyKeys.getMessage().getString("x509.subject.street"), "SR", "");
 
 			infosPanel.putEmptyLine();
+		//	infosPanel.put(MyKeys.getMessage().getString("x509.cdp"), JCheckBox.class, "CrlDistribObli", false, false); 
 			infosPanel.put(MyKeys.getMessage().getString("x509.cdp"), "CrlDistrib", "");
 			infosPanel.put(MyKeys.getMessage().getString("x509.policynotice"), "PolicyNotice", "");
 			infosPanel.put(MyKeys.getMessage().getString("x509.policycps"), "PolicyCPS", "");
