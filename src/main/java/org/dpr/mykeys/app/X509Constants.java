@@ -8,6 +8,9 @@ public class X509Constants {
 			"keyAgreement", "keyCertSign", "cRLSign", "encipherOnly",
 			"decipherOnly" };
 
+	   public static String[] ExtendedkeyUsageLabel = new String[] { "code signing",
+	             };
+	   
 	public static int[] keyUsageInt = new int[] { KeyUsage.digitalSignature,
 			KeyUsage.nonRepudiation, KeyUsage.keyEncipherment,
 			KeyUsage.dataEncipherment, KeyUsage.keyAgreement,
