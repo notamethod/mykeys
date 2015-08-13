@@ -1,27 +1,21 @@
 package org.dpr.mykeys.ihm.windows;
 
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.security.cert.X509Certificate;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -30,34 +24,28 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
-import javax.swing.JButton;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.windows.CreateCertificatDialog.DialogAction;
-import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingutils.SWComponent;
 
-public class CreateCertProfilDialog extends JDialog implements ItemListener {
+public class CreateCertProfilDialog extends JDialog implements ItemListener, ActionListener {
 
 	protected LabelValuePanel infosPanel;
 
@@ -93,8 +81,7 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener {
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
 		setContentPane(jp);
-//		ComboModel aModel = new ComboBoxModel();
-//		JComboBox comboProf = new JComboBox();
+		
 		
 		LabelValuePanel panelInfo0 = new LabelValuePanel();
 		Map<String, String> mapProfiles = new HashMap<String, String>();
@@ -105,7 +92,14 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener {
 		    }
 		    mapProfiles.put(profile, profile);
 		}
-		panelInfo0.put("Profil", JComboBox.class, "profil", mapProfiles);
+//		ComboBoxModel aModel = new DefaultComboBoxModel();
+//        JComboBox comboProf = new JComboBox(getProfiles());
+//        JPanel jpProfil = new JPanel();
+//        jpProfil.setLayout(new FlowLayout(FlowLayout.LEADING));
+//        jpProfil.add(new JLabel("Profil: "));
+//        jpProfil.add(comboProf);
+       SWComponent swc =new SWComponent("Profil", JComboBox.class, "profil", mapProfiles, null, this);
+		panelInfo0.put(swc);
 		JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		panelInfo.setMinimumSize(new Dimension(400, 100));
 
@@ -150,7 +144,7 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener {
 
 	            checkPanelExt.add(item);
 	        }
-	        
+	   //     jp.add(jpProfil);
 	    jp.add(panelInfo0);
 		jp.add(panelInfo);
 		jp.add(checkPanel);
@@ -227,6 +221,7 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener {
 		Object source = e.getItemSelectable();
 		JCheckBox jc = (JCheckBox) source;
 		String val = jc.getText();
+		System.out.println("changed !");
 		for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
 			if (val.equals(X509Constants.keyUsageLabel[i])) {
 				certInfo.getKeyUsage()[i] = jc.isSelected();
@@ -314,6 +309,13 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener {
 	    });
 	   return list;
 	}
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        System.out.println("houlala");
+        
+    }
 	
 	
 	
