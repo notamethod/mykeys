@@ -7,4 +7,9 @@ public class ManageProfilException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
+    public ManageProfilException(String string, Exception e)
+    {
+       super(string, e);
+    }
+
 }

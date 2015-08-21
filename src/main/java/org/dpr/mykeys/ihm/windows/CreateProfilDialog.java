@@ -49,6 +49,7 @@ import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.service.ProfileManager;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog.DialogAction;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
@@ -230,7 +231,8 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 			} else if (command.equals("OK")) {
 				try {
 					fillCertInfo();
-					saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"));
+					ProfileManager pman = new ProfileManager();
+					pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"));
 					CreateProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {
@@ -270,21 +272,6 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 
 	}
 
-	public void saveToFile(Map<String, Object> elements, String name) throws ManageProfilException, IOException {
-		if (StringUtils.isBlank(name)) {
-			throw new ManageProfilException("nom obligatoire");
-		}
-		File f = new File(KSConfig.getCfgPath(), name+".mkprof");
-		if (f.exists()) {
-			throw new ManageProfilException("Le profil existe déjà");
-		}
-		Properties p = new Properties();
-		for (Map.Entry<String, Object> entry : elements.entrySet()) {
-			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
-			p.setProperty(entry.getKey(), (String)entry.getValue());
-		}
-		p.store(new FileOutputStream(f), "");
 
-	}
 
 }
