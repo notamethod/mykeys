@@ -8,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+import org.dpr.mykeys.ihm.windows.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.CreateProfilDialog;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
@@ -86,6 +87,14 @@ public class MenuAction extends AbstractAction {
 							cs.setVisible(true);
 						}
 					});
+		           } else if (action.equals("certprof")) {
+	                    SwingUtilities.invokeLater(new Runnable() {
+	                        public void run() {
+	                            CreateCertProfilDialog cs = new CreateCertProfilDialog(MykeysFrame, true);
+	                            cs.setLocationRelativeTo(MykeysFrame);
+	                            cs.setVisible(true);
+	                        }
+	                    });
 				} else if (action.equals("signFile")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
