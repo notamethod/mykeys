@@ -26,39 +26,48 @@ public class CommonsActions {
 		exportCert(null, storeFormat, path, password, certInfo, false);
 	}
 
+    public void exportCert(KeyStoreInfo ksInfo, StoreFormat pkcs12, String path, char[] password,
+            CertificateInfo certInfo, boolean isExportCle) throws Exception 
+    {
+        exportCert( ksInfo,  pkcs12,  path,  password,
+                 certInfo,  isExportCle, null);
+        
+    }
+    
 	public void exportCert(KeyStoreInfo ksInfoIn, StoreFormat storeFormat,
-			String path, char[] password, CertificateInfo certInfo,
-			boolean isExportCle) throws Exception {
+			String path, char[] passwordExport, CertificateInfo certInfo,
+			boolean isExportCle,char[] privKeyPwd) throws Exception {
 		StoreModel storeModel = StoreModel.P12STORE;
 		KeyStoreInfo ksInfoOut = new KeyStoreInfo("store", path, storeModel,
 				storeFormat);
-		ksInfoOut.setPassword(password);
+		ksInfoOut.setPassword(passwordExport);
 		KeyTools kt = new KeyTools();
 		if (isExportCle && certInfo.getPrivateKey() == null) {
 			CertificateInfo certInfoEx = new CertificateInfo();
 			certInfoEx.setAlias(certInfo.getAlias());
 			certInfoEx.setCertificate(certInfo.getCertificate());
 			certInfoEx.setCertificateChain(certInfo.getCertificateChain());
-			certInfoEx.setPassword(password);
+			certInfoEx.setPassword(privKeyPwd);
 			KeyStore kstore;
-
+			boolean hasPrivateKey=false;
 			kstore = kt.loadKeyStore(ksInfoIn.getPath(),
 					ksInfoIn.getStoreFormat(), ksInfoIn.getPassword());
 			if (kstore.isKeyEntry(certInfoEx.getAlias())) {
-				// log.
+			    hasPrivateKey=true;
 
 			}
 			char pwd[]=ksInfoIn.getPassword();
 			if(ksInfoIn.getStoreType().equals(StoreType.INTERNAL)){
-				pwd=certInfoEx.getPassword();
+			//	pwd=certInfoEx.getPassword();
+				certInfoEx.setPassword(pwd);
 			}
 			certInfoEx.setPrivateKey(kt.getPrivateKey(certInfoEx.getAlias(),
-					kstore, pwd));
+					kstore, certInfoEx.getPassword()));
 
 			certInfo = certInfoEx;
 		}
 		try {
-			KeyStore ks = kt.createKeyStore(storeFormat, path, password);
+			KeyStore ks = kt.createKeyStore(storeFormat, path, ksInfoOut.getPassword());
 			// cloner le certinfo
 
 			kt.addCertToKeyStoreNew(certInfo.getCertificate(), ksInfoOut,
@@ -151,5 +160,7 @@ public class CommonsActions {
 		}
 
 	}
+
+
 
 }

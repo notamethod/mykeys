@@ -13,9 +13,11 @@ import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
+import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 
 public class CreateCertificatDialog extends SuperCreate implements ItemListener {
 
@@ -76,7 +78,15 @@ public static void main(String[] args) {
 						.toCharArray();
 
 				certInfo.setSubjectMap(elements);
-				certInfo.setPassword(pkPassword);
+				
+			    if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+			        certInfo.setPassword(InternalKeystores.password.toCharArray());
+			    }else{
+			        certInfo.setPassword(pkPassword);
+			    }
+
+
+	
 				X509Certificate[] xCerts = null;
 
 				try {

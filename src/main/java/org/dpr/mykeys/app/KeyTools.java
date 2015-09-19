@@ -423,7 +423,14 @@ public class KeyTools {
 
 		X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
 		//TODO: let generate expired certificate for test purpose ?
-		cert.checkValidity(new Date());
+		try
+        {
+            cert.checkValidity(new Date());
+        }
+        catch (Exception e)
+        {
+           log.warn("invalid certificate", e);
+        }
 		cert.verify(certIssuer.getPublicKey());
 		X509Certificate[] certChain = null;
 		// FIXME: gÃ©rer la chaine de l'Ã©metteur
@@ -461,6 +468,10 @@ public class KeyTools {
 			throws KeyToolsException {
 		KeyStore kstore = loadKeyStore(ksInfo.getPath(),
 				ksInfo.getStoreFormat(), ksInfo.getPassword());
+		if (ksInfo.getStoreType().equals(StoreType.INTERNAL)){
+		    certInfo.setPassword(InternalKeystores.password.toCharArray());
+		}
+	
 		saveCertChain(kstore, xCerts, certInfo);
 		saveKeyStore(kstore, ksInfo);
 	}
@@ -491,7 +502,7 @@ public class KeyTools {
 			if (certInfo.getPrivateKey() == null) {
 				// kstore.setCertificateEntry(certInfo.getAlias(), cert);
 			} else {
-
+//FIXME: isinternal: password = kspwd
 				kstore.setKeyEntry(certInfo.getAlias(),
 						certInfo.getPrivateKey(), certInfo.getPassword(),
 						xCerts);
@@ -1027,7 +1038,7 @@ public class KeyTools {
 			fillCertInfo(ks, infoEmetteur, aliasEmetteur);
 			infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur,
 					password));
-			return genererX509(certInfo, infoEmetteur, isAC);
+			return genererX509CodeSigning(certInfo, infoEmetteur, isAC);
 		} else {
 			return genererX509(certInfo, certInfo, isAC);
 		}
@@ -1256,6 +1267,118 @@ public class KeyTools {
 		IOUtils.write(crl.getEncoded(), output);
 
 	}
+	
+	
+	@SuppressWarnings("deprecation")
+    public X509Certificate[] genererX509CodeSigning(CertificateInfo certModel,
+            CertificateInfo certIssuer, boolean isAC) throws Exception {
+
+	    System.out.println("*********Méthode modifiée !!!!!");
+        keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(),
+                certModel);
+
+        X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+        BigInteger bi = RandomBI(30);
+        certGen.setSerialNumber(bi);
+        if (StringUtils.isBlank(certModel.getAlias())) {
+            certModel.setAlias(bi.toString(16));
+        }
+        if (certIssuer.getCertificate() != null) {
+            certGen.setIssuerDN(certIssuer.getCertificate()
+                    .getSubjectX500Principal());
+        } else {
+            certGen.setIssuerDN(new X509Principal(new X509Principal(certModel
+                    .subjectMapToX509Name())));
+        }
+
+        certGen.setPublicKey(certModel.getPublicKey());
+        certGen.setNotBefore(certModel.getNotBefore());
+        certGen.setNotAfter(certModel.getNotAfter());
+
+        certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
+        certGen.setSignatureAlgorithm(certModel.getAlgoSig());
+
+
+            certGen.addExtension(X509Extensions.BasicConstraints, true,
+                    new BasicConstraints(false));
+     
+        certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
+                certModel.getIntKeyUsage()));
+        // certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
+        // new AuthorityKeyIdentifierStructure( caCert));
+        certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
+                new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
+
+        // FIXME: à vérifier en cas de auto signé
+        if (certIssuer.getCertificate() != null) {
+            certGen.addExtension(
+                    X509Extensions.AuthorityKeyIdentifier,
+                    false,
+                    new AuthorityKeyIdentifierStructure(certIssuer
+                            .getCertificate()));
+        } else {
+            certGen.addExtension(
+                    X509Extensions.AuthorityKeyIdentifier,
+                    false,
+                    new AuthorityKeyIdentifierStructure(certModel
+                            .getPublicKey()));
+        }
+
+        if (certModel.getPolicyCPS() != null) {
+            PolicyInformation pi = getPolicyInformation(
+                    certModel.getPolicyID(), certModel.getPolicyCPS(),
+                    certModel.getPolicyNotice());
+
+            DERSequence seq = new DERSequence(pi);
+            certGen.addExtension(X509Extensions.CertificatePolicies.getId(),
+                    false, seq);
+        }
+        // gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
+        // new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
+
+        // point de distribution des CRL
+        if (certModel.getCrlDistributionURL() != null) {
+            DistributionPoint[] dp = new DistributionPoint[1];
+            DEROctetString oct = new DEROctetString(certModel
+                    .getCrlDistributionURL().getBytes());
+            DistributionPointName dpn = new DistributionPointName(
+                    new GeneralNames(new GeneralName(GeneralName.dNSName,
+                            certModel.getCrlDistributionURL())));
+            dp[0] = new DistributionPoint(dpn, null, null);
+            certGen.addExtension(X509Extensions.CRLDistributionPoints, false,
+                    new CRLDistPoint(dp));
+        } else {
+            if (certIssuer.getCertificate() != null) {
+                CRLDistPoint dpoint = getDistributionPoints(certIssuer
+                        .getCertificate());
+                if (dpoint != null) {
+                    certGen.addExtension(X509Extensions.CRLDistributionPoints,
+                            false, dpoint);
+                }
+            }
+        }
+
+        certGen.addExtension(X509Extensions.ExtendedKeyUsage, false,
+                new ExtendedKeyUsage(KeyPurposeId.id_kp_codeSigning));
+    
+          
+        X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
+        cert.checkValidity(new Date());
+
+        cert.verify(certIssuer.getPublicKey());
+        X509Certificate[] certChain = null;
+        // FIXME: gérer la chaine de l'émetteur
+        if (certIssuer.getCertificate() != null) {
+            certChain = new X509Certificate[2];
+            certChain[0] = cert;
+            certChain[1] = certIssuer.getCertificate();
+        } else {
+            certChain = new X509Certificate[] { cert };
+        }
+
+        return certChain;
+
+    }
 
 
 

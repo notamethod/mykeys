@@ -10,6 +10,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +38,7 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog.DialogAction;
@@ -231,10 +233,13 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy notice", "PolicyNotice", "");
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
-						false);
-				infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2", InternalKeystores.password,
-						false);
+				if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+				    infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
+	                        false);
+	                infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2", InternalKeystores.password,
+	                        false);
+	                }
+			
 			} else {
 				infosPanel.put("Alias (nom du certificat)", "alias", "");
 				infosPanel.putEmptyLine();
@@ -267,8 +272,12 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy notice", "PolicyNotice", "");
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", "", true);
-				infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2", "", true);
+                if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+                    infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
+                            true);
+                    infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2", InternalKeystores.password,
+                            true);
+                    }
 			}
 		}
 		return infosPanel;
@@ -325,7 +334,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 			while (it.hasNext()) {
 				String key = it.next();
 			}
-			if (elements.get("alias") == null || elements.get("pwd1") == null) {
+			if (elements.get("alias") == null || (elements.get("pwd1") == null && !ksInfo.getStoreType().equals(StoreType.INTERNAL))) {
 				MykeysFrame.showError(SuperCreate.this, "Champs obligatoires");
 				return;
 			}
@@ -338,11 +347,12 @@ public class SuperCreate extends JDialog implements ItemListener {
 			certInfo.setAlias((String) elements.get("alias"));
 			certInfo.setNotBefore((Date) elements.get("notBefore"));
 			certInfo.setNotAfter((Date) elements.get("notAfter"));
-
+			if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)){
 			char[] pkPassword = ((String) elements.get("pwd1")).toCharArray();
-
-			certInfo.setSubjectMap(elements);
 			certInfo.setPassword(pkPassword);
+			}
+			certInfo.setSubjectMap(elements);
+			
 
 			certInfo.setCrlDistributionURL(((String) elements.get("CrlDistrib")));
 			certInfo.setPolicyNotice(((String) elements.get("PolicyNotice")));
