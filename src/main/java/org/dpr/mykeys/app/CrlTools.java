@@ -163,7 +163,7 @@ public class CrlTools {
 		X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
 		// crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
 		crlGen.setIssuerDN(certSign.getCertificate().getSubjectX500Principal());
-		String signAlgo = "SHA1WITHRSAENCRYPTION";
+		String signAlgo = "SHA256WITHRSAENCRYPTION";
 		crlGen.setThisUpdate(crlInfo.getThisUpdate());
 		crlGen.setNextUpdate(crlInfo.getNextUpdate());
 		crlGen.setSignatureAlgorithm(signAlgo);
