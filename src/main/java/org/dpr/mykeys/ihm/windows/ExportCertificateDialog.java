@@ -185,8 +185,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 // saisie mot de passe
                 char[] password = null;
                 char[] privKeyPwd = null;
-                boolean isExportCle = (Boolean) infosPanel.getElements().get(
+                Object exportCle=infosPanel.getElements().get(
                         "isExportKey");
+                boolean isExportCle = exportCle==null ?false:(Boolean)exportCle;
 
 
                 KeyTools kt = new KeyTools();
@@ -194,7 +195,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                         "formatCert");
                 if (isExportCle)
                 {
-                    privKeyPwd = MykeysFrame.showPasswordDialog(null, "mot de passe de la clé privée");
+                    privKeyPwd = MykeysFrame.showPasswordDialog(null, "mot de passe de la clï¿½ privï¿½e");
                 }
                 if (format.equalsIgnoreCase("pkcs12"))
                 {
