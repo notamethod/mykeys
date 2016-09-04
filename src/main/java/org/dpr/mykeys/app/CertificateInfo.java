@@ -31,7 +31,17 @@ public class CertificateInfo {
 
 	private String algoPubKey;
 
+	public String getIssuer() {
+		return issuer;
+	}
+
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
+	}
+
 	private String algoSig;
+	
+	private String issuer;
 
 	private char[] password;
 

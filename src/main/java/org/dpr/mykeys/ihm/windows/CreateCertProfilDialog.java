@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.security.cert.X509Certificate;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -39,10 +41,13 @@ import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.model.FrameModel;
+import org.dpr.mykeys.ihm.service.CertificateManager;
 import org.dpr.mykeys.ihm.service.ProfileManager;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.SWComponent;
@@ -51,6 +56,7 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
 {
 
     protected LabelValuePanel infosPanel;
+    protected LabelValuePanel panelInfoVisible;
 
     protected CertificateInfo certInfo = new CertificateInfo();
     
@@ -92,8 +98,8 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
         jp.setLayout(bl);
         setContentPane(jp);
 
-
-        LabelValuePanel panelInfoVisible = new LabelValuePanel();
+        FrameModel model = new FrameModel();
+         panelInfoVisible = new LabelValuePanel(model);
         Map<String, String> mapProfiles = new HashMap<String, String>();
         mapProfiles.put("", "");
         for (String profile : getProfiles())
@@ -113,11 +119,11 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
         SWComponent swc = new SWComponent("Profil", JComboBox.class, "profil", mapProfiles, null, this);
         panelInfoVisible.put(swc);
         panelInfoVisible.put(MyKeys.getMessage().getString("label.name"), "name", "");
-        panelInfoVisible.put(MyKeys.getMessage().getString("x509.subject.country"), "C", "FR");
-        panelInfoVisible.put(MyKeys.getMessage().getString("x509.subject.organisation"), "O", "Orga");
-        panelInfoVisible.put(MyKeys.getMessage().getString("x509.subject.organisationUnit"), "OU", "Développement");
-        panelInfoVisible.put(MyKeys.getMessage().getString("x509.subject.location"), "L", "Saint-Etienne");
-        panelInfoVisible.put(MyKeys.getMessage().getString("x509.subject.street"), "SR", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.country"), "C", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.organisation"), "O", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.organisationUnit"), "OU", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.location"), "L", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.street"), "SR", "");
 
 
         JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -213,18 +219,18 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
 
 
             infosPanel.putEmptyLine();
-            infosPanel.put(MyKeys.getMessage().getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
-            infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), JComboBox.class, "keyLength", mapKeyLength,
-                    "2048 bits");
-            infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey,
-                    "RSA");
-            infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), JComboBox.class, "algoSig", mapAlgoSig,
-                    "SHA256WithRSAEncryption");
+            infosPanel.putDisabled(MyKeys.getMessage().getString("x509.issuer"), "emetteur", "");
+          infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), "keyLength", 
+                  "");
+            infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"),  "algoPubKey", "");
+      
+            infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), "algoSig",
+                    "");
             // subject
             infosPanel.putEmptyLine();
             Calendar calendar = Calendar.getInstance();
 
-            infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "3");
+            infosPanel.putDisabled(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "");
             infosPanel.putEmptyLine();
 
 
@@ -233,6 +239,7 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
             infosPanel.put(MyKeys.getMessage().getString("x509.cdp"), "CrlDistrib", "");
             infosPanel.put(MyKeys.getMessage().getString("x509.policynotice"), "PolicyNotice", "");
             infosPanel.put(MyKeys.getMessage().getString("x509.policycps"), "PolicyCPS", "");
+            infosPanel.setVisible(false);
 
         }
 
@@ -274,8 +281,14 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
                 try
                 {
                     fillCertInfo();
-                    ProfileManager pman = new ProfileManager();
-                    pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"));
+                    X509Certificate[] xCerts = null;
+
+    			
+    					CertificateManager cm = new CertificateManager();
+    					KeyTools ktools = new KeyTools();
+    					xCerts = cm.generateX509(certInfo);
+    					//TODO manage ksinfo
+    					ktools.addCertToKeyStoreNew(xCerts, null, certInfo);
                     CreateCertProfilDialog.this.setVisible(false);
 
                 }
@@ -353,6 +366,7 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
                 {
                     profile=pman.loadProfile(strProf);
                     fillCert(profile);
+                 
                 }
                 catch (ManageProfilException e1)
                 {
@@ -365,7 +379,15 @@ public class CreateCertProfilDialog extends JDialog implements ItemListener, Act
 
     private void fillCert(Properties myProfile)
     {
-        // TODO Auto-generated method stub
+    	 Enumeration<?> e = myProfile.propertyNames();
+
+    	    while (e.hasMoreElements()) {
+    	      String key = (String) e.nextElement();
+    	      System.out.println(key + " -- " + myProfile.getProperty(key));
+    	      panelInfoVisible.set( key, myProfile.getProperty(key));
+    	      infosPanel.set( key, myProfile.getProperty(key));
+    	    }
+    	   
         
     }
 

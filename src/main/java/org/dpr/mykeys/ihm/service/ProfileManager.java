@@ -14,7 +14,7 @@ import org.dpr.mykeys.ihm.windows.ManageProfilException;
 public class ProfileManager
 {
     public void saveToFile(Map<String, Object> elements, String name) throws ManageProfilException, IOException
-    {
+    { 
         if (StringUtils.isBlank(name))
         {
             throw new ManageProfilException("nom obligatoire");
@@ -22,7 +22,7 @@ public class ProfileManager
         File f = new File(KSConfig.getCfgPath(), name + ".mkprof");
         if (f.exists())
         {
-            throw new ManageProfilException("Le profil existe déjà ");
+            throw new ManageProfilException("Le profil existe dï¿½jï¿½");
         }
         Properties p = new Properties();
         for (Map.Entry<String, Object> entry : elements.entrySet())

@@ -156,6 +156,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	DefaultMutableTreeNode rootNode;
 
 	DefaultMutableTreeNode cliNode;
+	
+	DefaultMutableTreeNode adminNode;
 
 	DefaultMutableTreeNode acNode;
 	//
@@ -176,6 +178,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 				"store.ac.name"));
 		cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
 				"store.cert.name"));
+		adminNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+				"admin.name"));
 		//
 		// crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
 		// "store.crl.name"));
@@ -203,6 +207,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
 		treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
+		treeModel.insertNodeInto(adminNode, rootNode, rootNode.getChildCount());
 		// treeModel.insertNodeInto(crlNode, rootNode,
 		// rootNode.getChildCount());
 		// treeModel.insertNodeInto(sandBoxNode, rootNode,
@@ -292,6 +297,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		// addObject(nodei, "[Vide]", false);
 		nodei = addObject(cliNode, InternalKeystores.getCertKeystore(), true);
+		nodei = addObject(adminNode, MyKeys.getMessage().getString(
+				"profil.name"), true);
 		// addObject(nodei, "[Vide]", false);
 
 	}

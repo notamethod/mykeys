@@ -217,10 +217,8 @@ public class MykeysFrame extends JFrame implements WindowListener
         JMenuItem itemLog = new JMenuItem(new MenuAction(this,
                 messages.getString("options")));
         itemLog.setActionCommand("options");
-        JMenuItem menuCrl = new JMenuItem(new MenuAction(this,
-                messages.getString("crl.add")));
-        menuCrl.setActionCommand("addCrl");
-        menuOptions.add(menuCrl);
+
+        menuOptions.add(itemLog);
 
         JMenuItem menu3 = new JMenuItem(new MenuAction(this, "Profil"));
         menu3.setActionCommand("profil");

@@ -229,7 +229,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		} catch (KeyToolsException e1) {
 			// FIXME
-		    ksInfo.setPassword(null);
 			e1.printStackTrace();
 		}
 

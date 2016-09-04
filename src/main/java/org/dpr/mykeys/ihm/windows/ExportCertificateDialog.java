@@ -185,9 +185,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 // saisie mot de passe
                 char[] password = null;
                 char[] privKeyPwd = null;
-                Object exportCle=infosPanel.getElements().get(
+                boolean isExportCle = (Boolean) infosPanel.getElements().get(
                         "isExportKey");
-                boolean isExportCle = exportCle==null ?false:(Boolean)exportCle;
 
 
                 KeyTools kt = new KeyTools();
