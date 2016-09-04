@@ -1,6 +1,5 @@
 package org.dpr.mykeys.app;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,10 +51,16 @@ public class CrlTools {
 	private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
 
 	/**
-	 * Chargement certificat X509 à partir d'un flux.
+	 * Chargement certificat X509 � partir d'un flux.
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * b&gt;Algorithme : &lt;/b&gt;
+	 * EBUT
+	 *    
+	 * IN
+	 * </pre>
 	 * 
 	 * @param aCertStream
 	 * @return
@@ -63,7 +68,7 @@ public class CrlTools {
 	 */
 	private static X509Certificate loadX509Cert(InputStream aCertStream)
 			throws GeneralSecurityException {
-		// création d'une fabrique de certificat X509
+		// cr�ation d'une fabrique de certificat X509
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
 		// chargement du certificat
@@ -144,6 +149,13 @@ public class CrlTools {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *    
+	 * FIN
+	 * </pre>
+	 * 
 	 * @param certSign
 	 * @param crlInfo
 	 * @return
@@ -163,11 +175,15 @@ public class CrlTools {
 		X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
 		// crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
 		crlGen.setIssuerDN(certSign.getCertificate().getSubjectX500Principal());
-		String signAlgo = "SHA256WITHRSAENCRYPTION";
+		String signAlgo = "SHA1WITHRSAENCRYPTION";
 		crlGen.setThisUpdate(crlInfo.getThisUpdate());
 		crlGen.setNextUpdate(crlInfo.getNextUpdate());
 		crlGen.setSignatureAlgorithm(signAlgo);
-
+		if (!crlInfo.getListNumSer().isEmpty()){
+			for(BigInteger bi : crlInfo.getListNumSer()){
+				crlGen.addCRLEntry(bi, new Date(), CRLReason.privilegeWithdrawn);
+			}
+		}		
 		crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 				new AuthorityKeyIdentifierStructure(certSign.getCertificate()));
 		crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
@@ -183,6 +199,12 @@ public class CrlTools {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *    
+	 * FIN
+	 * </pre>
 	 * 
 	 * @param xCerts
 	 * @throws IOException

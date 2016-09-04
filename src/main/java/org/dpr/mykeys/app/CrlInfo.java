@@ -4,8 +4,9 @@
 package org.dpr.mykeys.app;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 
 /**
  * @author Buck
@@ -16,6 +17,8 @@ public class CrlInfo implements NodeInfo {
 	Date nextUpdate;
 	String name;
 	String path;
+
+	List<BigInteger> listNumSer = new ArrayList<BigInteger>();
 
 	BigInteger number = BigInteger.ONE;
 
@@ -32,7 +35,7 @@ public class CrlInfo implements NodeInfo {
 	 * Affecte le thisUpdate.
 	 * 
 	 * @param thisUpdate
-	 *            le thisUpdate à affecter.
+	 *            le thisUpdate � affecter.
 	 */
 	public void setThisUpdate(Date thisUpdate) {
 		this.thisUpdate = thisUpdate;
@@ -47,11 +50,17 @@ public class CrlInfo implements NodeInfo {
 		return nextUpdate;
 	}
 
+	public void addNumSer(String numser) {
+		BigInteger bi = new BigInteger(numser);
+		listNumSer.add(bi);
+
+	}
+
 	/**
 	 * Affecte le nextUpdate.
 	 * 
 	 * @param nextUpdate
-	 *            le nextUpdate à affecter.
+	 *            le nextUpdate � affecter.
 	 */
 	public void setNextUpdate(Date nextUpdate) {
 		this.nextUpdate = nextUpdate;
@@ -70,7 +79,7 @@ public class CrlInfo implements NodeInfo {
 	 * Affecte le number.
 	 * 
 	 * @param number
-	 *            le number à affecter.
+	 *            le number � affecter.
 	 */
 	public void setNumber(BigInteger number) {
 		this.number = number;
@@ -81,6 +90,12 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
 	 * 
 	 * @return
 	 * 
@@ -97,6 +112,12 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
 	 * 
 	 * @return
 	 * 
@@ -113,6 +134,12 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
 	 * 
 	 * @param name
 	 * 
@@ -129,6 +156,12 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
 	 * 
 	 * @param path
 	 * 
@@ -145,6 +178,12 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
 	 * 
 	 * @return
 	 * 
@@ -161,6 +200,12 @@ public class CrlInfo implements NodeInfo {
 	 * 
 	 * <BR>
 	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *     
+	 * FIN
+	 * </pre>
 	 * 
 	 * @param isOpen
 	 * 
@@ -169,7 +214,10 @@ public class CrlInfo implements NodeInfo {
 	@Override
 	public void setOpen(boolean isOpen) {
 		// TODO Auto-generated method stub
+	}
 
+	public List<BigInteger> getListNumSer() {
+		return listNumSer;
 	}
 
 }

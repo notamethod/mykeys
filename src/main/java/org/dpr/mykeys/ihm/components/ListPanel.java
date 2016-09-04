@@ -48,8 +48,10 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
+import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
@@ -90,15 +92,22 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (!e.getValueIsAdjusting()) {
-
+			
 				log.trace(e.getSource().getClass());
 				if (e.getSource() instanceof JList) {
 					if (((JList) e.getSource()).getSelectedValue() instanceof CertificateInfo) {
-						displayCertDetail((CertificateInfo) ((JList) e
-								.getSource()).getSelectedValue());
+						CertificateInfo cert = (CertificateInfo) ((JList) e
+								.getSource()).getSelectedValue();
+						displayCertDetail(cert);
 						if (ksInfo.isOpen()) {
 							exportButton.setEnabled(true);
 							deleteButton.setEnabled(true);
+						}
+						if (cert.getCertificate().getKeyUsage()[5]) {
+							crlButton.setEnabled(true);
+				
+						}else{
+							crlButton.setEnabled(false);
 						}
 					}
 
@@ -124,6 +133,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	JButton importButton;
 	JButton exportButton;
 	JButton deleteButton;
+	JButton crlButton;
 	JToggleButton unlockButton;
 
 	DefaultListModel listModel;
@@ -183,6 +193,10 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		deleteButton = new JButton("Supprimer");
 		deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
 		deleteButton.setEnabled(false);
+		crlButton = new JButton(MyKeys.getMessage().getString(
+				"crl.create"));
+		crlButton.setActionCommand(TypeAction.CRL_CREATE.getValue());
+		crlButton.setEnabled(false);
 		exportButton.setEnabled(false);
 		importButton.setEnabled(false);
 		actions = new KeysAction(this);
@@ -190,12 +204,14 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		importButton.addActionListener(actions);
 		unlockButton.addActionListener(actions);
 		deleteButton.addActionListener(actions);
+		crlButton.addActionListener(actions);
 		toolBar.add(titre);
 		toolBar.add(unlockButton);
 		toolBar.add(addCertButton);
 		toolBar.add(importButton);
 		toolBar.add(exportButton);
 		toolBar.add(deleteButton);
+		toolBar.add(crlButton);
 		toolBar.addSeparator();
 
 		JScrollPane listScroller = new JScrollPane(listCerts);
@@ -250,6 +266,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			importButton.setEnabled(false);
 			exportButton.setEnabled(false);
 			deleteButton.setEnabled(false);
+			crlButton.setEnabled(false);
 			addCertButton.setEnabled(false);
 			unlockButton.setSelected(false);
 			// unlockButton.setIcon(createImageIcon("Locked.png"));
@@ -428,7 +445,18 @@ public class ListPanel extends JPanel implements DropTargetListener {
 					}
 				}
 				break;
-
+			case CRL_CREATE:
+				if (listCerts != null
+						&& listCerts.getSelectedValue() != null
+						&& listCerts.getSelectedValue() instanceof CertificateInfo) {
+					CertificateInfo certInfo = (CertificateInfo) listCerts
+							.getSelectedValue();
+					if (MykeysFrame.askConfirmDialog(null,
+							"Creation crl du certificat " + certInfo.getName())) {
+						createCrl(ksInfo, certInfo);
+					}
+				}
+				break;
 			default:
 				break;
 			}
@@ -480,6 +508,19 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
 				certificateInfo, true);
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+
+	}
+	
+	public void createCrl(KeyStoreInfo ksInfo,
+			CertificateInfo certificateInfo) {
+		JFrame frame = (JFrame) this.getTopLevelAncestor();
+		CreateCrlDialog 
+		 cs = new CreateCrlDialog(frame, ksInfo,
+				certificateInfo);
+		cs.pack();
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);

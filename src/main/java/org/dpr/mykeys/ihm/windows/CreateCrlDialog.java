@@ -26,9 +26,11 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.InternalKeystores;
+import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.ihm.MyKeys;
@@ -55,16 +57,31 @@ public class CreateCrlDialog extends JDialog {
 	boolean isAC = false;
 	public JFileChooser jfc;
 
-	public CreateCrlDialog(JFrame owner, boolean modal) {
+	public static void main(String[] args) {
+		CreateCrlDialog crlDiag = new CreateCrlDialog(null, true);
+		crlDiag.build();
+		crlDiag.setVisible(true);
+	}
 
-		super(owner, modal);
-
-		init();
+	private void build() {
+		ProviderUtil.initBC();
+		init(null);
 		this.pack();
 
 	}
 
-	private void init() {
+	public CreateCrlDialog(JFrame owner, boolean modal) {
+
+		super(owner, modal);
+
+	}
+
+	public CreateCrlDialog(JFrame frame, KeyStoreInfo ksInfo, CertificateInfo certificateInfo) {
+		super(frame, true);
+		init(certificateInfo);
+	}
+
+	private void init(CertificateInfo certInfo) {
 
 		DialogAction dAction = new DialogAction();
 		// FIXME:
@@ -79,13 +96,12 @@ public class CreateCrlDialog extends JDialog {
 		JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		panelInfo.setMinimumSize(new Dimension(400, 100));
 
-		// fill with provider's available algorithms
-		Map<String, String> mapAlgoSig = new LinkedHashMap<String, String>();
-		for (String algo : ProviderUtil.SignatureList) {
-			mapAlgoSig.put(algo, algo);
-		}
-
-		getInfoPanel(mapAlgoSig);
+		
+		// for (String algo : ProviderUtil.SignatureList) {
+		// mapAlgoSig.put(algo, algo);
+		// }
+		Map<String, String> mapAC = getMapAC(certInfo);
+		getInfoPanel(null, mapAC);
 		panelInfo.add(infosPanel);
 
 		FileSystemView fsv = FileSystemView.getFileSystemView();
@@ -121,6 +137,14 @@ public class CreateCrlDialog extends JDialog {
 	/**
 	 * .
 	 * 
+	 * <BR>
+	 * 
+	 * <pre>
+	 * <b>Algorithme : </b>
+	 * DEBUT
+	 *    
+	 * FIN
+	 * </pre>
 	 * 
 	 * @param mapKeyLength
 	 * @param mapAlgoKey
@@ -129,13 +153,42 @@ public class CreateCrlDialog extends JDialog {
 	 * @param isAC2
 	 * @return
 	 */
-	private void getInfoPanel(Map<String, String> mapAlgoSig) {
+	private void getInfoPanel(Map<String, String> mapAlgoSig, Map<String, String> mapAC) {
 		infosPanel = new LabelValuePanel();
+
+		infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
+
+		infosPanel.put("Alias (nom du certificat)", "alias", "");
+		infosPanel.putEmptyLine();
+
+		
+		// subject
+		infosPanel.putEmptyLine();
+		Calendar calendar = Calendar.getInstance();
+
+		infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
+				calendar.getTime(), true);
+		calendar.add(Calendar.DAY_OF_YEAR, 7);
+		infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
+				calendar.getTime(), true);
+		infosPanel.putEmptyLine();
+
+		infosPanel.put("Numéros de série brùlés", "numcers", "");
+		// 275136453
+
+		infosPanel.putEmptyLine();
+
+	}
+
+	private Map getMapAC(CertificateInfo certInfo) {
 		Map<String, String> mapAC = null;
+		if (certInfo != null) {
+			mapAC = new HashMap<String, String>();
+			mapAC.put(certInfo.getAlias(), certInfo.getAlias());
+			return mapAC;
+		}
 		try {
-			mapAC = TreeKeyStorePanel.getListCerts(
-					InternalKeystores.getACPath(), "JKS",
-					InternalKeystores.password);
+			mapAC = TreeKeyStorePanel.getListCerts(InternalKeystores.getACPath(), "JKS", InternalKeystores.password);
 		} catch (Exception e) {
 			//
 		}
@@ -143,26 +196,7 @@ public class CreateCrlDialog extends JDialog {
 			mapAC = new HashMap<String, String>();
 		}
 		mapAC.put(" ", " ");
-		infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
-
-		infosPanel.put("Alias (nom du certificat)", "alias", "");
-		infosPanel.putEmptyLine();
-
-		infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig",
-				mapAlgoSig, "SHA256WithRSAEncryption");
-		// subject
-		infosPanel.putEmptyLine();
-		Calendar calendar = Calendar.getInstance();
-
-		infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
-				JSpinnerDate.class, "notBefore", calendar.getTime(), true);
-		calendar.add(Calendar.DAY_OF_YEAR, 7);
-		infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
-				JSpinnerDate.class, "notAfter", calendar.getTime(), true);
-		infosPanel.putEmptyLine();
-
-		infosPanel.putEmptyLine();
-
+		return mapAC;
 	}
 
 	public class DialogAction extends AbstractAction {
@@ -170,22 +204,7 @@ public class CreateCrlDialog extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			String command = event.getActionCommand();
-			if (command.equals("CHOOSE_OUT")) {
-				infosPanel.set("alias", "totototo");
-				// jfc = new JFileChooser();
-				// if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
-				// {
-				// String path = jfc.getSelectedFile().getAbsolutePath();
-				//
-				// if (!path.toUpperCase().endsWith("CRL")) {
-				//
-				// path = path + ".crl";
-				// }
-				//
-				// tfDirectoryOut.setText(path);
-				// }
-
-			} else if (command.equals("OK")) {
+			if (command.equals("OK")) {
 
 				Map<String, Object> elements = infosPanel.getElements();
 				log.trace(elements.get("alias"));
@@ -195,12 +214,21 @@ public class CreateCrlDialog extends JDialog {
 					String key = it.next();
 				}
 				if (elements.get("alias") == null) {
-					MykeysFrame.showError(CreateCrlDialog.this,
-							"alias obligatoire");
+					MykeysFrame.showError(CreateCrlDialog.this, "alias obligatoire");
 					return;
 				}
 				CrlInfo crlInfo = new CrlInfo();
-				;
+
+				if (elements.get("numcers") != null) {
+					// List<String> lstNumCer =
+					String numcers = (String) elements.get("numcers");
+					String[] strNumcers = numcers.split(",");
+					for (String numcer : strNumcers) {
+						if (!numcer.isEmpty())
+							crlInfo.addNumSer(numcer);
+					}
+
+				}
 
 				// certInfo.setX509PrincipalMap(elements);
 				HashMap<String, String> subjectMap = new HashMap<String, String>();
@@ -218,8 +246,7 @@ public class CreateCrlDialog extends JDialog {
 
 				try {
 
-					cActions.generateCrl((String) elements.get("emetteur"),
-							crlInfo);
+					cActions.generateCrl((String) elements.get("emetteur"), crlInfo);
 					// FIXME: add crl to tree
 					// ktools.generateCrl(certSign, crlInfo, privateKey);
 					CreateCrlDialog.this.setVisible(false);
