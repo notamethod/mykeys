@@ -229,8 +229,16 @@ public class MykeysFrame extends JFrame implements WindowListener
         //		JMenuItem menu4 = new JMenuItem(new MenuAction(this, MyKeys
         //				.getMessage().getString("file.sign")));
         //	menu4.setActionCommand("signFile");
+        JMenuItem menuO4 = new JMenuItem(new MenuAction(this, MyKeys
+				.getMessage().getString("file.sign")));
+        menuO4.setActionCommand("signFile");
+		JMenuItem menuO5 = new JMenuItem(new MenuAction(this, MyKeys
+				.getMessage().getString("file.verify")));
+		menuO5.setActionCommand("verify");
         menuBar.add(menu1);
         menuBar.add(menuOptions);
+        menuOptions.add(menuO4);
+		menuOptions.add(menuO5);
         menuBar.add(menu3);
         menuBar.add(menu4);
         // Create a toolbar and give it an etched border.

@@ -138,7 +138,7 @@ public class ImportStoreDialog extends JDialog {
 				try {
 					String typeKS = (String) elements.get("typeKS");
 					if (elements.get("typeKS").equals("auto")) {
-						typeKS = findTypeKS(tfDirectory.getText());
+						typeKS = findTypeKSByName(tfDirectory.getText());
 					}
 					StoreFormat format = StoreFormat.fromValue(typeKS);
 					kt.importStore(tfDirectory.getText(), format,
@@ -165,7 +165,7 @@ public class ImportStoreDialog extends JDialog {
 
 		}
 
-		private String findTypeKS(String filename) {
+		private String findTypeKSByName(String filename) {
 			try {
 				String ext = filename.substring(filename.lastIndexOf('.') + 1,
 						filename.length());

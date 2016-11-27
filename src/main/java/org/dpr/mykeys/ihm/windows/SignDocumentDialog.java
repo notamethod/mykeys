@@ -4,6 +4,13 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertStoreException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,13 +22,16 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.bouncycastle.cms.CMSException;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
+import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -32,7 +42,7 @@ public class SignDocumentDialog extends JDialog {
 	private JTextField tfDirectoryOut;
 
 	// JComboBox ksType;
-	// JPasswordField pwd1;
+	 JPasswordField pwd1;
 	// JPasswordField pwd2;
 	LabelValuePanel infosPanel;
 
@@ -54,6 +64,7 @@ public class SignDocumentDialog extends JDialog {
 
 		Map<String, String> mapType = new HashMap<String, String>();
 		mapType.put("CMS/PKCS#7", "CMS");
+		pwd1 = new JPasswordField();
 
 		Map<String, String> mapCerts = null;
 		try {
@@ -76,8 +87,10 @@ public class SignDocumentDialog extends JDialog {
 		infosPanel.put("Certificat signataire", JComboBox.class, "certificat",
 				mapCerts, "");
 		infosPanel.putEmptyLine();
+		
+		infosPanel.put("paswword", JPasswordField.class, "pwd1", "", true);
 
-		JLabel jl4 = new JLabel("Fichier à signer");
+		JLabel jl4 = new JLabel("Fichier � signer");
 		JLabel jl5 = new JLabel("Fichier en sortie");
 
 		FileSystemView fsv = FileSystemView.getFileSystemView();
@@ -89,7 +102,7 @@ public class SignDocumentDialog extends JDialog {
 		jbChoose.setActionCommand("CHOOSE_IN");
 
 		tfDirectoryOut = new JTextField(40);
-		tfDirectoryOut.setText(f.getAbsolutePath());
+		tfDirectoryOut.setText(f.getAbsolutePath()+"/sign.bin");
 		JButton jbChoose2 = new JButton("...");
 		jbChoose2.addActionListener(dAction);
 		jbChoose2.setActionCommand("CHOOSE_OUT");
@@ -157,20 +170,31 @@ public class SignDocumentDialog extends JDialog {
 
 			} else if (command.equals("OK")) {
 				if (tfDirectoryIn.getText().equals("")
-						|| elements.get("pwd1") == null) {
+						/*|| elements.get("pwd1") == null*/) {
 					MykeysFrame.showError(SignDocumentDialog.this,
 							"Champs invalides");
 					return;
 				}
-				if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-					MykeysFrame.showError(SignDocumentDialog.this,
-							"Mot de passe incorrect");
-					return;
+		
+				String pwd = (String) elements.get("pwd1");
+				if (null==pwd || pwd.isEmpty()){
+					pwd = InternalKeystores.password;
 				}
-
 				CommonsActions cact = new CommonsActions();
-				// cact.signData(ksInfo, password, certInfo, false);
-				// FIXME
+				//FIXME: gestion mdp ks interne si besoin
+			
+				 try {
+					cact.signData(InternalKeystores.getCertKeystore(), pwd.toCharArray(), (String)elements.get("certificat"), false);
+				} catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException
+						| KeyToolsException | InvalidAlgorithmParameterException | NoSuchProviderException | CertStoreException | IOException | CMSException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					 MykeysFrame.showError(SignDocumentDialog.this,
+	                            e.getLocalizedMessage());
+	                    return;
+				}
+				
+				 // FIXME
 				// cact.exportCert(StoreFormat.PKCS12, path, password,
 				// certInfo);
 

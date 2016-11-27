@@ -99,6 +99,17 @@ public class MenuAction extends AbstractAction {
 				} else if (action.equals("signFile")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
+
+							SignDocumentDialog cs = new SignDocumentDialog(
+									MykeysFrame, true);
+							cs.setLocationRelativeTo(MykeysFrame);
+							cs.setVisible(true);
+
+						}
+					});
+				}else if (action.equals("verify")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
 							VerifSigDialog cs = new VerifSigDialog(MykeysFrame,
 									true);
 							cs.setLocationRelativeTo(MykeysFrame);

@@ -173,9 +173,11 @@ public class VerifSigDialog extends JDialog {
 				// }
 				SignTools st = new SignTools();
 				try {
-					st.verify2("c:/dev/prv1.pk7", "c:/dev/SMC_test.sql");
+					boolean ret = st.verify2("/home/christophe/sign.bin", "/home/christophe/git/mykeys2016/src/test/resources/a.txt");
+					 MykeysFrame.showInfo(VerifSigDialog.this, "verification is "+ret);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					 MykeysFrame.showError(VerifSigDialog.this,
+	                            e.getLocalizedMessage());
 					e.printStackTrace();
 				}
 

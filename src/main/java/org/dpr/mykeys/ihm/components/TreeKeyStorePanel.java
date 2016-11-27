@@ -34,6 +34,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -44,6 +45,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.Certificate;
@@ -88,6 +90,7 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
+
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
@@ -117,9 +120,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		@Override
 		public boolean importData(TransferSupport arg0) {
 			// TODO Auto-generated method stub
+			System.out.println("ss");
 			return super.importData(arg0);
 		}
-
+	
 		DataFlavor nodesFlavor;
 		DataFlavor[] flavors = new DataFlavor[1];
 
@@ -132,7 +136,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		 */
 		@Override
 		public boolean canImport(TransferSupport support) {
-
+System.out.println("xxx");
 			if (!support.isDrop()) {
 				return false;
 			}
@@ -234,11 +238,45 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		splitPane.setBottomComponent(splitLeftPanel);
 		splitPane.setDividerLocation(210);
 
+		
+		final TransferHandler th = listePanel.getTransferHandler();
+		listePanel.setTransferHandler(th);
+		
 		// Add the split pane to this panel.
 		add(splitPane);
 
 	}
 
+	private TransferHandler handler = new TransferHandler() {
+        public boolean canImport(TransferHandler.TransferSupport support) {
+            if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                return false;
+            }
+
+//            if (copyItem.isSelected()) {
+//                boolean copySupported = (COPY & support.getSourceDropActions()) == COPY;
+//
+//                if (!copySupported) {
+//                    return false;
+//                }
+//
+//                support.setDropAction(COPY);
+//            }
+
+            return true;
+        }
+
+        public boolean importData(TransferHandler.TransferSupport support) {
+            if (!canImport(support)) {
+                return false;
+            }
+            
+            Transferable t = support.getTransferable();
+
+         System.out.println("xxx");
+            return true;
+        }
+    };
 	private void displayCertDetail(CertificateInfo info) {
 		detailPanel.updateInfo(info);
 

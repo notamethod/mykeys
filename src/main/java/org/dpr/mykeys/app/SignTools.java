@@ -11,11 +11,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.CRLException;
 import java.security.cert.CertStore;
+import java.security.cert.CertStoreException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CollectionCertStoreParameters;
@@ -26,6 +29,7 @@ import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
@@ -34,7 +38,6 @@ import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.swingutils.ImageUtils;
 
-
 /**
  * @author Buck
  *
@@ -42,6 +45,7 @@ import org.dpr.swingutils.ImageUtils;
 public class SignTools {
 
 	public static final Log log = LogFactory.getLog(ImageUtils.class);
+
 	public static void main(String[] args) {
 		Security.addProvider(new BouncyCastleProvider());
 		X509Certificate certs[] = null;
@@ -100,67 +104,63 @@ public class SignTools {
 		// tools.generateCMS(certifs, file, addFile);
 	}
 
-	public void SignData(KeyStoreInfo ksInfo, CertificateInfo certInfo,
-			String file, boolean addFile) {
+	public void SignData(KeyStoreInfo ksInfo, CertificateInfo certInfo, String file, boolean addFile)
+			throws IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException,
+			CertStoreException, CMSException {
 		// TODO:
 		// ajouter le timestamp
-		try {
-			KeyTools kt = new KeyTools();
-			X509Certificate cert = certInfo.getCertificate();
-			PrivateKey privatekey = certInfo.getPrivateKey();
-			// Chargement du fichier qui va être signé
 
-			File file_to_sign = new File(file);
-			byte[] buffer = new byte[(int) file_to_sign.length()];
-			DataInputStream in = new DataInputStream(new FileInputStream(
-					file_to_sign));
-			in.readFully(buffer);
-			in.close();
+		KeyTools kt = new KeyTools();
+		X509Certificate cert = certInfo.getCertificate();
+		PrivateKey privatekey = certInfo.getPrivateKey();
+		// Chargement du fichier qui va être signé
 
-			// Chargement des certificats qui seront stockés dans le fichier .p7
-			// Soit le certificat perso seul, soit la chaine de certification.
-			ArrayList certList = new ArrayList();
-			Certificate[] certsTmp = certInfo.getCertificateChain();
-			for (Certificate cerTmp : certsTmp) {
-				certList.add(cerTmp);
-			}
-			CertStore certs = CertStore.getInstance("Collection",
-					new CollectionCertStoreParameters(certList), "BC");
+		File file_to_sign = new File(file);
+		byte[] buffer = new byte[(int) file_to_sign.length()];
+		DataInputStream in = new DataInputStream(new FileInputStream(file_to_sign));
+		in.readFully(buffer);
+		in.close();
 
-			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
-
-			// privatekey correspond à notre clé privée récupérée du fichier
-			// PKCS#12
-			// cert correspond au certificat publique personnal_nyal.cer
-			// Le dernier argument est l'algorithme de hachage qui sera utilisé
-
-			// Ajout des CRLS ??
-			// a voir
-
-			signGen.addSigner(privatekey, cert,
-					CMSSignedDataGenerator.DIGEST_SHA256);
-			signGen.addCertificatesAndCRLs(certs);
-			CMSProcessable content = new CMSProcessableByteArray(buffer);
-
-			// Generation du fichier CMS/PKCS#7
-			// L'argument deux permet de signifier si le document doit être
-			// attaché avec la signature
-			// Valeur true: le fichier est attaché (c'est le cas ici)
-			// Valeur false: le fichier est détaché
-
-			CMSSignedData signedData = signGen.generate(content, addFile, "BC");
-			byte[] signeddata = signedData.getEncoded();
-
-			// Ecriture du buffer dans un fichier.
-
-			FileOutputStream envfos = new FileOutputStream(
-					file_to_sign.getName() + ".pk7");
-			envfos.write(signeddata);
-			envfos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+		// Chargement des certificats qui seront stockés dans le fichier .p7
+		// Soit le certificat perso seul, soit la chaine de certification.
+		ArrayList certList = new ArrayList();
+		Certificate[] certsTmp = certInfo.getCertificateChain();
+		for (Certificate cerTmp : certsTmp) {
+			certList.add(cerTmp);
 		}
+		CertStore certs = CertStore.getInstance("Collection", new CollectionCertStoreParameters(certList), "BC");
+
+		CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
+
+		// privatekey correspond à notre clé privée récupérée du fichier
+		// PKCS#12
+		// cert correspond au certificat publique personnal_nyal.cer
+		// Le dernier argument est l'algorithme de hachage qui sera utilisé
+
+		// Ajout des CRLS ??
+		// a voir
+
+		signGen.addSigner(privatekey, cert, CMSSignedDataGenerator.DIGEST_SHA256);
+		signGen.addCertificatesAndCRLs(certs);
+		CMSProcessable content = new CMSProcessableByteArray(buffer);
+
+		// Generation du fichier CMS/PKCS#7
+		// L'argument deux permet de signifier si le document doit être
+		// attaché avec la signature
+		// Valeur true: le fichier est attaché (c'est le cas ici)
+		// Valeur false: le fichier est détaché
+
+		CMSSignedData signedData = signGen.generate(content, addFile, "BC");
+		byte[] signeddata = signedData.getEncoded();
+
+		// Ecriture du buffer dans un fichier.
+
+		// FileOutputStream envfos = new FileOutputStream(
+		// file_to_sign.getName() + ".pk7");
+		FileOutputStream envfos = new FileOutputStream("/home/christophe/sign.bin");
+		envfos.write(signeddata);
+		envfos.close();
+
 	}
 
 	public void verify(String signatureFile) {
@@ -173,8 +173,7 @@ public class SignTools {
 			in.close();
 
 			CMSSignedData signature = new CMSSignedData(buffer);
-			SignerInformation signer = (SignerInformation) signature
-					.getSignerInfos().getSigners().iterator().next();
+			SignerInformation signer = (SignerInformation) signature.getSignerInfos().getSigners().iterator().next();
 			CertStore cs = signature.getCertificatesAndCRLs("Collection", "BC");
 			Iterator iter = cs.getCertificates(signer.getSID()).iterator();
 			X509Certificate certificate = (X509Certificate) iter.next();
@@ -191,12 +190,11 @@ public class SignTools {
 		}
 	}
 
-	public void verify2(String signatureFile, String fileOri) throws Exception {
+	public boolean verify2(String signatureFile, String fileOri) throws Exception {
 		File file_to_sign = new File(fileOri);
 		int taille = (int) file_to_sign.length();
 		byte[] buffer = new byte[taille];
-		DataInputStream in = new DataInputStream(new FileInputStream(
-				file_to_sign));
+		DataInputStream in = new DataInputStream(new FileInputStream(file_to_sign));
 		try {
 			in.readFully(buffer);
 			in.close();
@@ -219,28 +217,18 @@ public class SignTools {
 		// CMSSignedData(CMSProcessable signedContent, java.io.InputStream
 		// sigData)
 		CMSSignedData sig = new CMSSignedData(content, isSig);
-		SignerInformation signer = (SignerInformation) sig.getSignerInfos()
-				.getSigners().iterator().next();
+		SignerInformation signer = (SignerInformation) sig.getSignerInfos().getSigners().iterator().next();
 
 		// CMSAttributes
 		CertStore cs = sig.getCertificatesAndCRLs("Collection", "BC");
 		Iterator iter = cs.getCertificates(signer.getSID()).iterator();
 		X509Certificate certificate = (X509Certificate) iter.next();
 
-		boolean v = false;
-		try {
-			v = signer.verify(certificate, "BC");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		log.trace(v);
-		// return v;
+		return signer.verify(certificate, "BC");
 
 	}
 
-	public void generateCMS(X509Certificate[] certifs, String file,
-			boolean addFile) {
+	public void generateCMS(X509Certificate[] certifs, String file, boolean addFile) {
 		// TODO:
 		// ajouter le timestamp
 		try {
@@ -252,8 +240,7 @@ public class SignTools {
 
 			File file_to_sign = new File(file);
 			byte[] buffer = new byte[(int) file_to_sign.length()];
-			DataInputStream in = new DataInputStream(new FileInputStream(
-					file_to_sign));
+			DataInputStream in = new DataInputStream(new FileInputStream(file_to_sign));
 			in.readFully(buffer);
 			in.close();
 
@@ -264,8 +251,7 @@ public class SignTools {
 			for (Certificate cerTmp : certifs) {
 				certList.add(cerTmp);
 			}
-			CertStore certs = CertStore.getInstance("Collection",
-					new CollectionCertStoreParameters(certList), "BC");
+			CertStore certs = CertStore.getInstance("Collection", new CollectionCertStoreParameters(certList), "BC");
 
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 
@@ -293,8 +279,7 @@ public class SignTools {
 
 			// Ecriture du buffer dans un fichier.
 
-			FileOutputStream envfos = new FileOutputStream(
-					file_to_sign.getName() + ".pk7");
+			FileOutputStream envfos = new FileOutputStream(file_to_sign.getName() + ".pk7");
 			envfos.write(signeddata);
 			envfos.close();
 		} catch (Exception e) {
@@ -303,8 +288,7 @@ public class SignTools {
 		}
 	}
 
-	public void generateEmptyCMS(X509Certificate[] certifs, X509CRL[] crls,
-			String outputName) {
+	public void generateEmptyCMS(X509Certificate[] certifs, X509CRL[] crls, String outputName) {
 
 		try {
 
@@ -319,11 +303,9 @@ public class SignTools {
 			for (X509CRL crlTmp : crls) {
 				crlList.add(crlTmp);
 			}
-			CertStore certs = CertStore.getInstance("Collection",
-					new CollectionCertStoreParameters(certList), "BC");
+			CertStore certs = CertStore.getInstance("Collection", new CollectionCertStoreParameters(certList), "BC");
 
-			CertStore crlStore = CertStore.getInstance("Collection",
-					new CollectionCertStoreParameters(crlList), "BC");
+			CertStore crlStore = CertStore.getInstance("Collection", new CollectionCertStoreParameters(crlList), "BC");
 
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 
@@ -371,8 +353,7 @@ public class SignTools {
 	 * @param crls
 	 * @param output
 	 */
-	public void generateUnsignedCMS(X509Certificate[] certifs, X509CRL[] crls,
-			String outputName) {
+	public void generateUnsignedCMS(X509Certificate[] certifs, X509CRL[] crls, String outputName) {
 
 		try {
 
@@ -382,16 +363,14 @@ public class SignTools {
 			for (Certificate cerTmp : certifs) {
 				certList.add(cerTmp);
 			}
-			CertStore certs = CertStore.getInstance("Collection",
-					new CollectionCertStoreParameters(certList), "BC");
+			CertStore certs = CertStore.getInstance("Collection", new CollectionCertStoreParameters(certList), "BC");
 			// mise en forme crls
 			ArrayList crlList = new ArrayList();
 			for (X509CRL crlTmp : crls) {
 				crlList.add(crlTmp);
 			}
 
-			CertStore crlStore = CertStore.getInstance("Collection",
-					new CollectionCertStoreParameters(crlList), "BC");
+			CertStore crlStore = CertStore.getInstance("Collection", new CollectionCertStoreParameters(crlList), "BC");
 
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 
