@@ -114,7 +114,7 @@ public class CreateStoreDialog extends JDialog {
 					String path = jfc.getSelectedFile().getAbsolutePath();
 					String typeKS = (String) infosPanel.getElements().get("typeKS");
 
-					tfDirectory.setText(correctExtension(path, typeKS));
+					tfDirectory.setText(path);
 
 				}
 
@@ -128,10 +128,12 @@ public class CreateStoreDialog extends JDialog {
 					return;
 				}
 
-				String dir = tfDirectory.getText();
+				String typeKS = (String) infosPanel.getElements().get("typeKS");
+				String dir = correctExtension(tfDirectory.getText(), typeKS);
 				Path p = Paths.get(dir);
+				
 				if (!p.isAbsolute()) {
-					String typeKS = (String) infosPanel.getElements().get("typeKS");
+					
 					dir = getDataDir() + File.separator + correctExtension(dir, typeKS);;
 				}
 				KeyTools kt = new KeyTools();
