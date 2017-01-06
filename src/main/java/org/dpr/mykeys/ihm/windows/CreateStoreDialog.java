@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +23,11 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
+import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.utils.OSInfo;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -58,29 +62,16 @@ public class CreateStoreDialog extends JDialog {
 
 		infosPanel = new LabelValuePanel();
 
-		infosPanel.put("Type de magasin(àla fin)", JComboBox.class, "typeKS", mapType);
+		infosPanel.put("Type de magasin", JComboBox.class, "typeKS", mapType);
 		infosPanel.putEmptyLine();
 		infosPanel.put("Mot de passe", JPasswordField.class, "pwd1", "", true);
-		infosPanel.put("Confirmer le Mot de passe", JPasswordField.class,
-				"pwd2", "", true);
+		infosPanel.put("Confirmer le Mot de passe", JPasswordField.class, "pwd2", "", true);
 
 		infosPanel.putEmptyLine();
 
-		// JLabel jl = new JLabel("Type de magasin");
-		// ksType = new JComboBox(new String[] { "JKS", "PKCS12" });
-		// JFieldsPanel jf0 = new JFieldsPanel(jl, ksType);
-		// JLabel jl1 = new JLabel("Mot de passe");
-		// pwd1 = new JPasswordField(12);
-		// JFieldsPanel jf1 = new JFieldsPanel(jl1, pwd1);
-		// JLabel jl2 = new JLabel("Confirmer le Mot de passe");
-		// pwd2 = new JPasswordField(12);
-		// JFieldsPanel jf2 = new JFieldsPanel(jl2, pwd2);
+		JLabel jl4 = new JLabel(MyKeys.getMessage().getString("label.filename"));
+		tfDirectory = new JTextField(30);
 
-		JLabel jl4 = new JLabel("Emplacement");
-		tfDirectory = new JTextField(40);
-		FileSystemView fsv = FileSystemView.getFileSystemView();
-		File f = fsv.getDefaultDirectory();
-		tfDirectory.setText(f.getAbsolutePath());
 		JButton jbChoose = new JButton("...");
 		jbChoose.addActionListener(dAction);
 		jbChoose.setActionCommand("CHOOSE_IN");
@@ -100,8 +91,9 @@ public class CreateStoreDialog extends JDialog {
 		// jp.add(jf0);
 		// jp.add(jf1);
 		// jp.add(jf2);
-		jp.add(infosPanel);
 		jp.add(jpDirectory);
+		jp.add(infosPanel);
+
 		jp.add(jf4);
 
 	}
@@ -113,52 +105,42 @@ public class CreateStoreDialog extends JDialog {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
 			if (command.equals("CHOOSE_IN")) {
-				JFileChooser jfc = new JFileChooser();
+
+				JFileChooser jfc = new JFileChooser(getDataDir());
 				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
 				// jPanel1.add(jfc);
 				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					String path = jfc.getSelectedFile().getAbsolutePath();
-					String typeKS = (String) infosPanel.getElements().get(
-							"typeKS");
-					if (!path.toUpperCase().endsWith("JKS")
-							&& typeKS.equals("JKS")) {
-						path = path + ".jks";
-					}
-					if (!path.toUpperCase().endsWith("p12")
-							&& typeKS.equals("PKCS12")) {
-						path = path + ".p12";
-					}
+					String typeKS = (String) infosPanel.getElements().get("typeKS");
 
-					tfDirectory.setText(path);
+					tfDirectory.setText(correctExtension(path, typeKS));
 
 				}
 
 			} else if (command.equals("OK")) {
-				if (tfDirectory.getText().equals("")
-						|| elements.get("pwd1") == null) {
-					MykeysFrame.showError(CreateStoreDialog.this,
-							"Champs invalides");
+				if (tfDirectory.getText().equals("") || elements.get("pwd1") == null) {
+					MykeysFrame.showError(CreateStoreDialog.this, "Champs invalides");
 					return;
 				}
 				if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-					MykeysFrame.showError(CreateStoreDialog.this,
-							"Mot de passe incorrect");
+					MykeysFrame.showError(CreateStoreDialog.this, "Mot de passe incorrect");
 					return;
+				}
+
+				String dir = tfDirectory.getText();
+				Path p = Paths.get(dir);
+				if (!p.isAbsolute()) {
+					String typeKS = (String) infosPanel.getElements().get("typeKS");
+					dir = getDataDir() + File.separator + correctExtension(dir, typeKS);;
 				}
 				KeyTools kt = new KeyTools();
 				try {
-					StoreFormat format = StoreFormat.valueOf((String) elements
-							.get("typeKS"));
-					createKeyStore(format, tfDirectory.getText(),
-							((String) elements.get("pwd1")).toCharArray());
-					kt.createKeyStore(format, tfDirectory.getText(),
-							((String) elements.get("pwd1")).toCharArray());
-					KSConfig.getUserCfg().addProperty(
-							"store." + StoreModel.CERTSTORE + "."
-									+ format.toString(), tfDirectory.getText());
-					((MykeysFrame) CreateStoreDialog.this.getParent())
-							.updateKeyStoreList();
+					StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
+					createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
+					kt.createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
+					KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
+					((MykeysFrame) CreateStoreDialog.this.getParent()).updateKeyStoreList();
 					CreateStoreDialog.this.setVisible(false);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -206,6 +188,33 @@ public class CreateStoreDialog extends JDialog {
 	public void updateKeyStoreList() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public String correctExtension(String name, String typeKS) {
+		if (!name.toUpperCase().endsWith("JKS") && typeKS.equals("JKS")) {
+			name = name + ".jks";
+		}
+		if (!name.toUpperCase().endsWith("p12") && typeKS.equals("PKCS12")) {
+			name = name + ".p12";
+		}
+		return name;
+	}
+
+	public String getDataDir() {
+		System.out.println(OSInfo.getOs());
+		String dir = KSConfig.getUserCfg().getString("data.dir");
+		if (dir == null) {
+			// if (OSInfo.getOs().equals(OS.UNIX)) {
+			// dir = KSConfig.getCfgPath();
+			// } else {
+			// document dir in windows
+			File f = FileSystemView.getFileSystemView().getDefaultDirectory();
+			File data = new File(f, MyKeys.getMessage().getString("default.datadir"));
+			data.mkdirs();
+			dir = data.getAbsolutePath();
+			// }
+		}
+		return dir;
 	}
 
 	public void createKeyStore(StoreFormat format, String text, char[] charArray) {
