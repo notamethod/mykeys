@@ -4,55 +4,83 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.app.ChildInfo;
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.windows.ManageProfilException;
 
 public class ProfileManager
+
 {
-    public void saveToFile(Map<String, Object> elements, String name) throws ManageProfilException, IOException
-    { 
-        if (StringUtils.isBlank(name))
-        {
-            throw new ManageProfilException("nom obligatoire");
-        }
-        File f = new File(KSConfig.getCfgPath(), name + ".mkprof");
-        if (f.exists())
-        {
-            throw new ManageProfilException("Le profil existe d�j�");
-        }
-        Properties p = new Properties();
-        for (Map.Entry<String, Object> entry : elements.entrySet())
-        {
-            System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
-            p.setProperty(entry.getKey(), (String) entry.getValue());
-        }
-        p.store(new FileOutputStream(f), "");
-    }
+	public static final Log log = LogFactory.getLog(ProfileManager.class);
+	public final static String PROFIL_EXTENSION = ".mkprof";
 
-    public Properties loadProfile(String name) throws ManageProfilException
-    {
-        File f = new File(KSConfig.getCfgPath(), name + ".mkprof");
+	public void saveToFile(Map<String, Object> elements, String name) throws ManageProfilException, IOException {
+		if (StringUtils.isBlank(name)) {
+			throw new ManageProfilException("nom obligatoire");
+		}
+		File profDir = new File(KSConfig.getProfilsPath());
+		if (!profDir.exists()) {
+			profDir.mkdirs();
+		}
+		File f = new File(profDir, name + PROFIL_EXTENSION);
+		if (f.exists()) {
+			throw new ManageProfilException("Le profil existe d�j�");
+		}
+		Properties p = new Properties();
+		for (Map.Entry<String, Object> entry : elements.entrySet()) {
+			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+			p.setProperty(entry.getKey(), (String) entry.getValue());
+		}
+		p.store(new FileOutputStream(f), "");
+	}
 
-        if (!f.exists())
-        {
-            throw new ManageProfilException("Le profil n'existe pas");
+	public Properties loadProfile(String name) throws ManageProfilException {
+		File f = new File(KSConfig.getCfgPath(), name + PROFIL_EXTENSION);
 
-        }
-        try (FileInputStream fis = new FileInputStream(f))
-        {
-            Properties p = new Properties();
-            p.load(new FileInputStream(f));
-            return p;
-        }
-        catch (Exception e)
-        {
-            throw new ManageProfilException("Erreur chargement profil", e);
-        }
+		if (!f.exists()) {
+			throw new ManageProfilException("Le profil n'existe pas");
 
+		}
+		try (FileInputStream fis = new FileInputStream(f)) {
+			Properties p = new Properties();
+			p.load(new FileInputStream(f));
+			return p;
+		} catch (Exception e) {
+			throw new ManageProfilException("Erreur chargement profil", e);
+		}
 
-    }
+	}
+
+	public static List<? extends ChildInfo> getProfils() {
+		List<Profil> profs = new ArrayList<Profil>();
+		File profDir = new File(KSConfig.getProfilsPath());
+
+		for (File fic : profDir.listFiles()) {
+
+			try {
+				profs.add(new Profil(fic));
+			} catch (IOException e) {
+				log.error("can't open", e);
+				e.printStackTrace();
+			}
+		}
+		return profs;
+
+	}
+
+	public void saveToFile(CertificateInfo certInfo) {
+		// TODO Auto-generated method stub
+		
+	}
 }

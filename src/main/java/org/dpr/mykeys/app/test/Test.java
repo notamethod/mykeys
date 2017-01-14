@@ -14,9 +14,9 @@ import org.bouncycastle.tsp.TimeStampToken;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.StoreFormat;
+import org.dpr.mykeys.app.StoreModel;
 import org.dpr.mykeys.app.TimeStampManager;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 
 public class Test {
 

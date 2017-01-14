@@ -58,6 +58,10 @@ public class KSConfig {
 	public static String getCfgPath() {
 		return System.getProperty("user.home") + File.separator + cfgPathName;
 	}
+	
+	public static String getProfilsPath() {
+		return getCfgPath() + File.separator + "profils";
+	}
 
 	private static void setDefault(PropertiesConfiguration cfg) {
 		defaultConfig.setAutoSave(true);

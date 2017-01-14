@@ -9,9 +9,6 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.mykeys.ihm.MyKeys;
 
 public class InternalKeystores {
@@ -20,6 +17,7 @@ public class InternalKeystores {
 	public static String password = "mKeys983178";
 	private static String pathAC;
 	private static String pathCert;
+	private static String pathProfils;
 
 	public static String getACPath() {
 
@@ -33,10 +31,16 @@ public class InternalKeystores {
 	public static String getCertPath() {
 		if (pathCert == null) {
 
-			pathCert = KSConfig.getCfgPath() + File.separator
-					+ "mykeysCert.jks";
+			pathCert = KSConfig.getCfgPath() + File.separator + "mykeysCert.jks";
 		}
 		return pathCert;
+	}
+
+	public static String getProfilsPath() {
+		if (pathProfils == null) {
+			pathProfils = KSConfig.getProfilsPath();
+		}
+		return pathProfils;
 	}
 
 	public static KeyStoreInfo getACKeystore() {
@@ -49,8 +53,7 @@ public class InternalKeystores {
 
 			try {
 
-				InputStream is = (InternalKeystores.class
-						.getResourceAsStream("/org/dpr/mykeys/config/mykeysAc.jks"));
+				InputStream is = (InternalKeystores.class.getResourceAsStream("/org/dpr/mykeys/config/mykeysAc.jks"));
 				copyFile(is, f);
 				// InternalKeystores.class.getResource("/org.dpr.mykeys/config/myKeysAc.jks").getFile()getChannel();
 
@@ -58,19 +61,8 @@ public class InternalKeystores {
 				log.error(e);
 			}
 
-			// try {
-			// InputStream is =
-			// InternalKeystores.class.getResourceAsStream("/org.dpr.mykeys/config/myKeysAc.jks");
-			//
-			// kt.createKeyStore(StoreFormat.JKS,
-			// InternalKeystores.getACPath(), pwd.toCharArray());
-			// } catch (Exception e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
 		}
-		kinfo = new KeyStoreInfo(MyKeys.getMessage().getString(
-				"magasin.interne"), InternalKeystores.getACPath(),
+		kinfo = new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getACPath(),
 				StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
 		kinfo.setPassword(InternalKeystores.password.toCharArray());
 		kinfo.setOpen(true);
@@ -85,17 +77,30 @@ public class InternalKeystores {
 		File f = new File(path);
 		if (!f.exists()) {
 			try {
-				kt.createKeyStore(StoreFormat.JKS,
-						InternalKeystores.getCertPath(), pwd.toCharArray());
+				kt.createKeyStore(StoreFormat.JKS, InternalKeystores.getCertPath(), pwd.toCharArray());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		kinfo = new KeyStoreInfo(MyKeys.getMessage().getString(
-				"magasin.interne"), InternalKeystores.getCertPath(),
+		kinfo = new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getCertPath(),
 				StoreModel.CERTSTORE, StoreFormat.JKS, StoreType.INTERNAL);
 		kinfo.setPassword(InternalKeystores.password.toCharArray());
+		kinfo.setOpen(true);
+		return kinfo;
+	}
+
+	public static ProfilsInfo getProfilsStore() {
+		String path = InternalKeystores.getProfilsPath();
+
+		ProfilsInfo kinfo = null;
+		File f = new File(path);
+		if (!f.exists()) {
+			f.mkdirs();
+
+		}
+		kinfo = new ProfilsInfo(MyKeys.getMessage().getString("profil.name"), path, StoreFormat.PROPERTIES);
+		kinfo.setPassword("null".toCharArray());
 		kinfo.setOpen(true);
 		return kinfo;
 	}

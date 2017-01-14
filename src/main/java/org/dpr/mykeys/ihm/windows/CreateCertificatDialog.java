@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
+import org.dpr.mykeys.app.StoreModel;
+import org.dpr.mykeys.app.StoreType;
 
 public class CreateCertificatDialog extends SuperCreate implements ItemListener {
 

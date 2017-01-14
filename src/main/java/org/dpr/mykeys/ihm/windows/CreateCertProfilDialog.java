@@ -52,7 +52,7 @@ import org.dpr.mykeys.ihm.service.ProfileManager;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.SWComponent;
 
-public class CreateCertProfilDialog extends JDialog implements ItemListener, ActionListener
+public class CreateCertProfilDialog  extends SuperCreate implements ItemListener, ActionListener
 {
 
     protected LabelValuePanel infosPanel;

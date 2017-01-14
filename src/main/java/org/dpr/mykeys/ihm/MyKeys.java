@@ -34,11 +34,11 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.app.StoreFormat;
+import org.dpr.mykeys.app.StoreModel;
+import org.dpr.mykeys.app.StoreType;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 /**
@@ -94,7 +94,6 @@ public class MyKeys {
 		ProviderUtil.init("BC");
 		// buildComponents();
 		// updateKeyStoreList();
-
 	}
 
 	public static ResourceBundle getMessage() {

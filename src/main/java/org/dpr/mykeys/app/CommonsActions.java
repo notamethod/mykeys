@@ -11,10 +11,6 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509CRL;
 
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
-
 /**
  * @author Buck
  * 

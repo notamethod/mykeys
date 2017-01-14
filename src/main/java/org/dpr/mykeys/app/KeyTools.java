@@ -83,8 +83,6 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 
 public class KeyTools {
 	//FIXME:en crÃ©ation de magasin si l'extension est saisie ne pas la mettre 2 fois.
@@ -1273,7 +1271,7 @@ public class KeyTools {
     public X509Certificate[] genererX509CodeSigning(CertificateInfo certModel,
             CertificateInfo certIssuer, boolean isAC) throws Exception {
 
-	    System.out.println("*********Méthode modifiée !!!!!");
+	    System.out.println("*********Mï¿½thode modifiï¿½e !!!!!");
         keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(),
                 certModel);
 
@@ -1309,7 +1307,7 @@ public class KeyTools {
         certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
                 new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
 
-        // FIXME: à vérifier en cas de auto signé
+        // FIXME: ï¿½ vï¿½rifier en cas de auto signï¿½
         if (certIssuer.getCertificate() != null) {
             certGen.addExtension(
                     X509Extensions.AuthorityKeyIdentifier,
@@ -1367,7 +1365,7 @@ public class KeyTools {
 
         cert.verify(certIssuer.getPublicKey());
         X509Certificate[] certChain = null;
-        // FIXME: gérer la chaine de l'émetteur
+        // FIXME: gï¿½rer la chaine de l'ï¿½metteur
         if (certIssuer.getCertificate() != null) {
             certChain = new X509Certificate[2];
             certChain[0] = cert;

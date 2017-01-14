@@ -21,7 +21,7 @@ import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
 
-public class CertificateInfo {
+public class CertificateInfo implements ChildInfo{
 	public static final Log log = LogFactory.getLog(CertificateInfo.class);
 
 	// private X509PrincipalModel x509PrincipalModel;
@@ -625,5 +625,11 @@ public class CertificateInfo {
 		}
 		this.duration=dur;
 		
+	}
+
+	@Override
+	public ChildType getChildType() {
+		// TODO Auto-generated method stub
+		return ChildType.CERTIFICATE;
 	}
 }

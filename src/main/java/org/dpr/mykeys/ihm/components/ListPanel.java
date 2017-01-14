@@ -44,12 +44,17 @@ import javax.swing.event.ListSelectionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.ProfilsInfo;
+import org.dpr.mykeys.app.StoreFormat;
 import org.dpr.mykeys.ihm.actions.TypeAction;
+import org.dpr.mykeys.ihm.windows.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
+import org.dpr.mykeys.ihm.windows.CreateProfilDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
@@ -60,16 +65,14 @@ import org.dpr.swingutils.LabelValuePanel;
 @SuppressWarnings("serial")
 public class ListPanel extends JPanel implements DropTargetListener {
 	public static final Log log = LogFactory.getLog(ListPanel.class);
-	
+
 	public class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 
 		public ListTransferHandler() {
 			try {
-				String certType = DataFlavor.javaJVMLocalObjectMimeType
-						+ ";class=\""
-						+ org.dpr.mykeys.app.CertificateInfo.class.getName()
-						+ "\"";
+				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
+						+ org.dpr.mykeys.app.CertificateInfo.class.getName() + "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
 				log.trace("ClassNotFound: " + e.getMessage());
@@ -79,7 +82,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	private DetailPanel detailPanel;
 	KeysAction actions;
-
 
 	/**
 	 * @author Buck
@@ -93,9 +95,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 				log.trace(e.getSource().getClass());
 				if (e.getSource() instanceof JList) {
-					if (((JList) e.getSource()).getSelectedValue() instanceof CertificateInfo) {
-						displayCertDetail((CertificateInfo) ((JList) e
-								.getSource()).getSelectedValue());
+					if (((JList) e.getSource()).getSelectedValue() instanceof ChildInfo) {
+						displayDetail((ChildInfo) ((JList) e.getSource()).getSelectedValue());
 						if (ksInfo.isOpen()) {
 							exportButton.setEnabled(true);
 							deleteButton.setEnabled(true);
@@ -112,7 +113,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	// Map<String, String> elements = new HashMap<String, String>();
 	LabelValuePanel infosPanel;
 
-	KeyStoreInfo ksInfo;
+	NodeInfo ksInfo;
 
 	ActionPanel dAction;
 
@@ -138,10 +139,9 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	private void init() {
-		   // Create the DropTarget and register
-	    // it with the JPanel.
-	    dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE,
-	        this, true, null);		
+		// Create the DropTarget and register
+		// it with the JPanel.
+		dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true, null);
 		dAction = new ActionPanel();
 		// setBackground(new Color(125,0,0));
 		// BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
@@ -166,14 +166,12 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
-		//listCerts.setTransferHandler(new ListTransferHandler());
+		// listCerts.setTransferHandler(new ListTransferHandler());
 		addCertButton = new JButton(createImageIcon("add-cert.png"));
-		unlockButton = new JToggleButton(
-				createImageIcon("Locked.png"));
+		unlockButton = new JToggleButton(createImageIcon("Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
 		// unlockButton.setIcon(createImageIcon("Locked.png"));
-		unlockButton
-				.setDisabledIcon(createImageIcon("Unlocked.png"));
+		unlockButton.setDisabledIcon(createImageIcon("Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		importButton = new JButton("Import");
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
@@ -212,7 +210,15 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		jp.setVisible(false);
 	}
 
-	public void updateInfo(KeyStoreInfo info) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.dpr.mykeys.ihm.components.IListPanel#updateInfo(org.dpr.mykeys.app.
+	 * KeyStoreInfo)
+	 */
+
+	public void updateInfo(NodeInfo info) {
 		jp.setVisible(false);
 		// jp.removeAll();
 		// jp.revalidate();
@@ -222,22 +228,16 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		ksInfo = info;
 		listCerts.clearSelection();
 		listModel.removeAllElements();
-		try {
-			for (CertificateInfo ci : getCertificates(ksInfo)) {
-				listModel.addElement(ci);
-			}
 
-		} catch (KeyToolsException e1) {
-			// FIXME
-			e1.printStackTrace();
+		for (ChildInfo ci : ksInfo.getChildList()) {
+			listModel.addElement(ci);
 		}
 
 		addCertButton.removeActionListener(actions);
 		if (ksInfo.isOpen()) {
 			unlockButton.setSelected(false);
-			// unlockButton.setIcon(createImageIcon("Unlocked.png"));
 			unlockButton.setEnabled(false);
-			// unlockButton.setDisabledIcon(createImageIcon("Unlocked.png"));
+
 			addCertButton.setEnabled(true);
 			importButton.setEnabled(true);
 
@@ -271,40 +271,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * @return
 	 * @throws KeyToolsException
 	 */
-	private List<CertificateInfo> getCertificates(KeyStoreInfo ksInfo2)
-			throws KeyToolsException {
-		List<CertificateInfo> certs = new ArrayList<CertificateInfo>();
-		KeyTools kt = new KeyTools();
-		KeyStore ks = null;
-		if (ksInfo.getPassword() == null
-				&& ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)) {
-			return certs;
-		}
-
-		ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-				ksInfo.getPassword());
-
-		log.trace("addcerts");
-		Enumeration<String> enumKs;
-		try {
-			enumKs = ks.aliases();
-			if (enumKs != null && enumKs.hasMoreElements()) {
-
-				while (enumKs.hasMoreElements()) {
-					String alias = enumKs.nextElement();
-
-					CertificateInfo certInfo = new CertificateInfo(alias);
-					kt.fillCertInfo(ks, certInfo, alias);
-					certs.add(certInfo);
-				}
-			}
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return certs;
-
-	}
 
 	public class ActionPanel extends AbstractAction {
 
@@ -326,10 +292,18 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	}
 
-	private void displayCertDetail(CertificateInfo info) {
+	private void displayDetail(ChildInfo info) {
 		detailPanel.updateInfo(info);
 
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.dpr.mykeys.ihm.components.IListPanel#setDetailPanel(org.dpr.mykeys.
+	 * ihm.components.DetailPanel)
+	 */
 
 	public void setDetailPanel(DetailPanel detailPanel) {
 		this.detailPanel = detailPanel;
@@ -338,7 +312,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	/**
 	 * @return the ksInfo
 	 */
-	public KeyStoreInfo getKsInfo() {
+	public NodeInfo getKsInfo() {
 		return ksInfo;
 	}
 
@@ -400,29 +374,24 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			// break;
 
 			case ADD_CERT:
-				addCertificate(ksInfo, false);
+				addElement(ksInfo, false);
+				// addCertificate(ksInfo, false);
 				break;
 			case IMPORT_CERT:
 				importCertificate(ksInfo, false);
 				break;
 
 			case EXPORT_CERT:
-				if (listCerts != null
-						&& listCerts.getSelectedValue() != null
+				if (listCerts != null && listCerts.getSelectedValue() != null
 						&& listCerts.getSelectedValue() instanceof CertificateInfo) {
-					exporterCertificate(ksInfo,
-							(CertificateInfo) listCerts.getSelectedValue(),
-							false);
+					exporterCertificate(ksInfo, (CertificateInfo) listCerts.getSelectedValue(), false);
 				}
 				break;
 			case DELETE_CERT:
-				if (listCerts != null
-						&& listCerts.getSelectedValue() != null
+				if (listCerts != null && listCerts.getSelectedValue() != null
 						&& listCerts.getSelectedValue() instanceof CertificateInfo) {
-					CertificateInfo certInfo = (CertificateInfo) listCerts
-							.getSelectedValue();
-					if (MykeysFrame.askConfirmDialog(null,
-							"Suppression du certificat " + certInfo.getName())) {
+					CertificateInfo certInfo = (CertificateInfo) listCerts.getSelectedValue();
+					if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
 						deleteCertificate(ksInfo, certInfo);
 					}
 				}
@@ -436,19 +405,24 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	}
 
-	public void addCertificate(KeyStoreInfo ksInfo, boolean b) {
+	public void addElement(NodeInfo info, boolean b) {
+	
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
-
-		SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
-				true);
+		SuperCreate cs = null;
+		if (info instanceof KeyStoreInfo) {
+			cs = new CreateCertificatDialog(frame, (KeyStoreInfo) info, true);
+		} else {
+			cs = new CreateProfilDialog(frame, true);
+		}
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);
-		updateInfo(ksInfo);
+		updateInfo(info);
 
 		return;
-
 	}
+
+
 
 	/**
 	 * .
@@ -459,11 +433,11 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * @param ksInfo2
 	 * @param certificateInfo
 	 */
-	public void deleteCertificate(KeyStoreInfo ksInfo2,
-			CertificateInfo certificateInfo) {
+	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) {
+		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 		KeyTools kt = new KeyTools();
 		try {
-			kt.deleteCertificate(ksInfo, certificateInfo);
+			kt.deleteCertificate(kinfo, certificateInfo);
 
 		} catch (Exception e1) {
 			MykeysFrame.showError(this, e1.getMessage());
@@ -473,29 +447,30 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	}
 
-	public void exporterCertificate(KeyStoreInfo ksInfo,
-			CertificateInfo certificateInfo, boolean b) {
+	public void exporterCertificate(NodeInfo info, CertificateInfo certificateInfo, boolean b) {
+		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
-		ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
-				certificateInfo, true);
+		ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificateInfo, true);
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);
 
 	}
 
-	public void importCertificate(KeyStoreInfo ksInfo2, boolean b) {
+	public void importCertificate(NodeInfo info, boolean b) {
+		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
-		ImportCertificateDialog cs = new ImportCertificateDialog(frame, ksInfo,
-				true);
+		ImportCertificateDialog cs = new ImportCertificateDialog(frame, kinfo, true);
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);
-		updateInfo(ksInfo);
+		updateInfo(kinfo);
 
 	}
+	
+	
 
 	public boolean openStore(boolean useInternalPwd, boolean expand) {
 
@@ -505,22 +480,24 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		// useInternalPwd = true;
 		// }
 		// ask for password
-		if (ksInfo.getPassword() == null) {
-			char[] password = MykeysFrame.showPasswordDialog(this);
+		if (ksInfo.isProtected()) {
 
-			if (password == null || password.length == 0) {
-				return false;
+			KeyStoreInfo kstInfo = (KeyStoreInfo) ksInfo;
+			if (kstInfo.getPassword() == null) {
+				char[] password = MykeysFrame.showPasswordDialog(this);
+
+				if (password == null || password.length == 0) {
+					return false;
+				}
+
+				kstInfo.setPassword(password);
 			}
-
-			ksInfo.setPassword(password);
 
 		}
 
-		KeyTools kt = new KeyTools();
-		KeyStore ks = null;
 		try {
-			ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword());
+			ksInfo.open();
+
 			ksInfo.setOpen(true);
 
 		} catch (Exception e1) {
@@ -533,79 +510,99 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.dpr.mykeys.ihm.components.IListPanel#dragEnter(java.awt.dnd.
+	 * DropTargetDragEvent)
+	 */
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.dpr.mykeys.ihm.components.IListPanel#dragExit(java.awt.dnd.
+	 * DropTargetEvent)
+	 */
 	@Override
 	public void dragExit(DropTargetEvent dte) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.dpr.mykeys.ihm.components.IListPanel#dragOver(java.awt.dnd.
+	 * DropTargetDragEvent)
+	 */
 	@Override
 	public void dragOver(DropTargetDragEvent dtde) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.dpr.mykeys.ihm.components.IListPanel#drop(java.awt.dnd.
+	 * DropTargetDropEvent)
+	 */
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		 if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0)
-	        {
-	            // Accept the drop and get the transfer data
-	            dtde.acceptDrop(dtde.getDropAction());
-	            Transferable transferable = dtde.getTransferable();
+		if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
+			// Accept the drop and get the transfer data
+			dtde.acceptDrop(dtde.getDropAction());
+			Transferable transferable = dtde.getTransferable();
 
-	            try
-	            {
-	                boolean result = false;
+			try {
+				boolean result = false;
 
-	                if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
-	                {
-	                    result = dropFile(transferable);
-	                }
-	                else
-	                {
-	                    result = false;
-	                }
+				if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+					result = dropFile(transferable);
+				} else {
+					result = false;
+				}
 
-	                dtde.dropComplete(result);
+				dtde.dropComplete(result);
 
-	            }
-	            catch (Exception e)
-	            {
-	                System.out.println("Exception while handling drop " + e);
-	                dtde.rejectDrop();
-	            }
-	        }
-	        else
-	        {
-	            System.out.println("Drop target rejected drop");
-	            dtde.dropComplete(false);
-	        }
+			} catch (Exception e) {
+				System.out.println("Exception while handling drop " + e);
+				dtde.rejectDrop();
+			}
+		} else {
+			System.out.println("Drop target rejected drop");
+			dtde.dropComplete(false);
+		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.dpr.mykeys.ihm.components.IListPanel#dropActionChanged(java.awt.dnd.
+	 * DropTargetDragEvent)
+	 */
 	@Override
 	public void dropActionChanged(DropTargetDragEvent dtde) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-    // This method handles a drop for a list of files
-    protected boolean dropFile(Transferable transferable) throws IOException, UnsupportedFlavorException,
-            MalformedURLException
-    {
-        List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
-        File transferFile = (File) fileList.get(0);
 
-        final String transferURL = transferFile.getAbsolutePath();
-        //System.out.println("File URL is " + transferURL);
-        
+	// This method handles a drop for a list of files
+	protected boolean dropFile(Transferable transferable)
+			throws IOException, UnsupportedFlavorException, MalformedURLException {
+		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+		File transferFile = (File) fileList.get(0);
 
-        return true;
-    }	
+		final String transferURL = transferFile.getAbsolutePath();
+		// System.out.println("File URL is " + transferURL);
+
+		return true;
+	}
 
 }

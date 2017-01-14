@@ -22,8 +22,8 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
+import org.dpr.mykeys.app.StoreFormat;
+import org.dpr.mykeys.app.StoreModel;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

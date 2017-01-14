@@ -46,7 +46,6 @@ import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.service.ProfileManager;
@@ -55,7 +54,7 @@ import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class CreateProfilDialog extends JDialog implements ItemListener {
+public class CreateProfilDialog extends SuperCreate implements ItemListener {
 
 	protected LabelValuePanel infosPanel;
 
@@ -233,6 +232,7 @@ public class CreateProfilDialog extends JDialog implements ItemListener {
 					fillCertInfo();
 					ProfileManager pman = new ProfileManager();
 					pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"));
+					pman.saveToFile(certInfo);
 					CreateProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {

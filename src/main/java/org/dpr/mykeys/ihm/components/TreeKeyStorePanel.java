@@ -81,11 +81,13 @@ import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.PkiTools;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
+import org.dpr.mykeys.app.ProfilsInfo;
+import org.dpr.mykeys.app.StoreModel;
+import org.dpr.mykeys.app.StoreType;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
@@ -256,7 +258,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 * 
 	 * @param ksiInfo
 	 */
-	private void displayKeystoreList(KeyStoreInfo info) {
+	private void displayKeystoreList(NodeInfo info) {
 		listePanel.updateInfo(info);
 
 	}
@@ -294,19 +296,16 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	private void addInternalKS() {
 		DefaultMutableTreeNode nodei = addObject(acNode,
 				InternalKeystores.getACKeystore(), true);
-
 		// addObject(nodei, "[Vide]", false);
 		nodei = addObject(cliNode, InternalKeystores.getCertKeystore(), true);
-		nodei = addObject(adminNode, MyKeys.getMessage().getString(
-				"profil.name"), true);
-		// addObject(nodei, "[Vide]", false);
-
+		nodei = addObject(adminNode, InternalKeystores.getProfilsStore(), true);
 	}
 
 	/** Remove all nodes except the root node. */
 	public void clear() {
 		acNode.removeAllChildren();
 		cliNode.removeAllChildren();
+		adminNode.removeAllChildren();
 		treeModel.reload();
 	}
 
@@ -566,7 +565,13 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 						if (ksiInfo != null)
 							displayKeystoreList(ksiInfo);
 
-					} else {
+					} else 
+						if (object instanceof ProfilsInfo) {
+							ProfilsInfo ksiInfo = ((ProfilsInfo) object);
+							if (ksiInfo != null)
+								displayKeystoreList(ksiInfo);
+
+						} else {
 						displayKeystoreList(null);
 					}
 				}

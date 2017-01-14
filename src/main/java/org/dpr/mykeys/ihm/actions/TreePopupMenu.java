@@ -13,7 +13,7 @@ import javax.swing.tree.TreePath;
 
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
+import org.dpr.mykeys.app.StoreType;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
