@@ -27,7 +27,7 @@ import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.utils.OSInfo;
+
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -203,7 +203,7 @@ public class CreateStoreDialog extends JDialog {
 	}
 
 	public String getDataDir() {
-		System.out.println(OSInfo.getOs());
+
 		String dir = KSConfig.getUserCfg().getString("data.dir");
 		if (dir == null) {
 			// if (OSInfo.getOs().equals(OS.UNIX)) {
