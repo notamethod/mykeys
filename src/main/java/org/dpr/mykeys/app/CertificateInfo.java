@@ -247,6 +247,7 @@ public class CertificateInfo implements ChildInfo{
 	 * @param principalMap
 	 *            the x509PrincipalMap to set
 	 */
+	@Deprecated
 	public void setX509PrincipalMapOld(Map<String, String> sourceMap) {
 
 		x509PrincipalMap.put(X509Principal.C, sourceMap.get("x509PrincipalC"));

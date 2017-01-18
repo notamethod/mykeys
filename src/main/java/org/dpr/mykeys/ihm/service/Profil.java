@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.bouncycastle.asn1.DERBitString;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 
@@ -26,9 +27,9 @@ public class Profil implements ChildInfo {
 
 	public Profil(File fic) throws IOException {
 		try (FileInputStream fis = new FileInputStream(fic)) {
-			 p = new Properties();
+			p = new Properties();
 			p.load(fis);
-			this.name=FilenameUtils.getBaseName(fic.getName());
+			this.name = FilenameUtils.getBaseName(fic.getName());
 		} finally {
 
 		}
@@ -41,8 +42,13 @@ public class Profil implements ChildInfo {
 		return ChildType.PROFILE;
 	}
 
-	public Object getValue(String key) {
+	public String getValue(String key) {
 		// TODO Auto-generated method stub
 		return p.getProperty(key);
+	}
+
+	public int getIntValue(String string) {
+		// TODO Auto-generated method stub
+		return Integer.valueOf(getValue(string));
 	}
 }

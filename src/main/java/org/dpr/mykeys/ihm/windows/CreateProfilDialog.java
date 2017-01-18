@@ -231,8 +231,8 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 				try {
 					fillCertInfo();
 					ProfileManager pman = new ProfileManager();
-					pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"));
-					pman.saveToFile(certInfo);
+					pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"), certInfo);
+			
 					CreateProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {

@@ -16,6 +16,7 @@ import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.windows.ManageProfilException;
 
@@ -79,8 +80,28 @@ public class ProfileManager
 
 	}
 
-	public void saveToFile(CertificateInfo certInfo) {
-		// TODO Auto-generated method stub
+	public void saveToFile(Map<String, Object> elements, String name, CertificateInfo certInfo) throws ManageProfilException, IOException {
+		if (StringUtils.isBlank(name)) {
+			throw new ManageProfilException("nom obligatoire");
+		}
+		File profDir = new File(KSConfig.getProfilsPath());
+		if (!profDir.exists()) {
+			profDir.mkdirs();
+		}
+		File f = new File(profDir, name + PROFIL_EXTENSION);
+		if (f.exists()) {
+			throw new ManageProfilException("Le profil existe d�j�");
+		}
+		Properties p = new Properties();
+		for (Map.Entry<String, Object> entry : elements.entrySet()) {
+			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+			p.setProperty(entry.getKey(), (String) entry.getValue());
+		}
+	
+		p.setProperty("keyUSage", String.valueOf(certInfo.getIntKeyUsage()));
+		p.setProperty("keyUSage2", String.valueOf(certInfo.getKeyUsage()));
+		p.store(new FileOutputStream(f), "");
+		
 		
 	}
 }
