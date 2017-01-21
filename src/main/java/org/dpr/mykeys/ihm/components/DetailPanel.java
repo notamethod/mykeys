@@ -63,20 +63,15 @@ public class DetailPanel extends JPanel {
 		jpExt.setLayout(new FlowLayout(FlowLayout.LEADING));
 
 		add(jtab);
-		jtab.add(jp, "Informations principales");
-		jtab.add(jpExt, "Informations étendues");
+		jtab.add(jp, "Informations");
+		//jtab.add(jpExt, "Informations étendues");
 		// jp.add();
 		// jp.add(new JLabel("Contenu du certificat"));
 		jtab.setVisible(false);
 	}
 
 	public void updateInfoGen(ChildInfo info) {
-		jp.removeAll();
-		jtab.revalidate();
-		jp.add( getDetailInstance(info));
-		//certificatInfo = info;
-		
-		titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
+	
 	 
 
 		//jp.add(infosPanel);
@@ -91,32 +86,6 @@ public class DetailPanel extends JPanel {
 		}
 	}
 
-	public void updateInfoExt(CertificateInfo info) {
-		jpExt.removeAll();
-		jtab.revalidate();
-
-		certificatInfo = info;
-		titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
-		infosPanel = new LabelValuePanel();
-
-		infosPanel.put(MyKeys.getMessage().getString("x509.alias"),
-				JLabel.class, "", info.getAlias(), false);
-		infosPanel.putEmptyLine();
-		infosPanel.put("Chaine de certificats", JTextArea.class, "xCertChain",
-				info.getCertChain(), false);
-		infosPanel.putEmptyLine();
-
-		infosPanel.put("Digest SHA1", JLabel.class, "signature",
-				X509Util.toHexString(info.getDigestSHA1(), " ", false), false);
-		infosPanel
-				.put("Digest SHA256", JLabel.class, "signature", X509Util
-						.toHexString(info.getDigestSHA256(), " ", false), false);
-		infosPanel.putEmptyLine();
-		infosPanel.put("Signature", JTextArea.class, "signature",
-				X509Util.toHexString(info.getSignature(), " ", false), false);
-		jpExt.add(infosPanel);
-
-	}
 
 	public class ActionPanel extends AbstractAction {
 
@@ -144,10 +113,12 @@ public class DetailPanel extends JPanel {
 			jtab.setVisible(false);
 			return;
 		}
-		updateInfoGen(info);
-		if (info.getChildType().equals(ChildType.CERTIFICATE)){
-		updateInfoExt((CertificateInfo) info);
-		}
+		jp.removeAll();
+		//jtab.revalidate();
+		jp.add( getDetailInstance(info));
+
+		titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
+		
 		jtab.setVisible(true);
 		jtab.revalidate();
 

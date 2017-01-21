@@ -54,6 +54,7 @@ import org.dpr.mykeys.app.StoreFormat;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
+import org.dpr.mykeys.ihm.windows.CreateCertificateFromProfile;
 import org.dpr.mykeys.ihm.windows.CreateProfilDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
@@ -122,6 +123,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	JLabel titre = new JLabel();
 
 	JButton addCertButton;
+	JButton addCertProfButton;
 	JButton importButton;
 	JButton exportButton;
 	JButton deleteButton;
@@ -168,11 +170,14 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		listCerts.setDragEnabled(true);
 		// listCerts.setTransferHandler(new ListTransferHandler());
 		addCertButton = new JButton(createImageIcon("add-cert.png"));
+		addCertProfButton = new JButton(createImageIcon("add-cert-pro.png"));
 		unlockButton = new JToggleButton(createImageIcon("Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
 		// unlockButton.setIcon(createImageIcon("Locked.png"));
 		unlockButton.setDisabledIcon(createImageIcon("Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
+		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
+		addCertProfButton.setToolTipText("create cert from profile");
 		importButton = new JButton("Import");
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
 		exportButton = new JButton("Export");
@@ -188,9 +193,11 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		importButton.addActionListener(actions);
 		unlockButton.addActionListener(actions);
 		deleteButton.addActionListener(actions);
+		addCertProfButton.addActionListener(actions);
 		toolBar.add(titre);
 		toolBar.add(unlockButton);
 		toolBar.add(addCertButton);
+		toolBar.add(addCertProfButton);
 		toolBar.add(importButton);
 		toolBar.add(exportButton);
 		toolBar.add(deleteButton);
@@ -234,6 +241,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		}
 
 		addCertButton.removeActionListener(actions);
+		//addCertProfButton.removeActionListener(actions);
 		if (ksInfo.isOpen()) {
 			unlockButton.setSelected(false);
 			unlockButton.setEnabled(false);
@@ -242,6 +250,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			importButton.setEnabled(true);
 
 			addCertButton.addActionListener(actions);
+			//addCertProfButton.addActionListener(actions);
 			listCerts.setShowImage(false);
 
 		} else {
@@ -250,6 +259,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			exportButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 			addCertButton.setEnabled(false);
+			addCertProfButton.setEnabled(false);
 			unlockButton.setSelected(false);
 			// unlockButton.setIcon(createImageIcon("Locked.png"));
 			unlockButton.setEnabled(true);
@@ -377,6 +387,10 @@ public class ListPanel extends JPanel implements DropTargetListener {
 				addElement(ksInfo, false);
 				// addCertificate(ksInfo, false);
 				break;
+			case ADD_CERT_PROF: 
+				addCertFromPRofile(ksInfo, false);
+				// addCertificate(ksInfo, false);
+				break;
 			case IMPORT_CERT:
 				importCertificate(ksInfo, false);
 				break;
@@ -414,6 +428,21 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		} else {
 			cs = new CreateProfilDialog(frame, true);
 		}
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+		updateInfo(info);
+
+		return;
+	}
+	
+	public void addCertFromPRofile(NodeInfo info, boolean b) {
+		
+		JFrame frame = (JFrame) this.getTopLevelAncestor();
+		SuperCreate cs = null;
+		if (info instanceof KeyStoreInfo) {
+			cs = new CreateCertProfilDialog(frame,  true);
+		} 
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);

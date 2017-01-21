@@ -3,6 +3,7 @@ package org.dpr.mykeys.ihm.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ProfileManager
 	}
 
 	public Properties loadProfile(String name) throws ManageProfilException {
-		File f = new File(KSConfig.getCfgPath(), name + PROFIL_EXTENSION);
+		File f = new File(KSConfig.getProfilsPath(), name + PROFIL_EXTENSION);
 
 		if (!f.exists()) {
 			throw new ManageProfilException("Le profil n'existe pas");
@@ -80,7 +81,8 @@ public class ProfileManager
 
 	}
 
-	public void saveToFile(Map<String, Object> elements, String name, CertificateInfo certInfo) throws ManageProfilException, IOException {
+	public void saveToFile(Map<String, Object> elements, String name, CertificateInfo certInfo)
+			throws ManageProfilException, IOException {
 		if (StringUtils.isBlank(name)) {
 			throw new ManageProfilException("nom obligatoire");
 		}
@@ -97,11 +99,21 @@ public class ProfileManager
 			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
 			p.setProperty(entry.getKey(), (String) entry.getValue());
 		}
-	
+
 		p.setProperty("keyUSage", String.valueOf(certInfo.getIntKeyUsage()));
 		p.setProperty("keyUSage2", String.valueOf(certInfo.getKeyUsage()));
 		p.store(new FileOutputStream(f), "");
-		
-		
+
+	}
+
+	public String[] getProfiles() {
+		File profDir = new File(KSConfig.getProfilsPath());
+		String[] list = profDir.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.toLowerCase().endsWith(".mkprof");
+			}
+		});
+		return list;
 	}
 }

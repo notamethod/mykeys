@@ -102,7 +102,9 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
          panelInfoVisible = new LabelValuePanel(model);
         Map<String, String> mapProfiles = new HashMap<String, String>();
         mapProfiles.put("", "");
-        for (String profile : getProfiles())
+    	ProfileManager pman = new ProfileManager();
+	
+        for (String profile : pman.getProfiles())
         {
             if (profile != null)
             {
@@ -123,32 +125,27 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.organisation"), "O", "");
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.organisationUnit"), "OU", "");
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.location"), "L", "");
-        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.street"), "SR", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "E", "");
 
+        panelInfoVisible.putEmptyLine();
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoPubKey", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoSig", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "keyLength", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "duration", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "E", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "CrlDistrib", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "PolicyNotice", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "PolicyCPS", "");
+
+       
 
         JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
         panelInfo.setMinimumSize(new Dimension(400, 100));
 
-        Map<String, String> mapKeyLength = new HashMap<String, String>();
-        mapKeyLength.put("512 bits", "512");
-        mapKeyLength.put("1024 bits", "1024");
-        mapKeyLength.put("2048 bits", "2048");
-        mapKeyLength.put("4096 bits", "4096");
-        // fill with provider's available algorithms
-        Map<String, String> mapAlgoKey = new LinkedHashMap<String, String>();
-        for (String algo : ProviderUtil.getKeyPairGeneratorList())
-        {
-            mapAlgoKey.put(algo, algo);
-        }
-        // fill with provider's available algorithms
-        Map<String, String> mapAlgoSig = new LinkedHashMap<String, String>();
-        for (String algo : ProviderUtil.SignatureList)
-        {
-            mapAlgoSig.put(algo, algo);
-        }
+       
+       
 
-        createInfoPanel(mapKeyLength, mapAlgoKey, mapAlgoSig);
-        panelInfo.add(infosPanel);
+      
 
         // JPanel panelInfo2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
         JPanel checkPanel = new JPanel(new GridLayout(0, 3));
@@ -201,21 +198,6 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
         if (infosPanel == null)
         {
             infosPanel = new LabelValuePanel();
-            Map<String, String> mapAC = null;
-            try
-            {
-                mapAC = TreeKeyStorePanel.getListCerts(InternalKeystores.getACPath(), "JKS",
-                        InternalKeystores.password);
-            }
-            catch (Exception e)
-            {
-                //
-            }
-            if (mapAC == null)
-            {
-                mapAC = new HashMap<String, String>();
-            }
-            mapAC.put(" ", " ");
 
 
             infosPanel.putEmptyLine();
@@ -335,20 +317,7 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
     }
 
 
-    String[] getProfiles()
-    {
 
-        File dir = new File(KSConfig.getCfgPath());
-        String[] list = dir.list(new FilenameFilter()
-        {
-            @Override
-            public boolean accept(File dir, String name)
-            {
-                return name.toLowerCase().endsWith(".mkprof");
-            }
-        });
-        return list;
-    }
 
     @Override
     public void actionPerformed(ActionEvent e)
@@ -385,7 +354,7 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
     	      String key = (String) e.nextElement();
     	      System.out.println(key + " -- " + myProfile.getProperty(key));
     	      panelInfoVisible.set( key, myProfile.getProperty(key));
-    	      infosPanel.set( key, myProfile.getProperty(key));
+    	    //  infosPanel.set( key, myProfile.getProperty(key));
     	    }
     	   
         

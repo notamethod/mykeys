@@ -46,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public class CreateCertificateFromProfile extends JDialog {
 
 	protected LabelValuePanel infosPanel;
