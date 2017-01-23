@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -16,6 +19,7 @@ public class Profil implements ChildInfo {
 
 	Properties p;
 	String name;
+	private Path path;
 
 	public String getName() {
 		return name;
@@ -25,11 +29,15 @@ public class Profil implements ChildInfo {
 		this.name = name;
 	}
 
-	public Profil(File fic) throws IOException {
-		try (FileInputStream fis = new FileInputStream(fic)) {
+
+	
+	public Profil(Path path) throws IOException {
+		try (InputStream fis = Files.newInputStream(path)){
 			p = new Properties();
 			p.load(fis);
-			this.name = FilenameUtils.getBaseName(fic.getName());
+		
+			this.name = FilenameUtils.getBaseName(path.getFileName().toString());
+			this.path=path;
 		} finally {
 
 		}
@@ -50,5 +58,10 @@ public class Profil implements ChildInfo {
 	public int getIntValue(String string) {
 		// TODO Auto-generated method stub
 		return Integer.valueOf(getValue(string));
+	}
+
+	public Path getPath() {
+		// TODO Auto-generated method stub
+		return path;
 	}
 }

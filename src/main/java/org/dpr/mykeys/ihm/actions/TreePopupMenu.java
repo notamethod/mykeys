@@ -148,16 +148,19 @@ public class TreePopupMenu extends JPopupMenu {
 		openStore.setActionCommand(TypeAction.OPEN_STORE.getValue());
 		openStore.setVisible(false);
 		closeStore = new JMenuItem("Fermer magasin");
-		removeStore = new JMenuItem("Retirer du gestionnaire");
-		deleteStore = new JMenuItem("Suppression physique");
+		
+		
 
 		closeStore.addActionListener(new TreePopupAction());
 		closeStore.setActionCommand(TypeAction.CLOSE_STORE.getValue());
 		closeStore.setVisible(false);
 
+		removeStore = new JMenuItem("Retirer du gestionnaire");
 		removeStore.addActionListener(new TreePopupAction());
 		removeStore.setActionCommand(TypeAction.REMOVE_STORE.getValue());
 		removeStore.setVisible(false);
+		
+		deleteStore = new JMenuItem("Suppression physique");
 		deleteStore.addActionListener(new TreePopupAction());
 		deleteStore.setActionCommand(TypeAction.DELETE_STORE.getValue());
 		deleteStore.setVisible(false);

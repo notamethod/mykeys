@@ -13,6 +13,7 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -26,6 +27,8 @@ import javax.swing.AbstractAction;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,6 +51,9 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.ProfilsInfo;
 import org.dpr.mykeys.app.StoreFormat;
+import org.dpr.mykeys.ihm.actions.TypeAction;
+import org.dpr.mykeys.ihm.service.Profil;
+import org.dpr.mykeys.ihm.service.ProfileManager;
 import org.dpr.mykeys.ihm.windows.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.CreateCertificateFromProfile;
@@ -60,11 +66,10 @@ import org.dpr.mykeys.ihm.windows.SuperCreate;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
-public class ListPanel extends JPanel implements DropTargetListener {
-	public static final Log log = LogFactory.getLog(ListPanel.class);
+public class ListProfilePanel extends ListPanel implements DropTargetListener {
+	public static final Log log = LogFactory.getLog(ListProfilePanel.class);
 
-	ToolBarManager toolBarManager = new ToolBarManager();
-
+	ProfileManager profileService = new ProfileManager();
 	public class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 
@@ -97,8 +102,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 					if (((JList) e.getSource()).getSelectedValue() instanceof ChildInfo) {
 						displayDetail((ChildInfo) ((JList) e.getSource()).getSelectedValue());
 						if (ksInfo.isOpen()) {
-							toolBarManager.enableActions(ksInfo);
-
+							exportButton.setEnabled(true);
+							deleteButton.setEnabled(true);
 						}
 					}
 
@@ -118,12 +123,21 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	JPanel jp;
 
+	JLabel titre = new JLabel();
+
+	JButton addCertButton;
+	JButton addCertProfButton;
+	JButton importButton;
+	JButton exportButton;
+	JButton deleteButton;
+	JToggleButton unlockButton;
+
 	DefaultListModel listModel;
 	JImgList listCerts;
 	DropTarget dropTarget;
 
-	public ListPanel() {
-		super(new BorderLayout());
+	public ListProfilePanel() {
+		super();
 
 		init();
 
@@ -134,13 +148,17 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		// it with the JPanel.
 		dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true, null);
 		dAction = new ActionPanel();
+		// setBackground(new Color(125,0,0));
+		// BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
+		// this.setLayout(bl);
 
+		// titre = new GradientLabel("Gestion des certificats");
+		// add(titre);
 		jp = new JPanel(new BorderLayout());
 		final ImageIcon icon = createImageIcon("Locked.png");
 
-		actions = new KeysAction(this, this);
-		
-		toolBarManager.init("Still draggable", actions, this);
+		JToolBar toolBar = new JToolBar("Still draggable");
+		toolBar.setFloatable(false);
 		listModel = new DefaultListModel();
 		ListSelectionListener listListener = new CertListListener();
 
@@ -154,24 +172,65 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
 		// listCerts.setTransferHandler(new ListTransferHandler());
+		addCertButton = new JButton(createImageIcon("add-cert.png"));
+		addCertProfButton = new JButton(createImageIcon("add-cert-pro.png"));
+		unlockButton = new JToggleButton(createImageIcon("Locked.png"));
+		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
+		// unlockButton.setIcon(createImageIcon("Locked.png"));
+		unlockButton.setDisabledIcon(createImageIcon("Unlocked.png"));
+		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
+		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
+		addCertProfButton.setToolTipText("create cert from profile");
+		importButton = new JButton("Import");
+		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
+		exportButton = new JButton("Export");
+		exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
+		// FIXME libelles
+		deleteButton = new JButton("Supprimer");
+		deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
+		deleteButton.setEnabled(false);
+		exportButton.setEnabled(false);
+		importButton.setEnabled(false);
+		actions = new KeysAction(this);
+		exportButton.addActionListener(actions);
+		importButton.addActionListener(actions);
+		unlockButton.addActionListener(actions);
+		deleteButton.addActionListener(actions);
+		addCertProfButton.addActionListener(actions);
+		toolBar.add(titre);
+		toolBar.add(unlockButton);
+		toolBar.add(addCertButton);
+		toolBar.add(addCertProfButton);
+		toolBar.add(importButton);
+		toolBar.add(exportButton);
+		toolBar.add(deleteButton);
+		toolBar.addSeparator();
 
 		JScrollPane listScroller = new JScrollPane(listCerts);
 		// listScroller.setPreferredSize(new Dimension(450, 80));
 		listScroller.setAlignmentX(LEFT_ALIGNMENT);
-	
-		
+		jp.add(toolBar, BorderLayout.PAGE_START);
 		jp.add(listScroller, BorderLayout.CENTER);
 
+		// jp.add(listScroller);
 		add(jp);
-
+		// jp.add();
+		// jp.add(new JLabel("Contenu du certificat"));
+		// jp.setVisible(true);
 		jp.setVisible(false);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.dpr.mykeys.ihm.components.IListPanel#updateInfo(org.dpr.mykeys.app.
+	 * KeyStoreInfo)
+	 */
+
 	public void updateInfo(NodeInfo info) {
 		jp.setVisible(false);
-
-		jp.remove(toolBarManager.getInvInstance(info));
-		jp.add(toolBarManager.getInstance(info), BorderLayout.PAGE_START);
+		// jp.removeAll();
 		// jp.revalidate();
 		if (info == null) {
 			return;
@@ -184,27 +243,47 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			listModel.addElement(ci);
 		}
 
-		toolBarManager.removeListeners(info);
-		// addCertProfButton.removeActionListener(actions);
+		addCertButton.removeActionListener(actions);
+		//addCertProfButton.removeActionListener(actions);
 		if (ksInfo.isOpen()) {
+			unlockButton.setSelected(false);
+			unlockButton.setEnabled(false);
 
-			toolBarManager.enableActions(info);
-			toolBarManager.enableListeners(info);
+			addCertButton.setEnabled(true);
+			importButton.setEnabled(true);
 
-			// addCertProfButton.addActionListener(actions);
+			addCertButton.addActionListener(actions);
+			//addCertProfButton.addActionListener(actions);
 			listCerts.setShowImage(false);
 
 		} else {
 
-			toolBarManager.disableActions(info);
+			importButton.setEnabled(false);
+			exportButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+			addCertButton.setEnabled(false);
+			addCertProfButton.setEnabled(false);
+			unlockButton.setSelected(false);
+			// unlockButton.setIcon(createImageIcon("Locked.png"));
+			unlockButton.setEnabled(true);
 			listCerts.setShowImage(true);
 		}
-		toolBarManager.setTitle(ksInfo.getName());
-		//toolBarManager.show(info);
+		titre.setText(ksInfo.getName());
 
 		jp.revalidate();
 		jp.setVisible(true);
 	}
+
+	/**
+	 * .
+	 * 
+	 * <BR>
+	 * 
+	 * 
+	 * @param ksInfo2
+	 * @return
+	 * @throws KeyToolsException
+	 */
 
 	public class ActionPanel extends AbstractAction {
 
@@ -258,8 +337,98 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		this.ksInfo = ksInfo;
 	}
 
-	public void addElement(NodeInfo info, boolean b) {
+	public class KeysAction implements ActionListener {
 
+		public KeysAction(JComponent frameSource) {
+			super();
+			this.frameSource = frameSource;
+			// this.ksInfo = ksInfo;
+		}
+
+		private JComponent frameSource;
+
+		// private KeyStoreInfo ksInfo;
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			final String action = e.getActionCommand();
+			final Object composant = e.getSource();
+
+			TypeAction typeAction = TypeAction.getTypeAction(action);
+			JDialog cs;
+			JFrame frame = null;
+			switch (typeAction) {
+			// case ADD_STORE:
+			// frame = (JFrame) tree.getTopLevelAncestor();
+			// cs = new CreateStoreDialog(frame, true);
+			// cs.setLocationRelativeTo(frame);
+			// cs.setVisible(true);
+			// break;
+			//
+			// case IMPORT_STORE:
+			// frame = (JFrame) tree.getTopLevelAncestor();
+			// cs = new ImportStoreDialog(frame, true);
+			// cs.setLocationRelativeTo(frame);
+			// cs.setVisible(true);
+			// break;
+
+			// case EXPORT_CERT:
+			// treeKeyStoreParent.exporterCertificate(node, false);
+			// break;
+			//
+			case OPEN_STORE:
+				if (openStore(false, true)) {
+				}
+				updateInfo(ListProfilePanel.this.ksInfo);
+				break;
+			//
+			// case CLOSE_STORE:
+			// treeKeyStoreParent.closeStore(node, true);
+			// break;
+
+			case ADD_CERT:
+				addElement(ksInfo, false);
+				// addCertificate(ksInfo, false);
+				break;
+			case ADD_CERT_PROF: 
+				addCertFromPRofile(ksInfo, false);
+				// addCertificate(ksInfo, false);
+				break;
+			case IMPORT_CERT:
+				importCertificate(ksInfo, false);
+				break;
+
+			case EXPORT_CERT:
+				if (listCerts != null && listCerts.getSelectedValue() != null
+						&& listCerts.getSelectedValue() instanceof CertificateInfo) {
+					exporterCertificate(ksInfo, (CertificateInfo) listCerts.getSelectedValue(), false);
+				}
+				break;
+			case DELETE_CERT:
+				if (listCerts != null && listCerts.getSelectedValue() != null
+						&& listCerts.getSelectedValue() instanceof CertificateInfo) {
+					Profil certInfo = (Profil) listCerts.getSelectedValue();
+					if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
+						try {
+							profileService.delete(ksInfo, certInfo);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				break;
+
+			default:
+				break;
+			}
+
+		}
+
+	}
+
+	public void addElement(NodeInfo info, boolean b) {
+	
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
 		if (info instanceof KeyStoreInfo) {
@@ -274,14 +443,14 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		return;
 	}
-
+	
 	public void addCertFromPRofile(NodeInfo info, boolean b) {
-
+		
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
 		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertProfilDialog(frame, true);
-		}
+			cs = new CreateCertProfilDialog(frame,  true);
+		} 
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);
@@ -289,6 +458,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		return;
 	}
+
+
 
 	/**
 	 * .
@@ -335,9 +506,17 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		updateInfo(kinfo);
 
 	}
+	
+	
 
 	public boolean openStore(boolean useInternalPwd, boolean expand) {
 
+		// if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { //
+		// equals(StoreModel.CASTORE))
+		// // {
+		// useInternalPwd = true;
+		// }
+		// ask for password
 		if (ksInfo.isProtected()) {
 
 			KeyStoreInfo kstInfo = (KeyStoreInfo) ksInfo;

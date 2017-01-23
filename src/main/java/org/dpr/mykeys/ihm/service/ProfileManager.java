@@ -5,6 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +21,7 @@ import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.windows.ManageProfilException;
@@ -68,15 +73,13 @@ public class ProfileManager
 		List<Profil> profs = new ArrayList<Profil>();
 		File profDir = new File(KSConfig.getProfilsPath());
 
-		for (File fic : profDir.listFiles()) {
-
-			try {
-				profs.add(new Profil(fic));
-			} catch (IOException e) {
-				log.error("can't open", e);
-				e.printStackTrace();
-			}
-		}
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(KSConfig.getProfilsPath()))) {
+            for (Path path : directoryStream) {
+            	profs.add(new Profil(path));
+               
+            }
+        } catch (IOException ex) {}
+       
 		return profs;
 
 	}
@@ -115,5 +118,10 @@ public class ProfileManager
 			}
 		});
 		return list;
+	}
+
+	public void delete(NodeInfo ksInfo, Profil profil) throws IOException {
+		Files.delete(profil.getPath());
+		
 	}
 }
