@@ -19,10 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.SignTools;
-import org.dpr.mykeys.app.StoreFormat;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

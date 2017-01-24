@@ -13,8 +13,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.app.KeyStoreInfo;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
 
 public class TooltipTreeRenderer2 extends DefaultTreeCellRenderer implements
 		TreeCellRenderer {
@@ -41,13 +41,13 @@ public class TooltipTreeRenderer2 extends DefaultTreeCellRenderer implements
 				// setTextNonSelectionColor( Color.green);
 				switch (kInfo.getStoreModel()) {
 				case CERTSTORE:
-					icon = createImageIcon("images/keystoreblueo.png");
+					icon = createImageIcon("/images/images/keystoreblueo.png");
 					break;
 				case CASTORE:
-					icon = createImageIcon("images/keystorered.png");
+					icon = createImageIcon("/images/images/keystorered.png");
 					break;
 				default:
-					icon = createImageIcon("images/keystoreblue.png");
+					icon = createImageIcon("/images/images/keystoreblue.png");
 					break;
 				}
 
@@ -63,9 +63,9 @@ public class TooltipTreeRenderer2 extends DefaultTreeCellRenderer implements
 				ImageIcon icon = null;
 				if (((CertificateInfo) node.getUserObject())
 						.isContainsPrivateKey()) {
-					icon = createImageIcon("images/certificatekey.png");
+					icon = createImageIcon("/images/images/certificatekey.png");
 				} else {
-					icon = createImageIcon("images/certificate2.png");
+					icon = createImageIcon("/images/images/certificate2.png");
 				}
 				if (icon != null) {
 

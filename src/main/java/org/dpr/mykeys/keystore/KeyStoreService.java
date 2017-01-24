@@ -1,13 +1,13 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.keystore;
 
 import java.security.KeyStore;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.test.ListAlgorithms;
+import org.dpr.mykeys.ihm.windows.TamperedWithException;
 
 public class KeyStoreService {
 	public static final Log log = LogFactory.getLog(KeyStoreService.class);

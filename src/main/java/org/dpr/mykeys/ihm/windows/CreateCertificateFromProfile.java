@@ -18,15 +18,15 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.app.InternalKeystores;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.CreateCertificateFromProfile.DialogAction;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 

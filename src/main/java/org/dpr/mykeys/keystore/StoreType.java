@@ -1,4 +1,4 @@
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.keystore;
 
 public enum StoreType {
 	INTERNAL, EXTERNAL;

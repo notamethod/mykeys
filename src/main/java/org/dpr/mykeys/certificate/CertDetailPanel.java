@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.components;
+package org.dpr.mykeys.certificate;
 
 import java.awt.Component;
 import java.util.Iterator;
@@ -8,7 +8,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.bouncycastle.util.encoders.Hex;
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.swingutils.JSpinnerDate;

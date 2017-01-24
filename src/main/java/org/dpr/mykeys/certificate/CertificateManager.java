@@ -1,9 +1,8 @@
-package org.dpr.mykeys.ihm.service;
+package org.dpr.mykeys.certificate;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyTools;
 
 public class CertificateManager {

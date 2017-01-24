@@ -1,4 +1,4 @@
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.certificate;
 
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -15,7 +15,11 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.ihm.components.ListPanel;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
 
 public class CertificatManager {
 	public static final Log log = LogFactory.getLog(CertificatManager.class);

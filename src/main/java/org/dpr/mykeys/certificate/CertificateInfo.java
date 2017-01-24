@@ -1,4 +1,4 @@
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.certificate;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -20,6 +20,9 @@ import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
+import org.dpr.mykeys.app.ChildInfo;
+import org.dpr.mykeys.app.ChildType;
+import org.dpr.mykeys.app.X509Constants;
 
 public class CertificateInfo implements ChildInfo{
 	public static final Log log = LogFactory.getLog(CertificateInfo.class);

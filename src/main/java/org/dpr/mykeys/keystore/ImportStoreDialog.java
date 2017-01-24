@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.keystore;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -21,8 +21,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.StoreFormat;
-import org.dpr.mykeys.app.StoreModel;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JDropText;
 import org.dpr.swingutils.JDropTextField;
 import org.dpr.swingutils.JFieldsPanel;

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.certificate.windows;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -28,14 +28,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.StoreFormat;
+import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.ListPanel;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JLabel;
 import org.dpr.swingutils.LabelValuePanel;

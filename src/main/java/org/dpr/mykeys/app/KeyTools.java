@@ -83,6 +83,11 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.keystore.StoreType;
 
 public class KeyTools {
 	//FIXME:en création de magasin si l'extension est saisie ne pas la mettre 2 fois.

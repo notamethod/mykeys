@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.certificate.CertificateInfo;
 
 
 /**

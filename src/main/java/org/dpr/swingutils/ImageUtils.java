@@ -11,7 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.images.ImgRes;
+
 
 public class ImageUtils {
 
@@ -19,7 +19,7 @@ public class ImageUtils {
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	public static ImageIcon createImageIcon(String path) {
 		log.trace(path + " in");
-		java.net.URL imgURL = ImgRes.class.getResource(path);
+		java.net.URL imgURL = ImageUtils.class.getResource(path);
 		log.trace(path + " out " + imgURL);
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
@@ -32,7 +32,7 @@ public class ImageUtils {
 	public static Image getImage(String path) {
 		log.trace(path + " in");
 		Image img = Toolkit.getDefaultToolkit().getImage(
-				ImgRes.class.getResource(path));
+				ImageUtils.class.getResource(path));
 
 		log.trace(path + " out " + img);
 		if (img != null) {

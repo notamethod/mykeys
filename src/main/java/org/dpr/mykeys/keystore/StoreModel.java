@@ -1,4 +1,4 @@
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.keystore;
 
 public enum StoreModel {
 	CASTORE, CERTSTORE, KEYSTORE, P12STORE, PROFILSTORE;

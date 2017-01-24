@@ -6,10 +6,12 @@ import java.util.List;
 
 import javax.swing.JToolBar;
 
-import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.ihm.service.Profil;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.certificate.CertificateToolBar;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.profile.Profil;
+import org.dpr.mykeys.profile.ProfileToolBar;
 
 public class ToolBarManager {
 

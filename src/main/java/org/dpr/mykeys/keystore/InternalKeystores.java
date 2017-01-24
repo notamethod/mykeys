@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.keystore;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,7 +9,10 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.profile.ProfilsInfo;
 
 public class InternalKeystores {
 
@@ -53,7 +56,7 @@ public class InternalKeystores {
 
 			try {
 
-				InputStream is = (InternalKeystores.class.getResourceAsStream("/org/dpr/mykeys/config/mykeysAc.jks"));
+				InputStream is = (InternalKeystores.class.getResourceAsStream("/install/mykeysAc.jks"));
 				copyFile(is, f);
 				// InternalKeystores.class.getResource("/org.dpr.mykeys/config/myKeysAc.jks").getFile()getChannel();
 

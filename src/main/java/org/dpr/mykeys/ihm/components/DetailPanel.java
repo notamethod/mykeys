@@ -16,13 +16,15 @@ import javax.swing.JTextField;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.util.encoders.Hex;
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.certificate.CertDetailPanel;
+import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.ihm.service.Profil;
+import org.dpr.mykeys.profile.Profil;
+import org.dpr.mykeys.profile.ProfilDetailPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 

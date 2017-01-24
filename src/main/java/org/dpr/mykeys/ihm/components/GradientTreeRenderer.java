@@ -16,7 +16,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.dpr.mykeys.app.CrlInfo;
-import org.dpr.mykeys.app.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
 
 
 public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
@@ -31,8 +31,8 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 		final JLabel rc = (JLabel) super.getTreeCellRendererComponent(tree,
 				value, isSelected, expanded, leaf, row, hasFocus);
 		String tooltip = null;
-		setOpenIcon(createImageIcon("Go-down.png"));
-		setClosedIcon(createImageIcon("Go-previous.png"));
+		setOpenIcon(createImageIcon("/images/Go-down.png"));
+		setClosedIcon(createImageIcon("/images/Go-previous.png"));
 
 		Color colorb = UIManager.getColor("Tree.textBackground");
 		Color colorf = UIManager.getColor("Tree.textForeground");
@@ -50,20 +50,20 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 				// setTextNonSelectionColor( Color.green);
 				switch (kInfo.getStoreModel()) {
 				case CERTSTORE:
-					icon = createImageIcon("keystoreblue.png");
-					// icon = createImageIcon("keystoreblueo.png");
+					icon = createImageIcon("/images/keystoreblue.png");
+					// icon = createImageIcon("/images/keystoreblueo.png");
 					break;
 				case CASTORE:
-					// icon = ImageUtils.createImageIcon("keystorered.png");
+					// icon = ImageUtils.createImageIcon("/images/keystorered.png");
 					break;
 				default:
-					icon = createImageIcon("keystoreblue.png");
+					icon = createImageIcon("/images/keystoreblue.png");
 					break;
 				}
 
 				switch (kInfo.getStoreType()) {
 				case INTERNAL:
-					icon = createImageIcon("keystorered.png");
+					icon = createImageIcon("/images/keystorered.png");
 					break;
 				default:
 					break;
@@ -85,7 +85,7 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 				// if (kInfo.isOpen()) {
 				ImageIcon icon = null;
 
-				icon = createImageIcon("keystorered.png");
+				icon = createImageIcon("/images/keystorered.png");
 
 				if (icon != null) {
 

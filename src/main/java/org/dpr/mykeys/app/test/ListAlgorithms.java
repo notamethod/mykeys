@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.certificate.CertificateInfo;
 
 public class ListAlgorithms {
 	public static final Log log = LogFactory.getLog(ListAlgorithms.class);

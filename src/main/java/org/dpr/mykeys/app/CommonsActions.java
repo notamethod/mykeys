@@ -11,6 +11,12 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509CRL;
 
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.keystore.StoreModel;
+import org.dpr.mykeys.keystore.StoreType;
+
 /**
  * @author Buck
  * 

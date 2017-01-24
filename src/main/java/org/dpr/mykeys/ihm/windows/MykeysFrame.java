@@ -34,14 +34,14 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.StoreFormat;
-import org.dpr.mykeys.app.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.MenuAction;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.keystore.StoreModel;
 
 /**
  * 
@@ -102,9 +102,9 @@ public class MykeysFrame extends JFrame implements WindowListener
     {
         List<Image> images = new ArrayList<Image>();
         // URL imgURL = null;
-        images.add(getImage("mkico24.png"));
-        images.add(getImage("mkico32.png"));
-        images.add(getImage("mkico48.png"));
+        images.add(getImage("/images/mkico24.png"));
+        images.add(getImage("/images/mkico32.png"));
+        images.add(getImage("/images/mkico48.png"));
 
         return images;
     }
@@ -201,7 +201,7 @@ public class MykeysFrame extends JFrame implements WindowListener
         // menu
         JMenuBar menuBar = new JMenuBar();
         JMenu menu1 = new JMenu(MyKeys.getMessage().getString("magasin"));
-        // ImageIcon icon = createImageIcon("images/keystore.png");
+        // ImageIcon icon = createImageIcon("/images/images/keystore.png");
         // menu1.setIcon(icon);
         JMenuItem itemStart1 = new JMenuItem(new MenuAction(this, MyKeys
                 .getMessage().getString("magasin.new")));

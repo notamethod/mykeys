@@ -1,9 +1,9 @@
 import java.util.Calendar;
 import java.util.Date;
 
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.certificate.CertificateInfo;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

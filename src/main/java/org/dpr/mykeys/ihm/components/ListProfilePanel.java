@@ -43,26 +43,26 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.ProfilsInfo;
-import org.dpr.mykeys.app.StoreFormat;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.certificate.windows.CreateCertProfilDialog;
+import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
+import org.dpr.mykeys.certificate.windows.ExportCertificateDialog;
+import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.actions.TypeAction;
-import org.dpr.mykeys.ihm.service.Profil;
-import org.dpr.mykeys.ihm.service.ProfileManager;
-import org.dpr.mykeys.ihm.windows.CreateCertProfilDialog;
-import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.CreateCertificateFromProfile;
-import org.dpr.mykeys.ihm.windows.CreateProfilDialog;
-import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SuperCreate;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.profile.CreateProfilDialog;
+import org.dpr.mykeys.profile.Profil;
+import org.dpr.mykeys.profile.ProfileManager;
+import org.dpr.mykeys.profile.ProfilsInfo;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
@@ -76,7 +76,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		public ListTransferHandler() {
 			try {
 				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-						+ org.dpr.mykeys.app.CertificateInfo.class.getName() + "\"";
+						+ org.dpr.mykeys.certificate.CertificateInfo.class.getName() + "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
 				log.trace("ClassNotFound: " + e.getMessage());
@@ -155,7 +155,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		// titre = new GradientLabel("Gestion des certificats");
 		// add(titre);
 		jp = new JPanel(new BorderLayout());
-		final ImageIcon icon = createImageIcon("Locked.png");
+		final ImageIcon icon = createImageIcon("/images/Locked.png");
 
 		JToolBar toolBar = new JToolBar("Still draggable");
 		toolBar.setFloatable(false);
@@ -172,12 +172,12 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
 		// listCerts.setTransferHandler(new ListTransferHandler());
-		addCertButton = new JButton(createImageIcon("add-cert.png"));
-		addCertProfButton = new JButton(createImageIcon("add-cert-pro.png"));
-		unlockButton = new JToggleButton(createImageIcon("Locked.png"));
+		addCertButton = new JButton(createImageIcon("/images/add-cert.png"));
+		addCertProfButton = new JButton(createImageIcon("/images/add-cert-pro.png"));
+		unlockButton = new JToggleButton(createImageIcon("/images/Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
-		// unlockButton.setIcon(createImageIcon("Locked.png"));
-		unlockButton.setDisabledIcon(createImageIcon("Unlocked.png"));
+		// unlockButton.setIcon(createImageIcon("/images/Locked.png"));
+		unlockButton.setDisabledIcon(createImageIcon("/images/Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
 		addCertProfButton.setToolTipText("create cert from profile");
@@ -264,7 +264,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 			addCertButton.setEnabled(false);
 			addCertProfButton.setEnabled(false);
 			unlockButton.setSelected(false);
-			// unlockButton.setIcon(createImageIcon("Locked.png"));
+			// unlockButton.setIcon(createImageIcon("/images/Locked.png"));
 			unlockButton.setEnabled(true);
 			listCerts.setShowImage(true);
 		}

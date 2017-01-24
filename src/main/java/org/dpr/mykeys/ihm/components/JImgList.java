@@ -13,7 +13,7 @@ import javax.swing.ListModel;
 
 public class JImgList extends JList {
 
-	final ImageIcon icon = createImageIcon("cad1.png");
+	final ImageIcon icon = createImageIcon("/images/cad1.png");
 	Image grayImage = GrayFilter.createDisabledImage(icon.getImage());
 	boolean showImage = false;
 

@@ -33,6 +33,7 @@ import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
+import org.dpr.mykeys.certificate.CertificateInfo;
 
 public class CrlTools {
 	final Log log = LogFactory.getLog(CrlTools.class);

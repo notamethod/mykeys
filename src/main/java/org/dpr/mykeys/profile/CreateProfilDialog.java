@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.profile;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -39,17 +39,20 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.apache.commons.lang.StringUtils;
-import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
+import org.dpr.mykeys.certificate.windows.CreateCertificatDialog.DialogAction;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.service.ProfileManager;
-import org.dpr.mykeys.ihm.windows.CreateCertificatDialog.DialogAction;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.OkCancelPanel;
+import org.dpr.mykeys.ihm.windows.SuperCreate;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;

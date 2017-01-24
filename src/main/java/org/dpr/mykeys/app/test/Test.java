@@ -11,12 +11,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.tsp.TimeStampToken;
-import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.StoreFormat;
-import org.dpr.mykeys.app.StoreModel;
 import org.dpr.mykeys.app.TimeStampManager;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.keystore.StoreModel;
 
 public class Test {
 

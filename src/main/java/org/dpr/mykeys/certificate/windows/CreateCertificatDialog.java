@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.certificate.windows;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -13,11 +13,13 @@ import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 
-import org.dpr.mykeys.app.InternalKeystores;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.StoreModel;
-import org.dpr.mykeys.app.StoreType;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.SuperCreate;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreModel;
+import org.dpr.mykeys.keystore.StoreType;
 
 public class CreateCertificatDialog extends SuperCreate implements ItemListener {
 

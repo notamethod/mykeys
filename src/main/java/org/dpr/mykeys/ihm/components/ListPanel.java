@@ -40,23 +40,23 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.ProfilsInfo;
-import org.dpr.mykeys.app.StoreFormat;
-import org.dpr.mykeys.ihm.windows.CreateCertProfilDialog;
-import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.certificate.windows.CreateCertProfilDialog;
+import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
+import org.dpr.mykeys.certificate.windows.ExportCertificateDialog;
+import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.CreateCertificateFromProfile;
-import org.dpr.mykeys.ihm.windows.CreateProfilDialog;
-import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SuperCreate;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.profile.CreateProfilDialog;
+import org.dpr.mykeys.profile.ProfilsInfo;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
@@ -71,7 +71,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		public ListTransferHandler() {
 			try {
 				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-						+ org.dpr.mykeys.app.CertificateInfo.class.getName() + "\"";
+						+ org.dpr.mykeys.certificate.CertificateInfo.class.getName() + "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
 				log.trace("ClassNotFound: " + e.getMessage());
@@ -136,7 +136,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		dAction = new ActionPanel();
 
 		jp = new JPanel(new BorderLayout());
-		final ImageIcon icon = createImageIcon("Locked.png");
+		final ImageIcon icon = createImageIcon("/images/Locked.png");
 
 		actions = new KeysAction(this, this);
 		

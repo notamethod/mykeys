@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.certificate.windows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -38,17 +38,21 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import org.apache.commons.lang.StringUtils;
-import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.certificate.CertificateManager;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.model.FrameModel;
-import org.dpr.mykeys.ihm.service.CertificateManager;
-import org.dpr.mykeys.ihm.service.ProfileManager;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.OkCancelPanel;
+import org.dpr.mykeys.ihm.windows.SuperCreate;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.profile.ManageProfilException;
+import org.dpr.mykeys.profile.ProfileManager;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.SWComponent;
 

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.service;
+package org.dpr.mykeys.profile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,14 +17,13 @@ import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.components.ListPanel;
-import org.dpr.mykeys.ihm.windows.ManageProfilException;
+import org.dpr.mykeys.keystore.InternalKeystores;
 
 public class ProfileManager
 

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.service;
+package org.dpr.mykeys.profile;
 
 import java.io.File;
 import java.io.FileInputStream;

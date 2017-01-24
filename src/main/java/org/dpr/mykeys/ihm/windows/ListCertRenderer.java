@@ -9,8 +9,8 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 
-import org.dpr.mykeys.app.CertificateInfo;
-import org.dpr.mykeys.ihm.service.Profil;
+import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.profile.Profil;
 
 
 /**
@@ -46,9 +46,9 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 			CertificateInfo cert = ((CertificateInfo) value);
 			ImageIcon icon = null;
 			if (cert.isContainsPrivateKey()) {
-				icon = createImageIcon("certificatekey.png");
+				icon = createImageIcon("/images/certificatekey.png");
 			} else {
-				icon = createImageIcon("certificate2.png");
+				icon = createImageIcon("/images/certificate2.png");
 			}
 			if (icon != null) {
 
@@ -70,7 +70,7 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 
 		}else if (value instanceof Profil) {
 			Profil prof = ((Profil) value);
-			setIcon(createImageIcon("profile1.png"));
+			setIcon(createImageIcon("/images/profile1.png"));
 			setText(prof.getName());
 		}
 		// return super.getListCellRendererComponent(list, value, index,

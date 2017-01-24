@@ -7,10 +7,10 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.actions.TypeAction;
-import org.dpr.mykeys.ihm.service.Profil;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.profile.Profil;
  
 public class KeysProfileAction implements ActionListener {
 

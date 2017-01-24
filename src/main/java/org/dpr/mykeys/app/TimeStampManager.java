@@ -40,6 +40,7 @@ import org.bouncycastle.tsp.TimeStampRequestGenerator;
 import org.bouncycastle.tsp.TimeStampResponse;
 import org.bouncycastle.tsp.TimeStampToken;
 import org.bouncycastle.tsp.TimeStampTokenGenerator;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
 
 /*
  * http://threebit.net/mail-archive/itext-questions/msg04989.html

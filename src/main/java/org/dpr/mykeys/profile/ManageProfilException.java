@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.profile;
 
 public class ManageProfilException extends Exception {
 
