@@ -37,8 +37,8 @@ import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.app.StoreType;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog.DialogAction;
@@ -73,49 +73,11 @@ public class SuperCreate extends JDialog implements ItemListener {
 		super(owner, modal);
 	}
 
-	public SuperCreate(Frame owner, String title) {
-		super(owner, title);
-	}
-
 	public SuperCreate(Dialog owner, boolean modal) {
 		super(owner, modal);
 	}
 
-	public SuperCreate(Dialog owner, String title) {
-		super(owner, title);
-	}
-
-	public SuperCreate(Window owner, ModalityType modalityType) {
-		super(owner, modalityType);
-	}
-
-	public SuperCreate(Window owner, String title) {
-		super(owner, title);
-	}
-
-	public SuperCreate(Frame owner, String title, boolean modal) {
-		super(owner, title, modal);
-	}
-
-	public SuperCreate(Dialog owner, String title, boolean modal) {
-		super(owner, title, modal);
-	}
-
-	public SuperCreate(Window owner, String title, ModalityType modalityType) {
-		super(owner, title, modalityType);
-	}
-
-	public SuperCreate(Frame owner, String title, boolean modal, GraphicsConfiguration gc) {
-		super(owner, title, modal, gc);
-	}
-
-	public SuperCreate(Dialog owner, String title, boolean modal, GraphicsConfiguration gc) {
-		super(owner, title, modal, gc);
-	}
-
-	public SuperCreate(Window owner, String title, ModalityType modalityType, GraphicsConfiguration gc) {
-		super(owner, title, modalityType, gc);
-	}
+	
 
 	protected void init() {
 

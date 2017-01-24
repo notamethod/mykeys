@@ -3,6 +3,7 @@
  */
 package org.dpr.mykeys.app;
 
+import java.util.List;
 
 /**
  * @author Buck
@@ -49,5 +50,14 @@ public interface NodeInfo {
 	 *            the isOpen to set
 	 */
 	public void setOpen(boolean isOpen);
+	
+	 
+	public List<? extends ChildInfo> getChildList();
+
+	public boolean isProtected();
+
+	public void open() throws KeyToolsException;
+
+
 
 }

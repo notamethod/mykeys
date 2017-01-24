@@ -4,6 +4,7 @@
 package org.dpr.mykeys.app;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -12,7 +13,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author Buck
  *
  */
-public class BagInfo implements NodeInfo {
+public abstract class BagInfo implements NodeInfo {
 
 	String name;
 	String path;
@@ -109,5 +110,18 @@ public class BagInfo implements NodeInfo {
 	public void setPath(String path) {
 		this.path = path;
 	}
+
+	@Override
+	public abstract List<? extends ChildInfo> getChildList();
+
+
+	@Override
+	public boolean isProtected() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public abstract void open() throws KeyToolsException;
 
 }

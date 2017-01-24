@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.dpr.mykeys.app.CertificateInfo;
+import org.dpr.mykeys.ihm.service.Profil;
 
 
 /**
@@ -67,6 +68,10 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 			sb.append("</html>");
 			this.setToolTipText(sb.toString());
 
+		}else if (value instanceof Profil) {
+			Profil prof = ((Profil) value);
+			setIcon(createImageIcon("profile1.png"));
+			setText(prof.getName());
 		}
 		// return super.getListCellRendererComponent(list, value, index,
 		// isSelected, cellHasFocus);

@@ -1,12 +1,47 @@
 package org.dpr.mykeys.app;
 
 import java.io.File;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.PkiTools.TypeObject;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.ihm.components.ListPanel;
 
 public class KeyStoreInfo extends BagInfo implements NodeInfo {
+	
+	public static final Log log = LogFactory.getLog(KeyStoreInfo.class);
+
+	@Override
+	public List<CertificateInfo> getChildList() {
+		// TODO Auto-generated method stub
+		List<CertificateInfo> certs = null;
+		try {
+			certs = getCertificates();
+		} catch (KeyToolsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return certs;
+	}
+
+	@Override
+	public boolean isProtected() {
+		return true;
+	}
+
+	@Override
+	public void open() throws KeyToolsException {
+		KeyTools kt = new KeyTools();
+		KeyStore ks = null;
+		
+		ks = kt.loadKeyStore(this.getPath(), this.getStoreFormat(), this.getPassword());
+		
+	}
 
 	private String name;
 
@@ -120,60 +155,6 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 		this.password = password;
 	}
 
-	public enum StoreModel {
-		CASTORE, CERTSTORE, KEYSTORE, P12STORE;
-
-		public static StoreModel fromValue(String v) {
-			return valueOf(v);
-		}
-
-		public static String getValue(StoreModel type) {
-			return type.toString();
-		}
-	}
-
-	public enum StoreFormat {
-		JKS, PKCS12, PEM, DER, UNKNOWN;
-		public static StoreFormat fromValue(String v) {
-			StoreFormat fmt = null;
-			try {
-				fmt = valueOf(v);
-			} catch (Exception e) {
-				fmt = UNKNOWN;
-			}
-			return fmt;
-
-		}
-
-		public static String getValue(StoreFormat format) {
-			return format.toString();
-		}
-
-		public static StoreFormat fromValue(TypeObject typeObject) {
-			switch (typeObject) {
-			case MAGP12:
-				return PKCS12;
-
-            case MAGCER:
-            	return DER;
-  
-			default:
-				return UNKNOWN;
-			}
-		}
-	}
-
-	public enum StoreType {
-		INTERNAL, EXTERNAL;
-		public static StoreType fromValue(String v) {
-			return valueOf(v);
-		}
-
-		public static String getValue(StoreType type) {
-			return type.toString();
-		}
-	}
-
 	/**
 	 * Retourne le storeType.
 	 * 
@@ -225,5 +206,40 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	 */
 	public void setStoreType(StoreType storeType) {
 		this.storeType = storeType;
+	}
+	
+	private List<CertificateInfo> getCertificates()
+			throws KeyToolsException {
+		List<CertificateInfo> certs = new ArrayList<CertificateInfo>();
+		KeyTools kt = new KeyTools();
+		KeyStore ks = null;
+		if (this.getPassword() == null
+				&& this.getStoreFormat().equals(StoreFormat.PKCS12)) {
+			return certs;
+		}
+
+		ks = kt.loadKeyStore(this.getPath(), this.getStoreFormat(),
+				this.getPassword());
+
+		log.trace("addcerts");
+		Enumeration<String> enumKs;
+		try {
+			enumKs = ks.aliases();
+			if (enumKs != null && enumKs.hasMoreElements()) {
+
+				while (enumKs.hasMoreElements()) {
+					String alias = enumKs.nextElement();
+
+					CertificateInfo certInfo = new CertificateInfo(alias);
+					kt.fillCertInfo(ks, certInfo, alias);
+					certs.add(certInfo);
+				}
+			}
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return certs;
+
 	}
 }

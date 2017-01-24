@@ -32,8 +32,8 @@ import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.StoreFormat;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.swingutils.JFieldsPanel;
@@ -185,9 +185,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 // saisie mot de passe
                 char[] password = null;
                 char[] privKeyPwd = null;
-                Object exportCle=infosPanel.getElements().get(
+                boolean isExportCle = (Boolean) infosPanel.getElements().get(
                         "isExportKey");
-                boolean isExportCle = exportCle==null ?false:(Boolean)exportCle;
 
 
                 KeyTools kt = new KeyTools();

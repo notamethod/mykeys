@@ -5,6 +5,7 @@ package org.dpr.mykeys.app;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -170,6 +171,24 @@ public class CrlInfo implements NodeInfo {
 	public void setOpen(boolean isOpen) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<? extends ChildInfo> getChildList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isProtected() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void open() throws KeyToolsException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

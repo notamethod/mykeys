@@ -13,7 +13,7 @@ import javax.swing.tree.TreePath;
 
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreType;
+import org.dpr.mykeys.app.StoreType;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.CreateStoreDialog;
@@ -155,14 +155,16 @@ public class TreePopupMenu extends JPopupMenu {
 	
 		
 		closeStore = new JMenuItem("Fermer magasin");
+
 		closeStore.addActionListener(new TreePopupAction());
 		closeStore.setActionCommand(TypeAction.CLOSE_STORE.getValue());
 		closeStore.setVisible(false);
-		
+
 		removeStore = new JMenuItem("Retirer du gestionnaire");
 		removeStore.addActionListener(new TreePopupAction());
 		removeStore.setActionCommand(TypeAction.REMOVE_STORE.getValue());
 		removeStore.setVisible(false);
+
 		deleteStore = new JMenuItem("Suppression physique");
 		deleteStore.addActionListener(new TreePopupAction());
 		deleteStore.setActionCommand(TypeAction.DELETE_STORE.getValue());

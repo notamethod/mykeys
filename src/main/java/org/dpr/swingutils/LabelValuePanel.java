@@ -34,6 +34,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.ihm.model.FrameModel;
 
 public class LabelValuePanel extends JPanel implements DocumentListener
 {
@@ -44,6 +45,8 @@ public class LabelValuePanel extends JPanel implements DocumentListener
     private static final long serialVersionUID = 2550655426888407968L;
 
     int nbRows;
+    
+    FrameModel model=null;
 
     int nbCols;
 
@@ -72,7 +75,6 @@ public class LabelValuePanel extends JPanel implements DocumentListener
         this.setLayout(new SpringLayout());
         this.elements = new HashMap<String, Object>();
         this.components = new HashMap<String, Object>();
-
     }
 
     public LabelValuePanel(Map<String, String> elements2, int cols)
@@ -80,10 +82,23 @@ public class LabelValuePanel extends JPanel implements DocumentListener
         this.nbCols = cols;
     }
 
-    public void put(String label, String id, String defaultValue)
+    public LabelValuePanel(FrameModel model) {
+    	 super();
+         this.setLayout(new SpringLayout());
+         this.elements = new HashMap<String, Object>();
+         this.components = new HashMap<String, Object>();
+	}
+
+	public void put(String label, String id, String defaultValue)
     {
         put(label, JTextField.class, id, defaultValue, true);
     }
+    
+    public void putDisabled(String label, String id, String defaultValue)
+    {
+        put(label, JTextField.class, id, defaultValue, false);
+    }
+    
 
     public void put(String label, Class<?> class1, String keyValue,
             Map<String, String> values)
@@ -119,7 +134,9 @@ public class LabelValuePanel extends JPanel implements DocumentListener
             Map<String, String> values, String defaultValue, ActionListener listener)
     {
         JLabel jl = new JLabel(label);
-
+        if (model!=null){
+        	model.add(keyValue, keyValue);
+        }
         JComponent component = null;
         List<JComponent> components = null;
         if (class1.getName().equals(JComboBox.class.getName()))
@@ -727,5 +744,15 @@ public class LabelValuePanel extends JPanel implements DocumentListener
         }
         return string;
     }
+
+	public void put(String keyValue, String value) {
+		final String globalKey = keyValue;
+        
+            if (elements.get(globalKey) == null)
+            {
+                elements.put(globalKey, value);
+            }
+		
+	}
 
 }

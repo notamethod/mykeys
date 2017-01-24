@@ -6,6 +6,15 @@ import java.util.Map;
 public class SWComponent
 {
 
+
+
+    private String label;
+    private Class<?> classe;
+    private String keyValue;
+    private Map<String, String> values;
+    private String defaultValue;
+    private ActionListener listener;
+
     public SWComponent(String label, Class<?> classe, String keyValue, Map<String, String> values, String defaultValue,
             ActionListener listener)
     {
@@ -17,14 +26,7 @@ public class SWComponent
         this.defaultValue = defaultValue;
         this.listener = listener;
     }
-
-    private String label;
-    private Class<?> classe;
-    private String keyValue;
-    private Map<String, String> values;
-    private String defaultValue;
-    private ActionListener listener;
-
+    
     public String getLabel()
     {
         return label;

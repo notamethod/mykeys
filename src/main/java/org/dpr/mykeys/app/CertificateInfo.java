@@ -21,7 +21,7 @@ import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
 
-public class CertificateInfo {
+public class CertificateInfo implements ChildInfo{
 	public static final Log log = LogFactory.getLog(CertificateInfo.class);
 
 	// private X509PrincipalModel x509PrincipalModel;
@@ -31,7 +31,17 @@ public class CertificateInfo {
 
 	private String algoPubKey;
 
+	public String getIssuer() {
+		return issuer;
+	}
+
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
+	}
+
 	private String algoSig;
+	
+	private String issuer;
 
 	private char[] password;
 
@@ -237,6 +247,7 @@ public class CertificateInfo {
 	 * @param principalMap
 	 *            the x509PrincipalMap to set
 	 */
+	@Deprecated
 	public void setX509PrincipalMapOld(Map<String, String> sourceMap) {
 
 		x509PrincipalMap.put(X509Principal.C, sourceMap.get("x509PrincipalC"));
@@ -615,5 +626,11 @@ public class CertificateInfo {
 		}
 		this.duration=dur;
 		
+	}
+
+	@Override
+	public ChildType getChildType() {
+		// TODO Auto-generated method stub
+		return ChildType.CERTIFICATE;
 	}
 }

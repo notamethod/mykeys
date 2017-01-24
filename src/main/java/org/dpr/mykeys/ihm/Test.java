@@ -9,8 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateInfo;
 import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreFormat;
-import org.dpr.mykeys.app.KeyStoreInfo.StoreModel;
+import org.dpr.mykeys.app.StoreFormat;
+import org.dpr.mykeys.app.StoreModel;
 
 public class Test {
 

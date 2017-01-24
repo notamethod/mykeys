@@ -95,7 +95,6 @@ public class MenuAction extends AbstractAction {
 	                            cs.setVisible(true);
 	                        }
 	                    });
-	                    
 				} else if (action.equals("signFile")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
