@@ -220,7 +220,7 @@ public class MykeysFrame extends JFrame implements WindowListener
         JMenuItem menuCrl = new JMenuItem(new MenuAction(this,
                 messages.getString("crl.add")));
         menuCrl.setActionCommand("addCrl");
-        menuOptions.add(menuCrl);
+        //menuOptions.add(menuCrl);
 
         JMenuItem menu3 = new JMenuItem(new MenuAction(this, "Profil"));
         menu3.setActionCommand("profil");
@@ -231,8 +231,8 @@ public class MykeysFrame extends JFrame implements WindowListener
         //	menu4.setActionCommand("signFile");
         menuBar.add(menu1);
         menuBar.add(menuOptions);
-        menuBar.add(menu3);
-        menuBar.add(menu4);
+       // menuBar.add(menu3);
+        //menuBar.add(menu4);
         // Create a toolbar and give it an etched border.
 
         this.setJMenuBar(menuBar);
