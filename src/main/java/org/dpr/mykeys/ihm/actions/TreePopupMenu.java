@@ -39,6 +39,8 @@ public class TreePopupMenu extends JPopupMenu {
 	JMenuItem deleteStore;
 
 	JMenuItem exportCert;
+	
+	JMenuItem menuChangePwd;
 
 	TreeKeyStorePanel treeKeyStoreParent;
 
@@ -100,7 +102,9 @@ public class TreePopupMenu extends JPopupMenu {
 				MykeysFrame.removeKeyStore(ksInfo.getPath());
 				treeKeyStoreParent.removeNode(node);
 				break;
-
+			case CHANGE_PWD:
+				treeKeyStoreParent.changePassword(node, false);
+				break;
 			default:
 				break;
 			}
@@ -147,9 +151,10 @@ public class TreePopupMenu extends JPopupMenu {
 		openStore.addActionListener(new TreePopupAction());
 		openStore.setActionCommand(TypeAction.OPEN_STORE.getValue());
 		openStore.setVisible(false);
+		
+	
+		
 		closeStore = new JMenuItem("Fermer magasin");
-		
-		
 
 		closeStore.addActionListener(new TreePopupAction());
 		closeStore.setActionCommand(TypeAction.CLOSE_STORE.getValue());
@@ -159,11 +164,17 @@ public class TreePopupMenu extends JPopupMenu {
 		removeStore.addActionListener(new TreePopupAction());
 		removeStore.setActionCommand(TypeAction.REMOVE_STORE.getValue());
 		removeStore.setVisible(false);
-		
+
 		deleteStore = new JMenuItem("Suppression physique");
 		deleteStore.addActionListener(new TreePopupAction());
 		deleteStore.setActionCommand(TypeAction.DELETE_STORE.getValue());
 		deleteStore.setVisible(false);
+		
+		menuChangePwd = new JMenuItem(MyKeys.getMessage().getString("magasin.change.password"));
+		menuChangePwd.addActionListener(new TreePopupAction());
+		menuChangePwd.setActionCommand(TypeAction.CHANGE_PWD.getValue());
+		menuChangePwd.setVisible(false);
+		
 		add(addStore);
 		add(importStore);
 		add(addCertMenu);
@@ -173,6 +184,7 @@ public class TreePopupMenu extends JPopupMenu {
 		// add(closeStore);
 		add(removeStore);
 		add(deleteStore);
+		add(menuChangePwd);
 	}
 
 	/**
@@ -195,6 +207,7 @@ public class TreePopupMenu extends JPopupMenu {
 		closeStore.setVisible(false);
 		removeStore.setVisible(false);
 		deleteStore.setVisible(false);
+		menuChangePwd.setVisible(false);
 		this.node = node;
 		if (node == null || node.getParent() == null) {
 			addStore.setVisible(true);
@@ -210,8 +223,12 @@ public class TreePopupMenu extends JPopupMenu {
 			} else {
 				openStore.setVisible(true);
 			}
-			if (!ksInfo.getStoreType().equals(StoreType.INTERNAL))
+			if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)){
 				removeStore.setVisible(true);
+				menuChangePwd.setVisible(true);
+			}else{
+				
+			}
 
 		} else if (node.getUserObject() instanceof CertificateInfo) {
 			CertificateInfo certInfo = (CertificateInfo) node.getUserObject();

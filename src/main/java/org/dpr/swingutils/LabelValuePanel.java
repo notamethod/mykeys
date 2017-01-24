@@ -343,6 +343,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener
         {
             JPasswordField pwdField = new JPasswordField(strValue);
             pwdField.setEditable(isEditable);
+            pwdField.setColumns(16);
             elements.put(globalKey, value);
             pwdField.getDocument().addDocumentListener(new DocumentListener()
             {

@@ -92,6 +92,7 @@ import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
+import org.dpr.mykeys.ihm.windows.ChangePasswordDialog;
 import org.dpr.mykeys.ihm.windows.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ImportCertificateDialog;
@@ -676,6 +677,22 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		openStore(node, true, true);
 
 	}
+	
+	public void changePassword(DefaultMutableTreeNode node, boolean b) {
+		JFrame frame = (JFrame) tree.getTopLevelAncestor();
+		KeyStoreInfo ksInfo = null;
+		Object object = node.getUserObject();
+		if (object instanceof KeyStoreInfo) {
+			ksInfo = ((KeyStoreInfo) object);
+		}
+		ChangePasswordDialog cs = new ChangePasswordDialog(frame, ksInfo);
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+
+
+	}
+
 
 	/**
 	 * .

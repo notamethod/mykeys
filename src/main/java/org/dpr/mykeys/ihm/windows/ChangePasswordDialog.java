@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -22,16 +23,18 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.KeyStoreInfo;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.StoreFormat;
-import org.dpr.mykeys.app.StoreModel;
 import org.dpr.mykeys.ihm.MyKeys;
-
+import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class CreateStoreDialog extends JDialog {
+public class ChangePasswordDialog extends JDialog {
 
 	private JTextField tfDirectory;
 
@@ -39,47 +42,40 @@ public class CreateStoreDialog extends JDialog {
 	// JPasswordField pwd1;
 	// JPasswordField pwd2;
 	LabelValuePanel infosPanel;
+	
+	KeyStoreInfo ksInfo;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
-	public CreateStoreDialog(Frame owner, boolean modal) {
-		super(owner, modal);
+
+
+	public ChangePasswordDialog(JFrame frame, KeyStoreInfo ksInfo) {
+		super(frame, true);
+		this.ksInfo=ksInfo;
 		init();
 		this.pack();
 	}
 
 	public void init() {
 		DialogAction dAction = new DialogAction();
-		setTitle("Création de magasin");
+		setTitle(MyKeys.getMessage().getString("magasin.change.password"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
 		setContentPane(jp);
 
-		Map<String, String> mapType = new HashMap<String, String>();
-		mapType.put("Java Key store", "JKS");
-		mapType.put("PKCS12", "PKCS12");
+		
 
 		infosPanel = new LabelValuePanel();
 
-		infosPanel.put("Type de magasin", JComboBox.class, "typeKS", mapType);
-		infosPanel.putEmptyLine();
-		infosPanel.put("Mot de passe", JPasswordField.class, "pwd1", "", true);
-		infosPanel.put("Confirmer le Mot de passe", JPasswordField.class, "pwd2", "", true);
+
+		infosPanel.put(MyKeys.getMessage().getString("label.old.password"), JPasswordField.class, "pwd_old", "", true);
+		infosPanel.put(MyKeys.getMessage().getString("label.new.password"), JPasswordField.class, "pwd_new", "", true);
+		infosPanel.put(MyKeys.getMessage().getString("label.confirm.password"), JPasswordField.class, "pwd_new2", "", true);
 
 		infosPanel.putEmptyLine();
 
-		JLabel jl4 = new JLabel(MyKeys.getMessage().getString("label.filename"));
-		tfDirectory = new JTextField(30);
-
-		JButton jbChoose = new JButton("...");
-		jbChoose.addActionListener(dAction);
-		jbChoose.setActionCommand("CHOOSE_IN");
-
-		JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		jpDirectory.add(jl4);
-		jpDirectory.add(tfDirectory);
-		jpDirectory.add(jbChoose);
+	
 		JButton jbOK = new JButton("Valider");
 		jbOK.addActionListener(dAction);
 		jbOK.setActionCommand("OK");
@@ -88,10 +84,6 @@ public class CreateStoreDialog extends JDialog {
 		jbCancel.setActionCommand("CANCEL");
 		JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
-		// jp.add(jf0);
-		// jp.add(jf1);
-		// jp.add(jf2);
-		jp.add(jpDirectory);
 		jp.add(infosPanel);
 
 		jp.add(jf4);
@@ -104,53 +96,29 @@ public class CreateStoreDialog extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
-			if (command.equals("CHOOSE_IN")) {
-
-				JFileChooser jfc = new JFileChooser(getDataDir());
-				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
-
-				// jPanel1.add(jfc);
-				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					String path = jfc.getSelectedFile().getAbsolutePath();
-					String typeKS = (String) infosPanel.getElements().get("typeKS");
-
-					tfDirectory.setText(path);
-
-				}
-
-			} else if (command.equals("OK")) {
-				if (tfDirectory.getText().equals("") || elements.get("pwd1") == null) {
-					MykeysFrame.showError(CreateStoreDialog.this, "Champs invalides");
+			 if (command.equals("OK")) {
+				if (StringUtils.isBlank((String) elements.get("pwd_old")) || StringUtils.isBlank((String) elements.get("pwd_new")) || StringUtils.isBlank((String) elements.get("pwd_new2") )) {
+					MykeysFrame.showError(ChangePasswordDialog.this, "Champs invalides");
 					return;
 				}
-				if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-					MykeysFrame.showError(CreateStoreDialog.this, "Mot de passe incorrect");
+				if (!elements.get("pwd_new").equals(elements.get("pwd_new2"))) {
+					MykeysFrame.showError(ChangePasswordDialog.this, MyKeys.getMessage().getString("error.match.password"));
 					return;
 				}
-
-				String typeKS = (String) infosPanel.getElements().get("typeKS");
-				String dir = correctExtension(tfDirectory.getText(), typeKS);
-				Path p = Paths.get(dir);
-				
-				if (!p.isAbsolute()) {
-					
-					dir = getDataDir() + File.separator + correctExtension(dir, typeKS);;
-				}
-				KeyTools kt = new KeyTools();
+				ksInfo.setPassword(((String)elements.get("pwd_old")).toCharArray());
+				KeyStoreService service = new KeyStoreService(ksInfo);
 				try {
-					StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
-					createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
-					kt.createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
-					KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
-					((MykeysFrame) CreateStoreDialog.this.getParent()).updateKeyStoreList();
-					CreateStoreDialog.this.setVisible(false);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					service.changePassword(((String)elements.get("pwd_new")).toCharArray());
+					ksInfo.setOpen(false);
+					ChangePasswordDialog.this.setVisible(false);
+				} catch (TamperedWithException | KeyToolsException e) {
+					MykeysFrame.showError(ChangePasswordDialog.this, e.getLocalizedMessage());
 				}
+
+			
 
 			} else if (command.equals("CANCEL")) {
-				CreateStoreDialog.this.setVisible(false);
+				ChangePasswordDialog.this.setVisible(false);
 			}
 
 		}
