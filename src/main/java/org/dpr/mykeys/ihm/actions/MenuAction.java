@@ -87,15 +87,7 @@ public class MenuAction extends AbstractAction {
 							cs.setVisible(true);
 						}
 					});
-		           } else if (action.equals("certprof")) {
-	                    SwingUtilities.invokeLater(new Runnable() {
-	                        public void run() {
-	                            CreateCertProfilDialog cs = new CreateCertProfilDialog(MykeysFrame, true);
-	                            cs.setLocationRelativeTo(MykeysFrame);
-	                            cs.setVisible(true);
-	                        }
-	                    });
-				} else if (action.equals("signFile")) {
+		           }  else if (action.equals("signFile")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							VerifSigDialog cs = new VerifSigDialog(MykeysFrame,

@@ -41,9 +41,6 @@ public class CertificatManager {
 			log.warn(e1);
 			return getCertificatesFromFactory(kt, ksInfo);
 		}
-
-
-
 	}
 
 	private static List<CertificateInfo> getCertificatesFromFactory(KeyTools kt, KeyStoreInfo 

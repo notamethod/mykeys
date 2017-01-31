@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.profile.ProfilsInfo;
+import org.dpr.mykeys.profile.ProfilStoreInfo;
 
 public class InternalKeystores {
 
@@ -93,16 +93,16 @@ public class InternalKeystores {
 		return kinfo;
 	}
 
-	public static ProfilsInfo getProfilsStore() {
+	public static ProfilStoreInfo getProfilsStore() {
 		String path = InternalKeystores.getProfilsPath();
 
-		ProfilsInfo kinfo = null;
+		ProfilStoreInfo kinfo = null;
 		File f = new File(path);
 		if (!f.exists()) {
 			f.mkdirs();
 
 		}
-		kinfo = new ProfilsInfo(MyKeys.getMessage().getString("profil.name"), path, StoreFormat.PROPERTIES);
+		kinfo = new ProfilStoreInfo(MyKeys.getMessage().getString("profil.name"), path, StoreFormat.PROPERTIES);
 		kinfo.setPassword("null".toCharArray());
 		kinfo.setOpen(true);
 		return kinfo;

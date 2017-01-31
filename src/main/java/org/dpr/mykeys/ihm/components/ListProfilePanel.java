@@ -53,7 +53,6 @@ import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
 import org.dpr.mykeys.certificate.windows.ExportCertificateDialog;
 import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.actions.TypeAction;
-import org.dpr.mykeys.ihm.windows.CreateCertificateFromProfile;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SuperCreate;
@@ -62,7 +61,7 @@ import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.profile.CreateProfilDialog;
 import org.dpr.mykeys.profile.Profil;
 import org.dpr.mykeys.profile.ProfileManager;
-import org.dpr.mykeys.profile.ProfilsInfo;
+import org.dpr.mykeys.profile.ProfilStoreInfo;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
@@ -410,7 +409,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 					Profil certInfo = (Profil) listCerts.getSelectedValue();
 					if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
 						try {
-							profileService.delete(ksInfo, certInfo);
+							profileService.delete( certInfo);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -449,7 +448,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
 		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertProfilDialog(frame,  true);
+			cs = new CreateCertProfilDialog(frame,  (KeyStoreInfo) info, true);
 		} 
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);

@@ -97,7 +97,7 @@ import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
-import org.dpr.mykeys.profile.ProfilsInfo;
+import org.dpr.mykeys.profile.ProfilStoreInfo;
 
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		TreeExpansionListener, TreeWillExpandListener, DropTargetListener {
@@ -567,8 +567,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 							displayKeystoreList(ksiInfo);
 
 					} else 
-						if (object instanceof ProfilsInfo) {
-							ProfilsInfo ksiInfo = ((ProfilsInfo) object);
+						if (object instanceof ProfilStoreInfo) {
+							ProfilStoreInfo ksiInfo = ((ProfilStoreInfo) object);
 							if (ksiInfo != null)
 								displayKeystoreList(ksiInfo);
 

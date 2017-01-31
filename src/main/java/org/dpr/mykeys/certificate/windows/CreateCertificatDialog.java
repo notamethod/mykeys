@@ -69,9 +69,7 @@ public static void main(String[] args) {
 
 				// certInfo.setX509PrincipalMap(elements);
 				HashMap<String, String> subjectMap = new HashMap<String, String>();
-				certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
-				certInfo.setAlgoSig((String) elements.get("algoSig"));
-				certInfo.setKeyLength((String) elements.get("keyLength"));
+				FillUtils.fillCertInfo(elements, certInfo);
 				certInfo.setAlias((String) elements.get("alias"));
 				certInfo.setNotBefore((Date) elements.get("notBefore"));
 				certInfo.setNotAfter((Date) elements.get("notAfter"));

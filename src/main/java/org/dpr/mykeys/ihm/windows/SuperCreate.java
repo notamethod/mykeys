@@ -36,6 +36,7 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.certificate.windows.FillUtils;
 import org.dpr.mykeys.certificate.windows.CreateCertificatDialog.DialogAction;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
@@ -303,9 +304,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
 			// certInfo.setX509PrincipalMap(elements);
 			HashMap<String, String> subjectMap = new HashMap<String, String>();
-			certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
-			certInfo.setAlgoSig((String) elements.get("algoSig"));
-			certInfo.setKeyLength((String) elements.get("keyLength"));
+			FillUtils.fillCertInfo(elements, certInfo);
 			certInfo.setAlias((String) elements.get("alias"));
 			certInfo.setNotBefore((Date) elements.get("notBefore"));
 			certInfo.setNotAfter((Date) elements.get("notAfter"));

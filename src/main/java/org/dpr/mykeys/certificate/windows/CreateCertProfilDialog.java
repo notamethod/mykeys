@@ -51,7 +51,9 @@ import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.ihm.windows.SuperCreate;
 import org.dpr.mykeys.keystore.InternalKeystores;
-import org.dpr.mykeys.profile.ManageProfilException;
+import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreModel;
+import org.dpr.mykeys.profile.ProfilException;
 import org.dpr.mykeys.profile.ProfileManager;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.SWComponent;
@@ -66,10 +68,17 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
     
     private Properties profile = null;
 
-    public CreateCertProfilDialog(Frame owner, boolean modal)
+    public CreateCertProfilDialog(Frame owner, KeyStoreInfo ksInfo, boolean modal)
     {
 
         super(owner, true);
+		this.ksInfo = ksInfo;
+		if (ksInfo==null){
+			isAC = false;
+		}else
+		if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
+			isAC = true;
+		}
 
         init();
         this.pack();
@@ -135,7 +144,7 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoPubKey", "");
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoSig", "");
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "keyLength", "");
-        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "duration", "");
+        panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "Duration", "");
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "E", "");
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "CrlDistrib", "");
         panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "PolicyNotice", "");
@@ -216,7 +225,7 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
             infosPanel.putEmptyLine();
             Calendar calendar = Calendar.getInstance();
 
-            infosPanel.putDisabled(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "");
+            infosPanel.putDisabled(MyKeys.getMessage().getString("certinfo.Duration"), "Duration", "");
             infosPanel.putEmptyLine();
 
 
@@ -274,7 +283,7 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
     					KeyTools ktools = new KeyTools();
     					xCerts = cm.generateX509(certInfo);
     					//TODO manage ksinfo
-    					ktools.addCertToKeyStoreNew(xCerts, null, certInfo);
+    					ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
                     CreateCertProfilDialog.this.setVisible(false);
 
                 }
@@ -295,7 +304,7 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
 
         void fillCertInfo()
         {
-            Map<String, Object> elements = infosPanel.getElements();
+            Map<String, Object> elements = panelInfoVisible.getElements();
             Set<String> keys = elements.keySet();
             Iterator<String> it = keys.iterator();
             while (it.hasNext())
@@ -306,10 +315,8 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
             // certInfo.setX509PrincipalMap(elements);
             HashMap<String, String> subjectMap = new HashMap<String, String>();
 
-            certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
-            certInfo.setAlgoSig((String) elements.get("algoSig"));
-            certInfo.setKeyLength((String) elements.get("keyLength"));
-            certInfo.setDuration((Integer) elements.get("duration"));
+            FillUtils.fillCertInfo(elements, certInfo);
+            certInfo.setDuration(Integer.valueOf( (String) elements.get("Duration")));
 
             certInfo.setSubjectMap(elements);
 
@@ -341,7 +348,7 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
                     fillCert(profile);
                  
                 }
-                catch (ManageProfilException e1)
+                catch (ProfilException e1)
                 {
                     MykeysFrame.showError(this, e1.getMessage());
                 }

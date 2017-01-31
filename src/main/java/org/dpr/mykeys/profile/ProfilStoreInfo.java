@@ -16,7 +16,7 @@ import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
 
-public class ProfilsInfo extends BagInfo implements NodeInfo {
+public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 
 	private String name;
 
@@ -36,20 +36,20 @@ public class ProfilsInfo extends BagInfo implements NodeInfo {
 
 	private char[] password;
 
-	public ProfilsInfo(String name, String path,  StoreFormat storeFormat) {
+	public ProfilStoreInfo(String name, String path,  StoreFormat storeFormat) {
 		this.name = name;
 		this.path = path;
 		this.storeFormat = storeFormat;
 	}
 
-	public ProfilsInfo(String name, String path, StoreFormat storeFormat, StoreType storeType) {
+	public ProfilStoreInfo(String name, String path, StoreFormat storeFormat, StoreType storeType) {
 		this.name = name;
 		this.path = path;
 		this.storeFormat = storeFormat;
 		this.storeType = storeType;
 	}
 
-	public ProfilsInfo(File fic, StoreFormat storeFormat, char[] cs) {
+	public ProfilStoreInfo(File fic, StoreFormat storeFormat, char[] cs) {
 		this.name = FilenameUtils.getName(fic.getPath());
 		this.path = fic.getPath();
 		this.storeFormat = storeFormat;

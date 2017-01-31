@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.components;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -11,6 +12,7 @@ import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.profile.Profil;
+import org.dpr.mykeys.profile.ProfileManager;
  
 public class KeysProfileAction implements ActionListener {
 
@@ -18,6 +20,9 @@ public class KeysProfileAction implements ActionListener {
 	 * 
 	 */
 	private final ListPanel listPanel;
+	
+	ProfileManager profileService = new ProfileManager();
+	
 
 	public KeysProfileAction(ListPanel listPanel, JComponent frameSource) {
 		super();
@@ -39,33 +44,12 @@ public class KeysProfileAction implements ActionListener {
 		JDialog cs;
 		JFrame frame = null;
 		switch (typeAction) {
-		// case ADD_STORE:
-		// frame = (JFrame) tree.getTopLevelAncestor();
-		// cs = new CreateStoreDialog(frame, true);
-		// cs.setLocationRelativeTo(frame);
-		// cs.setVisible(true);
-		// break;
-		//
-		// case IMPORT_STORE:
-		// frame = (JFrame) tree.getTopLevelAncestor();
-		// cs = new ImportStoreDialog(frame, true);
-		// cs.setLocationRelativeTo(frame);
-		// cs.setVisible(true);
-		// break;
-
-		// case EXPORT_CERT:
-		// treeKeyStoreParent.exporterCertificate(node, false);
-		// break;
-		//
+		
 		case OPEN_STORE:
 			if (this.listPanel.openStore(false, true)) {
 			}
 			this.listPanel.updateInfo(this.listPanel.ksInfo);
 			break;
-		//
-		// case CLOSE_STORE:
-		// treeKeyStoreParent.closeStore(node, true);
-		// break;
 
 		case ADD_CERT:
 			this.listPanel.addElement(this.listPanel.ksInfo, false);
@@ -80,9 +64,15 @@ public class KeysProfileAction implements ActionListener {
 		case DELETE_CERT:
 			if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
 					&& this.listPanel.listCerts.getSelectedValue() instanceof Profil) {
-				Profil certInfo = (Profil) this.listPanel.listCerts.getSelectedValue();
-				if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
-				//	this.listPanel.deleteCertificate(this.listPanel.ksInfo, certInfo);
+				Profil info = (Profil) this.listPanel.listCerts.getSelectedValue();
+				if (MykeysFrame.askConfirmDialog(null, "Suppression du profil " + info.getName())) {
+					try {
+						profileService.delete( info);
+						this.listPanel.updateInfo(this.listPanel.ksInfo);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 			break;

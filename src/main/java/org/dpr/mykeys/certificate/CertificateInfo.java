@@ -32,6 +32,10 @@ public class CertificateInfo implements ChildInfo{
 
 	private PrivateKey privateKey;
 
+	public int getDuration() {
+		return duration;
+	}
+
 	private String algoPubKey;
 
 	public String getIssuer() {

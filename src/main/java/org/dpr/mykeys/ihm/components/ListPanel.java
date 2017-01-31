@@ -49,14 +49,13 @@ import org.dpr.mykeys.certificate.windows.CreateCertProfilDialog;
 import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
 import org.dpr.mykeys.certificate.windows.ExportCertificateDialog;
 import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.CreateCertificateFromProfile;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SuperCreate;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.profile.CreateProfilDialog;
-import org.dpr.mykeys.profile.ProfilsInfo;
+import org.dpr.mykeys.profile.ProfilStoreInfo;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
@@ -280,7 +279,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
 		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertProfilDialog(frame, true);
+			cs = new CreateCertProfilDialog(frame, (KeyStoreInfo) info, true);
 		}
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);

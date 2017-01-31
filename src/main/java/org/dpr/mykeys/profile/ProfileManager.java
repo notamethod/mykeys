@@ -31,9 +31,9 @@ public class ProfileManager
 	public static final Log log = LogFactory.getLog(ProfileManager.class);
 	public final static String PROFIL_EXTENSION = ".mkprof";
 
-	public void saveToFile(Map<String, Object> elements, String name) throws ManageProfilException, IOException {
+	public void saveToFile(Map<String, Object> elements, String name) throws ProfilException, IOException {
 		if (StringUtils.isBlank(name)) {
-			throw new ManageProfilException("nom obligatoire");
+			throw new ProfilException("nom obligatoire");
 		}
 		File profDir = new File(KSConfig.getProfilsPath());
 		if (!profDir.exists()) {
@@ -41,7 +41,7 @@ public class ProfileManager
 		}
 		File f = new File(profDir, name + PROFIL_EXTENSION);
 		if (f.exists()) {
-			throw new ManageProfilException("Le profil existe d�j�");
+			throw new ProfilException("Le profil existe d�j�");
 		}
 		Properties p = new Properties();
 		for (Map.Entry<String, Object> entry : elements.entrySet()) {
@@ -51,11 +51,11 @@ public class ProfileManager
 		p.store(new FileOutputStream(f), "");
 	}
 
-	public Properties loadProfile(String name) throws ManageProfilException {
+	public Properties loadProfile(String name) throws ProfilException {
 		File f = new File(KSConfig.getProfilsPath(), name + PROFIL_EXTENSION);
 
 		if (!f.exists()) {
-			throw new ManageProfilException("Le profil n'existe pas");
+			throw new ProfilException("Le profil n'existe pas");
 
 		}
 		try (FileInputStream fis = new FileInputStream(f)) {
@@ -63,7 +63,7 @@ public class ProfileManager
 			p.load(new FileInputStream(f));
 			return p;
 		} catch (Exception e) {
-			throw new ManageProfilException("Erreur chargement profil", e);
+			throw new ProfilException("Erreur chargement profil", e);
 		}
 
 	}
@@ -84,9 +84,9 @@ public class ProfileManager
 	}
 
 	public void saveToFile(Map<String, Object> elements, String name, CertificateInfo certInfo)
-			throws ManageProfilException, IOException {
+			throws ProfilException, IOException {
 		if (StringUtils.isBlank(name)) {
-			throw new ManageProfilException("nom obligatoire");
+			throw new ProfilException("nom obligatoire");
 		}
 		File profDir = new File(KSConfig.getProfilsPath());
 		if (!profDir.exists()) {
@@ -94,7 +94,7 @@ public class ProfileManager
 		}
 		File f = new File(profDir, name + PROFIL_EXTENSION);
 		if (f.exists()) {
-			throw new ManageProfilException("Le profil existe d�j�");
+			throw new ProfilException("Le profil existe d�j�");
 		}
 		Properties p = new Properties();
 		for (Map.Entry<String, Object> entry : elements.entrySet()) {
@@ -119,7 +119,7 @@ public class ProfileManager
 		return list;
 	}
 
-	public void delete(NodeInfo ksInfo, Profil profil) throws IOException {
+	public void delete(Profil profil) throws IOException {
 		Files.delete(profil.getPath());
 		
 	}
