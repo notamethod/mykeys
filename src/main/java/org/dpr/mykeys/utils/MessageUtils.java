@@ -20,10 +20,10 @@ public class MessageUtils {
 		Locale currentLocale = Locale.getDefault();
 		try {
 			messages = ResourceBundle.getBundle(
-					"org.dpr.mykeys.config.Messages", currentLocale);
+					"Messages", currentLocale);
 		} catch (Exception e) {
 			messages = ResourceBundle.getBundle(
-					"org.dpr.mykeys.config.Messages", Locale.ENGLISH);
+					"Messages", Locale.ENGLISH);
 		}
 	}	
 	
@@ -36,7 +36,12 @@ public class MessageUtils {
 	}	
 	
 	public static String getStringMessage(String key) {
-
+		if (messages==null){
+			init();
+		}
+		return getBundleMessage().getString(key);
+	}	
+	public static String getMessage(String key) {
 		if (messages==null){
 			init();
 		}

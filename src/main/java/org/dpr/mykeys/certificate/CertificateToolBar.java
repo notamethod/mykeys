@@ -10,6 +10,7 @@ import javax.swing.JToolBar;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
+import static org.dpr.mykeys.utils.MessageUtils.getMessage;;
 
 public class CertificateToolBar extends ObjToolBar  {
 
@@ -51,12 +52,15 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
 		addCertProfButton.setToolTipText("create cert from profile");
-		importButton = new JButton("Import");
+		importButton = new JButton(createImageIcon("/images/import.png")); 
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
-		exportButton = new JButton("Export");
+		importButton.setToolTipText(getMessage("import_button.tooltip"));
+		exportButton = new JButton(createImageIcon("/images/export.png"));
 		exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
+		exportButton.setToolTipText(getMessage("export_button.tooltip"));
+		
 		// FIXME libelles
-		deleteButton = new JButton("Supprimer");
+		deleteButton = new JButton(createImageIcon("/images/trash_can.png"));
 		deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
 		deleteButton.setEnabled(false);
 		exportButton.setEnabled(false);
