@@ -90,11 +90,12 @@ import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
-import org.dpr.mykeys.ihm.windows.ChangePasswordDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SuperCreate;
+import org.dpr.mykeys.keystore.ChangePasswordDialog;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
 import org.dpr.mykeys.profile.ProfilStoreInfo;
@@ -756,7 +757,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
 
-		ks = kt.loadKeyStore(path, type, password.toCharArray());
+		ks = kt.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray());
 		Map<String, String> certsAC = new HashMap<String, String>();
 		Enumeration<String> enumKs = ks.aliases();
 		while (enumKs.hasMoreElements()) {

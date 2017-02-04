@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.keystore;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -29,9 +29,8 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.KeyStoreService;
-import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.TamperedWithException;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

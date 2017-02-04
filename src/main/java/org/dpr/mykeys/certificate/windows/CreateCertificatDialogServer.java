@@ -1,11 +1,10 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.certificate.windows;
 
 import java.awt.event.ItemListener;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreModel;
 

@@ -241,9 +241,9 @@ public class KeyTools {
 
 	}
 
-	public KeyStore loadKeyStore(String ksName, String type, char[] pwd) throws KeyToolsException {
+	public KeyStore loadKeyStore(String ksName, StoreFormat format, char[] pwd) throws KeyToolsException {
 		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-
+		String type = StoreFormat.getValue(format);
 		KeyStore ks = null;
 		try {
 			try {
@@ -656,7 +656,7 @@ public class KeyTools {
 	 * @return
 	 * @throws GeneralSecurityException
 	 */
-	private static X509Certificate loadX509Cert(InputStream aCertStream) throws GeneralSecurityException {
+	private static X509Certificate loadX509Cert(InputStream aCertStream) throws GeneralSecurityException, CertificateException{
 		// création d'une fabrique de certificat X509
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
@@ -676,10 +676,10 @@ public class KeyTools {
 	}
 
 	public void importX509Cert(String alias, KeyStoreInfo ksInfo, String fileName, String typeCert, char[] charArray)
-			throws KeyToolsException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException {
+			throws KeyToolsException, FileNotFoundException, CertificateException, GeneralSecurityException {
 		CertificateInfo certInfo = new CertificateInfo();
-		if (typeCert.equals(TYPE_P12)) {
-			KeyStore ks = loadKeyStore(fileName, TYPE_P12, charArray);
+		if (typeCert== null || TYPE_P12.equals(typeCert)) {
+			KeyStore ks = loadKeyStore(fileName, StoreFormat.PKCS12, charArray);
 			String aliasOri = null;
 			Enumeration<String> enumKs = ks.aliases();
 			while (enumKs.hasMoreElements()) {
@@ -695,7 +695,7 @@ public class KeyTools {
 			certInfo.setPrivateKey((PrivateKey) ks.getKey(aliasOri, charArray));
 			// addCertToKeyStore((X509Certificate)cert, ksInfo, certInfo);
 			addCertToKeyStoreNew((X509Certificate) cert, ksInfo, certInfo);
-		} else {
+		} else if (TYPE_JKS.equals(typeCert)){
 			InputStream is = null;
 			try {
 				is = new FileInputStream(new File(fileName));
@@ -704,15 +704,7 @@ public class KeyTools {
 				fillCertInfo(certInfo, cert);
 				certInfo.setAlias(alias);
 				addCertToKeyStore(cert, ksInfo, certInfo);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (GeneralSecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (KeyToolsException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	
 			} finally {
 				try {
 					is.close();
@@ -994,22 +986,7 @@ public class KeyTools {
 
 	}
 
-	/**
-	 * .
-	 * 
-	 * <BR>
-	 * 
-	 * 
-	 * @param path
-	 * @param storeFormat
-	 * @param password
-	 * @return
-	 * @throws KeyToolsException
-	 */
-	public KeyStore loadKeyStore(String path, StoreFormat storeFormat, char[] password) throws KeyToolsException {
-		// TODO Auto-generated method stub
-		return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
-	}
+	
 
 	public KeyStore importStore(String path, StoreFormat storeFormat, char[] password)
 			throws KeyToolsException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
@@ -1017,7 +994,7 @@ public class KeyTools {
 		switch (storeFormat) {
 		case JKS:
 		case PKCS12:
-			return loadKeyStore(path, StoreFormat.getValue(storeFormat), password);
+			return loadKeyStore(path, storeFormat, password);
 
 		default:
 			loadX509Certs(path);
@@ -1257,6 +1234,11 @@ public class KeyTools {
 			certModel.setNotAfter(Date.from(zdt.toInstant()));
 		}
 		certGen.setNotAfter((certModel.getNotAfter()));
+	}
+
+	public KeyStore loadKeyStore(KeyStoreInfo ksin) throws KeyToolsException {
+		// TODO Auto-generated method stub
+		return loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword());
 	}
 
 }

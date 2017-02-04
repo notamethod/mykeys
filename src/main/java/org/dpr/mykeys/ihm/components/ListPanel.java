@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.util.ArrayList;
@@ -52,7 +53,9 @@ import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SuperCreate;
+import org.dpr.mykeys.keystore.ActionStatus;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.profile.CreateProfilDialog;
 import org.dpr.mykeys.profile.ProfilStoreInfo;
@@ -453,10 +456,28 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	// This method handles a drop for a list of files
 	protected boolean dropFile(Transferable transferable)
 			throws IOException, UnsupportedFlavorException, MalformedURLException {
+	
 		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 		File transferFile = (File) fileList.get(0);
-
+		KeyStoreInfo ksin = new KeyStoreInfo(transferFile, null, null);
+		KeyStoreService service = new KeyStoreService((KeyStoreInfo) ksInfo);
 		final String transferURL = transferFile.getAbsolutePath();
+		
+		ActionStatus act=null;
+		try {
+			act = service.importCertificates(ksin);
+			if (act.equals(ActionStatus.ASK_PASSWORD)){
+				char[] password = MykeysFrame.showPasswordDialog(this);
+				ksin.setPassword(password);
+				
+				service.importCertificates(ksin);
+			}
+			updateInfo(ksInfo);
+		} catch (KeyToolsException | GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	
 		// System.out.println("File URL is " + transferURL);
 
 		return true;
