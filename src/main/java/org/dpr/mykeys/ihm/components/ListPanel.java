@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.components;
 
 import static org.dpr.swingutils.ImageUtils.createImageIcon;
-
+import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 import java.awt.BorderLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -432,6 +432,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 			} catch (Exception e) {
 				System.out.println("Exception while handling drop " + e);
+				MykeysFrame.showError(this, getMessage("error.dnd"));
 				dtde.rejectDrop();
 			}
 		} else {

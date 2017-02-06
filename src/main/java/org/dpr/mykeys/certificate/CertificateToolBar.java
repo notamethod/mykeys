@@ -80,7 +80,6 @@ public class CertificateToolBar extends ObjToolBar  {
 		add(exportButton);
 		add(deleteButton);
 		addSeparator();
-		
 	}
 
 	public void enableActions() {
@@ -90,7 +89,7 @@ public class CertificateToolBar extends ObjToolBar  {
 		deleteButton.setEnabled(true);
 		importButton.setEnabled(true);
 		addCertButton.setEnabled(true);
-		
+		addCertProfButton.setEnabled(true);
 	}
 
 	public void disableActions() {

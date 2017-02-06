@@ -1,22 +1,17 @@
 package org.dpr.mykeys.keystore;
 
+import static org.dpr.mykeys.utils.MessageUtils.getMessage;
+
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -25,10 +20,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.TamperedWithException;
 import org.dpr.swingutils.JFieldsPanel;
@@ -58,7 +50,7 @@ public class ChangePasswordDialog extends JDialog {
 
 	public void init() {
 		DialogAction dAction = new DialogAction();
-		setTitle(MyKeys.getMessage().getString("magasin.change.password"));
+		setTitle(getMessage("magasin.change.password"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -69,9 +61,9 @@ public class ChangePasswordDialog extends JDialog {
 		infosPanel = new LabelValuePanel();
 
 
-		infosPanel.put(MyKeys.getMessage().getString("label.old.password"), JPasswordField.class, "pwd_old", "", true);
-		infosPanel.put(MyKeys.getMessage().getString("label.new.password"), JPasswordField.class, "pwd_new", "", true);
-		infosPanel.put(MyKeys.getMessage().getString("label.confirm.password"), JPasswordField.class, "pwd_new2", "", true);
+		infosPanel.put(getMessage("label.old.password"), JPasswordField.class, "pwd_old", "", true);
+		infosPanel.put(getMessage("label.new.password"), JPasswordField.class, "pwd_new", "", true);
+		infosPanel.put(getMessage("label.confirm.password"), JPasswordField.class, "pwd_new2", "", true);
 
 		infosPanel.putEmptyLine();
 
@@ -102,7 +94,7 @@ public class ChangePasswordDialog extends JDialog {
 					return;
 				}
 				if (!elements.get("pwd_new").equals(elements.get("pwd_new2"))) {
-					MykeysFrame.showError(ChangePasswordDialog.this, MyKeys.getMessage().getString("error.match.password"));
+					MykeysFrame.showError(ChangePasswordDialog.this, getMessage("error.match.password"));
 					return;
 				}
 				ksInfo.setPassword(((String)elements.get("pwd_old")).toCharArray());
@@ -179,7 +171,7 @@ public class ChangePasswordDialog extends JDialog {
 			// } else {
 			// document dir in windows
 			File f = FileSystemView.getFileSystemView().getDefaultDirectory();
-			File data = new File(f, MyKeys.getMessage().getString("default.datadir"));
+			File data = new File(f, getMessage("default.datadir"));
 			data.mkdirs();
 			dir = data.getAbsolutePath();
 			// }

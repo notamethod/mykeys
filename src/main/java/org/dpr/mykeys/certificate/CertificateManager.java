@@ -7,8 +7,14 @@ import org.dpr.mykeys.app.KeyTools;
 
 public class CertificateManager {
 	KeyTools ktool;
+	CertificateInfo certInfo;
 
-	public X509Certificate[] generateX509(CertificateInfo certInfo) throws CertificateException {
+	public CertificateManager(CertificateInfo certInfo) {
+		super();
+		this.certInfo = certInfo;
+	}
+
+	public X509Certificate[] generateX509() throws CertificateException {
 		if (ktool == null) {
 			ktool = new KeyTools();
 		}

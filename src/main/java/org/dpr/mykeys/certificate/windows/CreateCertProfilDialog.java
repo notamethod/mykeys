@@ -279,9 +279,9 @@ public class CreateCertProfilDialog  extends SuperCreate implements ItemListener
                     X509Certificate[] xCerts = null;
 
     			
-    					CertificateManager cm = new CertificateManager();
+    					CertificateManager cm = new CertificateManager(certInfo);
     					KeyTools ktools = new KeyTools();
-    					xCerts = cm.generateX509(certInfo);
+    					xCerts = cm.generateX509();
     					//TODO manage ksinfo
     					ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
                     CreateCertProfilDialog.this.setVisible(false);
