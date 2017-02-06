@@ -21,8 +21,8 @@ import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreFormat;
 
-public class CertificatManager {
-	public static final Log log = LogFactory.getLog(CertificatManager.class);
+public class CertificatManagerOld {
+	public static final Log log = LogFactory.getLog(CertificatManagerOld.class);
 
 	public static List<CertificateInfo> getCertificates(KeyStoreInfo ksInfo) throws Exception {
 

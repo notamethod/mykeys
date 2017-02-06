@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.app.X509Util;
-import org.dpr.mykeys.certificate.CertificateInfoUtils;
+import org.dpr.mykeys.certificate.CertificateUtils;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
@@ -60,7 +60,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
 	
 
 	this.put(MyKeys.getMessage().getString("x509.subject.organisationUnit"),
-			JTextArea.class, "algoPubKey", CertificateInfoUtils.keyUsageToString(info.getIntValue("keyUSage")), false);
+			JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("keyUSage")), false);
 
 	
 //	name=gg

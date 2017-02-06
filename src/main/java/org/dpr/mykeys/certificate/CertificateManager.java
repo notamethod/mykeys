@@ -4,6 +4,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.X509Constants;
 
 public class CertificateManager {
 	KeyTools ktool;
@@ -25,6 +26,27 @@ public class CertificateManager {
 			throw new CertificateException(e);
 		}
 		return xCerts;
+	}
+	
+	public String keyUsageToString() {
+		String value = "";
+		boolean[] keyUsage= certInfo.getKeyUsage();
+		boolean isKeyUsage = false;
+		if (keyUsage == null) {
+			return "null";
+		}
+		for (int i = 0; i < keyUsage.length; i++) {
+			if (keyUsage[i]) {
+				isKeyUsage = true;
+				value = value + ", " + X509Constants.keyUsageLabel[i];
+			}
+		}
+		if (isKeyUsage) {
+			return value.substring(1, value.length());
+		} else {
+			return null;
+		}
+
 	}
 
 }

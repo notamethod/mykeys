@@ -384,6 +384,12 @@ public class CertificateInfo implements ChildInfo{
 		return iku;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @deprecated user service method instead
+	 */
+	@Deprecated
 	public String keyUsageToString() {
 		String value = "";
 		boolean isKeyUsage = false;
