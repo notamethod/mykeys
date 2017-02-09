@@ -304,12 +304,14 @@ public class KeyTools {
 		return ks;
 	}
 
+	@SuppressWarnings("deprecation")
 	public X509Certificate[] genererX509(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
 			throws Exception {
-
+ 
 		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+		//SerialNumber
 		BigInteger bi = RandomBI(30);
 		certGen.setSerialNumber(bi);
 		if (StringUtils.isBlank(certModel.getAlias())) {
@@ -365,7 +367,7 @@ public class KeyTools {
 					new AuthorityKeyIdentifierStructure(certModel.getPublicKey()));
 		}
 
-		if (certModel.getPolicyCPS() != null) {
+		if (StringUtils.isNotBlank(certModel.getPolicyCPS())) {
 			PolicyInformation pi = getPolicyInformation(certModel.getPolicyID(), certModel.getPolicyCPS(),
 					certModel.getPolicyNotice());
 
@@ -376,7 +378,7 @@ public class KeyTools {
 		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
 
 		// point de distribution des CRL
-		if (certModel.getCrlDistributionURL() != null) {
+		if (StringUtils.isNotBlank(certModel.getCrlDistributionURL())) {
 			DistributionPoint[] dp = new DistributionPoint[1];
 			DEROctetString oct = new DEROctetString(certModel.getCrlDistributionURL().getBytes());
 			// TODO: check which dpn to use
@@ -1134,7 +1136,7 @@ public class KeyTools {
 	public X509Certificate[] genererX509CodeSigning(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
 			throws Exception {
 
-		System.out.println("*********M�thode modifi�e !!!!!");
+		
 		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
