@@ -46,12 +46,12 @@ import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
 import org.dpr.mykeys.certificate.windows.FillUtils;
+import org.dpr.mykeys.certificate.windows.SuperCreate;
 import org.dpr.mykeys.certificate.windows.CreateCertificatDialog.DialogAction;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
-import org.dpr.mykeys.ihm.windows.SuperCreate;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.swingutils.JFieldsPanel;
@@ -189,7 +189,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			infosPanel.putEmptyLine();
 			Calendar calendar = Calendar.getInstance();
 
-			infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "3");
+			infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "duration", "3");
 			infosPanel.putEmptyLine();
 
 			infosPanel.put(MyKeys.getMessage().getString("x509.subject.country"), "C", "FR");

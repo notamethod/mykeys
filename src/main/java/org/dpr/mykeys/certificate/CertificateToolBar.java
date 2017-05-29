@@ -91,6 +91,12 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertButton.setEnabled(true);
 		addCertProfButton.setEnabled(true);
 	}
+	public void enableCertActions() {
+		
+		exportButton.setEnabled(true);
+		deleteButton.setEnabled(true);
+
+	}
 
 	public void disableActions() {
 		importButton.setEnabled(false);

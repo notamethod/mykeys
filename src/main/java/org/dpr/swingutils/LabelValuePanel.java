@@ -46,7 +46,17 @@ public class LabelValuePanel extends JPanel implements DocumentListener
 
     int nbRows;
     
-    FrameModel model=null;
+    @Override
+	public void setVisible(boolean aFlag) {
+		if (aFlag == false){
+			   SpringUtilities.makeCompactGrid(this, 0, 2, 3, 3, 3, 3);
+		}else{
+			  SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+		}
+		super.setVisible(aFlag);
+	}
+
+	FrameModel model=null;
 
     int nbCols;
 
@@ -752,6 +762,21 @@ public class LabelValuePanel extends JPanel implements DocumentListener
             {
                 elements.put(globalKey, value);
             }
+		
+	}
+
+	public void put(JComponent cbDuration) {
+		cbDuration.setVisible(false);
+		this.add(cbDuration);
+		
+		
+		
+	}
+	
+	public void put(String label, JComponent cbDuration) {
+		//this.add(new JLabel(""));
+		this.add(cbDuration);
+		nbRows++;		
 		
 	}
 

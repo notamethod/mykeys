@@ -1,16 +1,14 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.certificate.windows;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,35 +19,44 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.certificate.CertificateInfo;
-import org.dpr.mykeys.certificate.windows.FillUtils;
-import org.dpr.mykeys.certificate.windows.CreateCertificatDialog.DialogAction;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.OkCancelPanel;
+import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreType;
-import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class SuperCreate extends JDialog implements ItemListener {
 
 	protected LabelValuePanel infosPanel;
+	
+	protected CertificateType typeCer;
+	protected LabelValuePanel durationPanel;
 	protected KeyStoreInfo ksInfo;
 	protected CertificateInfo certInfo = new CertificateInfo();
 	protected boolean isAC = false;
@@ -82,7 +89,44 @@ public class SuperCreate extends JDialog implements ItemListener {
 
 	protected void init() {
 
+		String a = null;
+		 final JPanel panel = new JPanel();
+		 ChangeListener changeListener = new ChangeListener() {
+	            public void stateChanged(ChangeEvent changEvent) {
+	            	JRadioButton aButton = (JRadioButton)changEvent.getSource();
+	            
+	             if ( aButton.isSelected()){
+	            	 typeCer=CertificateType.valueOf(aButton.getName());
+	            
+	             }
+	   
+	            }
+	          };
+	   
+		 BoxLayout bls = new BoxLayout(panel, BoxLayout.Y_AXIS);
+		 panel.setLayout(bls);
+	        final JRadioButton button1 = new JRadioButton("Client");
+	        button1.setSelected(true);
+	        button1.setName(CertificateType.STANDARD.toString());
+	        button1.addChangeListener(changeListener);
+	        final JRadioButton button2 = new JRadioButton("Serveur");
+	        button2.setName(CertificateType.SERVER.toString());
+	        final JRadioButton button3= new JRadioButton("Signature de code");
+	        button3.setName(CertificateType.CODE_SIGNING.toString());
+	        button2.addChangeListener(changeListener);
+	        button3.addChangeListener(changeListener);
+	        ButtonGroup vanillaOrMod = new ButtonGroup();
+	        vanillaOrMod.add(button1);
+	        vanillaOrMod.add(button2);
+	        vanillaOrMod.add(button3);
+	        panel.add(button1);
+	      //  panel.add(button2);
+	       // panel.add(button3);
+	       
+	        JOptionPane.showMessageDialog(this.getParent(), panel, "Type de certificat", 1, null);
 		DialogAction dAction = new DialogAction();
+		
+	 	  System.out.println(typeCer);
 		if (isAC) {
 			setTitle("Création d'une autorité de certification");
 		} else {
@@ -162,7 +206,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 			}
 			mapAC.put(" ", " ");
 			infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
-
+			PanelUtils putil = new PanelUtils();
 			if (isAC) {
 				infosPanel.put("Alias (nom du certificat)", "alias", "MyKeys Root CA");
 				infosPanel.putEmptyLine();
@@ -181,15 +225,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 						calendar.getTime(), true);
 				infosPanel.put("aaa", JTextField.class, "notAfter",
 						calendar.getTime(), true);
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "3");
+				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "duration", "3");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Nom (CN)", "CN", "MyKeys Root CA");
-				infosPanel.put("Pays (C)", "C", "FR");
-				infosPanel.put("Organisation (O)", "O", "MyKeys");
-				infosPanel.put("Section (OU)", "OU", "");
-				infosPanel.put("Localité (L)", "L", "");
-				infosPanel.put("Rue (ST)", "SR", "");
-				infosPanel.put("Email (E)", "E", "");
+				putil.addSubjectToPanel(CertificateType.AC, infosPanel);
+				
 
 				infosPanel.putEmptyLine();
 				infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib", "");
@@ -214,23 +253,20 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.putEmptyLine();
 				Calendar calendar = Calendar.getInstance();
 
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
-						calendar.getTime(), true);
-				calendar.add(Calendar.DAY_OF_YEAR, 60);
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
-						calendar.getTime(), true);
-				infosPanel.put("aaa", JTextField.class, "notAfter",
-						calendar.getTime(), true);
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "Duration", "3");
+				
+				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "duration", getDefaultDuration(CertificateType.STANDARD));
+				JCheckBox cbDuration = new JCheckBox(MyKeys.getMessage().getString("extended_mode"));
+
+				
+				cbDuration.setName("extendDuration");
+				cbDuration.addItemListener(this);
+				
+				
+				infosPanel.put("",cbDuration);
+				infosPanel.put(getDurationPanel(3));
 				infosPanel.putEmptyLine();
-				infosPanel.put("Nom (CN)", "CN", "Nom");
-				infosPanel.put("Pays (C)", "C", "FR");
-				infosPanel.put("Organisation (O)", "O", "Orga");
-				infosPanel.put("Section (OU)", "OU", "Développement");
-				infosPanel.put("Localité (L)", "L", "Saint-Etienne");
-				infosPanel.put("Rue (ST)", "SR", "");
-				infosPanel.put("Email (E)", "E", "");
-				infosPanel.putEmptyLine();
+				putil.addSubjectToPanel(CertificateType.STANDARD, infosPanel);
+
 				infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib", "");
 				infosPanel.put("Policy notice", "PolicyNotice", "");
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
@@ -247,10 +283,21 @@ public class SuperCreate extends JDialog implements ItemListener {
 
 	}
 
+	private String getDefaultDuration(CertificateType standard) {
+		// TODO Auto-generated method stub
+		return "3";
+	}
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getItemSelectable();
 		JCheckBox jc = (JCheckBox) source;
+		String name=jc.getName();
+		if (name!=null && name.equals("extendDuration")){
+			durationPanel.setVisible(jc.isSelected());
+			//this.pack();
+			
+		}
 		String val = jc.getText();
 		for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
 			if (val.equals(X509Constants.keyUsageLabel[i])) {
@@ -321,6 +368,22 @@ public class SuperCreate extends JDialog implements ItemListener {
 
 		}
 
+	}
+	
+	public  LabelValuePanel getDurationPanel(int duration){
+		Calendar calendar = Calendar.getInstance();
+		if (durationPanel == null){
+			durationPanel = new LabelValuePanel();
+			durationPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
+					calendar.getTime(), true);
+			calendar.add(Calendar.YEAR, duration);
+			durationPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
+					calendar.getTime(), true);
+			durationPanel.setVisible(false);
+
+		}
+		return durationPanel;
+		
 	}
 
 }

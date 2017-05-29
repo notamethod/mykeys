@@ -14,7 +14,7 @@ import javax.swing.JCheckBox;
 
 
 public class Preferences extends JDialog {
-	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("org.dpr.mykeys.config.Messages"); //$NON-NLS-1$
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("Messages"); //$NON-NLS-1$
 
 	private final JPanel contentPanel = new JPanel();
 

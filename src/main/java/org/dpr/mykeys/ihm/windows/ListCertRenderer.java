@@ -12,7 +12,6 @@ import javax.swing.JList;
 import org.dpr.mykeys.certificate.CertificateInfo;
 import org.dpr.mykeys.profile.Profil;
 
-
 /**
  * @author Buck
  *
@@ -35,11 +34,10 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 	 *      java.lang.Object, int, boolean, boolean)
 	 */
 	@Override
-	public Component getListCellRendererComponent(JList list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus) {
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+			boolean cellHasFocus) {
 
-		Component retValue = super.getListCellRendererComponent(list, value,
-				index, isSelected, cellHasFocus);
+		Component retValue = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		// TODO Auto-generated method stub
 
 		if (value instanceof CertificateInfo) {
@@ -58,17 +56,19 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 			setText(cert.getName());
 			StringBuilder sb = new StringBuilder();
 			sb.append("<html>Certificat ").append(cert.getName());
-			if (cert.getAlias()!=null) 
-			    sb.append(" (").append(cert.getAlias()).append(")");
-			 sb.append("<br>Numéro de série ").append(cert.getCertificate().getSerialNumber());
-			 sb.append("<br>Emetteur ").append(cert.getCertificate().getIssuerDN());
-			if (cert.isContainsPrivateKey()){
-			    sb.append("<br>Clé privée présente");
+			if (cert.getAlias() != null)
+				sb.append(" (").append(cert.getAlias()).append(")");
+			if (cert.getCertificate() != null) {
+				sb.append("<br>Numéro de série ").append(cert.getCertificate().getSerialNumber());
+				sb.append("<br>Emetteur ").append(cert.getCertificate().getIssuerDN());
+				if (cert.isContainsPrivateKey()) {
+					sb.append("<br>Clé privée présente");
+				}
 			}
 			sb.append("</html>");
 			this.setToolTipText(sb.toString());
 
-		}else if (value instanceof Profil) {
+		} else if (value instanceof Profil) {
 			Profil prof = ((Profil) value);
 			setIcon(createImageIcon("/images/profile1.png"));
 			setText(prof.getName());
@@ -77,7 +77,5 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 		// isSelected, cellHasFocus);
 		return retValue;
 	}
-
-
 
 }

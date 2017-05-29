@@ -40,7 +40,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
 	JTextField.class, "algoPubKey", info.getValue("algoSig"), false);
 	this.putEmptyLine();
 	this.put(MyKeys.getMessage().getString("certinfo.duration"),
-	JTextField.class, "algoPubKey", info.getValue("Duration"), false);
+	JTextField.class, "algoPubKey", info.getValue("duration"), false);
 	this.putEmptyLine();
 	this.put(MyKeys.getMessage().getString("x509.subject.organisation"),
 	JTextField.class, "algoPubKey", info.getValue("O"), false);

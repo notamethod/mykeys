@@ -6,11 +6,11 @@ import java.security.cert.X509Certificate;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
 
-public class CertificateManager {
+public class CertificateService {
 	KeyTools ktool;
 	CertificateInfo certInfo;
 
-	public CertificateManager(CertificateInfo certInfo) {
+	public CertificateService(CertificateInfo certInfo) {
 		super();
 		this.certInfo = certInfo;
 	}

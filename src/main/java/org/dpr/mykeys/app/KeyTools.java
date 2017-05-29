@@ -76,6 +76,7 @@ import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.PolicyQualifierId;
 import org.bouncycastle.asn1.x509.PolicyQualifierInfo;
 import org.bouncycastle.asn1.x509.UserNotice;
+import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
@@ -307,11 +308,11 @@ public class KeyTools {
 	@SuppressWarnings("deprecation")
 	public X509Certificate[] genererX509(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
 			throws Exception {
- 
+
 		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
-		//SerialNumber
+		// SerialNumber
 		BigInteger bi = RandomBI(30);
 		certGen.setSerialNumber(bi);
 		if (StringUtils.isBlank(certModel.getAlias())) {
@@ -378,27 +379,7 @@ public class KeyTools {
 		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
 
 		// point de distribution des CRL
-		if (StringUtils.isNotBlank(certModel.getCrlDistributionURL())) {
-			DistributionPoint[] dp = new DistributionPoint[1];
-			DEROctetString oct = new DEROctetString(certModel.getCrlDistributionURL().getBytes());
-			// TODO: check which dpn to use
-			DistributionPointName dpn = new DistributionPointName(
-					new GeneralNames(new GeneralName(GeneralName.dNSName, certModel.getCrlDistributionURL())));
-
-			// DistributionPointName dpn = new DistributionPointName(
-			// new GeneralNames(new
-			// GeneralName(GeneralName.uniformResourceIdentifier,
-			// certModel.getCrlDistributionURL())));
-			dp[0] = new DistributionPoint(dpn, null, null);
-			certGen.addExtension(X509Extensions.CRLDistributionPoints, true, new CRLDistPoint(dp));
-		} else {
-			if (certIssuer.getCertificate() != null) {
-				CRLDistPoint dpoint = getDistributionPoints(certIssuer.getCertificate());
-				if (dpoint != null) {
-					certGen.addExtension(X509Extensions.CRLDistributionPoints, true, dpoint);
-				}
-			}
-		}
+		buildCrl(certModel, certIssuer, certGen);
 
 		X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
 		// TODO: let generate expired certificate for test purpose ?
@@ -658,7 +639,8 @@ public class KeyTools {
 	 * @return
 	 * @throws GeneralSecurityException
 	 */
-	private static X509Certificate loadX509Cert(InputStream aCertStream) throws GeneralSecurityException, CertificateException{
+	private static X509Certificate loadX509Cert(InputStream aCertStream)
+			throws GeneralSecurityException, CertificateException {
 		// création d'une fabrique de certificat X509
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
@@ -680,7 +662,7 @@ public class KeyTools {
 	public void importX509Cert(String alias, KeyStoreInfo ksInfo, String fileName, String typeCert, char[] charArray)
 			throws KeyToolsException, FileNotFoundException, CertificateException, GeneralSecurityException {
 		CertificateInfo certInfo = new CertificateInfo();
-		if (typeCert== null || TYPE_P12.equals(typeCert)) {
+		if (typeCert == null || TYPE_P12.equals(typeCert)) {
 			KeyStore ks = loadKeyStore(fileName, StoreFormat.PKCS12, charArray);
 			String aliasOri = null;
 			Enumeration<String> enumKs = ks.aliases();
@@ -697,7 +679,7 @@ public class KeyTools {
 			certInfo.setPrivateKey((PrivateKey) ks.getKey(aliasOri, charArray));
 			// addCertToKeyStore((X509Certificate)cert, ksInfo, certInfo);
 			addCertToKeyStoreNew((X509Certificate) cert, ksInfo, certInfo);
-		} else if (TYPE_JKS.equals(typeCert)){
+		} else if (TYPE_JKS.equals(typeCert)) {
 			InputStream is = null;
 			try {
 				is = new FileInputStream(new File(fileName));
@@ -706,7 +688,7 @@ public class KeyTools {
 				fillCertInfo(certInfo, cert);
 				certInfo.setAlias(alias);
 				addCertToKeyStore(cert, ksInfo, certInfo);
-	
+
 			} finally {
 				try {
 					is.close();
@@ -988,8 +970,6 @@ public class KeyTools {
 
 	}
 
-	
-
 	public KeyStore importStore(String path, StoreFormat storeFormat, char[] password)
 			throws KeyToolsException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
 		// TODO Auto-generated method stub
@@ -1136,7 +1116,6 @@ public class KeyTools {
 	public X509Certificate[] genererX509CodeSigning(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
 			throws Exception {
 
-		
 		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -1157,20 +1136,20 @@ public class KeyTools {
 		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
 		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
 
-		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(false));
+		certGen.addExtension(X509Extension.basicConstraints, true, new BasicConstraints(false));
 
-		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(certModel.getIntKeyUsage()));
+		certGen.addExtension(X509Extension.keyUsage, true, new KeyUsage(certModel.getIntKeyUsage()));
 		// certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 		// new AuthorityKeyIdentifierStructure( caCert));
-		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
+		certGen.addExtension(X509Extension.subjectKeyIdentifier, false,
 				new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
 
 		// FIXME: � v�rifier en cas de auto sign�
 		if (certIssuer.getCertificate() != null) {
-			certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
+			certGen.addExtension(X509Extension.authorityKeyIdentifier, false,
 					new AuthorityKeyIdentifierStructure(certIssuer.getCertificate()));
 		} else {
-			certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
+			certGen.addExtension(X509Extension.authorityKeyIdentifier, false,
 					new AuthorityKeyIdentifierStructure(certModel.getPublicKey()));
 		}
 
@@ -1179,27 +1158,10 @@ public class KeyTools {
 					certModel.getPolicyNotice());
 
 			DERSequence seq = new DERSequence(pi);
-			certGen.addExtension(X509Extensions.CertificatePolicies.getId(), false, seq);
+			certGen.addExtension(X509Extension.certificatePolicies.getId(), false, seq);
 		}
 		// gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
 		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
-
-		// point de distribution des CRL
-		if (certModel.getCrlDistributionURL() != null) {
-			DistributionPoint[] dp = new DistributionPoint[1];
-			DEROctetString oct = new DEROctetString(certModel.getCrlDistributionURL().getBytes());
-			DistributionPointName dpn = new DistributionPointName(
-					new GeneralNames(new GeneralName(GeneralName.dNSName, certModel.getCrlDistributionURL())));
-			dp[0] = new DistributionPoint(dpn, null, null);
-			certGen.addExtension(X509Extensions.CRLDistributionPoints, false, new CRLDistPoint(dp));
-		} else {
-			if (certIssuer.getCertificate() != null) {
-				CRLDistPoint dpoint = getDistributionPoints(certIssuer.getCertificate());
-				if (dpoint != null) {
-					certGen.addExtension(X509Extensions.CRLDistributionPoints, false, dpoint);
-				}
-			}
-		}
 
 		certGen.addExtension(X509Extensions.ExtendedKeyUsage, false,
 				new ExtendedKeyUsage(KeyPurposeId.id_kp_codeSigning));
@@ -1223,6 +1185,26 @@ public class KeyTools {
 	}
 
 	private void setDuration(CertificateInfo certModel, X509V3CertificateGenerator certGen) {
+		if (certModel.getDuration() > 0) {
+			certModel.setNotBefore(new Date());
+			certGen.setNotBefore(certModel.getNotBefore());
+			LocalDateTime ldt = LocalDateTime.ofInstant(certModel.getNotBefore().toInstant(), ZoneId.systemDefault());
+
+			ZonedDateTime zdt = ldt.plusYears(certModel.getDuration()).atZone(ZoneId.systemDefault());
+			certModel.setNotAfter(Date.from(zdt.toInstant()));
+			certGen.setNotAfter((certModel.getNotAfter()));
+
+		} else {
+			if (null == certModel.getNotBefore()) {
+				certModel.setNotBefore(new Date());
+			}
+			certGen.setNotBefore(certModel.getNotBefore());
+
+			certGen.setNotAfter((certModel.getNotAfter()));
+		}
+	}
+
+	private void setDurationOld(CertificateInfo certModel, X509V3CertificateGenerator certGen) {
 
 		if (null == certModel.getNotBefore()) {
 			certModel.setNotBefore(new Date());
@@ -1241,6 +1223,33 @@ public class KeyTools {
 	public KeyStore loadKeyStore(KeyStoreInfo ksin) throws KeyToolsException {
 		// TODO Auto-generated method stub
 		return loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword());
+	}
+
+	/**
+	 * @param certModel
+	 * @param certIssuer
+	 * @param certGen
+	 */
+	void buildCrl(CertificateInfo certModel, CertificateInfo certIssuer, X509V3CertificateGenerator certGen) { // point
+																												// de
+																												// distribution
+																												// des
+																												// CRL
+		if (certModel.getCrlDistributionURL() != null) {
+			DistributionPoint[] dp = new DistributionPoint[1];
+			DEROctetString oct = new DEROctetString(certModel.getCrlDistributionURL().getBytes());
+			DistributionPointName dpn = new DistributionPointName(
+					new GeneralNames(new GeneralName(GeneralName.dNSName, certModel.getCrlDistributionURL())));
+			dp[0] = new DistributionPoint(dpn, null, null);
+			certGen.addExtension(X509Extension.cRLDistributionPoints, false, new CRLDistPoint(dp));
+		} else {
+			if (certIssuer.getCertificate() != null) {
+				CRLDistPoint dpoint = getDistributionPoints(certIssuer.getCertificate());
+				if (dpoint != null) {
+					certGen.addExtension(X509Extension.cRLDistributionPoints, false, dpoint);
+				}
+			}
+		}
 	}
 
 }

@@ -43,14 +43,13 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.certificate.CertificateInfo;
-import org.dpr.mykeys.certificate.CertificateManager;
+import org.dpr.mykeys.certificate.CertificateService;
 import org.dpr.mykeys.certificate.CertificateUtils;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.model.FrameModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
-import org.dpr.mykeys.ihm.windows.SuperCreate;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreModel;
@@ -136,7 +135,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoPubKey", "");
 		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoSig", "");
 		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "keyLength", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "Duration", "");
+		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "duration", "");
 		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "E", "");
 		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "CrlDistrib", "");
 		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "PolicyNotice", "");
@@ -193,7 +192,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 			infosPanel.putEmptyLine();
 			Calendar calendar = Calendar.getInstance();
 
-			infosPanel.putDisabled(MyKeys.getMessage().getString("certinfo.Duration"), "Duration", "");
+			infosPanel.putDisabled(MyKeys.getMessage().getString("certinfo.Duration"), "duration", "");
 			infosPanel.putEmptyLine();
 
 			infosPanel.putEmptyLine();
@@ -237,7 +236,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 					fillCertInfo();
 					X509Certificate[] xCerts = null;
 
-					CertificateManager cm = new CertificateManager(certInfo);
+					CertificateService cm = new CertificateService(certInfo);
 					KeyTools ktools = new KeyTools();
 					xCerts = cm.generateX509();
 					// TODO manage ksinfo
@@ -268,7 +267,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 			HashMap<String, String> subjectMap = new HashMap<String, String>();
 
 			FillUtils.fillCertInfo(elements, certInfo);
-			certInfo.setDuration(Integer.valueOf((String) elements.get("Duration")));
+			certInfo.setDuration(Integer.valueOf((String) elements.get("duration")));
 
 			certInfo.setSubjectMap(elements);
 

@@ -15,7 +15,7 @@ public class FillUtils {
 		certInfo.setAlgoSig((String) elements.get("algoSig"));
 		certInfo.setKeyLength((String) elements.get("keyLength"));
 
-		// certInfo.setDuration((Integer) elements.get("duration"));
+		certInfo.setDuration(Integer.valueOf((String) elements.get("duration")));
 		//
 		// certInfo.setSubjectMap(elements);
 		//
