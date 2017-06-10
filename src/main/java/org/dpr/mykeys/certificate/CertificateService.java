@@ -28,6 +28,19 @@ public class CertificateService {
 		return xCerts;
 	}
 	
+	public X509Certificate[] generateCrl() throws CertificateException {
+		if (ktool == null) {
+			ktool = new KeyTools();
+		}
+		X509Certificate[] xCerts;
+		try {
+			xCerts = ktool.genererX509(certInfo, certInfo.getIssuer(), false);
+		} catch (Exception e) {
+			throw new CertificateException(e);
+		}
+		return xCerts;
+	}
+	
 	public String keyUsageToString() {
 		String value = "";
 		boolean[] keyUsage= certInfo.getKeyUsage();
