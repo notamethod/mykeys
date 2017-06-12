@@ -15,6 +15,8 @@ import org.bouncycastle.asn1.DERBitString;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 
+import android.util.Log;
+
 public class Profil implements ChildInfo {
 
 	Properties p;
@@ -56,8 +58,16 @@ public class Profil implements ChildInfo {
 	}
 
 	public int getIntValue(String string) {
-		// TODO Auto-generated method stub
-		return Integer.valueOf(getValue(string));
+		if (string!=null){
+			try {
+				return Integer.valueOf(getValue(string));
+			} catch (NumberFormatException e) {
+				//not a number
+				
+			}
+		}
+		return 0;
+		
 	}
 
 	public Path getPath() {

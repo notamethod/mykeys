@@ -10,7 +10,7 @@ import javax.swing.JToolBar;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
-import static org.dpr.mykeys.utils.MessageUtils.getMessage;;
+import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
 public class CertificateToolBar extends ObjToolBar  {
 

@@ -57,6 +57,7 @@ import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
+import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
 public class CreateProfilDialog extends SuperCreate implements ItemListener {
 
@@ -89,7 +90,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 	protected void init() {
 
 		DialogAction dAction = new DialogAction();
-		setTitle(MyKeys.getMessage().getString("frame.create.profil"));
+		setTitle(getMessage("frame.create.profil"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -175,34 +176,34 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			}
 			mapAC.put(" ", " ");
 
-			infosPanel.put(MyKeys.getMessage().getString("label.name"), "name", "");
+			infosPanel.put(getMessage("label.name"), "name", "");
 
 			infosPanel.putEmptyLine();
-			infosPanel.put(MyKeys.getMessage().getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
-			infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), JComboBox.class, "keyLength", mapKeyLength,
+			infosPanel.put(getMessage("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
+			infosPanel.put(getMessage("x509.pubkeysize"), JComboBox.class, "keyLength", mapKeyLength,
 					"2048 bits");
-			infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey,
+			infosPanel.put(getMessage("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey,
 					"RSA");
-			infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), JComboBox.class, "algoSig", mapAlgoSig,
+			infosPanel.put(getMessage("x509.sigalgo"), JComboBox.class, "algoSig", mapAlgoSig,
 					"SHA256WithRSAEncryption");
 			// subject
 			infosPanel.putEmptyLine();
 			Calendar calendar = Calendar.getInstance();
 
-			infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "duration", "3");
+			infosPanel.put(getMessage("certinfo.duration"), "duration", "3");
 			infosPanel.putEmptyLine();
 
-			infosPanel.put(MyKeys.getMessage().getString("x509.subject.country"), "C", "FR");
-			infosPanel.put(MyKeys.getMessage().getString("x509.subject.organisation"), "O", "Orga");
-			infosPanel.put(MyKeys.getMessage().getString("x509.subject.organisationUnit"), "OU", "Développement");
-			infosPanel.put(MyKeys.getMessage().getString("x509.subject.location"), "L", "Saint-Etienne");
-			infosPanel.put(MyKeys.getMessage().getString("x509.subject.street"), "SR", "");
+			infosPanel.put(getMessage("x509.subject.country"), "C", "FR");
+			infosPanel.put(getMessage("x509.subject.organisation"), "O", "Orga");
+			infosPanel.put(getMessage("x509.subject.organisationUnit"), "OU", "Développement");
+			infosPanel.put(getMessage("x509.subject.location"), "L", "Saint-Etienne");
+			infosPanel.put(getMessage("x509.subject.street"), "SR", "");
 
 			infosPanel.putEmptyLine();
-		//	infosPanel.put(MyKeys.getMessage().getString("x509.cdp"), JCheckBox.class, "CrlDistribObli", false, false); 
-			infosPanel.put(MyKeys.getMessage().getString("x509.cdp"), "CrlDistrib", "");
-			infosPanel.put(MyKeys.getMessage().getString("x509.policynotice"), "PolicyNotice", "");
-			infosPanel.put(MyKeys.getMessage().getString("x509.policycps"), "PolicyCPS", "");
+		//	infosPanel.put(getMessage("x509.cdp"), JCheckBox.class, "CrlDistribObli", false, false); 
+			infosPanel.put(getMessage("x509.cdp"), "CrlDistrib", "");
+			infosPanel.put(getMessage("x509.policynotice"), "PolicyNotice", "");
+			infosPanel.put(getMessage("x509.policycps"), "PolicyCPS", "");
 
 		}
 
@@ -263,7 +264,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			HashMap<String, String> subjectMap = new HashMap<String, String>();
 			
 			FillUtils.fillCertInfo(elements, certInfo);
-			certInfo.setDuration((Integer) elements.get("duration"));
+			//certInfo.setDuration((Integer) elements.get("duration"));
 
 			certInfo.setSubjectMap(elements);
 
