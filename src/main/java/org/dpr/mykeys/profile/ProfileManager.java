@@ -21,7 +21,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.keystore.InternalKeystores;
 

@@ -13,7 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 
 public class TooltipTreeRenderer2 extends DefaultTreeCellRenderer implements

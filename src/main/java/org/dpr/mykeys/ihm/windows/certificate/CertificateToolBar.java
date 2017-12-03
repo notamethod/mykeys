@@ -1,4 +1,4 @@
-package org.dpr.mykeys.certificate;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import static org.dpr.swingutils.ImageUtils.createImageIcon;
 

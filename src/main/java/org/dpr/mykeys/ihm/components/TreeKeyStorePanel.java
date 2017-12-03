@@ -79,22 +79,25 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.PkiTools;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
-import org.dpr.mykeys.certificate.CertificateInfo;
-import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
-import org.dpr.mykeys.certificate.windows.ExportCertificateDialog;
-import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
-import org.dpr.mykeys.certificate.windows.SuperCreate;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
+import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
+import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
+import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.ChangePasswordDialog;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
@@ -259,8 +262,9 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 * <BR>
 	 * 
 	 * @param ksiInfo
+	 * @throws ServiceException 
 	 */
-	private void displayKeystoreList(NodeInfo info) {
+	private void displayKeystoreList(NodeInfo info) throws ServiceException {
 		listePanel.updateInfo(info);
 
 	}
@@ -394,12 +398,12 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 			ksInfo.setPassword(password);
 
 		}
-
+		KeystoreBuilder ksBuilder = new KeystoreBuilder();
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
 		try {
-			ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword());
+			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+					ksInfo.getPassword()).get();
 			ksInfo.setOpen(true);
 		} catch (Exception e1) {
 			MykeysFrame.showError(TreeKeyStorePanel.this, e1.getMessage());
@@ -565,16 +569,31 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 					if (object instanceof KeyStoreInfo) {
 						KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
 						if (ksiInfo != null)
-							displayKeystoreList(ksiInfo);
+							try {
+								displayKeystoreList(ksiInfo);
+							} catch (ServiceException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 
 					} else 
 						if (object instanceof ProfilStoreInfo) {
 							ProfilStoreInfo ksiInfo = ((ProfilStoreInfo) object);
 							if (ksiInfo != null)
-								displayKeystoreList(ksiInfo);
+								try {
+									displayKeystoreList(ksiInfo);
+								} catch (ServiceException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 
 						} else {
-						displayKeystoreList(null);
+						try {
+							displayKeystoreList(null);
+						} catch (ServiceException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 
@@ -645,7 +664,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		}
 	}
 
-	public void addCertificate(DefaultMutableTreeNode node, boolean b) {
+	public void addCertificate(DefaultMutableTreeNode node, boolean b) throws ServiceException {
 		JFrame frame = (JFrame) tree.getTopLevelAncestor();
 		KeyStoreInfo ksInfo = null;
 		Object object = node.getUserObject();
@@ -756,16 +775,17 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 			String password) throws KeyToolsException, KeyStoreException {
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
-
-		ks = kt.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray());
+		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		ks = ksBuilder.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray()).get();
 		Map<String, String> certsAC = new HashMap<String, String>();
 		Enumeration<String> enumKs = ks.aliases();
 		while (enumKs.hasMoreElements()) {
 			String alias = enumKs.nextElement();
 			Certificate cert = ks.getCertificate(alias);
 
-			CertificateInfo certInfo = new CertificateInfo(alias);
-			kt.fillCertInfo(ks, certInfo, alias);
+		
+			KeyStoreService ksv = new KeyStoreService(null);
+			CertificateInfo certInfo = ksv.fillCertInfo(ks, alias);
 
 			certsAC.put(alias, alias);
 

@@ -8,7 +8,8 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.profile.Profil;
@@ -42,22 +43,37 @@ public class KeysProfileAction implements ActionListener {
 
 		TypeAction typeAction = TypeAction.getTypeAction(action);
 		JDialog cs;
-		JFrame frame = null;
+		JFrame frame = null; 
 		switch (typeAction) {
 		
 		case OPEN_STORE:
 			if (this.listPanel.openStore(false, true)) {
 			}
-			this.listPanel.updateInfo(this.listPanel.ksInfo);
+			try {
+				this.listPanel.updateInfo(this.listPanel.ksInfo);
+			} catch (ServiceException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			break;
 
 		case ADD_CERT:
-			this.listPanel.addElement(this.listPanel.ksInfo, false);
+			try {
+				this.listPanel.addElement(this.listPanel.ksInfo, false);
+			} catch (ServiceException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			// addCertificate(ksInfo, false);
 			break;
 		
 		case IMPORT_CERT:
-			this.listPanel.importCertificate(this.listPanel.ksInfo, false);
+			try {
+				this.listPanel.importCertificate(this.listPanel.ksInfo, false);
+			} catch (ServiceException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			break;
 
 
@@ -69,7 +85,7 @@ public class KeysProfileAction implements ActionListener {
 					try {
 						profileService.delete( info);
 						this.listPanel.updateInfo(this.listPanel.ksInfo);
-					} catch (IOException e1) {
+					} catch (IOException | ServiceException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}

@@ -1,11 +1,16 @@
-package org.dpr.mykeys.certificate;
+package org.dpr.mykeys.app.certificate;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -23,6 +28,7 @@ import org.bouncycastle.jce.X509Principal;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.app.X509Util;
 
 public class CertificateInfo implements ChildInfo{
 	public static final Log log = LogFactory.getLog(CertificateInfo.class);
@@ -135,6 +141,64 @@ public class CertificateInfo implements ChildInfo{
 
 	public CertificateInfo(String alias2) {
 		this.alias = alias2;
+	}
+
+	public CertificateInfo(String alias2, X509Certificate cert, char[] charArray) {
+		this.alias = alias2;
+		this.password=charArray;
+		init(cert);
+	}
+	public CertificateInfo(String alias2, X509Certificate cert) {
+		this.alias = alias2;
+	
+		init(cert);
+	}
+
+	private void init(X509Certificate cert) {
+		this.setCertificate((X509Certificate) cert);
+		Map<DERObjectIdentifier, String> oidMap = new HashMap<DERObjectIdentifier, String>();
+		X509Certificate certX509 = (X509Certificate) cert;
+		this.setAlgoPubKey(cert.getPublicKey().getAlgorithm());
+		this.setAlgoSig(certX509.getSigAlgName());
+		this.setSignature(certX509.getSignature());
+		if (certX509.getPublicKey() instanceof RSAPublicKey) {
+			this.setKeyLength(((RSAPublicKey) certX509.getPublicKey()).getModulus().bitLength());
+			String aa = ((RSAPublicKey) certX509.getPublicKey()).getModulus().toString(16);
+		}
+		this.setPublicKey(certX509.getPublicKey());
+		//why ?
+		certX509.getSubjectX500Principal().getName("RFC2253");
+		X509Name name = new X509Name(certX509.getSubjectX500Principal().getName("RFC2253"));
+
+
+
+		this.x509NameToMap(name);
+
+		
+		this.setKeyUsage(certX509.getKeyUsage());
+		this.setNotBefore(certX509.getNotBefore());
+		this.setNotAfter(certX509.getNotAfter());
+		X509Util.getExtensions(certX509);
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			md.update(certX509.getEncoded());
+
+			this.setDigestSHA1(md.digest());
+			md = MessageDigest.getInstance("SHA-256");
+			md.update(certX509.getEncoded());
+
+			this.setDigestSHA256(md.digest());
+
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CertificateEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
 	}
 
 	public String toString() {

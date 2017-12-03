@@ -11,7 +11,8 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -87,7 +88,12 @@ public class TreePopupMenu extends JPopupMenu {
 				break;
 
 			case ADD_CERT:
-				treeKeyStoreParent.addCertificate(node, false);
+				try {
+					treeKeyStoreParent.addCertificate(node, false);
+				} catch (ServiceException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				break;
 
 			case ADD_CERT_AC:

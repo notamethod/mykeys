@@ -14,7 +14,7 @@ import javax.swing.tree.TreePath;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 
 public class ExplorerTreeUI extends BasicTreeUI {
 

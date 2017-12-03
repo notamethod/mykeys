@@ -1,8 +1,9 @@
-package org.dpr.mykeys.certificate.windows;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
+import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,9 +15,12 @@ import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateService;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
 
@@ -73,6 +77,7 @@ public static void main(String[] args) {
 				certInfo.setNotBefore((Date) elements.get("notBefore"));
 				certInfo.setNotAfter((Date) elements.get("notAfter"));
 				KeyTools ktools = new KeyTools();
+				KeyStoreService kserv = new KeyStoreService(ksInfo);
 				char[] pkPassword = ((String) elements.get("pwd1"))
 						.toCharArray();
 
@@ -94,11 +99,15 @@ public static void main(String[] args) {
 					certInfo.setPolicyNotice(((String) elements
 							.get("PolicyNotice")));
 					certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
-
-					xCerts = ktools.genererX509(certInfo,
+				
+					KeyStore ks = kserv.getKeystore();
+				
+					CertificateService certServ = new CertificateService(null);
+					CertificateInfo infoEmetteur = kserv.fillCertInfo(ks , (String) elements.get("emetteur"));
+					xCerts = certServ.genererX509(ks, infoEmetteur,certInfo,
 							(String) elements.get("emetteur"), isAC);
 
-					ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
+					kserv.addCertToKeyStore(xCerts, certInfo);
 					CreateCertificatDialog.this.setVisible(false);
 
 				} catch (Exception e) {

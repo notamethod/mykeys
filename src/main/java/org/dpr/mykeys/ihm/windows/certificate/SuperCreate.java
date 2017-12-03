@@ -1,4 +1,4 @@
-package org.dpr.mykeys.certificate.windows;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -39,7 +39,9 @@ import javax.swing.event.ChangeListener;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateService;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -47,6 +49,7 @@ import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreType;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
@@ -320,9 +323,14 @@ public class SuperCreate extends JDialog implements ItemListener {
 					fillCertInfo();
 					X509Certificate[] xCerts = null;
 					KeyTools ktools = new KeyTools();
-					xCerts = ktools.genererX509(certInfo, (String) infosPanel.getElements().get("emetteur"), isAC);
+					KeyStoreService kserv = new KeyStoreService(ksInfo);
+					
+					certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
+					CertificateService certServ = new CertificateService(certInfo);
+					 
+					xCerts = certServ.generateX509(isAC);
 
-					ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
+					kserv.addCertToKeyStore(xCerts, certInfo);
 					SuperCreate.this.setVisible(false);
 
 				} catch (Exception e) {

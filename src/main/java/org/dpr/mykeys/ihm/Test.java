@@ -7,8 +7,10 @@ import java.util.Enumeration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.KeystoreBuilder;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 
@@ -37,7 +39,8 @@ public class Test {
 			String pathCert = "c:/dev/cpi.cer";
 			KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path,
 					StoreModel.CERTSTORE, StoreFormat.JKS);
-			kt.importX509Cert(alias, ksInfo, pathCert, typeCert,
+			KeyStoreService kserv = new KeyStoreService(ksInfo);
+			kserv.importX509Cert(alias, pathCert, StoreFormat.UNKNOWN,
 					"111".toCharArray());
 
 		} catch (Exception e) {
@@ -55,11 +58,11 @@ public class Test {
 
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
-
+		KeystoreBuilder ksBuilder = new KeystoreBuilder();
 		ksInfo.setPassword("111".toCharArray());
 		try {
-			ks = kt.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword());
+			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+					ksInfo.getPassword()).get();
 
 		} catch (Exception e1) {
 
@@ -83,10 +86,16 @@ public class Test {
 				}
 				//
 				CertificateInfo certInfo = new CertificateInfo(alias);
-				kt.fillCertInfo(ks, certInfo, alias);
+				fillCertInfo(ksInfo, ks, certInfo, alias);
 
 			}
 		}
 
+	}
+	
+	private static void fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, CertificateInfo certInfo, String alias) {
+		KeyStoreService ksv = new KeyStoreService(ksInfo);
+		ksv.fillCertInfo(ks, certInfo, alias);
+		
 	}
 }

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.certificate.windows;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.util.Iterator;
 import java.util.Locale;

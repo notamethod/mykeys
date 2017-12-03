@@ -190,9 +190,9 @@ public class TimeStampManager {
 			KeyStoreInfo ksInfo) throws Exception {
 		try {
 			KeyTools kt = new KeyTools();
-
-			KeyStore ks = kt.loadKeyStore(ksInfo.getPath(),
-					ksInfo.getStoreFormat(), ksInfo.getPassword());
+			KeystoreBuilder ksBuilder = new KeystoreBuilder();
+			KeyStore ks = ksBuilder.loadKeyStore(ksInfo.getPath(),
+					ksInfo.getStoreFormat(), ksInfo.getPassword()).get();
 
 			// recup keystore, certifs et clefs
 			X509Certificate cert = (X509Certificate) ks

@@ -1,11 +1,11 @@
-package org.dpr.mykeys.certificate.windows;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 
 public class FillUtils {
 

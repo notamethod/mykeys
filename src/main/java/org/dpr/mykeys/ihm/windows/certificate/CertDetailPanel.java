@@ -1,4 +1,4 @@
-package org.dpr.mykeys.certificate;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.Component;
 import java.util.Iterator;
@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
@@ -42,8 +43,10 @@ public class CertDetailPanel extends LabelValuePanel {
 		this.putEmptyLine();
 		this.put(MyKeys.getMessage().getString("x509.serial"), JTextField.class, "numser",
 				info.getCertificate().getSerialNumber().toString(), false);
-		this.put(MyKeys.getMessage().getString("x509.issuer"), JTextField.class, "emetteur",
+		
+		this.put(MyKeys.getMessage().getString("x509.issuer"), JTextArea.class, "emetteur",
 				info.getCertificate().getIssuerX500Principal().toString(), false);
+		this.addTitle("Subject");
 		if (info.getSubjectMap() != null) {
 			Iterator<String> iter = info.getSubjectMap().keySet().iterator();
 			while (iter.hasNext()) {
@@ -71,8 +74,8 @@ public class CertDetailPanel extends LabelValuePanel {
 
 		this.put("Digest SHA1", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA1(), " ", false),
 				false);
-		this.put("Digest SHA256", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", false),
-				false);
+//		this.put("Digest SHA256", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", false),
+//				false);
 		this.putEmptyLine();
 		this.put("Chaine de certificats", JTextArea.class, "xCertChain", info.getCertChain(), false);
 		this.putEmptyLine();

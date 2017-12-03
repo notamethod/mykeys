@@ -7,8 +7,8 @@ import java.util.List;
 import javax.swing.JToolBar;
 
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.certificate.CertificateInfo;
-import org.dpr.mykeys.certificate.CertificateToolBar;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.ihm.windows.certificate.CertificateToolBar;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.profile.Profil;
 import org.dpr.mykeys.profile.ProfileToolBar;

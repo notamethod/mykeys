@@ -3,7 +3,8 @@ import java.util.Date;
 
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateService;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -30,8 +31,11 @@ public class GenerateCertificateTest {
 		certModel.setNotBefore(new Date());
 		certModel.setNotAfter(cal.getTime());
 		CertificateInfo certIssuer = new CertificateInfo();
+		
+		CertificateService certServ = new CertificateService(certModel);
+		
 		try {
-			ktools.genererX509(certModel, certModel, isAC);
+			certServ.genererX509(certModel, certModel, isAC);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

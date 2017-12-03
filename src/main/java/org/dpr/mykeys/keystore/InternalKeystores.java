@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.profile.ProfilStoreInfo;
 
@@ -74,13 +75,16 @@ public class InternalKeystores {
 
 	public static KeyStoreInfo getCertKeystore() {
 		String path = InternalKeystores.getCertPath();
-		KeyTools kt = new KeyTools();
+
+		KeystoreBuilder ksBuilder = new KeystoreBuilder();
 		String pwd = InternalKeystores.password;
 		KeyStoreInfo kinfo = null;
 		File f = new File(path);
+		//create keystore
 		if (!f.exists()) {
 			try {
-				kt.createKeyStore(StoreFormat.JKS, InternalKeystores.getCertPath(), pwd.toCharArray());
+				ksBuilder.create(StoreFormat.JKS, InternalKeystores.getCertPath(), pwd.toCharArray());
+
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -125,6 +129,11 @@ public class InternalKeystores {
 			if (fos != null)
 				fos.close();
 		}
+	}
+	
+	public KeyStoreInfo getKeystoreInfo() {
+		
+		return new KeyStoreInfo(new File(InternalKeystores.getACPath()), StoreFormat.JKS, InternalKeystores.password.toCharArray());
 	}
 
 }

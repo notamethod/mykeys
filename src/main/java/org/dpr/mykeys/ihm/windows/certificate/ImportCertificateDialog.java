@@ -1,4 +1,4 @@
-package org.dpr.mykeys.certificate.windows;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -24,6 +24,8 @@ import javax.swing.filechooser.FileFilter;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
+import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JDropText;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -132,8 +134,11 @@ public class ImportCertificateDialog extends JDialog {
 						MykeysFrame.showError(ImportCertificateDialog.this,
 								"Renseignez un alias pour ce certificat");
 					}
-					kt.importX509Cert(alias, ksInfo, tfDirectory.getText(),
-							typeCert,
+					KeyStoreService kserv = new KeyStoreService(ksInfo);
+					//FIXME;CRR 
+					System.out.println(typeCert);
+					kserv.importX509Cert(alias, tfDirectory.getText(),
+							StoreFormat.fromValue(typeCert),
 							((String) elements.get("pwd1")).toCharArray());
 
 					// ((MykeysFrame)ImportCertificateDialog.this.getParent()).updateKeyStoreList();

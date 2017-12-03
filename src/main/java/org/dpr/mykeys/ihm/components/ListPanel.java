@@ -45,14 +45,15 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.certificate.CertificateInfo;
-import org.dpr.mykeys.certificate.windows.CreateCertProfilDialog;
-import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
-import org.dpr.mykeys.certificate.windows.ExportCertificateDialog;
-import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
-import org.dpr.mykeys.certificate.windows.SuperCreate;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
+import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
+import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
+import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
+import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.ActionStatus;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.KeyStoreService;
@@ -73,7 +74,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		public ListTransferHandler() {
 			try {
 				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-						+ org.dpr.mykeys.certificate.CertificateInfo.class.getName() + "\"";
+						+ org.dpr.mykeys.app.certificate.CertificateInfo.class.getName() + "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
 				log.trace("ClassNotFound: " + e.getMessage());
@@ -141,7 +142,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		final ImageIcon icon = createImageIcon("/images/Locked.png");
 
 		actions = new KeysAction(this, this);
-		
+
 		toolBarManager.init("Still draggable", actions, this);
 		listModel = new DefaultListModel();
 		ListSelectionListener listListener = new CertListListener();
@@ -160,8 +161,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		JScrollPane listScroller = new JScrollPane(listCerts);
 		// listScroller.setPreferredSize(new Dimension(450, 80));
 		listScroller.setAlignmentX(LEFT_ALIGNMENT);
-	
-		
+
 		jp.add(listScroller, BorderLayout.CENTER);
 
 		add(jp);
@@ -169,7 +169,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		jp.setVisible(false);
 	}
 
-	public void updateInfo(NodeInfo info) {
+	public void updateInfo(NodeInfo info) throws ServiceException {
 		jp.setVisible(false);
 
 		jp.remove(toolBarManager.getInvInstance(info));
@@ -181,11 +181,17 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		ksInfo = info;
 		listCerts.clearSelection();
 		listModel.removeAllElements();
-
-		for (ChildInfo ci : ksInfo.getChildList()) {
-			listModel.addElement(ci);
+		// FIXME
+		if (ksInfo instanceof ProfilStoreInfo) {
+			for (ChildInfo ci : ksInfo.getChildList()) {
+				listModel.addElement(ci);
+			}
+		} else {
+			KeyStoreService ks = new KeyStoreService((KeyStoreInfo) ksInfo);
+			for (ChildInfo ci : ks.getChildList()) {
+				listModel.addElement(ci);
+			}
 		}
-
 		toolBarManager.removeListeners(info);
 		// addCertProfButton.removeActionListener(actions);
 		if (ksInfo.isOpen()) {
@@ -202,7 +208,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			listCerts.setShowImage(true);
 		}
 		toolBarManager.setTitle(ksInfo.getName());
-		//toolBarManager.show(info);
+		// toolBarManager.show(info);
 
 		jp.revalidate();
 		jp.setVisible(true);
@@ -236,8 +242,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.dpr.mykeys.ihm.components.IListPanel#setDetailPanel(org.dpr.mykeys.
+	 * @see org.dpr.mykeys.ihm.components.IListPanel#setDetailPanel(org.dpr.mykeys.
 	 * ihm.components.DetailPanel)
 	 */
 
@@ -260,7 +265,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		this.ksInfo = ksInfo;
 	}
 
-	public void addElement(NodeInfo info, boolean b) {
+	public void addElement(NodeInfo info, boolean b) throws ServiceException {
 
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
@@ -277,7 +282,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		return;
 	}
 
-	public void addCertFromPRofile(NodeInfo info, boolean b) {
+	public void addCertFromPRofile(NodeInfo info, boolean b) throws ServiceException {
 
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
@@ -300,12 +305,13 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * 
 	 * @param ksInfo2
 	 * @param certificateInfo
+	 * @throws ServiceException
 	 */
-	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) {
+	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) throws ServiceException {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
-		KeyTools kt = new KeyTools();
+		KeyStoreService ksv = new KeyStoreService(kinfo);
 		try {
-			kt.deleteCertificate(kinfo, certificateInfo);
+			ksv.removeCertificate(certificateInfo);
 
 		} catch (Exception e1) {
 			MykeysFrame.showError(this, e1.getMessage());
@@ -326,7 +332,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	}
 
-	public void importCertificate(NodeInfo info, boolean b) {
+	public void importCertificate(NodeInfo info, boolean b) throws ServiceException {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
@@ -356,7 +362,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		}
 
 		try {
-			ksInfo.open();
+			KeyStoreService kserv = new KeyStoreService((KeyStoreInfo) ksInfo);
+			kserv.open();
 
 			ksInfo.setOpen(true);
 
@@ -444,8 +451,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.dpr.mykeys.ihm.components.IListPanel#dropActionChanged(java.awt.dnd.
+	 * @see org.dpr.mykeys.ihm.components.IListPanel#dropActionChanged(java.awt.dnd.
 	 * DropTargetDragEvent)
 	 */
 	@Override
@@ -456,29 +462,29 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	// This method handles a drop for a list of files
 	protected boolean dropFile(Transferable transferable)
-			throws IOException, UnsupportedFlavorException, MalformedURLException {
-	
+			throws IOException, UnsupportedFlavorException, MalformedURLException, ServiceException {
+
 		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 		File transferFile = (File) fileList.get(0);
 		KeyStoreInfo ksin = new KeyStoreInfo(transferFile, null, null);
 		KeyStoreService service = new KeyStoreService((KeyStoreInfo) ksInfo);
 		final String transferURL = transferFile.getAbsolutePath();
-		
-		ActionStatus act=null;
+
+		ActionStatus act = null;
 		try {
 			act = service.importCertificates(ksin);
-			if (act.equals(ActionStatus.ASK_PASSWORD)){
+			if (act.equals(ActionStatus.ASK_PASSWORD)) {
 				char[] password = MykeysFrame.showPasswordDialog(this);
 				ksin.setPassword(password);
-				
+
 				service.importCertificates(ksin);
 			}
 			updateInfo(ksInfo);
 		} catch (KeyToolsException | GeneralSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-	
+		}
+
 		// System.out.println("File URL is " + transferURL);
 
 		return true;

@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.app.X509Util;
-import org.dpr.mykeys.certificate.CertificateUtils;
+import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;

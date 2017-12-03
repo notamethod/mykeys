@@ -1,4 +1,4 @@
-package org.dpr.mykeys.certificate.windows;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -42,9 +42,9 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.certificate.CertificateInfo;
-import org.dpr.mykeys.certificate.CertificateService;
-import org.dpr.mykeys.certificate.CertificateUtils;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateService;
+import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.model.FrameModel;
@@ -52,6 +52,7 @@ import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.profile.ProfilException;
 import org.dpr.mykeys.profile.ProfileManager;
@@ -238,9 +239,10 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
 					CertificateService cm = new CertificateService(certInfo);
 					KeyTools ktools = new KeyTools();
+					KeyStoreService kserv = new KeyStoreService(ksInfo);
 					xCerts = cm.generateX509();
 					// TODO manage ksinfo
-					ktools.addCertToKeyStoreNew(xCerts, ksInfo, certInfo);
+					kserv.addCertToKeyStore(xCerts, certInfo);
 					CreateCertProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.certificate.windows;
+package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -27,10 +27,11 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -185,6 +186,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
 
                 KeyTools kt = new KeyTools();
+                KeyStoreService kServ = new KeyStoreService(ksInfo);
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
                 if (isExportCle)
@@ -217,7 +219,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                         kt.exportDer(certInfo, path);
                         if (isExportCle)
                         {
-                            kt.exportPrivateKey(certInfo, ksInfo, privKeyPwd,
+                        	kServ.exportPrivateKey(certInfo, privKeyPwd,
                                     tfDirectory.getText());
                         }
 
@@ -238,7 +240,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                         kt.exportPem(certInfo, path);
                         if (isExportCle)
                         {
-                            kt.exportPrivateKeyPEM(certInfo, ksInfo, privKeyPwd,
+                        	kServ.exportPrivateKeyPEM(certInfo, ksInfo, privKeyPwd,
                                     tfDirectory.getText());
                         }
 

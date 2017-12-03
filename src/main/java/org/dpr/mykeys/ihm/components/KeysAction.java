@@ -7,7 +7,8 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
  
@@ -59,7 +60,12 @@ public class KeysAction implements ActionListener {
 		case OPEN_STORE:
 			if (this.listPanel.openStore(false, true)) {
 			}
-			this.listPanel.updateInfo(this.listPanel.ksInfo);
+			try {
+				this.listPanel.updateInfo(this.listPanel.ksInfo);
+			} catch (ServiceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			break;
 		//
 		// case CLOSE_STORE:
@@ -67,15 +73,30 @@ public class KeysAction implements ActionListener {
 		// break;
 
 		case ADD_CERT:
-			this.listPanel.addElement(this.listPanel.ksInfo, false);
+			try {
+				this.listPanel.addElement(this.listPanel.ksInfo, false);
+			} catch (ServiceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			// addCertificate(ksInfo, false);
 			break;
 		case ADD_CERT_PROF: 
-			this.listPanel.addCertFromPRofile(this.listPanel.ksInfo, false);
+			try {
+				this.listPanel.addCertFromPRofile(this.listPanel.ksInfo, false);
+			} catch (ServiceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			// addCertificate(ksInfo, false);
 			break;
 		case IMPORT_CERT:
-			this.listPanel.importCertificate(this.listPanel.ksInfo, false);
+			try {
+				this.listPanel.importCertificate(this.listPanel.ksInfo, false);
+			} catch (ServiceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			break;
 
 		case EXPORT_CERT:
@@ -89,7 +110,12 @@ public class KeysAction implements ActionListener {
 					&& this.listPanel.listCerts.getSelectedValue() instanceof CertificateInfo) {
 				CertificateInfo certInfo = (CertificateInfo) this.listPanel.listCerts.getSelectedValue();
 				if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
-					this.listPanel.deleteCertificate(this.listPanel.ksInfo, certInfo);
+					try {
+						this.listPanel.deleteCertificate(this.listPanel.ksInfo, certInfo);
+					} catch (ServiceException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 			break;

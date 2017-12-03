@@ -87,7 +87,7 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreFormat;
@@ -114,12 +114,12 @@ public class KeyTools {
 
 	static String X509_TYPE = "X.509";
 
-	static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
-	static final String END_PEM = "-----END CERTIFICATE-----";
+	public static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
+	public static final String END_PEM = "-----END CERTIFICATE-----";
 
-	static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
+	public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
 
-	static final String END_KEY = "-----END RSA PRIVATE KEY-----";
+	public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
 
 	private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
 
@@ -133,42 +133,42 @@ public class KeyTools {
 		// test.createKeyStore("JKS");
 		// test.createKeyStore(TYPE_P12, "keystorePub.p12");
 		Security.addProvider(new BouncyCastleProvider());
-		try {
-			test.generateCrl2();
-		} catch (UnrecoverableKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CRLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SignatureException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KeyToolsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			test.generateCrl2();
+//		} catch (UnrecoverableKeyException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (InvalidKeyException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (KeyStoreException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (NoSuchProviderException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (NoSuchAlgorithmException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (CertificateException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (CRLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IllegalStateException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SignatureException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (KeyToolsException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		// Set aa = Security.getProvider("BC").getServices();
 		// Object o = Security.getProvider("BC").get("Signature");
 		//
@@ -217,226 +217,17 @@ public class KeyTools {
 
 	}
 
-	/**
-	 * Create a keystore of type 'ksType' with filename 'name'
-	 * 
-	 * @param format
-	 *            .toString()
-	 * @param name
-	 * @param password
-	 * @throws Exception
-	 */
-	public KeyStore createKeyStore(StoreFormat format, String name, char[] password) throws Exception {
-		KeyStore ks = null;
-		try {
-			ks = KeyStore.getInstance(format.toString());
-
-			ks.load(null, password);
-			OutputStream fos = new FileOutputStream(new File(name));
-			ks.store(fos, password);
-			fos.close();
-		} catch (Exception e) {
-			throw new Exception(e);
-		}
-		return ks;
-
-	}
-
-	public KeyStore loadKeyStore(String ksName, StoreFormat format, char[] pwd) throws KeyToolsException {
-		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		String type = StoreFormat.getValue(format);
-		KeyStore ks = null;
-		try {
-			try {
-				ks = KeyStore.getInstance(type, "BC");
-			} catch (Exception e) {
-				ks = KeyStore.getInstance("JKS");
-			}
-
-			// get user password and file input stream
-
-			java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
-			ks.load(fis, pwd);
-			fis.close();
-		} catch (KeyStoreException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
-
-		} catch (FileNotFoundException e) {
-			throw new KeyToolsException("Fichier non trouvé:" + ksName + ", " + e.getCause(), e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new KeyToolsException("Format inconnu:" + ksName + ", " + e.getCause(), e);
-		} catch (CertificateException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName + ", " + e.getCause(), e);
-		} catch (IOException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName + ", " + e.getCause(), e);
-		}
-		return ks;
-
-	}
-
-	public KeyStore loadKeyStore2(String ksName, String type, char[] pwd) throws KeyToolsException {
-		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-
-		KeyStore ks = null;
-		try {
-			try {
-				ks = KeyStore.getInstance(type, "BC");
-			} catch (Exception e) {
-				ks = KeyStore.getInstance("JKS");
-			}
-
-			// get user password and file input stream
-
-			java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
-			ks.load(fis, pwd);
-			fis.close();
-		} catch (KeyStoreException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
-
-		} catch (FileNotFoundException e) {
-			throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new KeyToolsException("Format inconnu:" + ksName, e);
-		} catch (CertificateException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
-		} catch (IOException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
-		}
-		return ks;
-	}
-
-	@SuppressWarnings("deprecation")
-	public X509Certificate[] genererX509(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
-			throws Exception {
-
-		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
-
-		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
-		// SerialNumber
-		BigInteger bi = RandomBI(30);
-		certGen.setSerialNumber(bi);
-		if (StringUtils.isBlank(certModel.getAlias())) {
-			certModel.setAlias(bi.toString(16));
-		}
-		if (certIssuer.getCertificate() != null) {
-			certGen.setIssuerDN(certIssuer.getCertificate().getSubjectX500Principal());
-		} else {
-			certGen.setIssuerDN(new X509Principal(new X509Principal(certModel.subjectMapToX509Name())));
-		}
-
-		certGen.setPublicKey(certModel.getPublicKey());
-		setDuration(certModel, certGen);
-
-		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
-		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
-		int maxLength = -1;
-		if (isAC) {
-			// TODO: pass as parameter for server certificate
-			if (maxLength >= 0) {
-				certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(true, maxLength));
-			} else {
-				certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(true));
-			}
-		} else {
-			certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(false));
-		}
-		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(certModel.getIntKeyUsage()));
-		// certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
-		// new AuthorityKeyIdentifierStructure( caCert));
-		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
-				new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
-		// X509Extensions.ExtendedKeyUsage.
-
-		// FIXME: extensions to fix
-		// KeyPurposeId kpid[]=new KeyPurposeId[2];
-		//
-		// kpid[0]=KeyPurposeId.id_kp_clientAuth;
-		// kpid[1]=KeyPurposeId.id_kp_serverAuth;
-		// Vector v = new Vector<KeyPurposeId>();
-		// v.add(kpid[0]);
-		// v.add(kpid[1]);
-		//
-		// certGen.addExtension(X509Extensions.ExtendedKeyUsage, false,
-		// new ExtendedKeyUsage(v));
-
-		// FIXME: à vérifier en cas de auto signé
-		if (certIssuer.getCertificate() != null) {
-			certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
-					new AuthorityKeyIdentifierStructure(certIssuer.getCertificate()));
-		} else {
-			certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
-					new AuthorityKeyIdentifierStructure(certModel.getPublicKey()));
-		}
-
-		if (StringUtils.isNotBlank(certModel.getPolicyCPS())) {
-			PolicyInformation pi = getPolicyInformation(certModel.getPolicyID(), certModel.getPolicyCPS(),
-					certModel.getPolicyNotice());
-
-			DERSequence seq = new DERSequence(pi);
-			certGen.addExtension(X509Extensions.CertificatePolicies.getId(), false, seq);
-		}
-		// gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
-		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
-
-		// point de distribution des CRL
-		buildCrl(certModel, certIssuer, certGen);
-
-		X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
-		// TODO: let generate expired certificate for test purpose ?
-		try {
-			cert.checkValidity(new Date());
-		} catch (Exception e) {
-			log.warn("invalid certificate", e);
-		}
-		cert.verify(certIssuer.getPublicKey());
-		X509Certificate[] certChain = null;
-		// FIXME: gérer la chaine de l'émetteur
-		if (certIssuer.getCertificate() != null) {
-			certChain = new X509Certificate[2];
-			certChain[0] = cert;
-			certChain[1] = certIssuer.getCertificate();
-		} else {
-			certChain = new X509Certificate[] { cert };
-		}
-
-		return certChain;
-
-	}
+	
 
 	@Deprecated
-	public void addCertToKeyStore(X509Certificate cert, KeyStoreInfo ksInfo, CertificateInfo certInfo)
+	public void addCertToKeyStoreOld(X509Certificate cert, KeyStoreInfo ksInfo, CertificateInfo certInfo)
 			throws KeyToolsException {
-		KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
-		saveCert(kstore, cert, certInfo);
-		saveKeyStore(kstore, ksInfo);
+//		KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
+//		saveCert(kstore, cert, certInfo);
+//		saveKeyStore(kstore, ksInfo);
 	}
 
-	public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo, CertificateInfo certInfo)
-			throws KeyToolsException {
-		KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
-		saveCertChain(kstore, cert, certInfo);
-		saveKeyStore(kstore, ksInfo);
-	}
 
-	public void addCertToKeyStoreNew(X509Certificate[] xCerts, KeyStoreInfo ksInfo, CertificateInfo certInfo)
-			throws KeyToolsException {
-		KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
-		if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
-			certInfo.setPassword(InternalKeystores.password.toCharArray());
-		}
-
-		saveCertChain(kstore, xCerts, certInfo);
-		saveKeyStore(kstore, ksInfo);
-	}
-
-	public void deleteCertificate(KeyStoreInfo ksInfo, CertificateInfo certificateInfo)
-			throws KeyToolsException, KeyStoreException {
-
-		KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
-		ks.deleteEntry(certificateInfo.getAlias());
-		saveKeyStore(ks, ksInfo);
-
-	}
 
 	/**
 	 * .
@@ -447,7 +238,7 @@ public class KeyTools {
 	 * @param certInfo
 	 * @throws KeyToolsException
 	 */
-	private void saveCertChain(KeyStore kstore, X509Certificate[] xCerts, CertificateInfo certInfo)
+	protected void saveCertChain(KeyStore kstore, X509Certificate[] xCerts, CertificateInfo certInfo)
 			throws KeyToolsException {
 		try {
 			if (certInfo.getPrivateKey() == null) {
@@ -463,7 +254,8 @@ public class KeyTools {
 		}
 
 	}
-
+	
+	@Deprecated
 	public void saveKeyStore(KeyStore ks, KeyStoreInfo ksInfo) throws KeyToolsException {
 
 		try {
@@ -520,55 +312,20 @@ public class KeyTools {
 		}
 	}
 
-	public void fillCertInfo(KeyStore ks, CertificateInfo certInfo, String alias) {
+	
 
-		try {
-			Certificate certificate = ks.getCertificate(alias);
-			fillCertInfo(certInfo, certificate);
-			if (ks.isKeyEntry(alias)) {
-				certInfo.setContainsPrivateKey(true);
+	@Deprecated
+	public void fillCertInfoOld(CertificateInfo certInfo, Certificate certificate) {
 
-			}
-			Certificate[] certs = ks.getCertificateChain(alias);
-			StringBuffer bf = new StringBuffer();
-			if (certs == null) {
-				log.error("chaine de certification nulle pour" + alias);
-				return;
-			}
-			for (Certificate chainCert : certs) {
-				bf.append(chainCert.toString());
-			}
-			certInfo.setCertChain(bf.toString());
-			certInfo.setCertificateChain(certs);
+		
 
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	public void fillCertInfo(CertificateInfo certInfo, Certificate certificate) {
-
-		if (certificate instanceof X509Certificate) {
-			certInfo.setCertificate((X509Certificate) certificate);
-			Map<DERObjectIdentifier, String> oidMap = new HashMap<DERObjectIdentifier, String>();
-			X509Certificate certX509 = (X509Certificate) certificate;
-			certInfo.setAlgoPubKey(certificate.getPublicKey().getAlgorithm());
-			certInfo.setAlgoSig(certX509.getSigAlgName());
-			certInfo.setSignature(certX509.getSignature());
-			if (certX509.getPublicKey() instanceof RSAPublicKey) {
-				certInfo.setKeyLength(((RSAPublicKey) certX509.getPublicKey()).getModulus().bitLength());
-				String aa = ((RSAPublicKey) certX509.getPublicKey()).getModulus().toString(16);
-			}
-			certInfo.setPublicKey(certX509.getPublicKey());
 
 			// certInfo.setKeyLength("0");
-			certX509.getSubjectX500Principal().getName("RFC2253");
+			
 			// certX509.getSubjectX500Principal().getName("RFC2253", map2);
 			// certInfo.setX509PrincipalMap();
 			// ASN1Set set = new ASN1Set();
-			X509Name name = new X509Name(certX509.getSubjectX500Principal().getName("RFC2253"));
+			
 			// X509AttributeCertStoreSelector
 			// certX509.get
 			// certX509.getBasicConstraints();
@@ -577,32 +334,11 @@ public class KeyTools {
 			// certGen.addExtension("2.5.29.15", true, new X509KeyUsage(
 			// X509KeyUsage.encipherOnly));
 			// certInfo.setPrivateKey(privateKey)
-			certInfo.x509NameToMap(name);
-			certInfo.setKeyUsage(certX509.getKeyUsage());
-			certInfo.setNotBefore(certX509.getNotBefore());
-			certInfo.setNotAfter(certX509.getNotAfter());
-			X509Util.getExtensions(certX509);
+
 			// certX509.getExtensionValue();
-			try {
-				MessageDigest md = MessageDigest.getInstance("SHA-1");
-				md.update(certX509.getEncoded());
 
-				certInfo.setDigestSHA1(md.digest());
-				md = MessageDigest.getInstance("SHA-256");
-				md.update(certX509.getEncoded());
 
-				certInfo.setDigestSHA256(md.digest());
-
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CertificateEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
+		
 	}
 
 	public String getKey(String alias, KeyStore keyStore, char[] motDePasse) throws GeneralSecurityException {
@@ -629,133 +365,17 @@ public class KeyTools {
 		}
 	}
 
-	/**
-	 * Chargement certificat X509 à partir d'un flux.
-	 * 
-	 * <BR>
-	 * 
-	 * 
-	 * @param aCertStream
-	 * @return
-	 * @throws GeneralSecurityException
-	 */
-	private static X509Certificate loadX509Cert(InputStream aCertStream)
-			throws GeneralSecurityException, CertificateException {
-		// création d'une fabrique de certificat X509
-		CertificateFactory cf = CertificateFactory.getInstance("X.509");
+	
 
-		// chargement du certificat
-		X509Certificate cert = (X509Certificate) cf.generateCertificate(aCertStream);
-		return cert;
-	}
-
-	public static Set<X509Certificate> loadX509Certs(InputStream aCertStream) throws GeneralSecurityException {
-
-		CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
-
-		// chargement du certificat
-		Collection<X509Certificate> certs = (Collection<X509Certificate>) cf.generateCertificates(aCertStream);
-		Set<X509Certificate> certificates = new HashSet<X509Certificate>(certs);
-		return certificates;
-	}
-
-	public void importX509Cert(String alias, KeyStoreInfo ksInfo, String fileName, String typeCert, char[] charArray)
+	public void importX509CertOld(String alias, KeyStoreInfo ksInfo, String fileName, String typeCert, char[] charArray)
 			throws KeyToolsException, FileNotFoundException, CertificateException, GeneralSecurityException {
-		CertificateInfo certInfo = new CertificateInfo();
-		if (typeCert == null || TYPE_P12.equals(typeCert)) {
-			KeyStore ks = loadKeyStore(fileName, StoreFormat.PKCS12, charArray);
-			String aliasOri = null;
-			Enumeration<String> enumKs = ks.aliases();
-			while (enumKs.hasMoreElements()) {
-				aliasOri = enumKs.nextElement();
-			}
-
-			Certificate cert = ks.getCertificate(aliasOri);
-
-			fillCertInfo(certInfo, cert);
-			certInfo.setAlias(alias);
-			certInfo.setPassword(charArray);
-			certInfo.setCertificateChain(ks.getCertificateChain(aliasOri));
-			certInfo.setPrivateKey((PrivateKey) ks.getKey(aliasOri, charArray));
-			// addCertToKeyStore((X509Certificate)cert, ksInfo, certInfo);
-			addCertToKeyStoreNew((X509Certificate) cert, ksInfo, certInfo);
-		} else if (TYPE_JKS.equals(typeCert)) {
-			InputStream is = null;
-			try {
-				is = new FileInputStream(new File(fileName));
-				X509Certificate cert = loadX509Cert(is);
-
-				fillCertInfo(certInfo, cert);
-				certInfo.setAlias(alias);
-				addCertToKeyStore(cert, ksInfo, certInfo);
-
-			} finally {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+		return ;
 
 	}
 
-	public List<CertificateInfo> loadX509Certs(String fileName)
-			throws KeyToolsException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException {
+	
 
-		// NodeInfo nInfo = new KeyStoreInfo(new File(fileName));
-		List<CertificateInfo> certsRetour = new ArrayList<CertificateInfo>();
 
-		InputStream is = null;
-		try {
-			is = new FileInputStream(new File(fileName));
-			Set<X509Certificate> certs = loadX509Certs(is);
-
-			for (X509Certificate cert : certs) {
-				CertificateInfo certInfo = new CertificateInfo();
-				fillCertInfo(certInfo, cert);
-				certsRetour.add(certInfo);
-			}
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (GeneralSecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return certsRetour;
-
-	}
-
-	PolicyInformation getPolicyInformation(String policyOID, String cps, String unotice) {
-
-		ASN1EncodableVector qualifiers = new ASN1EncodableVector();
-
-		if (!StringUtils.isEmpty(unotice)) {
-			UserNotice un = new UserNotice(null, new DisplayText(DisplayText.CONTENT_TYPE_BMPSTRING, unotice));
-			PolicyQualifierInfo pqiUNOTICE = new PolicyQualifierInfo(PolicyQualifierId.id_qt_unotice, un);
-			qualifiers.add(pqiUNOTICE);
-		}
-		if (!StringUtils.isEmpty(cps)) {
-			PolicyQualifierInfo pqiCPS = new PolicyQualifierInfo(cps);
-			qualifiers.add(pqiCPS);
-		}
-
-		PolicyInformation policyInformation = new PolicyInformation(new DERObjectIdentifier(policyOID),
-				new DERSequence(qualifiers));
-
-		return policyInformation;
-
-	}
 
 	// PolicyInformation pi = new PolicyInformation(new
 	// DERObjectIdentifier(certProfile.getCertificatePolicyId()));
@@ -766,68 +386,7 @@ public class KeyTools {
 	// certProfile.getCpsUrl(), certProfile.getUserNoticeText());
 	// -- /Parche para el policyNotice
 
-	public void exportPrivateKey(CertificateInfo certInfo, KeyStoreInfo ksInfo, char[] password, String fName)
-			throws KeyToolsException {
-		/* save the private key in a file */
-
-		try {
-			KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
-			PrivateKey privateKey = null;
-			if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
-				privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), ksInfo.getPassword());
-			} else {
-				privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), password);
-			}
-			byte[] privKey = privateKey.getEncoded();
-			FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));
-			keyfos.write(privKey);
-			keyfos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e);
-			throw new KeyToolsException("Export de la clé privée impossible:" + certInfo.getAlias(), e);
-		}
-	}
-
-	public void exportPrivateKeyPEM(CertificateInfo certInfo, KeyStoreInfo ksInfo, char[] password, String fName)
-			throws KeyToolsException {
-		/* save the private key in a file */
-
-		try {
-			KeyStore ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
-			PrivateKey privateKey = null;
-			if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
-				privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), ksInfo.getPassword());
-			} else {
-				privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), password);
-			}
-			byte[] privKey = privateKey.getEncoded();
-
-			List<String> lines = new ArrayList<String>();
-			lines.add(BEGIN_KEY);
-			// FileUtils.writeLines(file, lines)
-			File f = new File(fName + ".pem.key");
-			// FileOutputStream keyfos = new FileOutputStream(new File(fName
-			// + ".pem"));
-			byte[] b = Base64.encodeBase64(privKey);
-			String tmpString = new String(b);
-			String[] datas = tmpString.split("(?<=\\G.{64})");
-			for (String data : datas) {
-				lines.add(data);
-			}
-
-			lines.add(END_KEY);
-			FileUtils.writeLines(f, lines);
-
-			FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));
-			keyfos.write(privKey);
-			keyfos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e);
-			throw new KeyToolsException("Export de la clé privée impossible:" + certInfo.getAlias(), e);
-		}
-	}
+	
 
 	public void exportPublicKeyOld(CertificateInfo certInfo, String fName) throws KeyToolsException {
 		/* save the public key in a file */
@@ -900,45 +459,9 @@ public class KeyTools {
 
 	}
 
-	/**
-	 * .
-	 * 
-	 * <BR>
-	 * 
-	 * 
-	 * @param certInfo
-	 * @param string
-	 * @return
-	 * @throws Exception
-	 */
-	public X509Certificate[] genererX509(CertificateInfo certInfo, String aliasEmetteur, boolean isAC)
-			throws Exception {
+	
 
-		KeyStore ks = null;
-		if (!StringUtils.isBlank(aliasEmetteur)) {
-			char[] password = InternalKeystores.password.toCharArray();
-			ks = loadKeyStore(InternalKeystores.getACPath(), StoreFormat.JKS, InternalKeystores.password.toCharArray());
-			CertificateInfo infoEmetteur = new CertificateInfo();
-			fillCertInfo(ks, infoEmetteur, aliasEmetteur);
-			infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
-			return genererX509CodeSigning(certInfo, infoEmetteur, isAC);
-		} else {
-			return genererX509(certInfo, certInfo, isAC);
-		}
-	}
 
-	public CertificateInfo getCertificateACByAlias(String aliasEmetteur) throws Exception {
-
-		KeyStore ks = null;
-
-		char[] password = InternalKeystores.password.toCharArray();
-		ks = loadKeyStore(InternalKeystores.getACPath(), StoreFormat.JKS, InternalKeystores.password.toCharArray());
-		CertificateInfo infoEmetteur = new CertificateInfo();
-		fillCertInfo(ks, infoEmetteur, aliasEmetteur);
-		infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
-		return infoEmetteur;
-
-	}
 
 	public CRLDistPoint getDistributionPoints(X509Certificate certX509) {
 
@@ -970,26 +493,7 @@ public class KeyTools {
 
 	}
 
-	public KeyStore importStore(String path, StoreFormat storeFormat, char[] password)
-			throws KeyToolsException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
-		// TODO Auto-generated method stub
-		switch (storeFormat) {
-		case JKS:
-		case PKCS12:
-			return loadKeyStore(path, storeFormat, password);
 
-		default:
-			loadX509Certs(path);
-			return null;
-
-		}
-	}
-
-	public void importStore(File transferFile, StoreFormat format, char[] charArray)
-			throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, KeyToolsException {
-		importStore(transferFile.getPath(), format, charArray);
-
-	}
 
 	public X509CRL generateCrl(X509Certificate certSign, CrlInfo crlInfo, Key privateKey) throws KeyStoreException,
 			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, IOException,
@@ -1034,27 +538,7 @@ public class KeyTools {
 
 	}
 
-	public void generateCrl2() throws KeyStoreException, NoSuchProviderException, NoSuchAlgorithmException,
-			CertificateException, IOException, UnrecoverableKeyException, InvalidKeyException, CRLException,
-			IllegalStateException, SignatureException, KeyToolsException {
 
-		String kst = "C:/Documents and Settings/n096015/.myKeys/mykeysAc.jks";
-
-		char[] password = "mKeys983178".toCharArray();
-		KeyStore ks = loadKeyStore(kst, StoreFormat.JKS, password);
-		CertificateInfo cinfo = new CertificateInfo();
-		fillCertInfo(ks, cinfo, "MK DEV AC Intermediaire");
-		Calendar nextupdate = Calendar.getInstance();
-		CrlInfo crlInfo = new CrlInfo();
-		nextupdate.add(Calendar.DAY_OF_YEAR, 30);
-		crlInfo.setNextUpdate(nextupdate.getTime());
-		Key key = ks.getKey("mk dev root ca", password);
-		X509CRL crl = generateCrl(cinfo.getCertificate(), crlInfo, key);
-		OutputStream os = new FileOutputStream("c:/dev/crl2.crl");
-		os.write(crl.getEncoded());
-		os.close();
-
-	}
 
 	// public void timeStamp(KeyStoreInfo ksInfo, CertificateInfo certInfo){
 	// TimeStampTokenGenerator ts = new TimeStampTokenGenerator(
@@ -1112,97 +596,9 @@ public class KeyTools {
 
 	}
 
-	@SuppressWarnings("deprecation")
-	public X509Certificate[] genererX509CodeSigning(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
-			throws Exception {
+	
 
-		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
-		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
-		BigInteger bi = RandomBI(30);
-		certGen.setSerialNumber(bi);
-		if (StringUtils.isBlank(certModel.getAlias())) {
-			certModel.setAlias(bi.toString(16));
-		}
-		if (certIssuer.getCertificate() != null) {
-			certGen.setIssuerDN(certIssuer.getCertificate().getSubjectX500Principal());
-		} else {
-			certGen.setIssuerDN(new X509Principal(new X509Principal(certModel.subjectMapToX509Name())));
-		}
-
-		setDuration(certModel, certGen);
-		certGen.setPublicKey(certModel.getPublicKey());
-		setDuration(certModel, certGen);
-		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
-		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
-
-		certGen.addExtension(X509Extension.basicConstraints, true, new BasicConstraints(false));
-
-		certGen.addExtension(X509Extension.keyUsage, true, new KeyUsage(certModel.getIntKeyUsage()));
-		// certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
-		// new AuthorityKeyIdentifierStructure( caCert));
-		certGen.addExtension(X509Extension.subjectKeyIdentifier, false,
-				new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
-
-		// FIXME: � v�rifier en cas de auto sign�
-		if (certIssuer.getCertificate() != null) {
-			certGen.addExtension(X509Extension.authorityKeyIdentifier, false,
-					new AuthorityKeyIdentifierStructure(certIssuer.getCertificate()));
-		} else {
-			certGen.addExtension(X509Extension.authorityKeyIdentifier, false,
-					new AuthorityKeyIdentifierStructure(certModel.getPublicKey()));
-		}
-
-		if (certModel.getPolicyCPS() != null) {
-			PolicyInformation pi = getPolicyInformation(certModel.getPolicyID(), certModel.getPolicyCPS(),
-					certModel.getPolicyNotice());
-
-			DERSequence seq = new DERSequence(pi);
-			certGen.addExtension(X509Extension.certificatePolicies.getId(), false, seq);
-		}
-		// gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
-		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
-
-		certGen.addExtension(X509Extensions.ExtendedKeyUsage, false,
-				new ExtendedKeyUsage(KeyPurposeId.id_kp_codeSigning));
-
-		X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
-		cert.checkValidity(new Date());
-
-		cert.verify(certIssuer.getPublicKey());
-		X509Certificate[] certChain = null;
-		// FIXME: g�rer la chaine de l'�metteur
-		if (certIssuer.getCertificate() != null) {
-			certChain = new X509Certificate[2];
-			certChain[0] = cert;
-			certChain[1] = certIssuer.getCertificate();
-		} else {
-			certChain = new X509Certificate[] { cert };
-		}
-
-		return certChain;
-
-	}
-
-	private void setDuration(CertificateInfo certModel, X509V3CertificateGenerator certGen) {
-		if (certModel.getDuration() > 0) {
-			certModel.setNotBefore(new Date());
-			certGen.setNotBefore(certModel.getNotBefore());
-			LocalDateTime ldt = LocalDateTime.ofInstant(certModel.getNotBefore().toInstant(), ZoneId.systemDefault());
-
-			ZonedDateTime zdt = ldt.plusYears(certModel.getDuration()).atZone(ZoneId.systemDefault());
-			certModel.setNotAfter(Date.from(zdt.toInstant()));
-			certGen.setNotAfter((certModel.getNotAfter()));
-
-		} else {
-			if (null == certModel.getNotBefore()) {
-				certModel.setNotBefore(new Date());
-			}
-			certGen.setNotBefore(certModel.getNotBefore());
-
-			certGen.setNotAfter((certModel.getNotAfter()));
-		}
-	}
 
 	private void setDurationOld(CertificateInfo certModel, X509V3CertificateGenerator certGen) {
 
@@ -1220,36 +616,5 @@ public class KeyTools {
 		certGen.setNotAfter((certModel.getNotAfter()));
 	}
 
-	public KeyStore loadKeyStore(KeyStoreInfo ksin) throws KeyToolsException {
-		// TODO Auto-generated method stub
-		return loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword());
-	}
-
-	/**
-	 * @param certModel
-	 * @param certIssuer
-	 * @param certGen
-	 */
-	void buildCrl(CertificateInfo certModel, CertificateInfo certIssuer, X509V3CertificateGenerator certGen) { // point
-																												// de
-																												// distribution
-																												// des
-																												// CRL
-		if (certModel.getCrlDistributionURL() != null) {
-			DistributionPoint[] dp = new DistributionPoint[1];
-			DEROctetString oct = new DEROctetString(certModel.getCrlDistributionURL().getBytes());
-			DistributionPointName dpn = new DistributionPointName(
-					new GeneralNames(new GeneralName(GeneralName.dNSName, certModel.getCrlDistributionURL())));
-			dp[0] = new DistributionPoint(dpn, null, null);
-			certGen.addExtension(X509Extension.cRLDistributionPoints, false, new CRLDistPoint(dp));
-		} else {
-			if (certIssuer.getCertificate() != null) {
-				CRLDistPoint dpoint = getDistributionPoints(certIssuer.getCertificate());
-				if (dpoint != null) {
-					certGen.addExtension(X509Extension.cRLDistributionPoints, false, dpoint);
-				}
-			}
-		}
-	}
 
 }

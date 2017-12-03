@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JFieldsPanel;
@@ -134,11 +136,12 @@ public class CreateStoreDialog extends JDialog {
 					
 					dir = getDataDir() + File.separator + correctExtension(dir, typeKS);;
 				}
-				KeyTools kt = new KeyTools();
+				KeystoreBuilder ksBuilder = new KeystoreBuilder();
+			
 				try {
 					StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
 					createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
-					kt.createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
+					ksBuilder.create(format, dir, ((String) elements.get("pwd1")).toCharArray());
 					KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
 					((MykeysFrame) CreateStoreDialog.this.getParent()).updateKeyStoreList();
 					CreateStoreDialog.this.setVisible(false);

@@ -8,12 +8,12 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
-import org.dpr.mykeys.certificate.windows.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.Preferences;
 import org.dpr.mykeys.ihm.windows.SignDocumentDialog;
 import org.dpr.mykeys.ihm.windows.VerifSigDialog;
+import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
 import org.dpr.mykeys.keystore.ImportStoreDialog;
 import org.dpr.mykeys.profile.CreateProfilDialog;

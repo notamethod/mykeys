@@ -11,7 +11,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
-import org.dpr.mykeys.certificate.windows.CreateCertProfilDialog;
+import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;

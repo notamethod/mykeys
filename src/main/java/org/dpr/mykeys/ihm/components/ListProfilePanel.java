@@ -47,16 +47,17 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.certificate.CertificateInfo;
-import org.dpr.mykeys.certificate.windows.CreateCertProfilDialog;
-import org.dpr.mykeys.certificate.windows.CreateCertificatDialog;
-import org.dpr.mykeys.certificate.windows.ExportCertificateDialog;
-import org.dpr.mykeys.certificate.windows.ImportCertificateDialog;
-import org.dpr.mykeys.certificate.windows.SuperCreate;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
+import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
+import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
+import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
+import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.profile.CreateProfilDialog;
 import org.dpr.mykeys.profile.Profil;
@@ -75,7 +76,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		public ListTransferHandler() {
 			try {
 				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-						+ org.dpr.mykeys.certificate.CertificateInfo.class.getName() + "\"";
+						+ org.dpr.mykeys.app.certificate.CertificateInfo.class.getName() + "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
 				log.trace("ClassNotFound: " + e.getMessage());
@@ -471,9 +472,10 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 */
 	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
-		KeyTools kt = new KeyTools();
+	
+		KeyStoreService ksv = new KeyStoreService(kinfo);
 		try {
-			kt.deleteCertificate(kinfo, certificateInfo);
+			ksv.removeCertificate( certificateInfo);
 
 		} catch (Exception e1) {
 			MykeysFrame.showError(this, e1.getMessage());

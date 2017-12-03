@@ -11,8 +11,9 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509CRL;
 
-import org.dpr.mykeys.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
@@ -23,57 +24,52 @@ import org.dpr.mykeys.keystore.StoreType;
  */
 public class CommonsActions {
 
-	public void exportCert(StoreFormat storeFormat, String path,
-			char[] password, CertificateInfo certInfo) throws Exception {
+	public void exportCert(StoreFormat storeFormat, String path, char[] password, CertificateInfo certInfo)
+			throws Exception {
 		exportCert(null, storeFormat, path, password, certInfo, false);
 	}
 
-    public void exportCert(KeyStoreInfo ksInfo, StoreFormat pkcs12, String path, char[] password,
-            CertificateInfo certInfo, boolean isExportCle) throws Exception 
-    {
-        exportCert( ksInfo,  pkcs12,  path,  password,
-                 certInfo,  isExportCle, null);
-        
-    }
-    
-	public void exportCert(KeyStoreInfo ksInfoIn, StoreFormat storeFormat,
-			String path, char[] passwordExport, CertificateInfo certInfo,
-			boolean isExportCle,char[] privKeyPwd) throws Exception {
+	public void exportCert(KeyStoreInfo ksInfo, StoreFormat pkcs12, String path, char[] password,
+			CertificateInfo certInfo, boolean isExportCle) throws Exception {
+		exportCert(ksInfo, pkcs12, path, password, certInfo, isExportCle, null);
+
+	}
+
+	public void exportCert(KeyStoreInfo ksInfoIn, StoreFormat storeFormat, String path, char[] passwordExport,
+			CertificateInfo certInfo, boolean isExportCle, char[] privKeyPwd) throws Exception {
 		StoreModel storeModel = StoreModel.P12STORE;
-		KeyStoreInfo ksInfoOut = new KeyStoreInfo("store", path, storeModel,
-				storeFormat);
+		KeyStoreInfo ksInfoOut = new KeyStoreInfo("store", path, storeModel, storeFormat);
 		ksInfoOut.setPassword(passwordExport);
 		KeyTools kt = new KeyTools();
+
 		if (isExportCle && certInfo.getPrivateKey() == null) {
+			KeystoreBuilder ksBuilder = new KeystoreBuilder();
 			CertificateInfo certInfoEx = new CertificateInfo();
 			certInfoEx.setAlias(certInfo.getAlias());
 			certInfoEx.setCertificate(certInfo.getCertificate());
 			certInfoEx.setCertificateChain(certInfo.getCertificateChain());
 			certInfoEx.setPassword(privKeyPwd);
 			KeyStore kstore;
-			boolean hasPrivateKey=false;
-			kstore = kt.loadKeyStore(ksInfoIn.getPath(),
-					ksInfoIn.getStoreFormat(), ksInfoIn.getPassword());
+			boolean hasPrivateKey = false;
+			kstore = ksBuilder.loadKeyStore(ksInfoIn.getPath(), ksInfoIn.getStoreFormat(), ksInfoIn.getPassword())
+					.get();
 			if (kstore.isKeyEntry(certInfoEx.getAlias())) {
-			    hasPrivateKey=true;
+				hasPrivateKey = true;
 
 			}
-			char pwd[]=ksInfoIn.getPassword();
-			if(ksInfoIn.getStoreType().equals(StoreType.INTERNAL)){
-			//	pwd=certInfoEx.getPassword();
+			char pwd[] = ksInfoIn.getPassword();
+			if (ksInfoIn.getStoreType().equals(StoreType.INTERNAL)) {
+				// pwd=certInfoEx.getPassword();
 				certInfoEx.setPassword(pwd);
 			}
-			certInfoEx.setPrivateKey(kt.getPrivateKey(certInfoEx.getAlias(),
-					kstore, certInfoEx.getPassword()));
+			certInfoEx.setPrivateKey(kt.getPrivateKey(certInfoEx.getAlias(), kstore, certInfoEx.getPassword()));
 
 			certInfo = certInfoEx;
 		}
 		try {
-			KeyStore ks = kt.createKeyStore(storeFormat, path, ksInfoOut.getPassword());
-			// cloner le certinfo
-
-			kt.addCertToKeyStoreNew(certInfo.getCertificate(), ksInfoOut,
-					certInfo);
+			KeystoreBuilder ksBuilder = new KeystoreBuilder();
+			ksBuilder.create(storeFormat, path, ksInfoOut.getPassword()).addCertToKeyStoreNew(certInfo.getCertificate(),
+					ksInfoOut, certInfo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,15 +77,13 @@ public class CommonsActions {
 
 	}
 
-	public void signData(KeyStoreInfo kInfo, char[] password,
-			CertificateInfo certInfo, boolean isInclude) {
+	public void signData(KeyStoreInfo kInfo, char[] password, CertificateInfo certInfo, boolean isInclude) {
 		KeyTools kt = new KeyTools();
+		KeystoreBuilder ksBuilder = new KeystoreBuilder();
 		KeyStore ks;
 		try {
-			ks = kt.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(),
-					kInfo.getPassword());
-			certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(),
-					kInfo.getPassword()));
+			ks = ksBuilder.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo.getPassword()).get();
+			certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(), kInfo.getPassword()));
 		} catch (KeyToolsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,14 +116,11 @@ public class CommonsActions {
 	 * @throws Exception
 	 * 
 	 */
-	public KeyStore createStore(StoreFormat format, String dir, char[] pwd)
-			throws Exception {
+	public KeyStore createStore(StoreFormat format, String dir, char[] pwd) throws Exception {
 
-		KeyTools kt = new KeyTools();
-
-		KeyStore ks = kt.createKeyStore(format, dir, pwd);
-		KSConfig.getUserCfg().addProperty(
-				"store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
+		KeystoreBuilder kt = new KeystoreBuilder();
+		KeyStore ks = kt.create(format, dir, pwd).get();
+		KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
 		return ks;
 
 	}
@@ -147,10 +138,9 @@ public class CommonsActions {
 	//
 	// }
 
-	public void generateCrl(String aliasEmetteur, CrlInfo crlInfo)
-			throws Exception {
+	public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
 
-		KeyTools ktools = new KeyTools();
+		KeyStoreService ktools = new KeyStoreService(null);
 		CertificateInfo certSign;
 		try {
 			certSign = ktools.getCertificateACByAlias(aliasEmetteur);
@@ -162,7 +152,5 @@ public class CommonsActions {
 		}
 
 	}
-
-
 
 }

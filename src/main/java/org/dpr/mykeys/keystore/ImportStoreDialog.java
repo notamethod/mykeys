@@ -133,14 +133,14 @@ public class ImportStoreDialog extends JDialog {
 					return;
 				}
 
-				KeyTools kt = new KeyTools();
+				KeyStoreService  kserv = new KeyStoreService(null);
 				try {
 					String typeKS = (String) elements.get("typeKS");
 					if (elements.get("typeKS").equals("auto")) {
 						typeKS = findTypeKS(tfDirectory.getText());
 					}
 					StoreFormat format = StoreFormat.fromValue(typeKS);
-					kt.importStore(tfDirectory.getText(), format,
+					kserv.importStore(tfDirectory.getText(), format,
 							((String) elements.get("pwd1")).toCharArray());
 					// KSConfig.getUserCfg().addProperty("magasin." + typeKS,
 					// tfDirectory.getText());

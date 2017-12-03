@@ -1,6 +1,7 @@
 package org.dpr.swingutils;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -36,748 +37,638 @@ import javax.swing.text.BadLocationException;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.model.FrameModel;
 
-public class LabelValuePanel extends JPanel implements DocumentListener
-{
+public class LabelValuePanel extends JPanel implements DocumentListener {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 2550655426888407968L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2550655426888407968L;
 
-    int nbRows;
-    
-    @Override
+	int nbRows;
+
+	@Override
 	public void setVisible(boolean aFlag) {
-		if (aFlag == false){
-			   SpringUtilities.makeCompactGrid(this, 0, 2, 3, 3, 3, 3);
-		}else{
-			  SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+		if (aFlag == false) {
+			SpringUtilities.makeCompactGrid(this, 0, 2, 3, 3, 3, 3);
+		} else {
+			SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
 		}
 		super.setVisible(aFlag);
 	}
 
-	FrameModel model=null;
+	FrameModel model = null;
 
-    int nbCols;
+	int nbCols;
 
-    int tfSize;
+	int tfSize;
 
-    public String getDateFormat()
-    {
-        return dateFormat;
-    }
-
-    public void setDateFormat(String dateFormat)
-    {
-        this.dateFormat = dateFormat;
-    }
-
-    final static String DEFAULT_DATE_FORMAT = "dd/MM/yyyy HH:mm";
-    String dateFormat = DEFAULT_DATE_FORMAT;
-
-    Map<String, Object> elements;
-
-    Map<String, Object> components;
-
-    public LabelValuePanel()
-    {
-        super();
-        this.setLayout(new SpringLayout());
-        this.elements = new HashMap<String, Object>();
-        this.components = new HashMap<String, Object>();
-    }
-
-    public LabelValuePanel(Map<String, String> elements2, int cols)
-    {
-        this.nbCols = cols;
-    }
-
-    public LabelValuePanel(FrameModel model) {
-    	 super();
-         this.setLayout(new SpringLayout());
-         this.elements = new HashMap<String, Object>();
-         this.components = new HashMap<String, Object>();
+	public String getDateFormat() {
+		return dateFormat;
 	}
 
-	public void put(String label, String id, String defaultValue)
-    {
-        put(label, JTextField.class, id, defaultValue, true);
-    }
-    
-    public void putDisabled(String label, String id, String defaultValue)
-    {
-        put(label, JTextField.class, id, defaultValue, false);
-    }
-    
-
-    public void put(String label, Class<?> class1, String keyValue,
-            Map<String, String> values)
-    {
-        JLabel jl = new JLabel(label);
-
-        JComponent component = null;
-        if (class1.getName().equals(JComboBox.class.getName()))
-        {
-            component = putCombo(keyValue, values, "");
-        }
-
-        this.add(jl);
-        this.add(component);
-        nbRows++;
-        SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
-    }
-
-    public void put(SWComponent swComponent)
-    {
-        put(swComponent.getLabel(), swComponent.getClasse(), swComponent.getKeyValue(),
-                swComponent.getValues(), swComponent.getDefaultValue(), swComponent.getListener());
-    }
-
-    public void put(String label, Class<?> class1, String keyValue,
-            Map<String, String> values, String defaultValue)
-    {
-        put(label, class1, keyValue,
-                values, defaultValue, null);
-    }
-
-    public void put(String label, Class<?> class1, String keyValue,
-            Map<String, String> values, String defaultValue, ActionListener listener)
-    {
-        JLabel jl = new JLabel(label);
-        if (model!=null){
-        	model.add(keyValue, keyValue);
-        }
-        JComponent component = null;
-        List<JComponent> components = null;
-        if (class1.getName().equals(JComboBox.class.getName()))
-        {
-            component = putCombo(keyValue, values, defaultValue, listener);
-        }
-        else if (class1.getName().equals(ButtonGroup.class.getName()))
-        {
-            components = putRadios(keyValue, values, defaultValue);
-        }
-
-        if (component != null)
-        {
-            this.add(jl);
-            this.add(component);
-            nbRows++;
-        }
-        else
-        {
-            for (int i = 0; i < components.size(); i++)
-            {
-                this.add(i == 0 ? new JLabel(label) : new JLabel(""));
-                this.add(components.get(i));
-
-                nbRows++;
-            }
-        }
-
-        SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
-
-    }
-
-    public JComponent putCombo(String keyValue, Map<String, String> values,
-            String defaultValue)
-    {
-        return putCombo(keyValue, values,
-                defaultValue, null);
-    }
-
-    public JComponent putCombo(String keyValue, Map<String, String> values,
-            String defaultValue, ActionListener listener)
-    {
-        final String globalKey = keyValue;
-        final Map<String, String> map = values;
-        JComboBox combo = new JComboBox();
-        Set<String> keys = values.keySet();
-        Iterator<String> it = keys.iterator();
-        while (it.hasNext())
-        {
-            String key = it.next();
-            combo.addItem(key);
-            if (elements.get(globalKey) == null)
-            {
-                elements.put(globalKey, map.get(key));
-            }
-        }
-
-        combo.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                JComboBox combo = (JComboBox) e.getSource();
-                String key = (String) combo.getSelectedItem();
-                elements.put(globalKey, map.get(key));
-            }
-        });
-        combo.setSelectedItem(defaultValue);
-
-        if (listener != null)
-        {
-            combo.addActionListener(listener);
-        }
-        return combo;
-    }
-
-    public List<JComponent> putRadios(String keyValue,
-            Map<String, String> values, String defaultValue)
-    {
-
-        final String globalKey = keyValue;
-        final Map<String, String> map = values;
-        // JComboBox combo = new JComboBox();
-        ButtonGroup bg = new ButtonGroup();
-
-        List<JComponent> radios = new ArrayList<JComponent>();
-        Set<String> keys = values.keySet();
-        Iterator<String> it = keys.iterator();
-        while (it.hasNext())
-        {
-            String key = it.next();
-            JRadioButton jradio = new JRadioButton(key);
-            radios.add(jradio);
-            if (elements.get(globalKey) == null)
-            {
-                elements.put(globalKey, map.get(key));
-                jradio.setSelected(true);
-            }
-            jradio.addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent e)
-                {
-                    JRadioButton radio = (JRadioButton) e.getSource();
-                    if (radio.isSelected())
-                    {
-                        String key = (String) radio.getText();
-                        elements.put(globalKey, map.get(key));
-                    }
-                }
-            });
-            bg.add(jradio);
-        }
-
-        // combo.addActionListener(new ActionListener() {
-        // public void actionPerformed(ActionEvent e) {
-        // JComboBox combo = (JComboBox) e.getSource();
-        // String key = (String) combo.getSelectedItem();
-        // elements.put(globalKey, map.get(key));
-        // }
-        // });
-        // combo.setSelectedItem(defaultValue);
-        return radios;
-    }
-
-    public void put(String label, Class<?> class1, String keyValue,
-            Object value, boolean isEditable)
-    {
-        JLabel jl = new JLabel(label);
-        String strValue = null;
-        if (value != null)
-        {
-            if (value instanceof String)
-            {
-                strValue = (String) value;
-            }
-            else
-            {
-                strValue = value.toString();
-            }
-        }
-        final String globalKey = keyValue;
-        JComponent component = null;
-        if (class1.getName().equals(JLabel.class.getName()))
-        {
-            JLabel labelValue = new JLabel();
-            labelValue.setText(strValue);
-
-            component = labelValue;
-            this.add(component, globalKey);
-            // JtextField
-        }
-        else if (class1.getName().equals(JTextField.class.getName()))
-        {
-
-            JTextField field = new JTextField(20);
-            field.setText(strValue);
-            field.setName(keyValue);
-
-            elements.put(globalKey, strValue);
-
-            field.getDocument().addDocumentListener(new DocumentListener()
-            {
-                @Override
-                public void changedUpdate(DocumentEvent e)
-                {
-                    String value = null;
-                    try
-                    {
-                        value = e.getDocument().getText(0,
-                                e.getDocument().getLength());
-                    }
-                    catch (BadLocationException e1)
-                    {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    elements.put(globalKey, value);
-                }
-
-                @Override
-                public void insertUpdate(DocumentEvent e)
-                {
-                    changedUpdate(e);
-
-                }
-
-                @Override
-                public void removeUpdate(DocumentEvent e)
-                {
-                    changedUpdate(e);
-                }
-            });
-
-            field.setEditable(isEditable);
-            if (!isEditable)
-            {
-                field.setBorder(null);
-            }
-
-            component = field;
-            this.add(component, globalKey);
-
-        }
-        else if (class1.getName().equals(JPasswordField.class.getName()))
-        {
-            JPasswordField pwdField = new JPasswordField(strValue);
-            pwdField.setEditable(isEditable);
-            pwdField.setColumns(16);
-            elements.put(globalKey, value);
-            pwdField.getDocument().addDocumentListener(new DocumentListener()
-            {
-                @Override
-                public void changedUpdate(DocumentEvent e)
-                {
-                    String value = null;
-                    try
-                    {
-                        value = e.getDocument().getText(0,
-                                e.getDocument().getLength());
-                    }
-                    catch (BadLocationException e1)
-                    {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    elements.put(globalKey, value);
-
-                }
-
-                @Override
-                public void insertUpdate(DocumentEvent e)
-                {
-                    changedUpdate(e);
-
-                }
-
-                @Override
-                public void removeUpdate(DocumentEvent e)
-                {
-                    changedUpdate(e);
-                }
-            });
-
-            component = pwdField;
-            this.add(component, globalKey);
-        }
-        else if (class1.getName().equals(JTextArea.class.getName()))
-        {
-            JTextArea textArea = new JTextArea(5, 20);
-            textArea.setText(strValue);
-            textArea.setLineWrap(true);
-            textArea.setEditable(isEditable);
-            JScrollPane scrollPane = new JScrollPane(textArea);
-
-            textArea.getDocument().addDocumentListener(new DocumentListener()
-            {
-                @Override
-                public void changedUpdate(DocumentEvent e)
-                {
-                    String value = null;
-                    try
-                    {
-                        value = e.getDocument().getText(0,
-                                e.getDocument().getLength());
-                    }
-                    catch (BadLocationException e1)
-                    {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    elements.put(globalKey, value);
-
-                }
-
-                @Override
-                public void insertUpdate(DocumentEvent e)
-                {
-                    changedUpdate(e);
-
-                }
-
-                @Override
-                public void removeUpdate(DocumentEvent e)
-                {
-                    changedUpdate(e);
-                }
-            });
-            this.add(textArea, globalKey);
-            component = scrollPane;
-        }
-        else if (class1.getName().equals(JSpinnerDate.class.getName()))
-        {
-            // DateFormat df = DateFormat.getDateInstance();
-
-            Date date = (Date) value;
-
-            if (!isEditable)
-            {
-                DateFormat dateFormat = new SimpleDateFormat(this.dateFormat);
-                put(label, JTextField.class, keyValue, dateFormat.format(date),
-                        false);
-                return;
-            }
-
-            JSpinnerDate spinner = new JSpinnerDate(this.dateFormat, date);
-
-            SpinnerModel dateModel = spinner.getModel();
-            if (dateModel instanceof SpinnerDateModel)
-            {
-                elements.put(globalKey,
-                        ((SpinnerDateModel) dateModel).getDate());
-            }
-
-            spinner.addChangeListener(new ChangeListener()
-            {
-                @Override
-                public void stateChanged(ChangeEvent e)
-                {
-                    JSpinnerDate dateSpinner = (JSpinnerDate) e.getSource();
-                    SpinnerModel dateModel = dateSpinner.getModel();
-                    if (dateModel instanceof SpinnerDateModel)
-                    {
-                        elements.put(globalKey,
-                                ((SpinnerDateModel) dateModel).getDate());
-
-                    }
-
-                }
-            });
-
-            component = spinner;
-        }
-        else if (class1.getName().equals(JCheckBox.class.getName()))
-        {
-
-            boolean valCheck = Boolean.parseBoolean(strValue);
-            JCheckBox checkbox = new JCheckBox("", valCheck);
-
-            elements.put(globalKey, checkbox.isSelected());
-
-            checkbox.addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent e)
-                {
-                    JCheckBox checkbox = (JCheckBox) e.getSource();
-
-                    elements.put(globalKey, checkbox.isSelected());
-                }
-            });
-
-            component = checkbox;
-        }
-
-        // component.setName(globalKey);
-        this.add(jl);
-        this.add(component);
-        nbRows++;
-        SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
-
-    }
-
-    public void set(String keyValue, Object value)
-    {
-
-        String strValue = null;
-        if (value != null)
-        {
-            if (value instanceof String)
-            {
-                strValue = (String) value;
-            }
-            else if (value instanceof Date)
-            {
-                DateFormat dateFormat = new SimpleDateFormat(this.dateFormat);
-                strValue = dateFormat.format(value);
-            }
-            else
-            {
-                strValue = value.toString();
-            }
-
-        }
-        final String globalKey = keyValue;
-
-        JComponent component = (JComponent) components.get(globalKey);
-        if (component == null)
-            return;
-
-        if (component instanceof JLabel)
-        {
-
-            JLabel field = (JLabel) component;
-            field.setText(strValue);
-        }
-        else if (component instanceof JTextField)
-        {
-
-            JTextField field = (JTextField) component;
-            field.setText(strValue);
-            // field.setEditable(isEditable);
-            // if (!isEditable) {
-            // field.setBorder(null);
-            // }
-
-        }
-
-    }
-
-    // public void set(String keyValue,
-    // Object value) {
-    // //boolean isEditable=true;
-    // Component[] comps = this.getComponents();
-    // JComponent component;
-    // for (Component c : comps) {
-    // if (c.getName().equals(keyValue)) {
-    // // if (c instanceof JTextField) {
-    // // ((JTextField) c).setText((String) obj);
-    // // }
-    // component = (JComponent)c;
-    // break;
-    // }
-    // }
-    // if (component==null){
-    // return;
-    // }
-    //
-    // String strValue = null;
-    // if (value != null) {
-    // if (value instanceof String) {
-    // strValue = (String) value;
-    // } else {
-    // strValue = value.toString();
-    // }
-    // }
-    //
-    // final String globalKey = keyValue;
-    //
-    // if (component.getClass().getName().equals(JLabel.class.getName())) {
-    // JLabel labelValue = new JLabel();
-    // ((JLabel)component).setText(strValue);
-    //
-    // } else if (component.getClass().equals(JTextField.class.getName())) {
-    //
-    //
-    // ((JTextField)component).setText(strValue);
-    //
-    //
-    // elements.put(globalKey, strValue);
-    //
-    // } else if (component.getName().equals(JPasswordField.class.getName())) {
-    //
-    // elements.put(globalKey, value);
-    // //todo
-    // } else if (component.getName().equals(JTextArea.class.getName())) {
-    //
-    // ((JTextArea)component).setText(strValue);
-    //
-    // } else if (component.getName().equals(JSpinnerDate.class.getName())) {
-    // // DateFormat df = DateFormat.getDateInstance();
-    //
-    // Date date = (Date) value;
-    //
-    //
-    // JSpinnerDate spinner = new JSpinnerDate(this.dateFormat, date);
-    //
-    // SpinnerModel dateModel = spinner.getModel();
-    // if (dateModel instanceof SpinnerDateModel) {
-    // elements.put(globalKey, ((SpinnerDateModel) dateModel)
-    // .getDate());
-    // }
-    // spinner.addChangeListener(new ChangeListener() {
-    //
-    // @Override
-    // public void stateChanged(ChangeEvent e) {
-    // JSpinnerDate dateSpinner = (JSpinnerDate) e.getSource();
-    // SpinnerModel dateModel = dateSpinner.getModel();
-    // if (dateModel instanceof SpinnerDateModel) {
-    // elements.put(globalKey, ((SpinnerDateModel) dateModel)
-    // .getDate());
-    //
-    // }
-    //
-    // }
-    // });
-    //
-    // component = spinner;
-    // }
-    //
-    //
-    //
-    // }
-
-    public void put(String label, JComponent component, boolean isEditable)
-    {
-        JLabel jl = new JLabel(label);
-        this.add(jl);
-        this.add(component);
-        nbRows++;
-        SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
-
-    }
-
-    public void putEmptyLine()
-    {
-        JLabel jl = new JLabel(" ");
-        JLabel jl2 = new JLabel(" ");
-
-        this.add(jl);
-        this.add(jl2);
-        nbRows++;
-        SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
-    }
-
-    public String getStringValue(String name)
-    {
-        return (String) elements.get(name);
-    }
-
-    public Object getValue(String name)
-    {
-        return elements.get(name);
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * @return the elements
-     */
-    public Map<String, Object> getElements()
-    {
-        return elements;
-    }
-
-    /**
-     * @param elements
-     *            the elements to set
-     */
-    public void setElements(Map<String, Object> elements)
-    {
-        this.elements = elements;
-    }
-
-    public void setValue(String strName, Object obj)
-    {
-        Component[] comps = this.getComponents();
-        for (Component c : comps)
-        {
-            if (c.getName().equals(strName))
-            {
-                if (c instanceof JTextField)
-                {
-                    ((JTextField) c).setText((String) obj);
-                }
-            }
-        }
-    }
-
-    /**
-     * .
-     * 
-     * 
-     * @param comp
-     * @param constraints
-     * 
-     */
-
-    public void add(Component comp, String key)
-    {
-        // TODO Auto-generated method stub
-        comp.setName(key);
-        // super.add(comp);
-        if (components.get(key) == null)
-        {
-            components.put(key, comp);
-        }
-    }
-
-    public static String getString(String string)
-    {
-        try
-        {
-            string = MyKeys.getMessage().getString(string);
-        }
-        catch (Exception e)
-        {
-            //
-        }
-        return string;
-    }
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	final static String DEFAULT_DATE_FORMAT = "dd/MM/yyyy HH:mm";
+	String dateFormat = DEFAULT_DATE_FORMAT;
+
+	Map<String, Object> elements;
+
+	Map<String, Object> components;
+
+	public LabelValuePanel() {
+		super();
+		this.setLayout(new SpringLayout());
+		this.elements = new HashMap<String, Object>();
+		this.components = new HashMap<String, Object>();
+	}
+
+	public LabelValuePanel(Map<String, String> elements2, int cols) {
+		this.nbCols = cols;
+	}
+
+	public LabelValuePanel(FrameModel model) {
+		super();
+		this.setLayout(new SpringLayout());
+		this.elements = new HashMap<String, Object>();
+		this.components = new HashMap<String, Object>();
+	}
+
+	public void put(String label, String id, String defaultValue) {
+		put(label, JTextField.class, id, defaultValue, true);
+	}
+
+	public void putDisabled(String label, String id, String defaultValue) {
+		put(label, JTextField.class, id, defaultValue, false);
+	}
+
+	public void put(String label, Class<?> class1, String keyValue, Map<String, String> values) {
+		JLabel jl = new JLabel(label);
+
+		JComponent component = null;
+		if (class1.getName().equals(JComboBox.class.getName())) {
+			component = putCombo(keyValue, values, "");
+		}
+
+		this.add(jl);
+		this.add(component);
+		nbRows++;
+		SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+	}
+
+	public void put(SWComponent swComponent) {
+		put(swComponent.getLabel(), swComponent.getClasse(), swComponent.getKeyValue(), swComponent.getValues(),
+				swComponent.getDefaultValue(), swComponent.getListener());
+	}
+
+	public void put(String label, Class<?> class1, String keyValue, Map<String, String> values, String defaultValue) {
+		put(label, class1, keyValue, values, defaultValue, null);
+	}
+
+	public void put(String label, Class<?> class1, String keyValue, Map<String, String> values, String defaultValue,
+			ActionListener listener) {
+		JLabel jl = new JLabel(label);
+		if (model != null) {
+			model.add(keyValue, keyValue);
+		}
+		JComponent component = null;
+		List<JComponent> components = null;
+		if (class1.getName().equals(JComboBox.class.getName())) {
+			component = putCombo(keyValue, values, defaultValue, listener);
+		} else if (class1.getName().equals(ButtonGroup.class.getName())) {
+			components = putRadios(keyValue, values, defaultValue);
+		}
+
+		if (component != null) {
+			this.add(jl);
+			this.add(component);
+			nbRows++;
+		} else {
+			for (int i = 0; i < components.size(); i++) {
+				this.add(i == 0 ? new JLabel(label) : new JLabel(""));
+				this.add(components.get(i));
+
+				nbRows++;
+			}
+		}
+
+		SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+
+	}
+
+	public JComponent putCombo(String keyValue, Map<String, String> values, String defaultValue) {
+		return putCombo(keyValue, values, defaultValue, null);
+	}
+
+	public JComponent putCombo(String keyValue, Map<String, String> values, String defaultValue,
+			ActionListener listener) {
+		final String globalKey = keyValue;
+		final Map<String, String> map = values;
+		JComboBox combo = new JComboBox();
+		Set<String> keys = values.keySet();
+		Iterator<String> it = keys.iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			combo.addItem(key);
+			if (elements.get(globalKey) == null) {
+				elements.put(globalKey, map.get(key));
+			}
+		}
+
+		combo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JComboBox combo = (JComboBox) e.getSource();
+				String key = (String) combo.getSelectedItem();
+				elements.put(globalKey, map.get(key));
+			}
+		});
+		combo.setSelectedItem(defaultValue);
+
+		if (listener != null) {
+			combo.addActionListener(listener);
+		}
+		return combo;
+	}
+
+	public List<JComponent> putRadios(String keyValue, Map<String, String> values, String defaultValue) {
+
+		final String globalKey = keyValue;
+		final Map<String, String> map = values;
+		// JComboBox combo = new JComboBox();
+		ButtonGroup bg = new ButtonGroup();
+
+		List<JComponent> radios = new ArrayList<JComponent>();
+		Set<String> keys = values.keySet();
+		Iterator<String> it = keys.iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			JRadioButton jradio = new JRadioButton(key);
+			radios.add(jradio);
+			if (elements.get(globalKey) == null) {
+				elements.put(globalKey, map.get(key));
+				jradio.setSelected(true);
+			}
+			jradio.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JRadioButton radio = (JRadioButton) e.getSource();
+					if (radio.isSelected()) {
+						String key = (String) radio.getText();
+						elements.put(globalKey, map.get(key));
+					}
+				}
+			});
+			bg.add(jradio);
+		}
+
+		// combo.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// JComboBox combo = (JComboBox) e.getSource();
+		// String key = (String) combo.getSelectedItem();
+		// elements.put(globalKey, map.get(key));
+		// }
+		// });
+		// combo.setSelectedItem(defaultValue);
+		return radios;
+	}
+
+	public LabelValuePanel put(String label, Class<?> class1, String keyValue, Object value, boolean isEditable) {
+		JLabel jl = new JLabel(label);
+		String strValue = null;
+		if (value != null) {
+
+			strValue = value.toString();
+
+		}
+		final String globalKey = keyValue;
+		JComponent component = null;
+		if (class1.getName().equals(JLabel.class.getName())) {
+			JLabel labelValue = new JLabel();
+			labelValue.setText(strValue);
+
+			component = labelValue;
+			this.add(component, globalKey);
+			// JtextField
+		} else if (class1.getName().equals(JTextField.class.getName())) {
+
+			JTextField field = new JTextField(20);
+			field.setText(strValue);
+			field.setName(keyValue);
+
+			elements.put(globalKey, strValue);
+
+			field.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					String value = null;
+					try {
+						value = e.getDocument().getText(0, e.getDocument().getLength());
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					elements.put(globalKey, value);
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					changedUpdate(e);
+
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					changedUpdate(e);
+				}
+			});
+
+			field.setEditable(isEditable);
+			if (!isEditable) {
+				field.setBorder(null);
+			}
+
+			component = field;
+			this.add(component, globalKey);
+
+		} else if (class1.getName().equals(JPasswordField.class.getName())) {
+			JPasswordField pwdField = new JPasswordField(strValue);
+			pwdField.setEditable(isEditable);
+			pwdField.setColumns(16);
+			elements.put(globalKey, value);
+			pwdField.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					String value = null;
+					try {
+						value = e.getDocument().getText(0, e.getDocument().getLength());
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					elements.put(globalKey, value);
+
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					changedUpdate(e);
+
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					changedUpdate(e);
+				}
+			});
+
+			component = pwdField;
+			this.add(component, globalKey);
+		} else if (class1.getName().equals(JTextArea.class.getName())) {
+			JTextArea textArea = new JTextArea(5, 20);
+			textArea.setText(strValue);
+			textArea.setLineWrap(true);
+			textArea.setEditable(isEditable);
+			JScrollPane scrollPane = new JScrollPane(textArea);
+
+			textArea.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					String value = null;
+					try {
+						value = e.getDocument().getText(0, e.getDocument().getLength());
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					elements.put(globalKey, value);
+
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					changedUpdate(e);
+
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					changedUpdate(e);
+				}
+			});
+			this.add(textArea, globalKey);
+			component = scrollPane;
+		} else if (class1.getName().equals(JSpinnerDate.class.getName())) {
+			// DateFormat df = DateFormat.getDateInstance();
+
+			Date date = (Date) value;
+
+			if (!isEditable) {
+				DateFormat dateFormat = new SimpleDateFormat(this.dateFormat);
+				put(label, JTextField.class, keyValue, dateFormat.format(date), false);
+				return this;
+			}
+
+			JSpinnerDate spinner = new JSpinnerDate(this.dateFormat, date);
+
+			SpinnerModel dateModel = spinner.getModel();
+			if (dateModel instanceof SpinnerDateModel) {
+				elements.put(globalKey, ((SpinnerDateModel) dateModel).getDate());
+			}
+
+			spinner.addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					JSpinnerDate dateSpinner = (JSpinnerDate) e.getSource();
+					SpinnerModel dateModel = dateSpinner.getModel();
+					if (dateModel instanceof SpinnerDateModel) {
+						elements.put(globalKey, ((SpinnerDateModel) dateModel).getDate());
+
+					}
+
+				}
+			});
+
+			component = spinner;
+		} else if (class1.getName().equals(JCheckBox.class.getName())) {
+
+			boolean valCheck = Boolean.parseBoolean(strValue);
+			JCheckBox checkbox = new JCheckBox("", valCheck);
+
+			elements.put(globalKey, checkbox.isSelected());
+
+			checkbox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JCheckBox checkbox = (JCheckBox) e.getSource();
+
+					elements.put(globalKey, checkbox.isSelected());
+				}
+			});
+
+			component = checkbox;
+		}
+
+		// component.setName(globalKey);
+		this.add(jl);
+		this.add(component);
+		nbRows++;
+		SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+		return this;
+
+	}
+
+	public void set(String keyValue, Object value) {
+
+		String strValue = null;
+		if (value != null) {
+			if (value instanceof String) {
+				strValue = (String) value;
+			} else if (value instanceof Date) {
+				DateFormat dateFormat = new SimpleDateFormat(this.dateFormat);
+				strValue = dateFormat.format(value);
+			} else {
+				strValue = value.toString();
+			}
+
+		}
+		final String globalKey = keyValue;
+
+		JComponent component = (JComponent) components.get(globalKey);
+		if (component == null)
+			return;
+
+		if (component instanceof JLabel) {
+
+			JLabel field = (JLabel) component;
+			field.setText(strValue);
+		} else if (component instanceof JTextField) {
+
+			JTextField field = (JTextField) component;
+			field.setText(strValue);
+			// field.setEditable(isEditable);
+			// if (!isEditable) {
+			// field.setBorder(null);
+			// }
+
+		}
+
+	}
+
+	// public void set(String keyValue,
+	// Object value) {
+	// //boolean isEditable=true;
+	// Component[] comps = this.getComponents();
+	// JComponent component;
+	// for (Component c : comps) {
+	// if (c.getName().equals(keyValue)) {
+	// // if (c instanceof JTextField) {
+	// // ((JTextField) c).setText((String) obj);
+	// // }
+	// component = (JComponent)c;
+	// break;
+	// }
+	// }
+	// if (component==null){
+	// return;
+	// }
+	//
+	// String strValue = null;
+	// if (value != null) {
+	// if (value instanceof String) {
+	// strValue = (String) value;
+	// } else {
+	// strValue = value.toString();
+	// }
+	// }
+	//
+	// final String globalKey = keyValue;
+	//
+	// if (component.getClass().getName().equals(JLabel.class.getName())) {
+	// JLabel labelValue = new JLabel();
+	// ((JLabel)component).setText(strValue);
+	//
+	// } else if (component.getClass().equals(JTextField.class.getName())) {
+	//
+	//
+	// ((JTextField)component).setText(strValue);
+	//
+	//
+	// elements.put(globalKey, strValue);
+	//
+	// } else if (component.getName().equals(JPasswordField.class.getName())) {
+	//
+	// elements.put(globalKey, value);
+	// //todo
+	// } else if (component.getName().equals(JTextArea.class.getName())) {
+	//
+	// ((JTextArea)component).setText(strValue);
+	//
+	// } else if (component.getName().equals(JSpinnerDate.class.getName())) {
+	// // DateFormat df = DateFormat.getDateInstance();
+	//
+	// Date date = (Date) value;
+	//
+	//
+	// JSpinnerDate spinner = new JSpinnerDate(this.dateFormat, date);
+	//
+	// SpinnerModel dateModel = spinner.getModel();
+	// if (dateModel instanceof SpinnerDateModel) {
+	// elements.put(globalKey, ((SpinnerDateModel) dateModel)
+	// .getDate());
+	// }
+	// spinner.addChangeListener(new ChangeListener() {
+	//
+	// @Override
+	// public void stateChanged(ChangeEvent e) {
+	// JSpinnerDate dateSpinner = (JSpinnerDate) e.getSource();
+	// SpinnerModel dateModel = dateSpinner.getModel();
+	// if (dateModel instanceof SpinnerDateModel) {
+	// elements.put(globalKey, ((SpinnerDateModel) dateModel)
+	// .getDate());
+	//
+	// }
+	//
+	// }
+	// });
+	//
+	// component = spinner;
+	// }
+	//
+	//
+	//
+	// }
+
+	public void put(String label, JComponent component, boolean isEditable) {
+		JLabel jl = new JLabel(label);
+		this.add(jl);
+		this.add(component);
+		nbRows++;
+		SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+
+	}
+
+	public void putEmptyLine() {
+		JLabel jl = new JLabel(" ");
+		JLabel jl2 = new JLabel(" ");
+
+		this.add(jl);
+		this.add(jl2);
+		nbRows++;
+		SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+	}
+	
+	public LabelValuePanel addTitle(String title) {
+		JLabel jl = new JLabel(title);
+		Font f = jl.getFont();
+		// bold
+		jl.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		JLabel jl2 = new JLabel(" ");
+
+		this.add(jl);
+		this.add(jl2);
+		nbRows++;
+		SpringUtilities.makeCompactGrid(this, nbRows, 2, 3, 3, 3, 3);
+		return this;
+	}
+
+	public String getStringValue(String name) {
+		return (String) elements.get(name);
+	}
+
+	public Object getValue(String name) {
+		return elements.get(name);
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @return the elements
+	 */
+	public Map<String, Object> getElements() {
+		return elements;
+	}
+
+	/**
+	 * @param elements
+	 *            the elements to set
+	 */
+	public void setElements(Map<String, Object> elements) {
+		this.elements = elements;
+	}
+
+	public void setValue(String strName, Object obj) {
+		Component[] comps = this.getComponents();
+		for (Component c : comps) {
+			if (c.getName().equals(strName)) {
+				if (c instanceof JTextField) {
+					((JTextField) c).setText((String) obj);
+				}
+			}
+		}
+	}
+
+	/**
+	 * .
+	 * 
+	 * 
+	 * @param comp
+	 * @param constraints
+	 * 
+	 */
+
+	public void add(Component comp, String key) {
+		// TODO Auto-generated method stub
+		comp.setName(key);
+		// super.add(comp);
+		if (components.get(key) == null) {
+			components.put(key, comp);
+		}
+	}
+
+	public static String getString(String string) {
+		try {
+			string = MyKeys.getMessage().getString(string);
+		} catch (Exception e) {
+			//
+		}
+		return string;
+	}
 
 	public void put(String keyValue, String value) {
 		final String globalKey = keyValue;
-        
-            if (elements.get(globalKey) == null)
-            {
-                elements.put(globalKey, value);
-            }
-		
+
+		if (elements.get(globalKey) == null) {
+			elements.put(globalKey, value);
+		}
+
 	}
 
 	public void put(JComponent cbDuration) {
 		cbDuration.setVisible(false);
 		this.add(cbDuration);
-		
-		
-		
+
 	}
-	
+
 	public void put(String label, JComponent cbDuration) {
-		//this.add(new JLabel(""));
+		// this.add(new JLabel(""));
 		this.add(cbDuration);
-		nbRows++;		
-		
+		nbRows++;
+
 	}
 
 }
