@@ -12,8 +12,8 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.InternalKeystores;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreType;
 

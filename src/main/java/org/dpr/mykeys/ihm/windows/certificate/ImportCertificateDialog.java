@@ -2,7 +2,6 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -13,7 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -22,9 +20,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JDropText;
 import org.dpr.swingutils.JFieldsPanel;

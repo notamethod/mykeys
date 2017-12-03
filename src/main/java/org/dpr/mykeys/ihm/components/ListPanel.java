@@ -1,7 +1,8 @@
 package org.dpr.mykeys.ihm.components;
 
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
 import static org.dpr.mykeys.utils.MessageUtils.getMessage;
+import static org.dpr.swingutils.ImageUtils.createImageIcon;
+
 import java.awt.BorderLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -17,23 +18,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
 import javax.swing.event.ListSelectionEvent;
@@ -46,6 +39,8 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -55,9 +50,6 @@ import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.ActionStatus;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.KeyStoreService;
-import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.profile.CreateProfilDialog;
 import org.dpr.mykeys.profile.ProfilStoreInfo;
 import org.dpr.swingutils.LabelValuePanel;
@@ -182,6 +174,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		listCerts.clearSelection();
 		listModel.removeAllElements();
 		// FIXME
+	
+		
 		if (ksInfo instanceof ProfilStoreInfo) {
 			for (ChildInfo ci : ksInfo.getChildList()) {
 				listModel.addElement(ci);

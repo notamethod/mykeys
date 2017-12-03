@@ -1,6 +1,5 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.security.KeyStore;
@@ -17,10 +16,10 @@ import javax.swing.JFrame;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.certificate.CertificateService;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.InternalKeystores;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
 

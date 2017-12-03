@@ -1,6 +1,7 @@
 package org.dpr.mykeys.ihm.components;
 
 import static org.dpr.swingutils.ImageUtils.createImageIcon;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -16,7 +17,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.dpr.mykeys.app.CrlInfo;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 
 
 public class GradientTreeRenderer extends DefaultTreeCellRenderer implements

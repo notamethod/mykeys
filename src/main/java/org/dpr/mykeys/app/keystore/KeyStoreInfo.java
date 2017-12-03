@@ -1,4 +1,4 @@
-package org.dpr.mykeys.keystore;
+package org.dpr.mykeys.app.keystore;
 
 import java.io.File;
 import java.util.List;
@@ -10,7 +10,9 @@ import org.dpr.mykeys.app.BagInfo;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.ihm.components.ListPanel;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.keystore.StoreModel;
+import org.dpr.mykeys.keystore.StoreType;
 
 public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	

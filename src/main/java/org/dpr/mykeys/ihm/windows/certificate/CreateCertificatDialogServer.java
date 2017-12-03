@@ -2,10 +2,9 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.event.ItemListener;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import org.dpr.mykeys.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.StoreModel;
 
 public class CreateCertificatDialogServer  extends CreateCertificatDialog implements ItemListener{

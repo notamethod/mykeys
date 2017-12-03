@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeystoreBuilder;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.profile.ProfilStoreInfo;
 

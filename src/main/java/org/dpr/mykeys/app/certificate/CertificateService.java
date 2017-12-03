@@ -1,7 +1,5 @@
 package org.dpr.mykeys.app.certificate;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.PrivateKey;
@@ -16,9 +14,9 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.keystore.CertificateBuilder;
 import org.dpr.mykeys.keystore.InternalKeystores;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
 
 public class CertificateService {
 	KeyTools ktool;

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.keystore;
+package org.dpr.mykeys.app.keystore;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,13 +28,17 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
-import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.test.ListAlgorithms;
 import org.dpr.mykeys.ihm.windows.TamperedWithException;
+import org.dpr.mykeys.keystore.ActionStatus;
+import org.dpr.mykeys.keystore.CertificateBuilder;
+import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.keystore.StoreFormat;
+import org.dpr.mykeys.keystore.StoreService;
+import org.dpr.mykeys.keystore.StoreType;
 
-public class KeyStoreService {
+public class KeyStoreService implements  StoreService<KeyStoreInfo> {
 	public static final Log log = LogFactory.getLog(KeyStoreService.class);
-
+ 
 	public static final String[] KSTYPE_EXT_PKCS12 = { "p12", "pfx", "pkcs12" };
 	public static final String KSTYPE_EXT_JKS = "jks";
 	KeyStoreInfo ksInfo;
@@ -221,6 +225,10 @@ public class KeyStoreService {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.dpr.mykeys.keystore.StoreService#getChildList()
+	 */
+	@Override
 	public List<CertificateInfo> getChildList() throws ServiceException {
 		// TODO Auto-generated method stub
 		List<CertificateInfo> certs = null;

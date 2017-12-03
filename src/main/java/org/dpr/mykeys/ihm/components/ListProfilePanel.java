@@ -17,10 +17,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -48,6 +44,8 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -56,13 +54,9 @@ import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.KeyStoreService;
-import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.profile.CreateProfilDialog;
 import org.dpr.mykeys.profile.Profil;
 import org.dpr.mykeys.profile.ProfileManager;
-import org.dpr.mykeys.profile.ProfilStoreInfo;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")

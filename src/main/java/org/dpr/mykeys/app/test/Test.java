@@ -15,8 +15,8 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.TimeStampManager;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 
