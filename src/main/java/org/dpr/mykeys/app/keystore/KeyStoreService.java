@@ -26,15 +26,15 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.KeystoreBuilder;
+import org.dpr.mykeys.app.TamperedWithException;
+import org.dpr.mykeys.app.certificate.CertificateBuilder;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
-import org.dpr.mykeys.ihm.windows.TamperedWithException;
-import org.dpr.mykeys.keystore.ActionStatus;
-import org.dpr.mykeys.keystore.CertificateBuilder;
 import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreService;
 import org.dpr.mykeys.keystore.StoreType;
+import org.dpr.mykeys.utils.ActionStatus;
 
 public class KeyStoreService implements  StoreService<KeyStoreInfo> {
 	public static final Log log = LogFactory.getLog(KeyStoreService.class);

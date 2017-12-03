@@ -3,29 +3,22 @@ package org.dpr.mykeys.ihm.components;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.ChildType;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.windows.certificate.CertDetailPanel;
 import org.dpr.mykeys.profile.Profil;
 import org.dpr.mykeys.profile.ProfilDetailPanel;
-import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class DetailPanel extends JPanel {
@@ -119,7 +112,7 @@ public class DetailPanel extends JPanel {
 		//jtab.revalidate();
 		jp.add( getDetailInstance(info));
 
-		titre.setText(MyKeys.getMessage().getString("detail.cert.title"));
+		titre.setText(KSConfig.getMessage().getString("detail.cert.title"));
 		
 		jtab.setVisible(true);
 		jtab.revalidate();

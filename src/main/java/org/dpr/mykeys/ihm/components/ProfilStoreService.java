@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.profile.ProfilStoreInfo;
+import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.keystore.StoreService;
-import org.dpr.mykeys.profile.ProfilStoreInfo;
-import org.dpr.mykeys.profile.ProfileManager;
 
 public class ProfilStoreService implements StoreService<ProfilStoreInfo> {
 

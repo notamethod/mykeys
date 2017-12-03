@@ -1,16 +1,15 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
+import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 import static org.dpr.swingutils.ImageUtils.createImageIcon;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
-import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
 public class CertificateToolBar extends ObjToolBar  {
 

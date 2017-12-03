@@ -13,8 +13,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.mykeys.profile.ProfilStoreInfo;
+import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 
 public class InternalKeystores {
 
@@ -67,7 +66,7 @@ public class InternalKeystores {
 			}
 
 		}
-		kinfo = new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getACPath(),
+		kinfo = new KeyStoreInfo(KSConfig.getMessage().getString("magasin.interne"), InternalKeystores.getACPath(),
 				StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
 		kinfo.setPassword(InternalKeystores.password.toCharArray());
 		kinfo.setOpen(true);
@@ -91,7 +90,7 @@ public class InternalKeystores {
 				e.printStackTrace();
 			}
 		}
-		kinfo = new KeyStoreInfo(MyKeys.getMessage().getString("magasin.interne"), InternalKeystores.getCertPath(),
+		kinfo = new KeyStoreInfo(KSConfig.getMessage().getString("magasin.interne"), InternalKeystores.getCertPath(),
 				StoreModel.CERTSTORE, StoreFormat.JKS, StoreType.INTERNAL);
 		kinfo.setPassword(InternalKeystores.password.toCharArray());
 		kinfo.setOpen(true);
@@ -107,7 +106,7 @@ public class InternalKeystores {
 			f.mkdirs();
 
 		}
-		kinfo = new ProfilStoreInfo(MyKeys.getMessage().getString("profil.name"), path, StoreFormat.PROPERTIES);
+		kinfo = new ProfilStoreInfo(KSConfig.getMessage().getString("profil.name"), path, StoreFormat.PROPERTIES);
 		kinfo.setPassword("null".toCharArray());
 		kinfo.setOpen(true);
 		return kinfo;

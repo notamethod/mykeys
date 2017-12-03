@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -23,6 +25,8 @@ public class KSConfig {
 	public static final String STORE_PREFIX = "store";
 
 	static String path;
+	
+	private static ResourceBundle messages;
 
 	public static void load() {
 
@@ -130,6 +134,27 @@ public class KSConfig {
 			}
 		}
 		return defaultConfig;
+	}
+	
+	public static void initResourceBundle() {
+		Locale currentLocale = Locale.getDefault();
+		try {
+			messages = ResourceBundle.getBundle(
+					"Messages", currentLocale);
+		} catch (Exception e) {
+			messages = ResourceBundle.getBundle(
+					"Messages", Locale.ENGLISH);
+		}
+		
+	}
+	
+	public static ResourceBundle getMessage() {
+		if (messages == null) {
+			Locale currentLocale = Locale.getDefault();
+			messages = ResourceBundle.getBundle(
+					"org.dpr.mykeys.config.Messages", currentLocale);
+		}
+		return messages;
 	}
 
 }

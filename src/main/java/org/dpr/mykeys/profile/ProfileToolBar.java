@@ -5,7 +5,6 @@ import static org.dpr.swingutils.ImageUtils.createImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysProfileAction;

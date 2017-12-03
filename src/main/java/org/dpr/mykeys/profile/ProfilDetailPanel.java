@@ -1,18 +1,11 @@
 package org.dpr.mykeys.profile;
 
-import java.awt.Component;
-import java.util.Iterator;
-
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.bouncycastle.asn1.x509.KeyUsage;
-import org.bouncycastle.util.encoders.Hex;
-import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
-import org.dpr.mykeys.ihm.MyKeys;
-import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ProfilDetailPanel extends LabelValuePanel {
@@ -26,27 +19,27 @@ public class ProfilDetailPanel extends LabelValuePanel {
   
 	public void getPanel(){
 		//infosPanel = new LabelValuePanel();
-		this.put(MyKeys.getMessage().getString("label.name"),
+		this.put(KSConfig.getMessage().getString("label.name"),
 				JTextField.class, "", info.getName(), false);
 		
 		this.putEmptyLine();
-	this.put(MyKeys.getMessage().getString("x509.pubkeysize"),
+	this.put(KSConfig.getMessage().getString("x509.pubkeysize"),
 				JTextField.class, "keyLength",
 				info.getValue("keyLength"), false);
 	
-	this.put(MyKeys.getMessage().getString("x509.pubkeyalgo"),
+	this.put(KSConfig.getMessage().getString("x509.pubkeyalgo"),
 	JTextField.class, "algoPubKey", info.getValue("algoPubKey"), false);
-	this.put(MyKeys.getMessage().getString("x509.sigalgo"),
+	this.put(KSConfig.getMessage().getString("x509.sigalgo"),
 	JTextField.class, "algoPubKey", info.getValue("algoSig"), false);
 	this.putEmptyLine();
-	this.put(MyKeys.getMessage().getString("certinfo.duration"),
+	this.put(KSConfig.getMessage().getString("certinfo.duration"),
 	JTextField.class, "algoPubKey", info.getValue("duration"), false);
 	this.putEmptyLine();
-	this.put(MyKeys.getMessage().getString("x509.subject.organisation"),
+	this.put(KSConfig.getMessage().getString("x509.subject.organisation"),
 	JTextField.class, "algoPubKey", info.getValue("O"), false);
-	this.put(MyKeys.getMessage().getString("x509.subject.location"),
+	this.put(KSConfig.getMessage().getString("x509.subject.location"),
 	JTextField.class, "algoPubKey", info.getValue("L"), false);
-	this.put(MyKeys.getMessage().getString("x509.subject.organisationUnit"),
+	this.put(KSConfig.getMessage().getString("x509.subject.organisationUnit"),
 	JTextField.class, "algoPubKey", info.getValue("OU"), false);
 	
 	KeyUsage ku = new KeyUsage(info.getIntValue("keyUSage"));
@@ -59,7 +52,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
 		System.out.println("zz");
 	
 
-	this.put(MyKeys.getMessage().getString("x509.subject.organisationUnit"),
+	this.put(KSConfig.getMessage().getString("x509.subject.organisationUnit"),
 			JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("keyUSage")), false);
 
 	
@@ -81,17 +74,17 @@ public class ProfilDetailPanel extends LabelValuePanel {
 //		// X509Util.toHexString(info.getPublicKey().getEncoded()," ",
 //		// false),false);
 	
-//		this.put(MyKeys.getMessage().getString("x509.sigalgo"),
+//		this.put(KSConfig.getMessage().getString("x509.sigalgo"),
 //				JTextField.class, "algoSig", info.getAlgoSig(), false);
-//		this.put(MyKeys.getMessage().getString("x509.startdate"),
+//		this.put(KSConfig.getMessage().getString("x509.startdate"),
 //				JSpinnerDate.class, "notBefore", info.getNotBefore(), false);
-//		this.put(MyKeys.getMessage().getString("x509.enddate"),
+//		this.put(KSConfig.getMessage().getString("x509.enddate"),
 //				JSpinnerDate.class, "notAfter", info.getNotAfter(), false);
 //		this.putEmptyLine();
-//		this.put(MyKeys.getMessage().getString("x509.serial"),
+//		this.put(KSConfig.getMessage().getString("x509.serial"),
 //				JTextField.class, "numser", info.getCertificate()
 //						.getSerialNumber().toString(), false);
-//		this.put(MyKeys.getMessage().getString("x509.issuer"),
+//		this.put(KSConfig.getMessage().getString("x509.issuer"),
 //				JTextField.class, "emetteur", info.getCertificate()
 //						.getIssuerX500Principal().toString(), false);
 //		if (info.getSubjectMap() != null) {
@@ -100,7 +93,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
 //				String key = iter.next();
 //				String name;
 //				try {
-//					name = MyKeys.getMessage().getString(
+//					name = KSConfig.getMessage().getString(
 //							X509Util.getMapNames().get(key));
 //				} catch (Exception e) {
 //					name = key;

@@ -1,7 +1,5 @@
 package org.dpr.mykeys.app.keystore;
 
-import org.dpr.mykeys.app.KeyToolsException;
-
 public class ServiceException extends Exception {
 
 	

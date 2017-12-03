@@ -42,6 +42,7 @@ import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
@@ -49,9 +50,8 @@ import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.keystore.ActionStatus;
 import org.dpr.mykeys.profile.CreateProfilDialog;
-import org.dpr.mykeys.profile.ProfilStoreInfo;
+import org.dpr.mykeys.utils.ActionStatus;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")

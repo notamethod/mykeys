@@ -14,16 +14,14 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dpr.mykeys.ihm;
+package org.dpr.mykeys;
 
 import java.io.File;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
@@ -51,7 +49,7 @@ public class MyKeys {
 	public static final Log log = LogFactory.getLog(MyKeys.class);
 	//private static final String ACFileName = "ACKS.jks";
 	// messages
-	private static ResourceBundle messages;
+
 
 	/**
 	 * @param args
@@ -75,19 +73,12 @@ public class MyKeys {
 		// Locale.setDefault(Locale.ENGLISH);
 		log.debug("loading configuration...");
 		  
-		Locale currentLocale = Locale.getDefault();
-		try {
-			messages = ResourceBundle.getBundle(
-					"Messages", currentLocale);
-		} catch (Exception e) {
-			messages = ResourceBundle.getBundle(
-					"Messages", Locale.ENGLISH);
-		}
+		KSConfig.initResourceBundle();
 		try {
 			KSConfig.load();
 			checkConfig();
 		} catch (Exception e) {
-			MykeysFrame.showError(null, messages.getString("error.config"));
+			MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
 			throw new RuntimeException("Fatal Error");
 		}
 		Security.addProvider(new BouncyCastleProvider());
@@ -96,14 +87,7 @@ public class MyKeys {
 		// updateKeyStoreList();
 	}
 
-	public static ResourceBundle getMessage() {
-		if (messages == null) {
-			Locale currentLocale = Locale.getDefault();
-			messages = ResourceBundle.getBundle(
-					"org.dpr.mykeys.config.Messages", currentLocale);
-		}
-		return messages;
-	}
+
 
 	private void checkConfig() {
 

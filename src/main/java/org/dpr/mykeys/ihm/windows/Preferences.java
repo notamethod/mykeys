@@ -1,16 +1,16 @@
 package org.dpr.mykeys.ihm.windows;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.util.ResourceBundle;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.border.EmptyBorder;
 
 
 public class Preferences extends JDialog {

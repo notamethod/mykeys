@@ -30,7 +30,6 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
-import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JFieldsPanel;
@@ -70,7 +69,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
     public void init()
     {
         DialogAction dAction = new DialogAction();
-        setTitle(MyKeys.getMessage().getString("dialog.export.title"));
+        setTitle(KSConfig.getMessage().getString("dialog.export.title"));
         JPanel jp = new JPanel();
         BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
         jp.setLayout(bl);

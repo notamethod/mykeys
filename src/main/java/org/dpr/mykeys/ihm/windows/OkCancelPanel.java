@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.dpr.swingutils.JFieldsPanel;
-
 public class OkCancelPanel extends JPanel {
 
 	public OkCancelPanel(ActionListener aListener) {

@@ -2,15 +2,11 @@ package org.dpr.swingutils;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.ihm.components.ListPanel;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 
 
 public class ImageUtils {

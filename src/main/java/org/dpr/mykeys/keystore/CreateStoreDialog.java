@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,9 +23,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeystoreBuilder;
-import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -69,7 +66,7 @@ public class CreateStoreDialog extends JDialog {
 
 		infosPanel.putEmptyLine();
 
-		JLabel jl4 = new JLabel(MyKeys.getMessage().getString("label.filename"));
+		JLabel jl4 = new JLabel(KSConfig.getMessage().getString("label.filename"));
 		tfDirectory = new JTextField(30);
 
 		JButton jbChoose = new JButton("...");
@@ -212,7 +209,7 @@ public class CreateStoreDialog extends JDialog {
 			// } else {
 			// document dir in windows
 			File f = FileSystemView.getFileSystemView().getDefaultDirectory();
-			File data = new File(f, MyKeys.getMessage().getString("default.datadir"));
+			File data = new File(f, KSConfig.getMessage().getString("default.datadir"));
 			data.mkdirs();
 			dir = data.getAbsolutePath();
 			// }

@@ -34,6 +34,7 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
@@ -41,7 +42,6 @@ import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.certificate.CertificateService;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
-import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
@@ -218,14 +218,14 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.putEmptyLine();
 				Calendar calendar = Calendar.getInstance();
 
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
+				infosPanel.put(KSConfig.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
 						calendar.getTime(), true);
 				calendar.add(Calendar.YEAR, 5);
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
+				infosPanel.put(KSConfig.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
 						calendar.getTime(), true);
 				infosPanel.put("aaa", JTextField.class, "notAfter",
 						calendar.getTime(), true);
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "duration", "3");
+				infosPanel.put(KSConfig.getMessage().getString("certinfo.duration"), "duration", "3");
 				infosPanel.putEmptyLine();
 				putil.addSubjectToPanel(CertificateType.AC, infosPanel);
 				
@@ -254,8 +254,8 @@ public class SuperCreate extends JDialog implements ItemListener {
 				Calendar calendar = Calendar.getInstance();
 
 				
-				infosPanel.put(MyKeys.getMessage().getString("certinfo.duration"), "duration", getDefaultDuration(CertificateType.STANDARD));
-				JCheckBox cbDuration = new JCheckBox(MyKeys.getMessage().getString("extended_mode"));
+				infosPanel.put(KSConfig.getMessage().getString("certinfo.duration"), "duration", getDefaultDuration(CertificateType.STANDARD));
+				JCheckBox cbDuration = new JCheckBox(KSConfig.getMessage().getString("extended_mode"));
 
 				
 				cbDuration.setName("extendDuration");
@@ -379,10 +379,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 		Calendar calendar = Calendar.getInstance();
 		if (durationPanel == null){
 			durationPanel = new LabelValuePanel();
-			durationPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
+			durationPanel.put(KSConfig.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
 					calendar.getTime(), true);
 			calendar.add(Calendar.YEAR, duration);
-			durationPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
+			durationPanel.put(KSConfig.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
 					calendar.getTime(), true);
 			durationPanel.setVisible(false);
 

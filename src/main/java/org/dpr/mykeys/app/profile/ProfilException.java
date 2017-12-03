@@ -1,4 +1,4 @@
-package org.dpr.mykeys.profile;
+package org.dpr.mykeys.app.profile;
 
 public class ProfilException extends Exception {
 

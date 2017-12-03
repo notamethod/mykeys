@@ -1,6 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
-
-import org.dpr.mykeys.app.KeyToolsException;
+package org.dpr.mykeys.app;
 
 public class TamperedWithException extends Exception {
 

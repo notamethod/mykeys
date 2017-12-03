@@ -1,9 +1,7 @@
-package org.dpr.mykeys.keystore;
+package org.dpr.mykeys.app.certificate;
 
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.KeyStore;
-import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -40,8 +38,6 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.certificate.Usage;
 
 public class CertificateBuilder extends KeyTools {
 	

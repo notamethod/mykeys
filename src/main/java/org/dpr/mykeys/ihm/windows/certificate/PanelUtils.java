@@ -1,11 +1,8 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.swingutils.LabelValuePanel;
 

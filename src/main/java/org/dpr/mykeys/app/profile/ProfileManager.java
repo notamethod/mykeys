@@ -1,4 +1,4 @@
-package org.dpr.mykeys.profile;
+package org.dpr.mykeys.app.profile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,11 +19,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.ihm.components.ListPanel;
-import org.dpr.mykeys.keystore.InternalKeystores;
+import org.dpr.mykeys.profile.Profil;
 
 public class ProfileManager
 

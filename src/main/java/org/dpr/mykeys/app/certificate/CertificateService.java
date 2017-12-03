@@ -15,7 +15,6 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.CertificateBuilder;
 import org.dpr.mykeys.keystore.InternalKeystores;
 
 public class CertificateService {

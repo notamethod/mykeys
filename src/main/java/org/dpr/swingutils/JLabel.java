@@ -1,6 +1,6 @@
 package org.dpr.swingutils;
 
-import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.app.KSConfig;
 
 public class JLabel extends javax.swing.JLabel {
 
@@ -8,7 +8,7 @@ public class JLabel extends javax.swing.JLabel {
 		//
 
 		try {
-			text = MyKeys.getMessage().getString(text);
+			text = KSConfig.getMessage().getString(text);
 		} catch (Exception e) {
 			//
 		}

@@ -1,11 +1,7 @@
 package org.dpr.mykeys.app;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -13,11 +9,6 @@ import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509CRL;
-import java.util.Calendar;
-
-import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.keystore.StoreFormat;
 
 public class CrlBuilder extends KeyTools {
 

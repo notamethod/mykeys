@@ -21,10 +21,10 @@ import javax.swing.filechooser.FileSystemView;
 import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.app.TamperedWithException;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.ihm.windows.TamperedWithException;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

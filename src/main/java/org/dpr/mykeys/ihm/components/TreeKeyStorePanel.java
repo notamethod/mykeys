@@ -76,6 +76,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.KeystoreBuilder;
@@ -86,7 +87,7 @@ import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
@@ -100,7 +101,6 @@ import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.mykeys.keystore.StoreType;
-import org.dpr.mykeys.profile.ProfilStoreInfo;
 
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		TreeExpansionListener, TreeWillExpandListener, DropTargetListener {
@@ -180,18 +180,18 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		// Create the nodes.
 		rootNode = new DefaultMutableTreeNode("Magasins");
-		acNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+		acNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
 				"store.ac.name"));
-		cliNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+		cliNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
 				"store.cert.name"));
-		adminNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+		adminNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
 				"admin.name"));
 		//
-		// crlNode = new DefaultMutableTreeNode(MyKeys.getMessage().getString(
+		// crlNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
 		// "store.crl.name"));
 		//
 		// sandBoxNode = new
-		// DefaultMutableTreeNode(MyKeys.getMessage().getString(
+		// DefaultMutableTreeNode(KSConfig.getMessage().getString(
 		// "store.sandbox.name"));
 
 		treeModel = new TreeModel(rootNode);

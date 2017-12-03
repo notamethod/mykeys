@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
@@ -33,13 +34,12 @@ import org.dpr.mykeys.app.certificate.CertificateService;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
-import org.dpr.mykeys.ihm.MyKeys;
+import org.dpr.mykeys.app.profile.ProfilException;
+import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.ihm.model.FrameModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.StoreModel;
-import org.dpr.mykeys.profile.ProfilException;
-import org.dpr.mykeys.profile.ProfileManager;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.SWComponent;
 
@@ -83,7 +83,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 	protected void init() {
 
 		DialogAction dAction = new DialogAction();
-		setTitle(MyKeys.getMessage().getString("frame.create.profil"));
+		setTitle(KSConfig.getMessage().getString("frame.create.profil"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -109,22 +109,22 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		// jpProfil.add(comboProf);
 		SWComponent swc = new SWComponent("Profil", JComboBox.class, "profil", mapProfiles, null, this);
 		panelInfoVisible.put(swc);
-		panelInfoVisible.put(MyKeys.getMessage().getString("label.name"), "name", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.country"), "C", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.organisation"), "O", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.organisationUnit"), "OU", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.location"), "L", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "E", "");
+		panelInfoVisible.put(KSConfig.getMessage().getString("label.name"), "name", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.country"), "C", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.organisation"), "O", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.organisationUnit"), "OU", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.location"), "L", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "E", "");
 
 		panelInfoVisible.putEmptyLine();
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoPubKey", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "algoSig", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "keyLength", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "duration", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "E", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "CrlDistrib", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "PolicyNotice", "");
-		panelInfoVisible.putDisabled(MyKeys.getMessage().getString("x509.subject.email"), "PolicyCPS", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "algoPubKey", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "algoSig", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "keyLength", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "duration", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "E", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "CrlDistrib", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "PolicyNotice", "");
+		panelInfoVisible.putDisabled(KSConfig.getMessage().getString("x509.subject.email"), "PolicyCPS", "");
 
 		JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		panelInfo.setMinimumSize(new Dimension(400, 100));
@@ -168,24 +168,24 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 			infosPanel = new LabelValuePanel();
 
 			infosPanel.putEmptyLine();
-			infosPanel.putDisabled(MyKeys.getMessage().getString("x509.issuer"), "emetteur", "");
-			infosPanel.put(MyKeys.getMessage().getString("x509.pubkeysize"), "keyLength", "");
-			infosPanel.put(MyKeys.getMessage().getString("x509.pubkeyalgo"), "algoPubKey", "");
+			infosPanel.putDisabled(KSConfig.getMessage().getString("x509.issuer"), "emetteur", "");
+			infosPanel.put(KSConfig.getMessage().getString("x509.pubkeysize"), "keyLength", "");
+			infosPanel.put(KSConfig.getMessage().getString("x509.pubkeyalgo"), "algoPubKey", "");
 
-			infosPanel.put(MyKeys.getMessage().getString("x509.sigalgo"), "algoSig", "");
+			infosPanel.put(KSConfig.getMessage().getString("x509.sigalgo"), "algoSig", "");
 			// subject
 			infosPanel.putEmptyLine();
 			Calendar calendar = Calendar.getInstance();
 
-			infosPanel.putDisabled(MyKeys.getMessage().getString("certinfo.Duration"), "duration", "");
+			infosPanel.putDisabled(KSConfig.getMessage().getString("certinfo.Duration"), "duration", "");
 			infosPanel.putEmptyLine();
 
 			infosPanel.putEmptyLine();
-			// infosPanel.put(MyKeys.getMessage().getString("x509.cdp"),
+			// infosPanel.put(KSConfig.getMessage().getString("x509.cdp"),
 			// JCheckBox.class, "CrlDistribObli", false, false);
-			infosPanel.put(MyKeys.getMessage().getString("x509.cdp"), "CrlDistrib", "");
-			infosPanel.put(MyKeys.getMessage().getString("x509.policynotice"), "PolicyNotice", "");
-			infosPanel.put(MyKeys.getMessage().getString("x509.policycps"), "PolicyCPS", "");
+			infosPanel.put(KSConfig.getMessage().getString("x509.cdp"), "CrlDistrib", "");
+			infosPanel.put(KSConfig.getMessage().getString("x509.policynotice"), "PolicyNotice", "");
+			infosPanel.put(KSConfig.getMessage().getString("x509.policycps"), "PolicyCPS", "");
 			infosPanel.setVisible(false);
 
 		}

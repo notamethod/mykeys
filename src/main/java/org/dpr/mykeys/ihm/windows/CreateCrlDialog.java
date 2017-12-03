@@ -28,9 +28,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.CrlInfo;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.ihm.MyKeys;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.keystore.InternalKeystores;
@@ -154,10 +154,10 @@ public class CreateCrlDialog extends JDialog {
 		infosPanel.putEmptyLine();
 		Calendar calendar = Calendar.getInstance();
 
-		infosPanel.put(MyKeys.getMessage().getString("certinfo.notBefore"),
+		infosPanel.put(KSConfig.getMessage().getString("certinfo.notBefore"),
 				JSpinnerDate.class, "notBefore", calendar.getTime(), true);
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
-		infosPanel.put(MyKeys.getMessage().getString("certinfo.notAfter"),
+		infosPanel.put(KSConfig.getMessage().getString("certinfo.notAfter"),
 				JSpinnerDate.class, "notAfter", calendar.getTime(), true);
 		infosPanel.putEmptyLine();
 
