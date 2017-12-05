@@ -7,7 +7,7 @@
 	<name>(J)myKeys</name> 
 	 <packaging>pom</packaging>
   <modules>
-  	<module>mkeys-core</module>
+  	<module>mykeys-core</module>
   	<module>mykeys-ihm</module>
   </modules>
 </project>

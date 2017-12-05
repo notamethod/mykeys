@@ -42,7 +42,7 @@ public class ProfileManager
 		}
 		Properties p = new Properties();
 		for (Map.Entry<String, Object> entry : elements.entrySet()) {
-			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+			//System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
 			p.setProperty(entry.getKey(), (String) entry.getValue());
 		}
 		p.store(new FileOutputStream(f), "");
@@ -95,7 +95,7 @@ public class ProfileManager
 		}
 		Properties p = new Properties();
 		for (Map.Entry<String, Object> entry : elements.entrySet()) {
-			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+			//System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
 			p.setProperty(entry.getKey(), (String) entry.getValue());
 		}
 

@@ -135,9 +135,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.dpr</groupId>
-			<artifactId>mkeys-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.dpr.apps</groupId>
+			<artifactId>mykeys-core</artifactId>
+			<version>0.5.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

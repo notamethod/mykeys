@@ -399,10 +399,6 @@ public class CertificateInfo implements ChildInfo{
 				String val = (String) atrs[i].getValue().toString();
 				String type = RFC4519Style.INSTANCE.oidToDisplayName(atrs[i].getType()).toUpperCase();
 				
-				System.out.println(type);
-				System.out.println(RFC4519Style.INSTANCE.oidToDisplayName(atrs[i].getType()));
-				//System.out.println(RFC4519Style.INSTANCE.oidToDisplayName(atrs[i]));
-				
 				if (log.isDebugEnabled()) {
 					log.debug(type+ ":" + val);
 				}
