@@ -32,12 +32,12 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.StoreType;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.keystore.InternalKeystores;
-import org.dpr.mykeys.keystore.StoreFormat;
-import org.dpr.mykeys.keystore.StoreModel;
-import org.dpr.mykeys.keystore.StoreType;
 
 /**
  * @author Christophe Roger

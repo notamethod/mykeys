@@ -30,8 +30,8 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

@@ -33,6 +33,7 @@ import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.swingutils.ImageUtils;
 

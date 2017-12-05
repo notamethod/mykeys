@@ -5,7 +5,7 @@ import java.awt.event.ItemListener;
 import javax.swing.JFrame;
 
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.StoreModel;
 
 public class CreateCertificatDialogServer  extends CreateCertificatDialog implements ItemListener{
 	public CreateCertificatDialogServer(JFrame owner, KeyStoreInfo ksInfo) {

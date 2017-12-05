@@ -16,8 +16,8 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.profile.Profil;
 import org.dpr.mykeys.ihm.windows.certificate.CertDetailPanel;
-import org.dpr.mykeys.profile.Profil;
 import org.dpr.mykeys.profile.ProfilDetailPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

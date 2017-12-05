@@ -7,12 +7,12 @@ import java.util.Enumeration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
-import org.dpr.mykeys.keystore.StoreFormat;
-import org.dpr.mykeys.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.KeystoreBuilder;
+import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.StoreModel;
 
 public class Test {
 

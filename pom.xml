@@ -5,7 +5,7 @@
 	<artifactId>mykeys</artifactId>
 	<version>0.5.1-SNAPSHOT</version>
 	<name>(J)myKeys</name>
-	<build> 
+	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -65,8 +65,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk16</artifactId>
-			<version>1.46</version>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.58</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -127,6 +127,11 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dpr</groupId>
+			<artifactId>mkeys-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

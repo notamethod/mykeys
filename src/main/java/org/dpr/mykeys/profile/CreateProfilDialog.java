@@ -28,6 +28,7 @@ import javax.swing.border.Border;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -35,7 +36,6 @@ import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.FillUtils;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.keystore.InternalKeystores;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class CreateProfilDialog extends SuperCreate implements ItemListener {

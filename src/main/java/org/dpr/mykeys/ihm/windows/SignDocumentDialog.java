@@ -20,9 +20,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.app.CommonsActions;
+import org.dpr.mykeys.app.keystore.InternalKeystores;
+import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.keystore.InternalKeystores;
-import org.dpr.mykeys.keystore.StoreFormat;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 

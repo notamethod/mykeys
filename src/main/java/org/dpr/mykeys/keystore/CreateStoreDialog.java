@@ -23,7 +23,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeystoreBuilder;
+import org.dpr.mykeys.app.keystore.KeystoreBuilder;
+import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;

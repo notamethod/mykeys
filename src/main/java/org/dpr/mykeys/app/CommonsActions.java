@@ -11,11 +11,13 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.X509CRL;
 
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.crl.CrlTools;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
-import org.dpr.mykeys.keystore.StoreFormat;
-import org.dpr.mykeys.keystore.StoreModel;
-import org.dpr.mykeys.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.KeystoreBuilder;
+import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.StoreType;
 
 /**
  * @author Buck

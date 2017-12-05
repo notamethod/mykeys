@@ -79,14 +79,18 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.KeystoreBuilder;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.PkiTools;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.StoreType;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
@@ -97,10 +101,6 @@ import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.ChangePasswordDialog;
-import org.dpr.mykeys.keystore.InternalKeystores;
-import org.dpr.mykeys.keystore.StoreFormat;
-import org.dpr.mykeys.keystore.StoreModel;
-import org.dpr.mykeys.keystore.StoreType;
 
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		TreeExpansionListener, TreeWillExpandListener, DropTargetListener {

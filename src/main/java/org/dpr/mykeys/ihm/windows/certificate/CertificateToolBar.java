@@ -15,6 +15,7 @@ public class CertificateToolBar extends ObjToolBar  {
 
 	JButton addCertButton;
 	JButton addCertProfButton;
+	JButton addCertFromCSRButton;
 	JButton importButton;
 	JButton exportButton;
 	JButton deleteButton;
@@ -44,11 +45,14 @@ public class CertificateToolBar extends ObjToolBar  {
 		JLabel titre = new JLabel();
 		addCertButton = new JButton(createImageIcon("/images/add-cert.png"));
 		addCertProfButton = new JButton(createImageIcon("/images/add-cert-pro.png"));
+		addCertFromCSRButton = new JButton(createImageIcon("/images/add-cert.png"));
 		unlockButton = new JToggleButton(createImageIcon("/images/Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
 		// unlockButton.setIcon(createImageIcon("/images/Locked.png"));
 		unlockButton.setDisabledIcon(createImageIcon("/images/Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
+		addCertFromCSRButton.setActionCommand(TypeAction.ADD_CERT_FROMCSR.getValue());
+		addCertProfButton.setToolTipText("create certificate from CSR request");
 		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
 		addCertProfButton.setToolTipText("create cert from profile");
 		importButton = new JButton(createImageIcon("/images/import.png")); 
@@ -70,11 +74,13 @@ public class CertificateToolBar extends ObjToolBar  {
 		unlockButton.addActionListener(actions);
 		deleteButton.addActionListener(actions);
 		addCertProfButton.addActionListener(actions);
+		addCertFromCSRButton.addActionListener(actions);
 		titre.setText(title);
 		add(titre);
 		add(unlockButton);
 		add(addCertButton);
 		add(addCertProfButton);
+		add(addCertFromCSRButton);
 		add(importButton);
 		add(exportButton);
 		add(deleteButton);
@@ -88,6 +94,7 @@ public class CertificateToolBar extends ObjToolBar  {
 		deleteButton.setEnabled(true);
 		importButton.setEnabled(true);
 		addCertButton.setEnabled(true);
+		addCertFromCSRButton.setEnabled(true);
 		addCertProfButton.setEnabled(true);
 	}
 	public void enableCertActions() {
@@ -103,8 +110,8 @@ public class CertificateToolBar extends ObjToolBar  {
 		deleteButton.setEnabled(false);
 		addCertButton.setEnabled(false);
 		addCertProfButton.setEnabled(false);
+		addCertFromCSRButton.setEnabled(false);
 		unlockButton.setSelected(false);
-
 		unlockButton.setEnabled(true);
 		
 	}

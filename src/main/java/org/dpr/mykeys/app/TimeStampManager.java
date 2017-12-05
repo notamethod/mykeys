@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.DERSet;
@@ -38,6 +39,7 @@ import org.bouncycastle.tsp.TimeStampResponse;
 import org.bouncycastle.tsp.TimeStampToken;
 import org.bouncycastle.tsp.TimeStampTokenGenerator;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 
 /*
  * http://threebit.net/mail-archive/itext-questions/msg04989.html
@@ -75,7 +77,7 @@ public class TimeStampManager {
 		TimeStampToken tok = getTimeStampToken(1);
 
 		ASN1InputStream asn1InputStream = new ASN1InputStream(tok.getEncoded());
-		DERObject tstDER = asn1InputStream.readObject();
+		ASN1Primitive tstDER = asn1InputStream.readObject();
 		DERSet ds = new DERSet(tstDER);
 		Attribute a = new Attribute(new DERObjectIdentifier("r"), ds);
 		ASN1EncodableVector dv = new ASN1EncodableVector();

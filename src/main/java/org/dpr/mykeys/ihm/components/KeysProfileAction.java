@@ -9,10 +9,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.profile.Profil;
 import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.profile.Profil;
  
 public class KeysProfileAction implements ActionListener {
 

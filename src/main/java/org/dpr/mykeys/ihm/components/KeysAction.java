@@ -90,6 +90,15 @@ public class KeysAction implements ActionListener {
 			}
 			// addCertificate(ksInfo, false);
 			break;
+		case ADD_CERT_FROMCSR: 
+			try {
+				this.listPanel.addCertFromCSR(this.listPanel.ksInfo, false);
+			} catch (ServiceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			// addCertificate(ksInfo, false);
+			break;
 		case IMPORT_CERT:
 			try {
 				this.listPanel.importCertificate(this.listPanel.ksInfo, false);

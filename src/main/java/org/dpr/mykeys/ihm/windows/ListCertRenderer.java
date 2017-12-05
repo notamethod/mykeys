@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.profile.Profil;
+import org.dpr.mykeys.app.profile.Profil;
 
 /**
  * @author Buck

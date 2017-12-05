@@ -484,4 +484,19 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		return true;
 	}
 
+	public void addCertFromCSR(NodeInfo info, boolean b) throws ServiceException {
+		JFrame frame = (JFrame) this.getTopLevelAncestor();
+		SuperCreate cs = null;
+		if (info instanceof KeyStoreInfo) {
+			cs = new CreateCertificatFromCSRDialog(frame, (KeyStoreInfo) info, true);
+		} 
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+		updateInfo(info);
+
+		return;
+		
+	}
+
 }

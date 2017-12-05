@@ -15,11 +15,11 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.keystore.StoreType;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
 import org.dpr.mykeys.keystore.ImportStoreDialog;
-import org.dpr.mykeys.keystore.StoreType;
 
 public class TreePopupMenu extends JPopupMenu {
 

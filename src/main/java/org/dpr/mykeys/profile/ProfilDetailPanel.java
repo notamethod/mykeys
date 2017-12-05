@@ -6,6 +6,7 @@ import javax.swing.JTextField;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
+import org.dpr.mykeys.app.profile.Profil;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class ProfilDetailPanel extends LabelValuePanel {

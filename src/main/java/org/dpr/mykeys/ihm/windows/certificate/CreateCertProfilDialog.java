@@ -34,12 +34,12 @@ import org.dpr.mykeys.app.certificate.CertificateService;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
 import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.ihm.model.FrameModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
-import org.dpr.mykeys.keystore.StoreModel;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.SWComponent;
 
