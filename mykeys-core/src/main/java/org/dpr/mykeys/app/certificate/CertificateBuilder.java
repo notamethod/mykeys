@@ -1,10 +1,9 @@
 package org.dpr.mykeys.app.certificate;
 
-import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.math.BigInteger;
-import java.security.KeyStore;
-import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -17,7 +16,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -33,14 +34,17 @@ import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.PolicyQualifierId;
 import org.bouncycastle.asn1.x509.PolicyQualifierInfo;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.asn1.x509.UserNotice;
 import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.jce.X509Principal;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
-import org.bouncycastle.x509.extension.SubjectKeyIdentifierStructure;
 import org.dpr.mykeys.app.KeyTools;
 
 public class CertificateBuilder extends KeyTools {
@@ -97,6 +101,7 @@ public class CertificateBuilder extends KeyTools {
 	public X509Certificate[] genererX509(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
 			throws Exception {
 
+		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
 		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -132,7 +137,9 @@ public class CertificateBuilder extends KeyTools {
 		// certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 		// new AuthorityKeyIdentifierStructure( caCert));
 		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
-				new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
+				extUtils.createSubjectKeyIdentifier(certModel.getPublicKey()));
+		
+		
 		// X509Extensions.ExtendedKeyUsage.
 
 		// FIXME: extensions to fix
@@ -195,6 +202,7 @@ public class CertificateBuilder extends KeyTools {
 	public X509Certificate[] genererX509CodeSigning(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
 			throws Exception {
 
+		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
 		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -220,9 +228,9 @@ public class CertificateBuilder extends KeyTools {
 		certGen.addExtension(X509Extension.keyUsage, true, new KeyUsage(certModel.getIntKeyUsage()));
 		// certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 		// new AuthorityKeyIdentifierStructure( caCert));
-		certGen.addExtension(X509Extension.subjectKeyIdentifier, false,
-				new SubjectKeyIdentifierStructure(certModel.getPublicKey()));
-
+		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
+				extUtils.createSubjectKeyIdentifier(certModel.getPublicKey()));
+		
 		// FIXME: � v�rifier en cas de auto sign�
 		if (certIssuer.getCertificate() != null) {
 			certGen.addExtension(X509Extension.authorityKeyIdentifier, false,
@@ -359,8 +367,11 @@ public class CertificateBuilder extends KeyTools {
 		return certificates;
 	}
 
-	public CertificateBuilder buildFromRequest(File file, CertificateInfo issuer) {
-		//PKCS10CertificationRequest csr = new PKCS10CertificationRequestHolder(csrData);
+	public CertificateBuilder buildFromRequest(Reader buf, CertificateInfo issuer) throws IOException {
+		PemReader reader = new PemReader(buf);
+		PKCS10CertificationRequest csr = new PKCS10CertificationRequest(reader.readPemObject().getContent());
+		csr.getSubject();
+	
 		return null;
 	}
 

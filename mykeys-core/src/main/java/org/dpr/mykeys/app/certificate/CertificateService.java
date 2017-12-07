@@ -1,6 +1,10 @@
 package org.dpr.mykeys.app.certificate;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.PrivateKey;
@@ -11,6 +15,7 @@ import java.security.cert.X509Certificate;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.X509Constants;
@@ -44,9 +49,9 @@ public class CertificateService {
 
 		CertificateBuilder builder = new CertificateBuilder();
 		X509Certificate[] xCerts;
-		CertificateInfo issuer=getCertInfo(certInfo.getIssuer());
-		if (issuer==null) {
-			issuer=certInfo;
+		CertificateInfo issuer = getCertInfo(certInfo.getIssuer());
+		if (issuer == null) {
+			issuer = certInfo;
 		}
 		try {
 			xCerts = builder.build(certInfo, issuer, isAC).getCertificates();
@@ -163,18 +168,25 @@ public class CertificateService {
 		return certInfo;
 	}
 
-	public X509Certificate[] generateFromCSR(String text, String strIssuer) throws KeyToolsException, CertificateException {
+	public X509Certificate[] generateFromCSR(String fic, String strIssuer)
+			throws KeyToolsException, CertificateException, IOException {
 		CertificateBuilder builder = new CertificateBuilder();
 		X509Certificate[] xCerts;
-		CertificateInfo issuer=getCertInfo(strIssuer);
+		CertificateInfo issuer = getCertInfo(strIssuer);
+
+		// Path path = Paths.get("path/to/file");
+
+		Object pemcsr;
+		BufferedReader buf = new BufferedReader(new FileReader(fic));
 		
+
 		try {
-			xCerts = builder.buildFromRequest(new File(text), issuer).getCertificates();
+			xCerts = builder.buildFromRequest(buf, issuer).getCertificates();
 		} catch (Exception e) {
 			throw new CertificateException(e);
 		}
 		return xCerts;
-		
+
 	}
 
 }

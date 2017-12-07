@@ -174,7 +174,6 @@ public class Test {
 				certInfo = new CertificateInfo(alias);
 			
 				fillCertInfo(ksInfo, ks, certInfo, alias);
-
 			}
 		}
 		try {
