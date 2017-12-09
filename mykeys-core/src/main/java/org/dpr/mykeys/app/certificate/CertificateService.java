@@ -3,11 +3,14 @@ package org.dpr.mykeys.app.certificate;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -38,7 +41,7 @@ public class CertificateService {
 		CertificateBuilder builder = new CertificateBuilder();
 		X509Certificate[] xCerts;
 		try {
-			xCerts = builder.build(certInfo, getCertInfo(certInfo.getIssuer()), false).getCertificates();
+			xCerts = builder.generate(certInfo, findACCertificateInfo(certInfo.getIssuer()), false).getCertificates();
 		} catch (Exception e) {
 			throw new CertificateException(e);
 		}
@@ -49,29 +52,21 @@ public class CertificateService {
 
 		CertificateBuilder builder = new CertificateBuilder();
 		X509Certificate[] xCerts;
-		CertificateInfo issuer = getCertInfo(certInfo.getIssuer());
-		if (issuer == null) {
-			issuer = certInfo;
-		}
+
 		try {
-			xCerts = builder.build(certInfo, issuer, isAC).getCertificates();
+			CertificateInfo issuer = findACCertificateInfo(certInfo.getIssuer());
+			if (issuer == null) {
+				issuer = certInfo;
+			}
+			xCerts = builder.generate(certInfo, issuer, isAC).getCertificates();
 		} catch (Exception e) {
+			log.error(e);
 			throw new CertificateException(e);
 		}
 		return xCerts;
 	}
 
-	public X509Certificate[] generateX509FromCSR() throws CertificateException {
 
-		CertificateBuilder builder = new CertificateBuilder();
-		X509Certificate[] xCerts;
-		try {
-			xCerts = builder.build(certInfo, getCertInfo(certInfo.getIssuer()), false).getCertificates();
-		} catch (Exception e) {
-			throw new CertificateException(e);
-		}
-		return xCerts;
-	}
 
 	public X509Certificate[] generateCrlToFix() throws CertificateException {
 		// if (ktool == null) {
@@ -121,35 +116,37 @@ public class CertificateService {
 			usage = Usage.CODESIGNING;
 
 		}
-		return builder.build(certInfo, infoEmetteur, isAC, usage).getCertificates();
+		return builder.generate(certInfo, infoEmetteur, isAC, usage).getCertificates();
 	}
 
 	public X509Certificate[] genererX509(CertificateInfo certInfo, CertificateInfo infoEmetteur, boolean isAC)
 			throws Exception {
 		CertificateBuilder builder = new CertificateBuilder();
-		Usage usage = null;
-
-		return builder.build(certInfo, infoEmetteur, isAC, usage).getCertificates();
+		return builder.generate(certInfo, infoEmetteur, isAC, Usage.DEFAULT).getCertificates();
 	}
 
-	public CertificateInfo getCertInfo(String alias) throws KeyToolsException {
+	public CertificateInfo findACCertificateInfo(String alias)
+			throws KeyToolsException, UnrecoverableKeyException, NoSuchAlgorithmException {
 		if (null == alias || alias.trim().isEmpty()) {
 			return null;
 		}
 		KeystoreBuilder ksb = new KeystoreBuilder();
 		KeyStore ks = ksb.load(InternalKeystores.getACKeystore()).get();
-
+		
 		CertificateInfo certInfo = new CertificateInfo();
 		try {
 			Certificate certificate = ks.getCertificate(alias);
 			Certificate[] certs = ks.getCertificateChain(alias);
 			if (ks.isKeyEntry(alias)) {
 				certInfo.setContainsPrivateKey(true);
+				certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, InternalKeystores.password.toCharArray()));
 
 			}
+			X509Certificate x509Cert = (X509Certificate) certificate;
+			certInfo.setSubjectMap(x509Cert.getSubjectDN().getName());
 			// CertificateInfo certInfo2 = new CertificateInfo(alias, (X509Certificate)
 			// certificate);
-
+			certInfo.setPublicKey(certificate.getPublicKey());
 			StringBuffer bf = new StringBuffer();
 			if (certs == null) {
 				log.error("chaine de certification nulle pour" + alias);
@@ -168,24 +165,28 @@ public class CertificateService {
 		return certInfo;
 	}
 
-	public X509Certificate[] generateFromCSR(String fic, String strIssuer)
+	public X509Certificate[] generateFromCSR(String fic, CertificateInfo certModel, String strIssuer)
 			throws KeyToolsException, CertificateException, IOException {
 		CertificateBuilder builder = new CertificateBuilder();
-		X509Certificate[] xCerts;
-		CertificateInfo issuer = getCertInfo(strIssuer);
-
-		// Path path = Paths.get("path/to/file");
-
-		Object pemcsr;
-		BufferedReader buf = new BufferedReader(new FileReader(fic));
 		
+	
+		if (StringUtils.isBlank(certModel.getAlias())) {
+			BigInteger bi = KeyTools.RandomBI(30);
+			certModel.setAlias(bi.toString(16));
+		}
+		X509Certificate xCert;
 
 		try {
-			xCerts = builder.buildFromRequest(buf, issuer).getCertificates();
+			CertificateInfo issuer = findACCertificateInfo(strIssuer);
+
+			Object pemcsr;
+			BufferedReader buf = new BufferedReader(new FileReader(fic));
+
+			xCert= builder.fromRequest(buf, issuer).get();
 		} catch (Exception e) {
-			throw new CertificateException(e);
+			throw new CertificateException("error on certificate generation fro csr file "+fic, e);
 		}
-		return xCerts;
+		return new X509Certificate[] {xCert};
 
 	}
 

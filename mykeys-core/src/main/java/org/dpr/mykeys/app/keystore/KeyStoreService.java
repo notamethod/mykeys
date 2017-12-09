@@ -31,9 +31,9 @@ import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.utils.ActionStatus;
 
-public class KeyStoreService implements  StoreService<KeyStoreInfo> {
+public class KeyStoreService implements StoreService<KeyStoreInfo> {
 	public static final Log log = LogFactory.getLog(KeyStoreService.class);
- 
+
 	public static final String[] KSTYPE_EXT_PKCS12 = { "p12", "pfx", "pkcs12" };
 	public static final String KSTYPE_EXT_JKS = "jks";
 	KeyStoreInfo ksInfo;
@@ -220,7 +220,9 @@ public class KeyStoreService implements  StoreService<KeyStoreInfo> {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dpr.mykeys.keystore.StoreService#getChildList()
 	 */
 	@Override
@@ -305,8 +307,8 @@ public class KeyStoreService implements  StoreService<KeyStoreInfo> {
 
 			StringBuffer bf = new StringBuffer();
 			if (certs == null) {
-				log.error("chaine de certification nulle pour" + alias);
-				return;
+				log.warn("chaine de certification nulle pour" + alias);
+				// return;
 			}
 			for (Certificate chainCert : certs) {
 				bf.append(chainCert.toString());
@@ -334,14 +336,15 @@ public class KeyStoreService implements  StoreService<KeyStoreInfo> {
 			}
 			StringBuffer bf = new StringBuffer();
 			if (certs == null) {
-				log.error("chaine de certification nulle pour" + alias);
-				return null;
+				log.warn("chaine de certification nulle pour" + alias);
+				// return null;
+			} else {
+				for (Certificate chainCert : certs) {
+					bf.append(chainCert.toString());
+				}
+				certInfo.setCertChain(bf.toString());
+				certInfo.setCertificateChain(certs);
 			}
-			for (Certificate chainCert : certs) {
-				bf.append(chainCert.toString());
-			}
-			certInfo.setCertChain(bf.toString());
-			certInfo.setCertificateChain(certs);
 
 		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block
@@ -439,7 +442,7 @@ public class KeyStoreService implements  StoreService<KeyStoreInfo> {
 
 		char[] password = InternalKeystores.password.toCharArray();
 		ks = getKeystore(InternalKeystores.getACPath(), StoreFormat.JKS, InternalKeystores.password.toCharArray());
-		CertificateInfo infoEmetteur =	fillCertInfo(ks, aliasEmetteur);
+		CertificateInfo infoEmetteur = fillCertInfo(ks, aliasEmetteur);
 		infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
 		return infoEmetteur;
 

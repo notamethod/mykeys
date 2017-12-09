@@ -71,7 +71,7 @@ public class KeystoreBuilder extends KeyTools {
 			certInfo.setPassword(InternalKeystores.password.toCharArray());
 		}
 	
-		saveCertChain(keystore, xCerts, certInfo);
+		saveCertChain(keystore, xCerts[0], certInfo);
 		saveKeyStore(keystore, ksInfo);
 		return this;
 	}

@@ -197,6 +197,7 @@ public class KeyTools {
 	 * @param certInfo
 	 * @throws KeyToolsException
 	 */
+	@Deprecated
 	protected void saveCertChain(KeyStore kstore, X509Certificate[] xCerts, CertificateInfo certInfo)
 			throws KeyToolsException {
 		try {
@@ -212,6 +213,30 @@ public class KeyTools {
 			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
 		}
 
+	}
+	
+	public void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateInfo certInfo)
+			throws KeyToolsException {
+		try {
+			// pas bonne chaine
+			// X509Certificate x509Cert = (X509Certificate) cert;
+		
+		
+			if (certInfo.getPrivateKey() == null) {
+				kstore.setCertificateEntry(certInfo.getAlias(), cert);
+			} else {
+				Certificate[] chaine = null;
+				if (certInfo.getCertificateChain()!=null) {
+					chaine = certInfo.getCertificateChain();
+				}else {
+					chaine = new Certificate[] {cert};
+				}
+				kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
+			}
+
+		} catch (KeyStoreException e) {
+			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
+		}
 	}
 	
 	@Deprecated
@@ -252,24 +277,7 @@ public class KeyTools {
 		}
 	}
 
-	public void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateInfo certInfo)
-			throws KeyToolsException {
-		try {
-			// pas bonne chaine
-			// X509Certificate x509Cert = (X509Certificate) cert;
-			Certificate[] chaine = certInfo.getCertificateChain();
-			if (certInfo.getPrivateKey() == null) {
-				kstore.setCertificateEntry(certInfo.getAlias(), cert);
-			} else {
-
-				kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
-			}
-
-			// ks.setCertificateEntry(alias, cer);
-		} catch (KeyStoreException e) {
-			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
-		}
-	}
+	
 
 	
 

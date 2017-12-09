@@ -147,7 +147,7 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 					
 					//certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 					CertificateService cm = new CertificateService(certInfo);
-					X509Certificate[] xCerts = cm.generateFromCSR(tfDirectory.getText(), (String) infosPanel.getElements().get("emetteur"));
+					X509Certificate[] xCerts = cm.generateFromCSR(tfDirectory.getText(), certInfo, (String) infosPanel.getElements().get("emetteur"));
 					KeyTools ktools = new KeyTools();
 					KeyStoreService kserv = new KeyStoreService(ksInfo);
 				
@@ -157,8 +157,9 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 
 				} catch (Exception e) {
 
+					log.error("error generating certificate", e);
 					MykeysFrame.showError(CreateCertificatFromCSRDialog.this, e.getMessage());
-					e.printStackTrace();
+				
 				}
 
 			} else if (command.equals("CANCEL")) {

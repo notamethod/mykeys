@@ -1,7 +1,11 @@
-package org.dpr.mykeys.app.test;
+package org.dpr.mykeys.test;
+
+import static org.junit.Assert.fail;
 
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.Security;
@@ -19,23 +23,17 @@ import org.dpr.mykeys.app.keystore.KeyStoreService;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
+import org.junit.Test;
 
-public class Test {
+
+public class TestCerts {
 
 	final static Log log = LogFactory.getLog(Test.class);
 
-	/**
-	 * .
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		TimeStamp();
-		// ImportCert();
 
-	}
 
-	private static void ImportCert() {
+	@Test
+	public void ImportCert() {
 		KeyTools kt = new KeyTools();
 		try {
 			String typeCert = null;
@@ -54,25 +52,29 @@ public class Test {
 
 		} catch (Exception e) {
 
-			// e.printStackTrace();
+			 e.printStackTrace();
+			fail();
+	
 
 		}
 
 	}
 
-	private static void loadKS() {
+	@Test
+	public  void loadKS() {
 		// String path = "data/test01.jks";
 		// KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path,
 		// StoreModel.CERTSTORE, StoreFormat.JKS);
 		String path = System.getProperty("user.dir");
 
-		URL url = Test.class.getResource("data/test01.jks");
+		URL url = TestCerts.class.getResource("/data/test01.jks");
 
 		try {
 			log.trace(url.toURI().getPath());
 		} catch (URISyntaxException e2) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			log.error(e2);
+			fail();
 		}
 
 		// log.trace(String. Test.class.getPackage().getName());
@@ -88,10 +90,11 @@ public class Test {
 		try {
 			fileName = url.toURI().getPath().substring(1);
 		} catch (URISyntaxException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			log.error(e2);
+			fail();
 		}
-		fileName = "C:/Documents and Settings/n096015/workspace_V2008/MyKeys0/bin/org/dpr/mykeys/app/test/data/test01.jks";
+		Path resourceDirectory = Paths.get("src/test/resources/data/test01.jks");
+		fileName = resourceDirectory.toAbsolutePath().toString();
 		KeyStoreInfo ksInfo = new KeyStoreInfo("aa", fileName,
 				StoreModel.CERTSTORE, StoreFormat.JKS);
 		ksInfo.setPassword("1234".toCharArray());
@@ -101,16 +104,16 @@ public class Test {
 
 		} catch (Exception e1) {
 
-			e1.printStackTrace();
-
+			log.error(e1);
+			fail();
 		}
 
 		Enumeration<String> enumKs = null;
 		try {
 			enumKs = ks.aliases();
 		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
+			fail();
 		}
 		if (enumKs != null && enumKs.hasMoreElements()) {
 
@@ -134,15 +137,16 @@ public class Test {
 		
 	}
 
-	private static void TimeStamp() {
+	@Test
+	public void TimeStamp() {
 		Security.addProvider(new BouncyCastleProvider());
 
 		KeyTools kt = new KeyTools();
 		KeystoreBuilder ksBuilder = new KeystoreBuilder();
 		KeyStore ks = null;
 		String fileName = null;
-
-		fileName = "C:/Documents and Settings/n096015/workspace_V2008/MyKeys0/bin/org/dpr/mykeys/app/test/data/test01.jks";
+		Path resourceDirectory = Paths.get("src/test/resources/data/test01.jks");
+		fileName = resourceDirectory.toAbsolutePath().toString();
 		KeyStoreInfo ksInfo = new KeyStoreInfo("aa", fileName,
 				StoreModel.CERTSTORE, StoreFormat.JKS);
 		ksInfo.setPassword("1234".toCharArray());
@@ -152,7 +156,8 @@ public class Test {
 
 		} catch (Exception e1) {
 
-			e1.printStackTrace();
+			log.error(e1);
+			fail();
 
 		}
 		CertificateInfo certInfo = null;
@@ -180,8 +185,8 @@ public class Test {
 			TimeStampToken tsp = TimeStampManager.getTimeStampToken(4);
 			log.trace(tsp);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
+			fail();
 		}
 
 	}

@@ -2,6 +2,7 @@ package org.dpr.mykeys.app.certificate;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
@@ -22,9 +23,12 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.X500NameBuilder;
+import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x500.style.RFC4519Style;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
@@ -338,33 +342,27 @@ public class CertificateInfo implements ChildInfo{
 
 	public X500Name subjectMapToX509Name() {
 
-		System.err.println("merde");
-		System.err.println("merde");
-		System.err.println("merde");
-		System.err.println("merde");
-		System.err.println("merde");
-		System.err.println("merde");
+		X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
+		Set setKey = subjectMap.keySet();
+		Iterator iter = setKey.iterator();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			String value = subjectMap.get(key);
+			Object oidKey = X509Name.DefaultLookUp.get(key.toLowerCase());
+			if (oidKey != null && value != null && !value.equals("")) {
 		
-//		Set setKey = subjectMap.keySet();
-//		Iterator iter = setKey.iterator();
-//		Vector vOid = new Vector();
-//		Vector vValue = new Vector();
-//		// int i=0;
-//		while (iter.hasNext()) {
-//			String key = (String) iter.next();
-//			String value = subjectMap.get(key);
-//			Object oidKey = X509Name.DefaultLookUp.get(key.toLowerCase());
-//			if (oidKey != null && value != null && !value.equals("")) {
-//				vOid.add(oidKey);
-//				vValue.add(subjectMap.get(key));
-//				// i++;
-//			} else {
-//				log.error("No OID: " + key);
-//			}
-//		}
-//		RDN rdn = new RDN(attrTAndV)
-//		X500Name x500Name = new X500Name(
-		return null;
+				  nameBuilder.addRDN((ASN1ObjectIdentifier) oidKey, subjectMap.get(key));
+				// i++;
+			} else {
+				log.error("No OID: " + key);
+			}
+		}
+		return nameBuilder.build();
+		
+	
+	
+		
+	
 
 	}
 
@@ -390,19 +388,32 @@ public class CertificateInfo implements ChildInfo{
 	 */
 	public void x509NameToMap(X500Name name) {
 		
+		
 		ASN1ObjectIdentifier[] v = name.getAttributeTypes();
+		
+		//  /** PKCS#9: 1.2.840.113549.1.9.1 */
+	    //static final ASN1ObjectIdentifier    pkcs_9_at_emailAddress        = pkcs_9.branch("1").intern();
 		
 		for (RDN rdn: name.getRDNs()) {
 			AttributeTypeAndValue[] atrs = rdn.getTypesAndValues();
 			for (int i = 0; i < atrs.length; i++) {
 			
 				String val = (String) atrs[i].getValue().toString();
-				String type = RFC4519Style.INSTANCE.oidToDisplayName(atrs[i].getType()).toUpperCase();
+				
+				//String type = RFC4519Style.INSTANCE.oidToDisplayName(atrs[i].getType());
+				String type = BCStyle.INSTANCE.oidToDisplayName(atrs[i].getType());
 				
 				if (log.isDebugEnabled()) {
 					log.debug(type+ ":" + val);
+					
+					
 				}
-				subjectMap.put(type, val);
+				if (null==type) {
+					log.error("o.i.d type not found for "+atrs[i].getType());
+			
+				}
+				else
+					subjectMap.put(type.toUpperCase(), val);
 			}
 			
 	
@@ -617,6 +628,8 @@ public class CertificateInfo implements ChildInfo{
 	 * @return X509Certificate - le certificate.
 	 */
 	public X509Certificate getCertificate() {
+		if(certificate==null && certificateChain!=null)
+			return (X509Certificate) certificateChain[0];
 		return certificate;
 	}
 
@@ -729,5 +742,16 @@ public class CertificateInfo implements ChildInfo{
 	public ChildType getChildType() {
 		// TODO Auto-generated method stub
 		return ChildType.CERTIFICATE;
+	}
+
+
+
+	public void setSubjectMap(String name) {
+		this.subjectMap.clear();
+		for (String pair : name.split(",")) {
+			String[] value = pair.split("=");
+			subjectMap.put(value[0], value[1]);
+		}
+		
 	}
 }
