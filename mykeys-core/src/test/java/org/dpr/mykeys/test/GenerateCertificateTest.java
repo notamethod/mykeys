@@ -17,6 +17,7 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -67,7 +68,7 @@ public class GenerateCertificateTest {
 	}
 
 	@Test
-	public void create_from_csr_ok() {
+	public void create_from_csr_ok() throws ServiceException {
 
 		boolean isAC = false;
 		CertificateInfo certModel = new CertificateInfo("aliastest");
@@ -85,7 +86,7 @@ public class GenerateCertificateTest {
 		CertificateHelper certServ = new CertificateHelper(certModel);
 		try {
 			certServ.generateFromCSR(new File("src/test/resources/data/cert1.csr").getAbsolutePath(), AC_NAME);
-		} catch (CertificateException | KeyToolsException | IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail();
