@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.windows;
 
 import static org.dpr.swingutils.ImageUtils.getImage;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -31,6 +32,7 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.ColorUIResource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -110,6 +112,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 		try {
 			// UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
 			UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
+			 UIManager.put("ToolTip.foreground", new ColorUIResource(Color.ORANGE));
 			return;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
