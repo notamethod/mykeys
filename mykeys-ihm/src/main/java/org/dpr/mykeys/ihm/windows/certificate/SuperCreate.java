@@ -41,11 +41,11 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.certificate.CertificateService;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
-import org.dpr.mykeys.app.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
@@ -234,7 +234,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy notice", "PolicyNotice", "");
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
-				if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+				if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
 					infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
 							false);
 					infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
@@ -268,7 +268,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy notice", "PolicyNotice", "");
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
-				if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+				if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
 					infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
 							true);
 					infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
@@ -317,10 +317,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 					fillCertInfo();
 					X509Certificate[] xCerts = null;
 					KeyTools ktools = new KeyTools();
-					KeyStoreService kserv = new KeyStoreService(ksInfo);
+					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 
 					certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
-					CertificateService certServ = new CertificateService(certInfo);
+					CertificateHelper certServ = new CertificateHelper(certInfo);
 
 					xCerts = certServ.generateX509(isAC);
 
@@ -348,7 +348,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 				String key = it.next();
 			}
 			if (elements.get("alias") == null
-					|| (elements.get("pwd1") == null && !ksInfo.getStoreType().equals(StoreType.INTERNAL))) {
+					|| (elements.get("pwd1") == null && !ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))) {
 				MykeysFrame.showError(SuperCreate.this, "Champs obligatoires");
 				return;
 			}
@@ -359,7 +359,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 			certInfo.setAlias((String) elements.get("alias"));
 			certInfo.setNotBefore((Date) elements.get("notBefore"));
 			certInfo.setNotAfter((Date) elements.get("notAfter"));
-			if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)) {
+			if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
 				char[] pkPassword = ((String) elements.get("pwd1")).toCharArray();
 				certInfo.setPassword(pkPassword);
 			}

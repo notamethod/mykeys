@@ -67,8 +67,10 @@ import org.dpr.mykeys.app.KeyTools;
 
 public class CertificateBuilder extends KeyTools {
 
+	private static final int CSR_VALIDITY = 365;
+	private static final String CSR_SIGN_ALGORITHM = "SHA256withRSA";
 	final Log log = LogFactory.getLog(CertificateBuilder.class);
-	X509Certificate certificate;
+	
 	X509Certificate[] certificates;
 
 	public CertificateBuilder load(InputStream is) throws CertificateException {
@@ -85,7 +87,7 @@ public class CertificateBuilder extends KeyTools {
 	}
 
 	public X509Certificate get() {
-		return certificate;
+		return certificates[0];
 	}
 
 	/**
@@ -386,31 +388,26 @@ public class CertificateBuilder extends KeyTools {
 
 	}
 
-	public X509Certificate getCertificate() {
-		return certificate;
-	}
-
 	public X509Certificate[] getCertificates() {
 		return certificates;
 	}
 
-	public CertificateBuilder fromRequest(Reader buf, CertificateInfo issuer)
+	public CertificateBuilder generateFromCSR(Reader buf, CertificateInfo issuer)
 			throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException,
 			SignatureException, OperatorCreationException, CertificateException {
 		PemReader reader = new PemReader(buf);
 		PKCS10CertificationRequest csr = convertPemToPKCS10CertificationRequest(reader);
-
+	
 		X500Name x500Name = csr.getSubject();
-		System.out.println("x500Name is: " + x500Name + "\n");
-		System.out.println("x500Name is: " + csr.getSignatureAlgorithm() + "\n");
-
-		csr.getSubject();
+		log.info("x500Name is: " + x500Name + "\n");
+		log.info("x500Name is: " + csr.getSignatureAlgorithm() + "\n");
 
 		byte[] certencoded = sign(csr, issuer.getPrivateKey(), issuer.getCertificate());
 		CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
 
 		InputStream in = new ByteArrayInputStream(certencoded);
-		certificate = (X509Certificate) certFactory.generateCertificate(in);
+		X509Certificate certificate = (X509Certificate) certFactory.generateCertificate(in);
+		certificates = new X509Certificate[] {certificate};
 		if (certificate != null) {
 			log.info("certificate " + certificate.getSubjectDN().getName() + " created !");
 		}
@@ -427,8 +424,6 @@ public class CertificateBuilder extends KeyTools {
 		try {
 			Object parsedObj = pemParser.readObject();
 
-			System.out.println("PemParser returned: " + parsedObj);
-
 			if (parsedObj instanceof PKCS10CertificationRequest) {
 				csr = (PKCS10CertificationRequest) parsedObj;
 
@@ -440,24 +435,19 @@ public class CertificateBuilder extends KeyTools {
 		return csr;
 	}
 
-	public byte[] sign(PKCS10CertificationRequest inputCSR, PrivateKey caPrivate, X509Certificate caCert)
+	private byte[] sign(PKCS10CertificationRequest inputCSR, PrivateKey caPrivate, X509Certificate caCert)
 			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException,
 			IOException, OperatorCreationException, CertificateException {
 
-		AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find("SHA1withRSA");
+		AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find(CSR_SIGN_ALGORITHM);
 		AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
 
-		int validity = 365;
+		int validity = CSR_VALIDITY;
 		X500Name issuer = new X500Name(caCert.getSubjectX500Principal().getName());
 		BigInteger serial = new BigInteger(32, new SecureRandom());
 		Date from = new Date();
 		Date to = new Date(System.currentTimeMillis() + (validity * 86400000L));
 
-		// PKCS10CertificationRequestHolder pk10Holder = new
-		// PKCS10CertificationRequestHolder(inputCSR);
-		// in newer version of BC such as 1.51, this is
-		// PKCS10CertificationRequest pk10Holder = new
-		// PKCS10CertificationRequest(inputCSR);
 		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
 		X509v3CertificateBuilder certgen = new X509v3CertificateBuilder(issuer, serial, from, to, inputCSR.getSubject(),
 				inputCSR.getSubjectPublicKeyInfo());

@@ -18,7 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -132,7 +132,7 @@ public class ImportStoreDialog extends JDialog {
 					return;
 				}
 
-				KeyStoreService  kserv = new KeyStoreService(null);
+				KeyStoreHelper  kserv = new KeyStoreHelper(null);
 				try {
 					String typeKS = (String) elements.get("typeKS");
 					if (elements.get("typeKS").equals("auto")) {

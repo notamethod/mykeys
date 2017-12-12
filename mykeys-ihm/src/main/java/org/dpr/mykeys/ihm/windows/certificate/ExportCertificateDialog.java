@@ -29,7 +29,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JFieldsPanel;
@@ -185,7 +185,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 boolean isExportCle = o==null?false:(Boolean) o;
 
                 KeyTools kt = new KeyTools();
-                KeyStoreService kServ = new KeyStoreService(ksInfo);
+                KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
                 if (isExportCle)

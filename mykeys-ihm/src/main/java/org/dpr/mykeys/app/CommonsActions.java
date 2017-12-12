@@ -13,11 +13,11 @@ import java.security.cert.X509CRL;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.crl.CrlTools;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 
 /**
  * @author Buck
@@ -59,7 +59,7 @@ public class CommonsActions {
 
 			}
 			char pwd[] = ksInfoIn.getPassword();
-			if (ksInfoIn.getStoreType().equals(StoreType.INTERNAL)) {
+			if (ksInfoIn.getStoreType().equals(StoreLocationType.INTERNAL)) {
 				// pwd=certInfoEx.getPassword();
 				certInfoEx.setPassword(pwd);
 			}
@@ -141,7 +141,7 @@ public class CommonsActions {
 
 	public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
 
-		KeyStoreService ktools = new KeyStoreService(null);
+		KeyStoreHelper ktools = new KeyStoreHelper(null);
 		CertificateInfo certSign;
 		try {
 			certSign = ktools.getCertificateACByAlias(aliasEmetteur);

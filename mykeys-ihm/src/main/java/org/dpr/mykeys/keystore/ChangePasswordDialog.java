@@ -23,7 +23,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JFieldsPanel;
@@ -101,7 +101,7 @@ public class ChangePasswordDialog extends JDialog {
 					return;
 				}
 				ksInfo.setPassword(((String)elements.get("pwd_old")).toCharArray());
-				KeyStoreService service = new KeyStoreService(ksInfo);
+				KeyStoreHelper service = new KeyStoreHelper(ksInfo);
 				try {
 					service.changePassword(((String)elements.get("pwd_new")).toCharArray());
 					ksInfo.setOpen(false);

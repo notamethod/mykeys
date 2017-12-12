@@ -36,7 +36,7 @@ import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 /**
@@ -149,7 +149,7 @@ public class MyKeys {
 		KeyStoreInfo kinfo = null;
 
 		kinfo = new KeyStoreInfo("interne", InternalKeystores.getACPath(),
-				StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
+				StoreModel.CASTORE, StoreFormat.JKS, StoreLocationType.INTERNAL);
 		return kinfo;
 		// try {
 		// kt.loadKeyStore(path, StoreFormat.JKS, pwd.toCharArray());

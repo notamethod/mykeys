@@ -65,7 +65,7 @@ public class InternalKeystores {
 
 		}
 		kinfo = new KeyStoreInfo(KSConfig.getMessage().getString("magasin.interne"), InternalKeystores.getACPath(),
-				StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
+				StoreModel.CASTORE, StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(InternalKeystores.password.toCharArray());
 		kinfo.setOpen(true);
 		return kinfo;
@@ -89,7 +89,7 @@ public class InternalKeystores {
 			}
 		}
 		kinfo = new KeyStoreInfo(KSConfig.getMessage().getString("magasin.interne"), InternalKeystores.getCertPath(),
-				StoreModel.CERTSTORE, StoreFormat.JKS, StoreType.INTERNAL);
+				StoreModel.CERTSTORE, StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(InternalKeystores.password.toCharArray());
 		kinfo.setOpen(true);
 		return kinfo;

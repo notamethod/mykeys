@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm;
+package org.dpr.mykeys.test;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -9,8 +9,9 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 
@@ -22,8 +23,9 @@ public class Test {
 	 * .
 	 * 
 	 * @param args
+	 * @throws ServiceException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ServiceException {
 		loadKS();
 		// ImportCert();
 
@@ -39,7 +41,7 @@ public class Test {
 			String pathCert = "c:/dev/cpi.cer";
 			KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path,
 					StoreModel.CERTSTORE, StoreFormat.JKS);
-			KeyStoreService kserv = new KeyStoreService(ksInfo);
+			KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 			kserv.importX509Cert(alias, pathCert, StoreFormat.UNKNOWN,
 					"111".toCharArray());
 
@@ -51,7 +53,7 @@ public class Test {
 
 	}
 
-	private static void loadKS() {
+	private static void loadKS() throws ServiceException {
 		String path = "mag1.jks";
 		KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path,
 				StoreModel.CERTSTORE, StoreFormat.JKS);
@@ -85,17 +87,16 @@ public class Test {
 					log.debug(alias);
 				}
 				//
-				CertificateInfo certInfo = new CertificateInfo(alias);
-				fillCertInfo(ksInfo, ks, certInfo, alias);
+				CertificateInfo certInfo = fillCertInfo(ksInfo, ks, alias);
 
 			}
 		}
 
 	}
 	
-	private static void fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, CertificateInfo certInfo, String alias) {
-		KeyStoreService ksv = new KeyStoreService(ksInfo);
-		ksv.fillCertInfo(ks, certInfo, alias);
+	private static CertificateInfo fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, String alias) throws ServiceException {
+		KeyStoreHelper ksv = new KeyStoreHelper(ksInfo);
+		return ksv.fillCertInfo(ks, alias);
 		
 	}
 }

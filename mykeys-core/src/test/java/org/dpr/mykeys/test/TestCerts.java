@@ -19,8 +19,9 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.TimeStampManager;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class TestCerts {
 					StoreModel.CERTSTORE, StoreFormat.JKS);
 		
 			
-			KeyStoreService kserv = new KeyStoreService(ksInfo);
+			KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 			kserv.importX509Cert(alias, pathCert, StoreFormat.UNKNOWN,
 					"111".toCharArray());
 			
@@ -61,7 +62,7 @@ public class TestCerts {
 	}
 
 	@Test
-	public  void loadKS() {
+	public  void loadKS() throws ServiceException {
 		// String path = "data/test01.jks";
 		// KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path,
 		// StoreModel.CERTSTORE, StoreFormat.JKS);
@@ -123,22 +124,21 @@ public class TestCerts {
 					log.debug(alias);
 				}
 				//
-				CertificateInfo certInfo = new CertificateInfo(alias);
-				fillCertInfo(ksInfo, ks, certInfo, alias);
+				CertificateInfo certInfo = fillCertInfo(ksInfo, ks, alias);
 
 			}
 		}
 
 	}
 
-	private static void fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, CertificateInfo certInfo, String alias) {
-		KeyStoreService ksv = new KeyStoreService(ksInfo);
-		ksv.fillCertInfo(ks, certInfo, alias);
+	private static CertificateInfo fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, String alias) throws ServiceException {
+		KeyStoreHelper ksv = new KeyStoreHelper(ksInfo);
+		return ksv.fillCertInfo(ks, alias);
 		
 	}
 
 	@Test
-	public void TimeStamp() {
+	public void TimeStamp() throws ServiceException {
 		Security.addProvider(new BouncyCastleProvider());
 
 		KeyTools kt = new KeyTools();
@@ -176,9 +176,7 @@ public class TestCerts {
 					log.debug(alias);
 				}
 				//
-				certInfo = new CertificateInfo(alias);
-			
-				fillCertInfo(ksInfo, ks, certInfo, alias);
+				certInfo = fillCertInfo(ksInfo, ks, alias);
 			}
 		}
 		try {

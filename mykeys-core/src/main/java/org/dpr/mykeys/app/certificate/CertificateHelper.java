@@ -3,6 +3,8 @@ package org.dpr.mykeys.app.certificate;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,12 +28,12 @@ import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 
-public class CertificateService {
+public class CertificateHelper {
 	KeyTools ktool;
 	CertificateInfo certInfo;
-	public static final Log log = LogFactory.getLog(CertificateService.class);
+	public static final Log log = LogFactory.getLog(CertificateHelper.class);
 
-	public CertificateService(CertificateInfo certInfo) {
+	public CertificateHelper(CertificateInfo certInfo) {
 		super();
 		this.certInfo = certInfo;
 	}
@@ -65,7 +67,6 @@ public class CertificateService {
 		}
 		return xCerts;
 	}
-
 
 
 	public X509Certificate[] generateCrlToFix() throws CertificateException {
@@ -165,15 +166,20 @@ public class CertificateService {
 		return certInfo;
 	}
 
-	public X509Certificate[] generateFromCSR(String fic, CertificateInfo certModel, String strIssuer)
+	/**
+	 * @param fic the CSR file (pem encoded)
+	 * @param certModel
+	 * @param strIssuer name of the issuer certificate (CN)
+	 * @return
+	 * @throws KeyToolsException
+	 * @throws CertificateException
+	 * @throws IOException
+	 */
+	public CertificateInfo generateFromCSR(String fic, String strIssuer)
 			throws KeyToolsException, CertificateException, IOException {
 		CertificateBuilder builder = new CertificateBuilder();
 		
 	
-		if (StringUtils.isBlank(certModel.getAlias())) {
-			BigInteger bi = KeyTools.RandomBI(30);
-			certModel.setAlias(bi.toString(16));
-		}
 		X509Certificate xCert;
 
 		try {
@@ -182,11 +188,35 @@ public class CertificateService {
 			Object pemcsr;
 			BufferedReader buf = new BufferedReader(new FileReader(fic));
 
-			xCert= builder.fromRequest(buf, issuer).get();
+			xCert= builder.generateFromCSR(buf, issuer).get();
 		} catch (Exception e) {
 			throw new CertificateException("error on certificate generation fro csr file "+fic, e);
 		}
-		return new X509Certificate[] {xCert};
+		CertificateInfo cert = new CertificateInfo(new X509Certificate[] {xCert});
+		
+		return cert;
+
+	}
+	
+	public CertificateInfo generateFromCSR(InputStream fic, String strIssuer)
+			throws KeyToolsException, CertificateException, IOException {
+		CertificateBuilder builder = new CertificateBuilder();
+		
+		X509Certificate xCert;
+
+		try {
+			CertificateInfo issuer = findACCertificateInfo(strIssuer);
+
+			Object pemcsr;
+			BufferedReader buf = new BufferedReader(new InputStreamReader(fic));
+
+			xCert= builder.generateFromCSR(buf, issuer).get();
+		} catch (Exception e) {
+			throw new CertificateException("error on certificate generation fro csr file "+fic, e);
+		}
+		CertificateInfo cert = new CertificateInfo(new X509Certificate[] {xCert});
+		
+		return cert;
 
 	}
 

@@ -161,6 +161,17 @@ public class CertificateInfo implements ChildInfo{
 	
 		init(cert);
 	}
+	
+	public CertificateInfo(X509Certificate[] certs) {
+
+		init(certs);
+	}
+
+	private void init(X509Certificate[] certs) {
+		init(certs[0]);
+		this.setCertificateChain(certs);
+		
+	}
 
 	private void init(X509Certificate cert) {
 		this.setCertificate((X509Certificate) cert);
@@ -178,11 +189,7 @@ public class CertificateInfo implements ChildInfo{
 		certX509.getSubjectX500Principal().getName("RFC2253");
 		X500Name name = new X500Name(certX509.getSubjectX500Principal().getName("RFC2253"));
 
-
-
 		this.x509NameToMap(name);
-
-		
 		this.setKeyUsage(certX509.getKeyUsage());
 		this.setNotBefore(certX509.getNotBefore());
 		this.setNotAfter(certX509.getNotAfter());

@@ -17,7 +17,7 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.certificate.CertificateService;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -56,7 +56,7 @@ public class GenerateCertificateTest {
 		certModel.setNotAfter(cal.getTime());
 		CertificateInfo certIssuer = new CertificateInfo();
 
-		CertificateService certServ = new CertificateService(certModel);
+		CertificateHelper certServ = new CertificateHelper(certModel);
 
 		try {
 			certServ.genererX509(certModel, certModel, isAC);
@@ -82,12 +82,13 @@ public class GenerateCertificateTest {
 		certModel.setNotAfter(cal.getTime());
 		CertificateInfo certIssuer = new CertificateInfo();
 
-		CertificateService certServ = new CertificateService(certModel);
+		CertificateHelper certServ = new CertificateHelper(certModel);
 		try {
-			certServ.generateFromCSR(new File("src/test/resources/data/cert1.csr").getAbsolutePath(), certModel, AC_NAME);
+			certServ.generateFromCSR(new File("src/test/resources/data/cert1.csr").getAbsolutePath(), AC_NAME);
 		} catch (CertificateException | KeyToolsException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail();
 		}
 
 	}

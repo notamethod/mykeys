@@ -59,9 +59,8 @@ public class X509Util {
 	}
 
 	public static void getExtensions(X509Certificate certificate) {
-		// byte[] b =
-		// certificate.getExtensionValue(X509Extensions.AuditIdentity.getId());
-		// ASN1Object obj = X509ExtensionUtil.fromExtensionValue(b);
+		
+		//FIXME
 		byte[] b = certificate.getExtensionValue(X509Extensions.KeyUsage.getId());
 		ASN1Primitive obj = null;
 		try {
@@ -70,7 +69,6 @@ public class X509Util {
 			if (log.isErrorEnabled()) {
 				log.error(e);
 			}
-
 		}
 
 		if (log.isDebugEnabled()) {

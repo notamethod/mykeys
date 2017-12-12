@@ -85,12 +85,12 @@ import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
@@ -382,7 +382,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	public boolean openStore(DefaultMutableTreeNode node,
 			boolean useInternalPwd, boolean expand) {
 		KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
-		if (ksInfo.getStoreType().equals(StoreType.INTERNAL)) { // equals(StoreModel.CASTORE))
+		if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) { // equals(StoreModel.CASTORE))
 			// {
 			useInternalPwd = true;
 		}
@@ -771,7 +771,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	}
 
 	public static Map<String, String> getListCerts(String path, String type,
-			String password) throws KeyToolsException, KeyStoreException {
+			String password) throws KeyToolsException, KeyStoreException, ServiceException {
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
 		KeystoreBuilder ksBuilder = new KeystoreBuilder();
@@ -783,7 +783,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 			Certificate cert = ks.getCertificate(alias);
 
 		
-			KeyStoreService ksv = new KeyStoreService(null);
+			KeyStoreHelper ksv = new KeyStoreHelper(null);
 			CertificateInfo certInfo = ksv.fillCertInfo(ks, alias);
 
 			certsAC.put(alias, alias);

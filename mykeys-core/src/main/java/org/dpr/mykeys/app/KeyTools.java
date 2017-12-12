@@ -215,31 +215,6 @@ public class KeyTools {
 
 	}
 	
-	public void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateInfo certInfo)
-			throws KeyToolsException {
-		try {
-			// pas bonne chaine
-			// X509Certificate x509Cert = (X509Certificate) cert;
-		
-		
-			if (certInfo.getPrivateKey() == null) {
-				kstore.setCertificateEntry(certInfo.getAlias(), cert);
-			} else {
-				Certificate[] chaine = null;
-				if (certInfo.getCertificateChain()!=null) {
-					chaine = certInfo.getCertificateChain();
-				}else {
-					chaine = new Certificate[] {cert};
-				}
-				kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
-			}
-
-		} catch (KeyStoreException e) {
-			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
-		}
-	}
-	
-	@Deprecated
 	public void saveKeyStore(KeyStore ks, KeyStoreInfo ksInfo) throws KeyToolsException {
 
 		try {
@@ -277,36 +252,6 @@ public class KeyTools {
 		}
 	}
 
-	
-
-	
-
-	@Deprecated
-	public void fillCertInfoOld(CertificateInfo certInfo, Certificate certificate) {
-
-		
-
-
-			// certInfo.setKeyLength("0");
-			
-			// certX509.getSubjectX500Principal().getName("RFC2253", map2);
-			// certInfo.setX509PrincipalMap();
-			// ASN1Set set = new ASN1Set();
-			
-			// X509AttributeCertStoreSelector
-			// certX509.get
-			// certX509.getBasicConstraints();
-			// certX509.getExtendedKeyUsage()
-
-			// certGen.addExtension("2.5.29.15", true, new X509KeyUsage(
-			// X509KeyUsage.encipherOnly));
-			// certInfo.setPrivateKey(privateKey)
-
-			// certX509.getExtensionValue();
-
-
-		
-	}
 
 	public String getKey(String alias, KeyStore keyStore, char[] motDePasse) throws GeneralSecurityException {
 

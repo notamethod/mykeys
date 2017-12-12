@@ -10,7 +10,7 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 
 public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 
@@ -24,7 +24,7 @@ public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 
 	private StoreFormat storeFormat;
 
-	private StoreType storeType = StoreType.INTERNAL;
+	private StoreLocationType storeType = StoreLocationType.INTERNAL;
 	// TODO
 	private boolean isTemp = false;
 	// TODO
@@ -38,7 +38,7 @@ public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 		this.storeFormat = storeFormat;
 	}
 
-	public ProfilStoreInfo(String name, String path, StoreFormat storeFormat, StoreType storeType) {
+	public ProfilStoreInfo(String name, String path, StoreFormat storeFormat, StoreLocationType storeType) {
 		this.name = name;
 		this.path = path;
 		this.storeFormat = storeFormat;
@@ -165,7 +165,7 @@ public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 	/**
 	 * @return the storeType
 	 */
-	public StoreType getStoreType() {
+	public StoreLocationType getStoreType() {
 		return storeType;
 	}
 
@@ -173,7 +173,7 @@ public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 	 * @param storeType
 	 *            the storeType to set
 	 */
-	public void setStoreType(StoreType storeType) {
+	public void setStoreType(StoreLocationType storeType) {
 		this.storeType = storeType;
 	}
 

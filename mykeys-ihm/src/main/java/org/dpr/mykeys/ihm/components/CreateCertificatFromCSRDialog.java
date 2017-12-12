@@ -26,12 +26,12 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.certificate.CertificateService;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.PanelUtils;
@@ -146,13 +146,13 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 					}
 					
 					//certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
-					CertificateService cm = new CertificateService(certInfo);
-					X509Certificate[] xCerts = cm.generateFromCSR(tfDirectory.getText(), certInfo, (String) infosPanel.getElements().get("emetteur"));
+					CertificateHelper cm = new CertificateHelper(certInfo);
+					CertificateInfo xCerts = cm.generateFromCSR(tfDirectory.getText(), (String) infosPanel.getElements().get("emetteur"));
 					KeyTools ktools = new KeyTools();
-					KeyStoreService kserv = new KeyStoreService(ksInfo);
+					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 				
 					// TODO manage ksinfo
-					kserv.addCertToKeyStore(xCerts, certInfo);
+					kserv.addCertToKeyStore(xCerts);
 					CreateCertificatFromCSRDialog.this.setVisible(false);
 
 				} catch (Exception e) {

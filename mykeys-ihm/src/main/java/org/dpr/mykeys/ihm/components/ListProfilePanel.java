@@ -45,7 +45,7 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.profile.Profil;
 import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.ihm.actions.TypeAction;
@@ -467,7 +467,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 	
-		KeyStoreService ksv = new KeyStoreService(kinfo);
+		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
 		try {
 			ksv.removeCertificate( certificateInfo);
 

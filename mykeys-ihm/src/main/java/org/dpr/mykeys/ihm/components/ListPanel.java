@@ -40,7 +40,7 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
@@ -181,7 +181,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 				listModel.addElement(ci);
 			}
 		} else {
-			KeyStoreService ks = new KeyStoreService((KeyStoreInfo) ksInfo);
+			KeyStoreHelper ks = new KeyStoreHelper((KeyStoreInfo) ksInfo);
 			for (ChildInfo ci : ks.getChildList()) {
 				listModel.addElement(ci);
 			}
@@ -303,7 +303,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 */
 	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) throws ServiceException {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
-		KeyStoreService ksv = new KeyStoreService(kinfo);
+		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
 		try {
 			ksv.removeCertificate(certificateInfo);
 
@@ -356,7 +356,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		}
 
 		try {
-			KeyStoreService kserv = new KeyStoreService((KeyStoreInfo) ksInfo);
+			KeyStoreHelper kserv = new KeyStoreHelper((KeyStoreInfo) ksInfo);
 			kserv.open();
 
 			ksInfo.setOpen(true);
@@ -461,7 +461,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 		File transferFile = (File) fileList.get(0);
 		KeyStoreInfo ksin = new KeyStoreInfo(transferFile, null, null);
-		KeyStoreService service = new KeyStoreService((KeyStoreInfo) ksInfo);
+		KeyStoreHelper service = new KeyStoreHelper((KeyStoreInfo) ksInfo);
 		final String transferURL = transferFile.getAbsolutePath();
 
 		ActionStatus act = null;

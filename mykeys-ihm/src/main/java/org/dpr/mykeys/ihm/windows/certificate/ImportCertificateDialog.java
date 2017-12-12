@@ -21,7 +21,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JDropText;
@@ -132,7 +132,7 @@ public class ImportCertificateDialog extends JDialog {
 						MykeysFrame.showError(ImportCertificateDialog.this,
 								"Renseignez un alias pour ce certificat");
 					}
-					KeyStoreService kserv = new KeyStoreService(ksInfo);
+					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 					//FIXME;CRR 
 					System.out.println(typeCert);
 					kserv.importX509Cert(alias, tfDirectory.getText(),

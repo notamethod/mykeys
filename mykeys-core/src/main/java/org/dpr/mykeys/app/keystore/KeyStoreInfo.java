@@ -37,7 +37,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 
 	private StoreFormat storeFormat;
 
-	private StoreType storeType = StoreType.EXTERNAL;
+	private StoreLocationType storeType = StoreLocationType.EXTERNAL;
     //TODO	
 	private boolean isTemp =false;
 	//TODO
@@ -54,7 +54,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	}
 
 	public KeyStoreInfo(String name, String path, StoreModel storeModel,
-			StoreFormat storeFormat, StoreType storeType) {
+			StoreFormat storeFormat, StoreLocationType storeType) {
 		this.name = name;
 		this.path = path;
 		this.storeModel = storeModel;
@@ -180,7 +180,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	/**
 	 * @return the storeType
 	 */
-	public StoreType getStoreType() {
+	public StoreLocationType getStoreType() {
 		return storeType;
 	}
 
@@ -188,7 +188,7 @@ public class KeyStoreInfo extends BagInfo implements NodeInfo {
 	 * @param storeType
 	 *            the storeType to set
 	 */
-	public void setStoreType(StoreType storeType) {
+	public void setStoreType(StoreLocationType storeType) {
 		this.storeType = storeType;
 	}
 

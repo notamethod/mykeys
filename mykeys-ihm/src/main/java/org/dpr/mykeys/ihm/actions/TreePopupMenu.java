@@ -15,7 +15,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.keystore.StoreType;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
@@ -229,7 +229,7 @@ public class TreePopupMenu extends JPopupMenu {
 			} else {
 				openStore.setVisible(true);
 			}
-			if (!ksInfo.getStoreType().equals(StoreType.INTERNAL)){
+			if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)){
 				removeStore.setVisible(true);
 				menuChangePwd.setVisible(true);
 			}else{

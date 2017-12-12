@@ -30,10 +30,10 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.certificate.CertificateService;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreService;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
 import org.dpr.mykeys.app.profile.ProfileManager;
@@ -221,9 +221,9 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 					fillCertInfo();
 					X509Certificate[] xCerts = null;
 
-					CertificateService cm = new CertificateService(certInfo);
+					CertificateHelper cm = new CertificateHelper(certInfo);
 					KeyTools ktools = new KeyTools();
-					KeyStoreService kserv = new KeyStoreService(ksInfo);
+					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 					xCerts = cm.generateX509();
 					// TODO manage ksinfo
 					kserv.addCertToKeyStore(xCerts, certInfo);
