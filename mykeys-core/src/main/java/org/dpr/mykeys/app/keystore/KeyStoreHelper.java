@@ -49,9 +49,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	}
 
 	public void open() throws ServiceException {
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+	
 		try {
-			ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
+			loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
 		} catch (KeyToolsException e) {
 			throw new ServiceException("can't load keystore "+ksInfo.getPath(), e);
 		}
@@ -61,9 +61,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	public void changePassword(char[] newPwd) throws TamperedWithException, KeyToolsException {
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		
 		try {
-			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).get();
+			ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
 		} catch (KeyToolsException e) {
 			throw new TamperedWithException(e);
 		}
@@ -75,13 +75,13 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 
 	public ActionStatus loadKeystore(String path) {
 		StoreFormat format = findTypeKS(path);
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		
 		if (ksInfo == null && format.equals(StoreFormat.PKCS12)) {
 			return ActionStatus.ASK_PASSWORD;
 		}
-		KeyTools kt = new KeyTools();
+	
 		try {
-			ksBuilder.loadKeyStore(path, format, ksInfo.getPassword());
+			loadKeyStore(path, format, ksInfo.getPassword());
 		} catch (KeyToolsException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -123,10 +123,11 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 			throws KeyToolsException, FileNotFoundException, CertificateException, GeneralSecurityException {
 
 		KeyTools kt = new KeyTools();
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		
 
 		if (ksin.getStoreFormat().equals(StoreFormat.PKCS12)) {
-			KeyStore ks = ksBuilder.load(ksin).get();
+			KeyStore ks = load(ksin);
+			KeystoreBuilder ksBuilder = new KeystoreBuilder(ks);
 			String aliasOri = null;
 			Enumeration<String> enumKs = ks.aliases();
 			while (enumKs.hasMoreElements()) {
@@ -170,9 +171,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	@Deprecated
 	public KeyStore getKeystore(String ksName, StoreFormat format, char[] pwd) throws ServiceException {
 
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		
 		try {
-			return ksBuilder.loadKeyStore(ksName, format, pwd).get();
+			return loadKeyStore(ksName, format, pwd);
 		} catch (KeyToolsException e) {
 			throw new ServiceException("can't open keystore" + ksName, e);
 		}
@@ -180,9 +181,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 
 	public KeyStore getKeystore() throws ServiceException {
 
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		
 		try {
-			return ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).get();
+			return loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword());
 		} catch (KeyToolsException e) {
 			throw new ServiceException("can't open keystore" + ksInfo.getPath(), e);
 		}
@@ -233,10 +234,10 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	}
 
 	public void addCertToKeyStore(X509Certificate[] xCerts, CertificateValue certInfo, char[] password) throws ServiceException {
-		KeystoreBuilder ksb = new KeystoreBuilder();
+	
 	
 		try {
-			ksb.load(ksInfo).addCert(xCerts, ksInfo, certInfo, password);
+			new KeystoreBuilder(load(ksInfo)).addCert(xCerts, ksInfo, certInfo, password);
 		} catch (KeyToolsException e) {
 			throw new ServiceException(e);
 		}
@@ -244,11 +245,11 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 
 	public void importX509Cert(String alias, String fileName, StoreFormat storeFormat, char[] charArray)
 			throws ServiceException {
-
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		KeystoreBuilder ksBuilder = null;
 		if (storeFormat == null || storeFormat.PKCS12.equals(storeFormat)) {
+			
 			try {
-				KeyStore ks = ksBuilder.loadKeyStore(fileName, storeFormat, ksInfo.getPassword()).get();
+				KeyStore ks = loadKeyStore(fileName, storeFormat, ksInfo.getPassword());
 
 				String aliasOri = null;
 				Enumeration<String> enumKs = ks.aliases();
@@ -261,7 +262,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 				certInfo.setCertificateChain(ks.getCertificateChain(aliasOri));
 				certInfo.setPrivateKey((PrivateKey) ks.getKey(aliasOri, charArray));
 				// addCertToKeyStore((X509Certificate)cert, ksInfo, certInfo);
-
+				ksBuilder = new KeystoreBuilder(ks);
 				ksBuilder.addCert((X509Certificate) cert, ksInfo, certInfo);
 			} catch (KeyToolsException | KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
@@ -286,8 +287,8 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	}
 
 	public void removeCertificate(CertificateValue certificateInfo) throws KeyToolsException, KeyStoreException {
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
-		ksBuilder.load(ksInfo).removeCert(certificateInfo).save(ksInfo);
+		 new KeystoreBuilder(load(ksInfo)).removeCert(certificateInfo).save(ksInfo);
+		
 	}
 
 
@@ -414,9 +415,11 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 			BigInteger bi = KeyTools.RandomBI(30);
 			certificate.setAlias(bi.toString(16));
 		}
-		KeystoreBuilder ksb = new KeystoreBuilder();
+		
 		try {
-			ksb.load(ksInfo).addCert(ksInfo, certificate, password);
+			KeyStore ks = load(ksInfo);
+			KeystoreBuilder ksb = new KeystoreBuilder(ks);
+			ksb.addCert(ksInfo, certificate, password);
 		} catch (KeyToolsException e) {
 			throw new ServiceException(e);
 		}
@@ -427,10 +430,10 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		if (null == alias || alias.trim().isEmpty()) {
 			return null;
 		}
-		KeystoreBuilder ksb = new KeystoreBuilder();
+		
 		CertificateValue certInfo = new CertificateValue();
 		try {
-			KeyStore ks = ksb.load(storeAC).get();
+			KeyStore ks = load(storeAC);
 
 			Certificate certificate = ks.getCertificate(alias);
 			Certificate[] certs = ks.getCertificateChain(alias);
@@ -464,6 +467,77 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	public CertificateValue findACByAlias(String issuer) throws ServiceException {
 		return findACByAlias(ksInfo, issuer);
 		
+	}
+	
+	/**
+	 * 
+	 * @param ksName
+	 * @param format
+	 * @param pwd
+	 * @return
+	 * @throws KeyToolsException
+	 */
+	public KeyStore loadKeyStore(String ksName, StoreFormat format, char[] pwd) throws KeyToolsException {
+		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+		String type = StoreFormat.getValue(format);
+		KeyStore ks = null;
+		try {
+			try {
+				ks = KeyStore.getInstance(type, "BC");
+			} catch (Exception e) {
+				ks = KeyStore.getInstance("JKS");
+			}
+
+			// get user password and file input stream
+
+			java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
+			ks.load(fis, pwd);
+			fis.close();
+		} catch (KeyStoreException e) {
+			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
+
+		} catch (FileNotFoundException e) {
+			throw new KeyToolsException("Fichier non trouvé:" + ksName + ", " + e.getCause(), e);
+		} catch (NoSuchAlgorithmException e) {
+			throw new KeyToolsException("Format inconnu:" + ksName + ", " + e.getCause(), e);
+		} catch (CertificateException e) {
+			throw new KeyToolsException("Echec du chargement de:" + ksName + ", " + e.getCause(), e);
+		} catch (IOException e) {
+			throw new KeyToolsException("Echec du chargement de:" + ksName + ", " + e.getCause(), e);
+		}
+		KeyStore keystore = ks;
+		return keystore;
+
+	}
+	
+	public KeyStore load(KeyStoreInfo ksin) throws KeyToolsException {
+		KeyStore keystore= loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword());
+	
+		return keystore;
+
+	}
+	
+	public PrivateKey getPrivateKey(String alias, KeyStore keyStore, char[] motDePasse)
+			throws GeneralSecurityException {
+		//
+		// PrivateKeyEntry pkEntry = (PrivateKeyEntry) keyStore.getEntry(alias,
+		// new KeyStore.PasswordProtection(motDePasse));
+		PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
+		if (privateKey != null) {
+			return privateKey;
+		} else {
+			throw new GeneralSecurityException("Clé privée absente ");
+
+		}
+	}
+	public PrivateKey getPrivateKey(KeyStoreInfo ksInfoIn, String alias, char[] password) throws KeyToolsException, GeneralSecurityException {
+		KeyStore kstore = loadKeyStore(ksInfoIn.getPath(), ksInfoIn.getStoreFormat(), ksInfoIn.getPassword());
+		return getPrivateKey( alias,  kstore,password);
+	}
+	
+	public KeystoreBuilder getKeystoreBuilder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

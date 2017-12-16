@@ -135,12 +135,13 @@ public class CreateStoreDialog extends JDialog {
 					
 					dir = getDataDir() + File.separator + correctExtension(dir, typeKS);;
 				}
-				KeystoreBuilder ksBuilder = new KeystoreBuilder();
+				
 			
 				try {
 					StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
+					KeystoreBuilder ksBuilder = new KeystoreBuilder(format);
 					createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
-					ksBuilder.create(format, dir, ((String) elements.get("pwd1")).toCharArray());
+					ksBuilder.create(dir, ((String) elements.get("pwd1")).toCharArray());
 					KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
 					((MykeysFrame) CreateStoreDialog.this.getParent()).updateKeyStoreList();
 					CreateStoreDialog.this.setVisible(false);

@@ -60,11 +60,11 @@ public class Test {
 
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfo);
 		ksInfo.setPassword("111".toCharArray());
 		try {
 			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword()).get();
+					ksInfo.getPassword());
 
 		} catch (Exception e1) {
 

@@ -222,19 +222,7 @@ public class KeyTools {
 		}
 	}
 
-	public PrivateKey getPrivateKey(String alias, KeyStore keyStore, char[] motDePasse)
-			throws GeneralSecurityException {
-		//
-		// PrivateKeyEntry pkEntry = (PrivateKeyEntry) keyStore.getEntry(alias,
-		// new KeyStore.PasswordProtection(motDePasse));
-		PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
-		if (privateKey != null) {
-			return privateKey;
-		} else {
-			throw new GeneralSecurityException("Clé privée absente ");
 
-		}
-	}
 
 	
 
@@ -353,6 +341,8 @@ public class KeyTools {
 		IOUtils.write(crl.getEncoded(), output);
 
 	}
+
+
 
 	
 

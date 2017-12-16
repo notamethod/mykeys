@@ -148,10 +148,14 @@ public class KSConfig {
 	
 	public static InternalKeystores getInternalKeystores() {
 		if (internalKeystores == null) {
-			internalKeystores = new InternalKeystores(getCfgPath() +  "mykeysAc.jks",getCfgPath() + "mykeysCert.jks",getProfilsPath());
+			internalKeystores = new InternalKeystores(getCfgPath() +  "userDB.jks", getCfgPath() +  "mykeysAc.jks",getCfgPath() + "mykeysCert.jks",getProfilsPath());
 			
 		}
 		return internalKeystores;
+	}
+	
+	public static void initUser() {
+		
 	}
 	
 	

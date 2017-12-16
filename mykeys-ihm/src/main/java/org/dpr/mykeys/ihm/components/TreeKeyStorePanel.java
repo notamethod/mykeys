@@ -272,8 +272,9 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 * Update nodes with keystores list
 	 * 
 	 * @param ksList
+	 * @throws KeyStoreException 
 	 */
-	public void updateKSList(HashMap<String, KeyStoreInfo> ksList) {
+	public void updateKSList(HashMap<String, KeyStoreInfo> ksList) throws KeyStoreException {
 		clear();
 		// Set<String> dirs = ksList.keySet();
 		SortedSet<String> dirs = new TreeSet<String>(
@@ -298,7 +299,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	}
 
-	private void addInternalKS() {
+	private void addInternalKS() throws KeyStoreException {
 		DefaultMutableTreeNode nodei = addObject(acNode,
 				KSConfig.getInternalKeystores().getStoreAC(), true);
 		// addObject(nodei, "[Vide]", false);
@@ -397,12 +398,12 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 			ksInfo.setPassword(password);
 
 		}
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
-		KeyTools kt = new KeyTools();
+		KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfo);
+	
 		KeyStore ks = null;
 		try {
 			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword()).get();
+					ksInfo.getPassword());
 			ksInfo.setOpen(true);
 		} catch (Exception e1) {
 			MykeysFrame.showError(TreeKeyStorePanel.this, e1.getMessage());
@@ -774,8 +775,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 			String password) throws KeyToolsException, KeyStoreException, ServiceException {
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
-		ks = ksBuilder.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray()).get();
+		KeyStoreHelper ksv = new KeyStoreHelper(null);
+		ks = ksv.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray());
 		Map<String, String> certsAC = new HashMap<String, String>();
 		Enumeration<String> enumKs = ks.aliases();
 		while (enumKs.hasMoreElements()) {
@@ -783,7 +784,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 			Certificate cert = ks.getCertificate(alias);
 
 		
-			KeyStoreHelper ksv = new KeyStoreHelper(null);
+			
 			CertificateValue certInfo = ksv.fillCertInfo(ks, alias);
 
 			certsAC.put(alias, alias);

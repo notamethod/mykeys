@@ -17,6 +17,7 @@
 package org.dpr.mykeys;
 
 import java.io.File;
+import java.security.KeyStoreException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,7 +61,12 @@ public class MyKeys {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				//MykeysFrame frame = new MykeysFrame();
-				new MykeysFrame();
+				try {
+					new MykeysFrame();
+				} catch (KeyStoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				// frame.addComponents();
 
 			}

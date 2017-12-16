@@ -23,6 +23,16 @@ public class KeystoreBuilder extends KeyTools {
 
 	KeyStore keystore;
 
+	public KeystoreBuilder(KeyStore keystore) {
+		super();
+		this.keystore = keystore;
+	}
+	
+	public KeystoreBuilder(StoreFormat format) throws KeyStoreException {
+		super();
+		this.keystore = KeyStore.getInstance(format.toString());;
+	}
+
 	/**
 	 * Create a keystore of type 'ksType' with filename 'name'
 	 * 
@@ -32,19 +42,18 @@ public class KeystoreBuilder extends KeyTools {
 	 * @param password
 	 * @throws Exception
 	 */
-	public KeystoreBuilder create(StoreFormat format, String name, char[] password) throws Exception {
-		KeyStore ks = null;
+	public KeystoreBuilder create(String name, char[] password) throws Exception {
+		
 		try {
-			ks = KeyStore.getInstance(format.toString());
-
-			ks.load(null, password);
+		
+			keystore.load(null, password);
 			OutputStream fos = new FileOutputStream(new File(name));
-			ks.store(fos, password);
+			keystore.store(fos, password);
 			fos.close();
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
-		keystore = ks;
+
 		return this;
 
 	}
@@ -55,9 +64,9 @@ public class KeystoreBuilder extends KeyTools {
 
 	public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo, CertificateValue certInfo)
 			throws KeyToolsException {
-		KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).get();
-		saveCertChain(kstore, cert, certInfo);
-		saveKeyStore(kstore, ksInfo);
+		
+		saveCertChain(keystore, cert, certInfo);
+		saveKeyStore(keystore, ksInfo);
 	}
 
 	public void addCert(X509Certificate cert, KeyStoreInfo ksInfo, CertificateValue certInfo) throws KeyToolsException {
@@ -122,10 +131,7 @@ public class KeystoreBuilder extends KeyTools {
 		return this;
 	}
 
-	public KeystoreBuilder load(KeyStoreInfo ksin) throws KeyToolsException {
-		loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword());
-		return this;
-	}
+
 
 	public void save(KeyStoreInfo ksInfo) throws KeyToolsException {
 
@@ -146,46 +152,7 @@ public class KeystoreBuilder extends KeyTools {
 		}
 	}
 
-	/**
-	 * 
-	 * @param ksName
-	 * @param format
-	 * @param pwd
-	 * @return
-	 * @throws KeyToolsException
-	 */
-	public KeystoreBuilder loadKeyStore(String ksName, StoreFormat format, char[] pwd) throws KeyToolsException {
-		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		String type = StoreFormat.getValue(format);
-		KeyStore ks = null;
-		try {
-			try {
-				ks = KeyStore.getInstance(type, "BC");
-			} catch (Exception e) {
-				ks = KeyStore.getInstance("JKS");
-			}
-
-			// get user password and file input stream
-
-			java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
-			ks.load(fis, pwd);
-			fis.close();
-		} catch (KeyStoreException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName, e);
-
-		} catch (FileNotFoundException e) {
-			throw new KeyToolsException("Fichier non trouvé:" + ksName + ", " + e.getCause(), e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new KeyToolsException("Format inconnu:" + ksName + ", " + e.getCause(), e);
-		} catch (CertificateException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName + ", " + e.getCause(), e);
-		} catch (IOException e) {
-			throw new KeyToolsException("Echec du chargement de:" + ksName + ", " + e.getCause(), e);
-		}
-		keystore = ks;
-		return this;
-
-	}
+	
 
 	public KeyStore loadKeyStore2(String ksName, String type, char[] pwd) throws KeyToolsException {
 		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -240,4 +207,8 @@ public class KeystoreBuilder extends KeyTools {
 			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
 		}
 	}
+
+
+	
+	
 }

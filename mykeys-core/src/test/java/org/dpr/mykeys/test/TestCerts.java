@@ -86,7 +86,7 @@ public class TestCerts {
 		// log.trace(f.getAbsolutePath());
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+	
 		String fileName = null;
 		try {
 			fileName = url.toURI().getPath().substring(1);
@@ -98,10 +98,11 @@ public class TestCerts {
 		fileName = resourceDirectory.toAbsolutePath().toString();
 		KeyStoreInfo ksInfo = new KeyStoreInfo("aa", fileName,
 				StoreModel.CERTSTORE, StoreFormat.JKS);
+		KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfo);
 		ksInfo.setPassword("1234".toCharArray());
 		try {
 			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword()).get();
+					ksInfo.getPassword());
 
 		} catch (Exception e1) {
 
@@ -142,7 +143,7 @@ public class TestCerts {
 		Security.addProvider(new BouncyCastleProvider());
 
 		KeyTools kt = new KeyTools();
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+
 		KeyStore ks = null;
 		String fileName = null;
 		Path resourceDirectory = Paths.get("src/test/resources/data/test01.jks");
@@ -150,9 +151,10 @@ public class TestCerts {
 		KeyStoreInfo ksInfo = new KeyStoreInfo("aa", fileName,
 				StoreModel.CERTSTORE, StoreFormat.JKS);
 		ksInfo.setPassword("1234".toCharArray());
+		KeyStoreHelper ksHelper = new KeyStoreHelper(ksInfo);
 		try {
-			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword()).get();
+			ks = ksHelper.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+					ksInfo.getPassword());
 
 		} catch (Exception e1) {
 

@@ -44,32 +44,28 @@ public class CommonsActions {
 		KeyTools kt = new KeyTools();
 
 		if (isExportCle && certInfo.getPrivateKey() == null) {
-			KeystoreBuilder ksBuilder = new KeystoreBuilder();
+			KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfoIn);
 			CertificateValue certInfoEx = new CertificateValue();
 			certInfoEx.setAlias(certInfo.getAlias());
 			certInfoEx.setCertificate(certInfo.getCertificate());
 			certInfoEx.setCertificateChain(certInfo.getCertificateChain());
 			certInfoEx.setPassword(privKeyPwd);
-			KeyStore kstore;
-			boolean hasPrivateKey = false;
-			kstore = ksBuilder.loadKeyStore(ksInfoIn.getPath(), ksInfoIn.getStoreFormat(), ksInfoIn.getPassword())
-					.get();
-			if (kstore.isKeyEntry(certInfoEx.getAlias())) {
-				hasPrivateKey = true;
+//			CertificateValue certTmp= ksBuilder.findACByAlias(certInfoEx.getAlias());
+//			boolean hasPrivateKey = certTmp.isContainsPrivateKey();
 
-			}
 			char pwd[] = ksInfoIn.getPassword();
 			if (ksInfoIn.getStoreType().equals(StoreLocationType.INTERNAL)) {
 				// pwd=certInfoEx.getPassword();
 				certInfoEx.setPassword(pwd);
 			}
-			certInfoEx.setPrivateKey(kt.getPrivateKey(certInfoEx.getAlias(), kstore, certInfoEx.getPassword()));
+		
+			certInfoEx.setPrivateKey(ksBuilder.getPrivateKey(ksInfoIn, certInfoEx.getAlias(), certInfoEx.getPassword()));
 
 			certInfo = certInfoEx;
 		}
 		try {
-			KeystoreBuilder ksBuilder = new KeystoreBuilder();
-			ksBuilder.create(storeFormat, path, ksInfoOut.getPassword()).addCertToKeyStoreNew(certInfo.getCertificate(),
+			KeystoreBuilder ksBuilder = new KeystoreBuilder(storeFormat);
+			ksBuilder.create(path, ksInfoOut.getPassword()).addCertToKeyStoreNew(certInfo.getCertificate(),
 					ksInfoOut, certInfo);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -80,10 +76,10 @@ public class CommonsActions {
 
 	public void signData(KeyStoreInfo kInfo, char[] password, CertificateValue certInfo, boolean isInclude) {
 		KeyTools kt = new KeyTools();
-		KeystoreBuilder ksBuilder = new KeystoreBuilder();
+		KeyStoreHelper ksBuilder = new KeyStoreHelper(kInfo);
 		KeyStore ks;
 		try {
-			ks = ksBuilder.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo.getPassword()).get();
+			ks = ksBuilder.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo.getPassword());
 			certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(), kInfo.getPassword()));
 		} catch (KeyToolsException e) {
 			// TODO Auto-generated catch block
@@ -119,8 +115,8 @@ public class CommonsActions {
 	 */
 	public KeyStore createStore(StoreFormat format, String dir, char[] pwd) throws Exception {
 
-		KeystoreBuilder kt = new KeystoreBuilder();
-		KeyStore ks = kt.create(format, dir, pwd).get();
+		KeystoreBuilder kt = new KeystoreBuilder(format);
+		KeyStore ks = kt.create(dir, pwd).get();
 		KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
 		return ks;
 

@@ -12,6 +12,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.security.KeyStoreException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -65,8 +66,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 	/**
 	 * Constructeur
+	 * @throws KeyStoreException 
 	 */
-	public MykeysFrame() {
+	public MykeysFrame() throws KeyStoreException {
 		super("mykeys");
 		// Get toolkit
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -83,7 +85,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 	}
 
-	private void init() {
+	private void init() throws KeyStoreException {
 		initLookAndFeel();
 		this.addWindowListener(this);
 		buildComponents();
@@ -282,7 +284,12 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new MykeysFrame();
+				try {
+					new MykeysFrame();
+				} catch (KeyStoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		});
@@ -330,7 +337,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 	}
 
-	public void updateKeyStoreList() {
+	public void updateKeyStoreList() throws KeyStoreException {
 		KSConfig.getInternalKeystores().getACPath();
 		Iterator iter = KSConfig.getUserCfg().getKeys(KSConfig.STORE_PREFIX);
 		while (iter.hasNext()) {
