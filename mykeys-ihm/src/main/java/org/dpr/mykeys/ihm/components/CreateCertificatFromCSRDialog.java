@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -22,12 +24,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -42,15 +44,14 @@ import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemListener, ActionListener {
+public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemListener, ActionListener {
 
 	protected LabelValuePanel infosPanel;
 	protected LabelValuePanel panelInfoVisible;
 
 	private JDropText tfDirectory;
-	
-	protected CertificateInfo certInfo = new CertificateInfo();
 
+	protected CertificateValue certInfo = new CertificateValue();
 
 	public CreateCertificatFromCSRDialog(Frame owner, KeyStoreInfo ksInfo, boolean modal) {
 
@@ -67,8 +68,6 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 
 	}
 
-
-
 	public static void main(String[] args) {
 		JFrame f = null;
 		CreateCertificatDialog cr = new CreateCertificatDialog(f, null, false);
@@ -82,12 +81,11 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
 		setContentPane(jp);
-		//infosPanel = new LabelValuePanel();
+		// infosPanel = new LabelValuePanel();
 
 		createInfoPanel();
 		JLabel jl4 = new JLabel("Emplacement");
 		tfDirectory = new JDropText();
-
 
 		JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		// jpDirectory.add(jl4);
@@ -110,8 +108,6 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 		jp.add(jf4);
 
 	}
-
-	
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
@@ -136,30 +132,30 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 			if (command.equals("CHOOSE_IN")) {
 
 			} else if (command.equals("OK")) {
-				try {
-					
-					if (tfDirectory.getText().equals("")
-						) {
-						MykeysFrame.showError(CreateCertificatFromCSRDialog.this,
-								"Champs invalides");
-						return;
-					}
-					
-					//certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
-					CertificateHelper cm = new CertificateHelper(certInfo);
-					CertificateInfo xCerts = cm.generateFromCSR(tfDirectory.getText(), (String) infosPanel.getElements().get("emetteur"));
+
+				if (tfDirectory.getText().equals("")) {
+					MykeysFrame.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
+					return;
+				}
+
+				// certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
+				CertificateHelper cm = new CertificateHelper(certInfo);
+				KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
+				try (InputStream is = new FileInputStream(tfDirectory.getText())) {
+					CertificateValue issuer = kserv.findACByAlias((String) infosPanel.getElements().get("emetteur"));
+					CertificateValue xCerts = cm.generateFromCSR(is, issuer);
 					KeyTools ktools = new KeyTools();
-					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 				
+					
 					// TODO manage ksinfo
-					kserv.addCertToKeyStore(xCerts);
+					kserv.addCertToKeyStore(xCerts, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertificatFromCSRDialog.this.setVisible(false);
 
 				} catch (Exception e) {
 
 					log.error("error generating certificate", e);
 					MykeysFrame.showError(CreateCertificatFromCSRDialog.this, e.getMessage());
-				
+
 				}
 
 			} else if (command.equals("CANCEL")) {
@@ -173,16 +169,16 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	private LabelValuePanel createInfoPanel() {
 		if (infosPanel == null) {
 			infosPanel = new LabelValuePanel();
 			Map<String, String> mapAC = null;
 			try {
-				mapAC = TreeKeyStorePanel
-						.getListCerts(InternalKeystores.getACPath(), "JKS", InternalKeystores.password);
+				mapAC = TreeKeyStorePanel.getListCerts(KSConfig.getInternalKeystores().getACPath(), "JKS",
+						KSConfig.getInternalKeystores().getPassword());
 			} catch (Exception e) {
 				//
 			}
@@ -191,11 +187,10 @@ public class CreateCertificatFromCSRDialog  extends SuperCreate implements ItemL
 			}
 			mapAC.put(" ", " ");
 			infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
-			
+
 		}
 		return infosPanel;
 
 	}
-
 
 }

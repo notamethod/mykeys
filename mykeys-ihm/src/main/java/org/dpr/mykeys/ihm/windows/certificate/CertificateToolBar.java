@@ -3,6 +3,9 @@ package org.dpr.mykeys.ihm.windows.certificate;
 import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 import static org.dpr.swingutils.ImageUtils.createImageIcon;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
@@ -48,7 +51,19 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertFromCSRButton = new JButton(createImageIcon("/images/add-csr2.png"));
 		unlockButton = new JToggleButton(createImageIcon("/images/Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
+		unlockButton.addItemListener(new ItemListener() {
+			   public void itemStateChanged(ItemEvent ev) {
+			      if(ev.getStateChange()==ItemEvent.SELECTED){
+			        System.out.println("button is selected");
+			      } else if(ev.getStateChange()==ItemEvent.DESELECTED){
+			        System.out.println("button is not selected");
+			      }
+			   }
+			});
+
+		unlockButton.addActionListener(e -> System.out.println("Handled by Lambda listener"));
 		// unlockButton.setIcon(createImageIcon("/images/Locked.png"));
+
 		unlockButton.setDisabledIcon(createImageIcon("/images/Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		addCertFromCSRButton.setActionCommand(TypeAction.ADD_CERT_FROMCSR.getValue());

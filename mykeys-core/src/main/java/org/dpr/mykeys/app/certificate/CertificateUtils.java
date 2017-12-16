@@ -112,11 +112,11 @@ public class CertificateUtils {
 		return certificates;
 	}
 
-	public static List<CertificateInfo> loadX509Certs(String fileName)
+	public static List<CertificateValue> loadX509Certs(String fileName)
 			throws KeyToolsException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException {
 
 		// NodeInfo nInfo = new KeyStoreInfo(new File(fileName));
-		List<CertificateInfo> certsRetour = new ArrayList<CertificateInfo>();
+		List<CertificateValue> certsRetour = new ArrayList<CertificateValue>();
 
 		InputStream is = null;
 		try {
@@ -124,7 +124,7 @@ public class CertificateUtils {
 			Set<X509Certificate> certs = loadX509Certs(is);
 
 			for (X509Certificate cert : certs) {
-				CertificateInfo certInfo = new CertificateInfo(null, cert);
+				CertificateValue certInfo = new CertificateValue(null, cert);
 
 				certsRetour.add(certInfo);
 			}

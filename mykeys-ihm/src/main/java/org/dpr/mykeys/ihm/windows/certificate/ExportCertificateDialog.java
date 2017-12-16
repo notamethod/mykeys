@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
@@ -48,7 +48,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
     LabelValuePanel infosPanel;
 
-    CertificateInfo certInfo;
+    CertificateValue certInfo;
 
     KeyStoreInfo ksInfo;
 
@@ -57,7 +57,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
     // Map<String, String> elements = new HashMap<String, String>();
 
     public ExportCertificateDialog(Frame owner, KeyStoreInfo ksInfo,
-            CertificateInfo certInfo, boolean modal)
+            CertificateValue certInfo, boolean modal)
     {
         super(owner, modal);
         this.certInfo = certInfo;

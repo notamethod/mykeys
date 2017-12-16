@@ -67,11 +67,18 @@ import org.dpr.mykeys.app.KeyTools;
 
 public class CertificateBuilder extends KeyTools {
 
-	private static final int CSR_VALIDITY = 365;
-	private static final String CSR_SIGN_ALGORITHM = "SHA256withRSA";
 	final Log log = LogFactory.getLog(CertificateBuilder.class);
 	
 	X509Certificate[] certificates;
+	
+	X509V3CertificateGenerator certGen;
+	
+	
+
+	public CertificateBuilder() {
+		super();
+		certGen = new X509V3CertificateGenerator();
+	}
 
 	public CertificateBuilder load(InputStream is) throws CertificateException {
 
@@ -107,8 +114,8 @@ public class CertificateBuilder extends KeyTools {
 	//
 	// KeyStoreInfo ksInfo = null;
 	// if (!StringUtils.isBlank(aliasEmetteur)) {
-	// char[] password = InternalKeystores.password.toCharArray();
-	// ksInfo = InternalKeystores.getACKeystore();
+	// char[] password = KSConfig.getInternalKeystores().getPassword().toCharArray();
+	// ksInfo = KSConfig.getInternalKeystores().getACKeystore();
 	//
 	//
 	//
@@ -120,13 +127,12 @@ public class CertificateBuilder extends KeyTools {
 	// }
 
 	@SuppressWarnings("deprecation")
-	private X509Certificate[] genererX509(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
+	private X509Certificate[] genererX509(CertificateValue certModel, CertificateValue certIssuer, boolean isAC)
 			throws Exception {
 
 		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
 		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
 
-		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 		// SerialNumber
 		BigInteger bi = RandomBI(30);
 		certGen.setSerialNumber(bi);
@@ -141,7 +147,7 @@ public class CertificateBuilder extends KeyTools {
 		}
 
 		certGen.setPublicKey(certModel.getPublicKey());
-		setDuration(certModel, certGen);
+		setDuration(certModel);
 
 		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
 		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
@@ -195,9 +201,6 @@ public class CertificateBuilder extends KeyTools {
 		// gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
 		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
 
-		// point de distribution des CRL
-		addCrlDistributionPoint(certModel, certIssuer, certGen);
-
 		X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
 		// TODO: let generate expired certificate for test purpose ?
 		try {
@@ -229,7 +232,7 @@ public class CertificateBuilder extends KeyTools {
 	}
 
 	@SuppressWarnings("deprecation")
-	public X509Certificate[] genererX509CodeSigning(CertificateInfo certModel, CertificateInfo certIssuer, boolean isAC)
+	public X509Certificate[] genererX509CodeSigning(CertificateValue certModel, CertificateValue certIssuer, boolean isAC)
 			throws Exception {
 
 		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
@@ -247,9 +250,9 @@ public class CertificateBuilder extends KeyTools {
 			certGen.setIssuerDN(new X509Principal(new X509Principal(certModel.subjectMapToX509Name())));
 		}
 
-		setDuration(certModel, certGen);
+		setDuration(certModel);
 		certGen.setPublicKey(certModel.getPublicKey());
-		setDuration(certModel, certGen);
+
 		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
 		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
 
@@ -301,7 +304,7 @@ public class CertificateBuilder extends KeyTools {
 
 	}
 
-	private void setDuration(CertificateInfo certModel, X509V3CertificateGenerator certGen) {
+	private void setDuration(CertificateValue certModel) {
 		if (certModel.getDuration() > 0) {
 			certModel.setNotBefore(new Date());
 			certGen.setNotBefore(certModel.getNotBefore());
@@ -347,8 +350,8 @@ public class CertificateBuilder extends KeyTools {
 	 * @param certIssuer
 	 * @param certGen
 	 */
-	void addCrlDistributionPoint(CertificateInfo certModel, CertificateInfo certIssuer,
-			X509V3CertificateGenerator certGen) { // point
+	CertificateBuilder addCrlDistributionPoint(CertificateValue certModel, CertificateValue certIssuer
+			) { // point
 		// CRL
 		if (certModel.getCrlDistributionURL() != null) {
 			DistributionPoint[] dp = new DistributionPoint[1];
@@ -365,9 +368,10 @@ public class CertificateBuilder extends KeyTools {
 				}
 			}
 		}
+		return this;
 	}
 
-	public CertificateBuilder generate(CertificateInfo certInfo, CertificateInfo infoEmetteur, boolean isAC,
+	public CertificateBuilder generate(CertificateValue certInfo, CertificateValue infoEmetteur, boolean isAC,
 			Usage usage) throws Exception {
 		switch (usage) {
 		case CODESIGNING:
@@ -376,13 +380,14 @@ public class CertificateBuilder extends KeyTools {
 
 		default:
 			certificates = genererX509(certInfo, infoEmetteur, isAC);
+			//FIXME: crl dispitribuion point?
 			break;
 		}
 		return this;
 
 	}
 
-	public CertificateBuilder generate(CertificateInfo certInfo, CertificateInfo infoEmetteur, boolean isAC)
+	public CertificateBuilder generate(CertificateValue certInfo, CertificateValue infoEmetteur, boolean isAC)
 			throws Exception {
 		return generate(certInfo, infoEmetteur, isAC, Usage.DEFAULT);
 
@@ -392,79 +397,10 @@ public class CertificateBuilder extends KeyTools {
 		return certificates;
 	}
 
-	public CertificateBuilder generateFromCSR(Reader buf, CertificateInfo issuer)
-			throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException,
-			SignatureException, OperatorCreationException, CertificateException {
-		PemReader reader = new PemReader(buf);
-		PKCS10CertificationRequest csr = convertPemToPKCS10CertificationRequest(reader);
+
+
+
+
 	
-		X500Name x500Name = csr.getSubject();
-		log.info("x500Name is: " + x500Name + "\n");
-		log.info("x500Name is: " + csr.getSignatureAlgorithm() + "\n");
-
-		byte[] certencoded = sign(csr, issuer.getPrivateKey(), issuer.getCertificate());
-		CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-
-		InputStream in = new ByteArrayInputStream(certencoded);
-		X509Certificate certificate = (X509Certificate) certFactory.generateCertificate(in);
-		certificates = new X509Certificate[] {certificate};
-		if (certificate != null) {
-			log.info("certificate " + certificate.getSubjectDN().getName() + " created !");
-		}
-		return this;
-	}
-
-	private PKCS10CertificationRequest convertPemToPKCS10CertificationRequest(Reader pemReader) {
-
-		PKCS10CertificationRequest csr = null;
-		ByteArrayInputStream pemStream = null;
-
-		PEMParser pemParser = new PEMParser(pemReader);
-
-		try {
-			Object parsedObj = pemParser.readObject();
-
-			if (parsedObj instanceof PKCS10CertificationRequest) {
-				csr = (PKCS10CertificationRequest) parsedObj;
-
-			}
-		} catch (IOException ex) {
-			log.error("IOException, convertPemToPublicKey", ex);
-		}
-
-		return csr;
-	}
-
-	private byte[] sign(PKCS10CertificationRequest inputCSR, PrivateKey caPrivate, X509Certificate caCert)
-			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException,
-			IOException, OperatorCreationException, CertificateException {
-
-		AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find(CSR_SIGN_ALGORITHM);
-		AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
-
-		int validity = CSR_VALIDITY;
-		X500Name issuer = new X500Name(caCert.getSubjectX500Principal().getName());
-		BigInteger serial = new BigInteger(32, new SecureRandom());
-		Date from = new Date();
-		Date to = new Date(System.currentTimeMillis() + (validity * 86400000L));
-
-		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
-		X509v3CertificateBuilder certgen = new X509v3CertificateBuilder(issuer, serial, from, to, inputCSR.getSubject(),
-				inputCSR.getSubjectPublicKeyInfo());
-		certgen.addExtension(Extension.basicConstraints, false, new BasicConstraints(false));
-		certgen.addExtension(Extension.subjectKeyIdentifier, false,
-				extUtils.createSubjectKeyIdentifier(inputCSR.getSubjectPublicKeyInfo()));
-		certgen.addExtension(Extension.authorityKeyIdentifier, false,
-				new AuthorityKeyIdentifier(
-						new GeneralNames(new GeneralName(new X509Name(caCert.getSubjectX500Principal().getName()))),
-						caCert.getSerialNumber()));
-
-		ContentSigner signer = new BcRSAContentSignerBuilder(sigAlgId, digAlgId)
-				.build(PrivateKeyFactory.createKey(caPrivate.getEncoded()));
-		X509CertificateHolder holder = certgen.build(signer);
-		byte[] certencoded = holder.toASN1Structure().getEncoded();
-		return certencoded;
-
-	}
 
 }

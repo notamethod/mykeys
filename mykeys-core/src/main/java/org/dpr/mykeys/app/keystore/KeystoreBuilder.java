@@ -14,9 +14,10 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 public class KeystoreBuilder extends KeyTools {
 
@@ -52,24 +53,24 @@ public class KeystoreBuilder extends KeyTools {
 		return keystore;
 	}
 
-	public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo, CertificateInfo certInfo)
+	public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo, CertificateValue certInfo)
 			throws KeyToolsException {
 		KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).get();
 		saveCertChain(kstore, cert, certInfo);
 		saveKeyStore(kstore, ksInfo);
 	}
 
-	public void addCert(X509Certificate cert, KeyStoreInfo ksInfo, CertificateInfo certInfo) throws KeyToolsException {
+	public void addCert(X509Certificate cert, KeyStoreInfo ksInfo, CertificateValue certInfo) throws KeyToolsException {
 		saveCertChain(keystore, cert, certInfo);
 		saveKeyStore(keystore, ksInfo);
 	}
 
 	@Deprecated
-	public KeystoreBuilder addCert(X509Certificate[] xCerts, KeyStoreInfo ksInfo, CertificateInfo certInfo)
+	public KeystoreBuilder addCert(X509Certificate[] xCerts, KeyStoreInfo ksInfo, CertificateValue certInfo, char[] password)
 			throws KeyToolsException {
 		// FIXME
 		if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-			certInfo.setPassword(InternalKeystores.password.toCharArray());
+			certInfo.setPassword(password);
 		}
 
 		saveCertChain(keystore, xCerts[0], certInfo);
@@ -77,11 +78,11 @@ public class KeystoreBuilder extends KeyTools {
 		return this;
 	}
 
-	public KeystoreBuilder addCert(KeyStoreInfo ksInfo, CertificateInfo certInfo) throws KeyToolsException {
+	public KeystoreBuilder addCert(KeyStoreInfo ksInfo, CertificateValue certInfo, char[] password) throws KeyToolsException {
 
 		// FIXME
 		if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-			certInfo.setPassword(InternalKeystores.password.toCharArray());
+			certInfo.setPassword(password);
 		}
 
 		saveCertChain(keystore, certInfo);
@@ -89,7 +90,7 @@ public class KeystoreBuilder extends KeyTools {
 		return this;
 	}
 
-	private String saveCertChain(KeyStore keystore, CertificateInfo certInfo) throws KeyToolsException {
+	private String saveCertChain(KeyStore keystore, CertificateValue certInfo) throws KeyToolsException {
 
 		if (StringUtils.isBlank(certInfo.getAlias())) {
 			BigInteger bi = KeyTools.RandomBI(30);
@@ -114,7 +115,7 @@ public class KeystoreBuilder extends KeyTools {
 
 	}
 
-	public KeystoreBuilder removeCert(CertificateInfo certificateInfo) throws KeyToolsException, KeyStoreException {
+	public KeystoreBuilder removeCert(CertificateValue certificateInfo) throws KeyToolsException, KeyStoreException {
 
 		keystore.deleteEntry(certificateInfo.getAlias());
 
@@ -217,7 +218,7 @@ public class KeystoreBuilder extends KeyTools {
 		return ks;
 	}
 
-	public void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateInfo certInfo)
+	public void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateValue certInfo)
 			throws KeyToolsException {
 		try {
 			// pas bonne chaine

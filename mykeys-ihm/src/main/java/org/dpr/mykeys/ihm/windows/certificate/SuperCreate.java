@@ -36,13 +36,13 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
@@ -61,7 +61,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 	protected CertificateType typeCer;
 	protected LabelValuePanel durationPanel;
 	protected KeyStoreInfo ksInfo;
-	protected CertificateInfo certInfo = new CertificateInfo();
+	protected CertificateValue certInfo = new CertificateValue();
 	protected boolean isAC = false;
 
 	public SuperCreate() {
@@ -197,8 +197,8 @@ public class SuperCreate extends JDialog implements ItemListener {
 			infosPanel = new LabelValuePanel();
 			Map<String, String> mapAC = null;
 			try {
-				mapAC = TreeKeyStorePanel.getListCerts(InternalKeystores.getACPath(), "JKS",
-						InternalKeystores.password);
+				mapAC = TreeKeyStorePanel.getListCerts(KSConfig.getInternalKeystores().getACPath(), "JKS",
+						KSConfig.getInternalKeystores().getPassword());
 			} catch (Exception e) {
 				//
 			}
@@ -235,10 +235,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
 				if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-					infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
+					infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", KSConfig.getInternalKeystores().getPassword(),
 							false);
 					infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
-							InternalKeystores.password, false);
+							KSConfig.getInternalKeystores().getPassword(), false);
 				}
 
 			} else {
@@ -269,10 +269,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("Policy CPS", "PolicyCPS", "");
 				infosPanel.putEmptyLine();
 				if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-					infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", InternalKeystores.password,
+					infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", KSConfig.getInternalKeystores().getPassword(),
 							true);
 					infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
-							InternalKeystores.password, true);
+							KSConfig.getInternalKeystores().getPassword(), true);
 				}
 			}
 		}
@@ -280,8 +280,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
 	}
 
-	private String getDefaultDuration(CertificateType standard) {
-		// TODO Auto-generated method stub
+	private static String getDefaultDuration(CertificateType standard) {
 		return "3";
 	}
 
@@ -318,13 +317,13 @@ public class SuperCreate extends JDialog implements ItemListener {
 					X509Certificate[] xCerts = null;
 					KeyTools ktools = new KeyTools();
 					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
-
+					
 					certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 					CertificateHelper certServ = new CertificateHelper(certInfo);
+					CertificateValue issuer =  kserv.findACByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
+					xCerts = certServ.generateX509(isAC, issuer);
 
-					xCerts = certServ.generateX509(isAC);
-
-					kserv.addCertToKeyStore(xCerts, certInfo);
+					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					SuperCreate.this.setVisible(false);
 
 				} catch (Exception e) {

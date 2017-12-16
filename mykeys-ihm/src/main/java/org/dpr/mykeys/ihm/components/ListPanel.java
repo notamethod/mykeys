@@ -38,7 +38,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
@@ -66,7 +66,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		public ListTransferHandler() {
 			try {
 				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-						+ org.dpr.mykeys.app.certificate.CertificateInfo.class.getName() + "\"";
+						+ org.dpr.mykeys.app.certificate.CertificateValue.class.getName() + "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
 				log.trace("ClassNotFound: " + e.getMessage());
@@ -301,7 +301,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * @param certificateInfo
 	 * @throws ServiceException
 	 */
-	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) throws ServiceException {
+	public void deleteCertificate(NodeInfo info, CertificateValue certificateInfo) throws ServiceException {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
 		try {
@@ -315,7 +315,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	}
 
-	public void exporterCertificate(NodeInfo info, CertificateInfo certificateInfo, boolean b) {
+	public void exporterCertificate(NodeInfo info, CertificateValue certificateInfo, boolean b) {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 

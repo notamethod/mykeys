@@ -19,8 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.SignTools;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
@@ -62,8 +62,8 @@ public class VerifSigDialog extends JDialog {
 		Map<String, String> mapCerts = null;
 		try {
 			mapCerts = TreeKeyStorePanel.getListCerts(
-					InternalKeystores.getCertPath(), "JKS",
-					InternalKeystores.password);
+					KSConfig.getInternalKeystores().getCertPath(), "JKS",
+					KSConfig.getInternalKeystores().getPassword());
 		} catch (Exception e) {
 			//
 		}

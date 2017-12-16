@@ -3,22 +3,25 @@ package org.dpr.mykeys.test;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.Security;
-import java.security.cert.CertificateException;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.app.keystore.StoreModel;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -33,9 +36,9 @@ public class GenerateCertificateTest {
 	@BeforeClass
 	public static void init() {
 
-		KSConfig.initResourceBundle();
+		KSConfigTestTmp.initResourceBundle();
 
-		KSConfig.load();
+		KSConfigTestTmp.init(".myKeys");
 
 		Security.addProvider(new BouncyCastleProvider());
 
@@ -45,7 +48,7 @@ public class GenerateCertificateTest {
 	@Test
 	public void self_signed_create_ok() {
 		boolean isAC = false;
-		CertificateInfo certModel = new CertificateInfo("aliastest");
+		CertificateValue certModel = new CertificateValue("aliastest");
 		certModel.setAlgoPubKey("RSA");
 		certModel.setAlgoSig("SHA1WithRSAEncryption");
 
@@ -55,13 +58,14 @@ public class GenerateCertificateTest {
 		cal.add(Calendar.MONTH, 1);
 		certModel.setNotBefore(new Date());
 		certModel.setNotAfter(cal.getTime());
-		CertificateInfo certIssuer = new CertificateInfo();
+		CertificateValue certIssuer = new CertificateValue();
 
 		CertificateHelper certServ = new CertificateHelper(certModel);
 
 		try {
 			certServ.genererX509(certModel, certModel, isAC);
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e);
 			fail(e.getMessage());
 		}
@@ -71,7 +75,7 @@ public class GenerateCertificateTest {
 	public void create_from_csr_ok() throws ServiceException {
 
 		boolean isAC = false;
-		CertificateInfo certModel = new CertificateInfo("aliastest");
+		CertificateValue certModel = new CertificateValue("aliastest");
 		certModel.setAlgoPubKey("RSA");
 		certModel.setAlgoSig("SHA1WithRSAEncryption");
 
@@ -79,18 +83,34 @@ public class GenerateCertificateTest {
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, 1);
-		certModel.setNotBefore(new Date());
+		certModel.setNotBefore(new Date()); 
 		certModel.setNotAfter(cal.getTime());
-		CertificateInfo certIssuer = new CertificateInfo();
-
+	
 		CertificateHelper certServ = new CertificateHelper(certModel);
+		KeyStoreHelper ksh = new KeyStoreHelper(getStoreAC());
+		CertificateValue certIssuer = ksh.findACByAlias(AC_NAME);
 		try {
-			certServ.generateFromCSR(new File("src/test/resources/data/cert1.csr").getAbsolutePath(), AC_NAME);
+			certServ.generateFromCSR(new FileInputStream(new File("src/test/resources/data/cert1.csr")), certIssuer);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail();
 		}
 
+	}
+	
+	public  KeyStoreInfo getStoreAC() {
+		
+	
+		 String pwd = "mKeys983178";
+		KeyStoreInfo kinfo = null;
+
+	
+		
+		kinfo = new KeyStoreInfo("", new File("src/test/resources/data/mykeysAc.jks").getAbsolutePath(),
+				StoreModel.CASTORE, StoreFormat.JKS, StoreLocationType.INTERNAL);
+		kinfo.setPassword(pwd.toCharArray());
+		kinfo.setOpen(true);
+		return kinfo;
 	}
 }

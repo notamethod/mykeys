@@ -2,11 +2,11 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.util.Map;
 
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 public class FillUtils {
 
-	public static void fillCertInfo(Map<String, Object> elements, CertificateInfo certInfo) {
+	public static void fillCertInfo(Map<String, Object> elements, CertificateValue certInfo) {
 
 		certInfo.setAlgoPubKey((String) elements.get("algoPubKey"));
 		certInfo.setAlgoSig((String) elements.get("algoSig"));

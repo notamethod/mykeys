@@ -11,7 +11,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.Profil;
 
 /**
@@ -42,8 +42,8 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 		Component retValue = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		// TODO Auto-generated method stub
 
-		if (value instanceof CertificateInfo) {
-			CertificateInfo cert = ((CertificateInfo) value);
+		if (value instanceof CertificateValue) {
+			CertificateValue cert = ((CertificateValue) value);
 			ImageIcon icon = null;
 			if (cert.isContainsPrivateKey()) {
 				icon = createImageIcon("/images/certificatekey.png");

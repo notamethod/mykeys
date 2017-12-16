@@ -9,16 +9,16 @@ import javax.swing.JTextField;
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Util;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class CertDetailPanel extends LabelValuePanel {
 
 	// LabelValuePanel infosPanel;
-	CertificateInfo info;
+	CertificateValue info;
 
-	public CertDetailPanel(CertificateInfo info) {
+	public CertDetailPanel(CertificateValue info) {
 		this.info = info;
 		getPanel();
 	}

@@ -9,9 +9,12 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class KSConfig {
 
+	private static final Log log = LogFactory.getLog(KSConfig.class);
 	static PropertiesConfiguration userConfig;
 
 	static PropertiesConfiguration defaultConfig;
@@ -20,17 +23,17 @@ public class KSConfig {
 
 	static String defaultFileName = "default.properties";
 
-	public static String cfgPathName = ".myKeys";
-
 	public static final String STORE_PREFIX = "store";
 
 	static String path;
 	
+	static InternalKeystores internalKeystores;
+	
 	private static ResourceBundle messages;
 
-	public static void load() {
+	public static void init(String cfgPathName) {
 
-		path = getCfgPath();
+		path = System.getProperty("user.home") + File.separator + cfgPathName  + File.separator;
 		try {
 			userConfig = new PropertiesConfiguration(path + File.separator
 					+ usrFileName);
@@ -58,13 +61,14 @@ public class KSConfig {
 		defaultConfig.setAutoSave(true);
 
 	}
+	
 
 	public static String getCfgPath() {
-		return System.getProperty("user.home") + File.separator + cfgPathName;
+		return path;
 	}
 	
 	public static String getProfilsPath() {
-		return getCfgPath() + File.separator + "profils";
+		return path + File.separator + "profils";
 	}
 
 	private static void setDefault(PropertiesConfiguration cfg) {
@@ -110,14 +114,6 @@ public class KSConfig {
 	 * @return the application
 	 */
 	public static PropertiesConfiguration getUserCfg() {
-		if (userConfig == null) {
-			try {
-				load();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		return userConfig;
 	}
 
@@ -125,19 +121,12 @@ public class KSConfig {
 	 * @return the application
 	 */
 	public static PropertiesConfiguration getDefaultCfg() {
-		if (defaultConfig == null) {
-			try {
-				load();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		return defaultConfig;
 	}
 	
 	public static void initResourceBundle() {
 		Locale currentLocale = Locale.getDefault();
+		log.info("Init RessourceBundle for locale "+currentLocale.toString());
 		try {
 			messages = ResourceBundle.getBundle(
 					"Messages", currentLocale);
@@ -156,5 +145,15 @@ public class KSConfig {
 		}
 		return messages;
 	}
+	
+	public static InternalKeystores getInternalKeystores() {
+		if (internalKeystores == null) {
+			internalKeystores = new InternalKeystores(getCfgPath() +  "mykeysAc.jks",getCfgPath() + "mykeysCert.jks",getProfilsPath());
+			
+		}
+		return internalKeystores;
+	}
+	
+	
 
 }

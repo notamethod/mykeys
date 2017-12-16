@@ -7,7 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -110,14 +110,14 @@ public class KeysAction implements ActionListener {
 
 		case EXPORT_CERT:
 			if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
-					&& this.listPanel.listCerts.getSelectedValue() instanceof CertificateInfo) {
-				this.listPanel.exporterCertificate(this.listPanel.ksInfo, (CertificateInfo) this.listPanel.listCerts.getSelectedValue(), false);
+					&& this.listPanel.listCerts.getSelectedValue() instanceof CertificateValue) {
+				this.listPanel.exporterCertificate(this.listPanel.ksInfo, (CertificateValue) this.listPanel.listCerts.getSelectedValue(), false);
 			}
 			break;
 		case DELETE_CERT:
 			if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
-					&& this.listPanel.listCerts.getSelectedValue() instanceof CertificateInfo) {
-				CertificateInfo certInfo = (CertificateInfo) this.listPanel.listCerts.getSelectedValue();
+					&& this.listPanel.listCerts.getSelectedValue() instanceof CertificateValue) {
+				CertificateValue certInfo = (CertificateValue) this.listPanel.listCerts.getSelectedValue();
 				if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
 					try {
 						this.listPanel.deleteCertificate(this.listPanel.ksInfo, certInfo);

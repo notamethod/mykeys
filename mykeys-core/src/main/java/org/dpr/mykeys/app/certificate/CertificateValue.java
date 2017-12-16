@@ -38,8 +38,8 @@ import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.X509Util;
 
-public class CertificateInfo implements ChildInfo{
-	public static final Log log = LogFactory.getLog(CertificateInfo.class);
+public class CertificateValue implements ChildInfo{
+	public static final Log log = LogFactory.getLog(CertificateValue.class);
 
 	// private X509PrincipalModel x509PrincipalModel;
 	private PublicKey publicKey;
@@ -142,27 +142,27 @@ public class CertificateInfo implements ChildInfo{
 		this.certChain = certChain;
 	}
 
-	public CertificateInfo() {
+	public CertificateValue() {
 		super();
 		// x509PrincipalModel = new X509PrincipalModel();
 	}
 
-	public CertificateInfo(String alias2) {
+	public CertificateValue(String alias2) {
 		this.alias = alias2;
 	}
 
-	public CertificateInfo(String alias2, X509Certificate cert, char[] charArray) {
+	public CertificateValue(String alias2, X509Certificate cert, char[] charArray) {
 		this.alias = alias2;
 		this.password=charArray;
 		init(cert);
 	}
-	public CertificateInfo(String alias2, X509Certificate cert) {
+	public CertificateValue(String alias2, X509Certificate cert) {
 		this.alias = alias2;
 	
 		init(cert);
 	}
 	
-	public CertificateInfo(X509Certificate[] certs) {
+	public CertificateValue(X509Certificate[] certs) {
 
 		init(certs);
 	}
@@ -703,7 +703,7 @@ public class CertificateInfo implements ChildInfo{
 		return alias;
 	}
 	
-	public CertificateInfo setDnsNames(String... dnsNames) {
+	public CertificateValue setDnsNames(String... dnsNames) {
         for (String name : dnsNames) {
             subjectNames.add(new GeneralName(GeneralName.dNSName, name));
         }
@@ -716,7 +716,7 @@ public class CertificateInfo implements ChildInfo{
      * @param ipAddresses
      * @return
      */
-    public CertificateInfo setIpAddresses(String... ipAddresses) {
+    public CertificateValue setIpAddresses(String... ipAddresses) {
         for (String address : ipAddresses) {
             subjectNames.add(new GeneralName(GeneralName.iPAddress, address));
         }
@@ -730,7 +730,7 @@ public class CertificateInfo implements ChildInfo{
      * @param dirNames
      * @return
      */
-    public CertificateInfo setDirectoryNames(String... dirNames) {
+    public CertificateValue setDirectoryNames(String... dirNames) {
         for (String name : dirNames) {
             subjectNames.add(new GeneralName(GeneralName.directoryName, name));
         }

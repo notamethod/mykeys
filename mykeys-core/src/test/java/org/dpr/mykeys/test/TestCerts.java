@@ -17,7 +17,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.tsp.TimeStampToken;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.TimeStampManager;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
@@ -124,14 +124,14 @@ public class TestCerts {
 					log.debug(alias);
 				}
 				//
-				CertificateInfo certInfo = fillCertInfo(ksInfo, ks, alias);
+				CertificateValue certInfo = fillCertInfo(ksInfo, ks, alias);
 
 			}
 		}
 
 	}
 
-	private static CertificateInfo fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, String alias) throws ServiceException {
+	private static CertificateValue fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, String alias) throws ServiceException {
 		KeyStoreHelper ksv = new KeyStoreHelper(ksInfo);
 		return ksv.fillCertInfo(ks, alias);
 		
@@ -160,7 +160,7 @@ public class TestCerts {
 			fail();
 
 		}
-		CertificateInfo certInfo = null;
+		CertificateValue certInfo = null;
 		Enumeration<String> enumKs = null;
 		try {
 			enumKs = ks.aliases();

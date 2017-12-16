@@ -1,68 +1,85 @@
 package org.dpr.mykeys.app.certificate;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.asn1.x509.X509Name;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
+import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder;
+import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
+import org.dpr.mykeys.app.keystore.InternalKSTmp;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.ServiceException;
 
 public class CertificateHelper {
+	
+
+	private static final int CSR_VALIDITY = 365;
+	private static final String CSR_SIGN_ALGORITHM = "SHA256withRSA";
+	
 	KeyTools ktool;
-	CertificateInfo certInfo;
+	CertificateValue certInfo;
 	public static final Log log = LogFactory.getLog(CertificateHelper.class);
 
-	public CertificateHelper(CertificateInfo certInfo) {
+	public CertificateHelper(CertificateValue certInfo) {
 		super();
 		this.certInfo = certInfo;
 	}
 
-	public X509Certificate[] generateX509() throws CertificateException {
+	public X509Certificate[] generateX509(CertificateValue issuer) throws CertificateException, KeyToolsException {
 
-		CertificateBuilder builder = new CertificateBuilder();
-		X509Certificate[] xCerts;
-		try {
-			xCerts = builder.generate(certInfo, findACCertificateInfo(certInfo.getIssuer()), false).getCertificates();
-		} catch (Exception e) {
-			throw new CertificateException(e);
-		}
-		return xCerts;
+		return generateX509(false, issuer);
 	}
 
-	public X509Certificate[] generateX509(boolean isAC) throws CertificateException, KeyToolsException {
+	public X509Certificate[] generateX509(boolean isAC, CertificateValue issuer) throws CertificateException, KeyToolsException {
 
 		CertificateBuilder builder = new CertificateBuilder();
 		X509Certificate[] xCerts;
 
 		try {
-			CertificateInfo issuer = findACCertificateInfo(certInfo.getIssuer());
+
 			if (issuer == null) {
 				issuer = certInfo;
 			}
@@ -108,117 +125,130 @@ public class CertificateHelper {
 		}
 
 	}
+//TODEL
+//	public X509Certificate[] genererX509(CertificateValue infoEmetteur, CertificateValue certInfo,
+//			String aliasEmetteur, boolean isAC) throws Exception {
+//		CertificateBuilder builder = new CertificateBuilder();
+//		Usage usage = null;
+//		KeyStoreInfo ksInfo = null;
+//		if (!StringUtils.isBlank(aliasEmetteur)) {
+//			char[] password = InternalKSTmp.getPassword();
+//			ksInfo = InternalKSTmp.getStoreAC();
+//			infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
+//			usage = Usage.CODESIGNING;
+//		}
+//		return builder.generate(certInfo, infoEmetteur, isAC, usage).getCertificates();
+//	}
 
-	public X509Certificate[] genererX509(KeyStore ks, CertificateInfo infoEmetteur, CertificateInfo certInfo,
-			String aliasEmetteur, boolean isAC) throws Exception {
-		CertificateBuilder builder = new CertificateBuilder();
-		Usage usage = null;
-		KeyStoreInfo ksInfo = null;
-		if (!StringUtils.isBlank(aliasEmetteur)) {
-			char[] password = InternalKeystores.password.toCharArray();
-			ksInfo = InternalKeystores.getACKeystore();
-
-			infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
-			usage = Usage.CODESIGNING;
-
-		}
-		return builder.generate(certInfo, infoEmetteur, isAC, usage).getCertificates();
-	}
-
-	public X509Certificate[] genererX509(CertificateInfo certInfo, CertificateInfo infoEmetteur, boolean isAC)
+	public X509Certificate[] genererX509(CertificateValue certInfo, CertificateValue infoEmetteur, boolean isAC)
 			throws Exception {
 		CertificateBuilder builder = new CertificateBuilder();
 		return builder.generate(certInfo, infoEmetteur, isAC, Usage.DEFAULT).getCertificates();
 	}
-
-	public CertificateInfo findACCertificateInfo(String alias) throws ServiceException {
-		if (null == alias || alias.trim().isEmpty()) {
-			return null;
-		}
-		KeystoreBuilder ksb = new KeystoreBuilder();
-		CertificateInfo certInfo = new CertificateInfo();
-		try {
-			KeyStore ks = ksb.load(InternalKeystores.getACKeystore()).get();
-
-			Certificate certificate = ks.getCertificate(alias);
-			Certificate[] certs = ks.getCertificateChain(alias);
-			if (ks.isKeyEntry(alias)) {
-				certInfo.setContainsPrivateKey(true);
-				certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, InternalKeystores.password.toCharArray()));
-
-			}
-			X509Certificate x509Cert = (X509Certificate) certificate;
-			certInfo.setSubjectMap(x509Cert.getSubjectDN().getName());
-			// CertificateInfo certInfo2 = new CertificateInfo(alias, (X509Certificate)
-			// certificate);
-			certInfo.setPublicKey(certificate.getPublicKey());
-			StringBuffer bf = new StringBuffer();
-			if (certs == null) {
-				log.error("chaine de certification nulle pour" + alias);
-				return null;
-			}
-			for (Certificate chainCert : certs) {
-				bf.append(chainCert.toString());
-			}
-			certInfo.setCertChain(bf.toString());
-			certInfo.setCertificateChain(certs);
-
-		} catch (KeyStoreException | KeyToolsException | UnrecoverableKeyException | NoSuchAlgorithmException e) {
-			throw new ServiceException(e);
-		}
-		return certInfo;
-	}
-
-	/**
-	 * Generate a X509 certificate from CSR
-	 * @param fic
-	 *            the CSR file (pem encoded)
-	 * @param certModel
-	 * @param strIssuer
-	 *            name of the issuer certificate (CN)
-	 * @return
-	 * @throws KeyToolsException
-	 * @throws CertificateException
-	 * @throws IOException
-	 * @throws ServiceException
-	 */
-	public CertificateInfo generateFromCSR(String fic, String strIssuer) throws IOException, ServiceException {
+	
+	public X509Certificate[] genererX509(CertificateValue certInfo, CertificateValue infoEmetteur, boolean isAC, Usage usage)
+			throws Exception {
 		CertificateBuilder builder = new CertificateBuilder();
-
-		try (InputStream is = new FileInputStream(fic)) {
-			return generateFromCSR(is, strIssuer);
-		}
+		return builder.generate(certInfo, infoEmetteur, isAC,usage).getCertificates();
 	}
 
+	
+
 	/**
-	 * Generate a X509 certificate from CSR
+	 * Generate a X509 certificate from CSR file
 	 * @param fic
 	 * @param strIssuer
 	 * @return
 	 * @throws ServiceException
 	 * @throws IOException
 	 */
-	public CertificateInfo generateFromCSR(InputStream fic, String strIssuer) throws ServiceException, IOException {
+	public CertificateValue generateFromCSR(InputStream fic, CertificateValue issuer ) throws ServiceException, IOException {
 
 		CertificateBuilder builder = new CertificateBuilder();
 
-		X509Certificate xCert;
+		X509Certificate[] certificates = null;
 
 		try {
-			CertificateInfo issuer = findACCertificateInfo(strIssuer);
-
+		
 			Object pemcsr;
 			BufferedReader buf = new BufferedReader(new InputStreamReader(fic));
 
-			xCert = builder.generateFromCSR(buf, issuer).get();
+			//xCert = builder.generateFromCSR(buf, issuer).get();
+			PemReader reader = new PemReader(buf);
+			PKCS10CertificationRequest csr = convertPemToPKCS10CertificationRequest(reader);
+		
+			X500Name x500Name = csr.getSubject();
+			log.info("x500Name is: " + x500Name + "\n");
+			log.info("x500Name is: " + csr.getSignatureAlgorithm() + "\n");
+
+			byte[] certencoded = sign(csr, issuer.getPrivateKey(), issuer.getCertificate());
+			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+
+			InputStream in = new ByteArrayInputStream(certencoded);
+			X509Certificate certificate = (X509Certificate) certFactory.generateCertificate(in);
+			certificates = new X509Certificate[] {certificate};
+			if (certificate != null) {
+				log.info("certificate " + certificate.getSubjectDN().getName() + " created !");
+			}
 		} catch (CertificateException | InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException
 				| SignatureException | OperatorCreationException e) {
 			throw new ServiceException("error on certificate generation fro csr file " + fic, e);
 		}
-		CertificateInfo cert = new CertificateInfo(new X509Certificate[] { xCert });
+		CertificateValue cert = new CertificateValue(certificates);
 
 		return cert;
 
 	}
 
+	private PKCS10CertificationRequest convertPemToPKCS10CertificationRequest(Reader pemReader) {
+
+		PKCS10CertificationRequest csr = null;
+		ByteArrayInputStream pemStream = null;
+
+		PEMParser pemParser = new PEMParser(pemReader);
+
+		try {
+			Object parsedObj = pemParser.readObject();
+
+			if (parsedObj instanceof PKCS10CertificationRequest) {
+				csr = (PKCS10CertificationRequest) parsedObj;
+
+			}
+		} catch (IOException ex) {
+			log.error("IOException, convertPemToPublicKey", ex);
+		}
+		return csr;
+	}
+	
+	private byte[] sign(PKCS10CertificationRequest inputCSR, PrivateKey caPrivate, X509Certificate caCert)
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException,
+			IOException, OperatorCreationException, CertificateException {
+
+		AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find(CSR_SIGN_ALGORITHM);
+		AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
+
+		int validity = CSR_VALIDITY;
+		X500Name issuer = new X500Name(caCert.getSubjectX500Principal().getName());
+		BigInteger serial = new BigInteger(32, new SecureRandom());
+		Date from = new Date();
+		Date to = new Date(System.currentTimeMillis() + (validity * 86400000L));
+
+		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
+		X509v3CertificateBuilder certgen = new X509v3CertificateBuilder(issuer, serial, from, to, inputCSR.getSubject(),
+				inputCSR.getSubjectPublicKeyInfo());
+		certgen.addExtension(Extension.basicConstraints, false, new BasicConstraints(false));
+		certgen.addExtension(Extension.subjectKeyIdentifier, false,
+				extUtils.createSubjectKeyIdentifier(inputCSR.getSubjectPublicKeyInfo()));
+		certgen.addExtension(Extension.authorityKeyIdentifier, false,
+				new AuthorityKeyIdentifier(
+						new GeneralNames(new GeneralName(new X509Name(caCert.getSubjectX500Principal().getName()))),
+						caCert.getSerialNumber()));
+
+		ContentSigner signer = new BcRSAContentSignerBuilder(sigAlgId, digAlgId)
+				.build(PrivateKeyFactory.createKey(caPrivate.getEncoded()));
+		X509CertificateHolder holder = certgen.build(signer);
+		byte[] certencoded = holder.toASN1Structure().getEncoded();
+		return certencoded;
+
+	}
 }

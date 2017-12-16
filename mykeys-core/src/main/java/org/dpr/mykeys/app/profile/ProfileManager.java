@@ -18,8 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 
 public class ProfileManager
@@ -32,7 +31,7 @@ public class ProfileManager
 		if (StringUtils.isBlank(name)) {
 			throw new ProfilException("nom obligatoire");
 		}
-		File profDir = new File(KSConfig.getProfilsPath());
+		File profDir = new File(KSConfigTmp.getProfilsPath());
 		if (!profDir.exists()) {
 			profDir.mkdirs();
 		}
@@ -49,7 +48,7 @@ public class ProfileManager
 	}
 
 	public Properties loadProfile(String name) throws ProfilException {
-		File f = new File(KSConfig.getProfilsPath(), name + PROFIL_EXTENSION);
+		File f = new File(KSConfigTmp.getProfilsPath(), name + PROFIL_EXTENSION);
 
 		if (!f.exists()) {
 			throw new ProfilException("Le profil n'existe pas");
@@ -67,9 +66,9 @@ public class ProfileManager
 
 	public static List<? extends ChildInfo> getProfils() {
 		List<Profil> profs = new ArrayList<Profil>();
-		File profDir = new File(KSConfig.getProfilsPath());
+		File profDir = new File(KSConfigTmp.getProfilsPath());
 
-		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(KSConfig.getProfilsPath()))) {
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(KSConfigTmp.getProfilsPath()))) {
             for (Path path : directoryStream) {
             	profs.add(new Profil(path));
                
@@ -80,12 +79,12 @@ public class ProfileManager
 
 	}
 
-	public void saveToFile(Map<String, Object> elements, String name, CertificateInfo certInfo)
+	public void saveToFile(Map<String, Object> elements, String name, CertificateValue certInfo)
 			throws ProfilException, IOException {
 		if (StringUtils.isBlank(name)) {
 			throw new ProfilException("nom obligatoire");
 		}
-		File profDir = new File(KSConfig.getProfilsPath());
+		File profDir = new File(KSConfigTmp.getProfilsPath());
 		if (!profDir.exists()) {
 			profDir.mkdirs();
 		}
@@ -106,7 +105,7 @@ public class ProfileManager
 	}
 
 	public String[] getProfiles() {
-		File profDir = new File(KSConfig.getProfilsPath());
+		File profDir = new File(KSConfigTmp.getProfilsPath());
 		String[] list = profDir.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {

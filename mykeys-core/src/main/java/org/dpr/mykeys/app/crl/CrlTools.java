@@ -34,7 +34,7 @@ import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 public class CrlTools {
 	final Log log = LogFactory.getLog(CrlTools.class);
@@ -157,7 +157,7 @@ public class CrlTools {
 	 * @throws CRLException
 	 * @throws InvalidKeyException
 	 */
-	public static X509CRL generateCrl(CertificateInfo certSign, CrlInfo crlInfo)
+	public static X509CRL generateCrl(CertificateValue certSign, CrlInfo crlInfo)
 			throws CertificateParsingException, InvalidKeyException,
 			CRLException, IllegalStateException, NoSuchProviderException,
 			NoSuchAlgorithmException, SignatureException {

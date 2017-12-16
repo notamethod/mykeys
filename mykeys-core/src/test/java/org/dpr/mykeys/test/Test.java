@@ -7,7 +7,7 @@ import java.util.Enumeration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
@@ -87,14 +87,14 @@ public class Test {
 					log.debug(alias);
 				}
 				//
-				CertificateInfo certInfo = fillCertInfo(ksInfo, ks, alias);
+				CertificateValue certInfo = fillCertInfo(ksInfo, ks, alias);
 
 			}
 		}
 
 	}
 	
-	private static CertificateInfo fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, String alias) throws ServiceException {
+	private static CertificateValue fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, String alias) throws ServiceException {
 		KeyStoreHelper ksv = new KeyStoreHelper(ksInfo);
 		return ksv.fillCertInfo(ks, alias);
 		

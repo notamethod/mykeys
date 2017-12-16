@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 
 /**
@@ -17,12 +17,12 @@ import org.dpr.mykeys.app.certificate.CertificateInfo;
  */
 public class CertListModel implements ListModel {
 
-	public CertListModel(List<CertificateInfo> data) {
+	public CertListModel(List<CertificateValue> data) {
 		super();
 		this.data = data;
 	}
 
-	private List<CertificateInfo> data;
+	private List<CertificateValue> data;
 
 	/**
 	 * .
@@ -86,7 +86,7 @@ public class CertListModel implements ListModel {
 	 * 
 	 * @return List<CertificateInfo> - le data.
 	 */
-	public List<CertificateInfo> getData() {
+	public List<CertificateValue> getData() {
 		return data;
 	}
 
@@ -96,7 +96,7 @@ public class CertListModel implements ListModel {
 	 * @param data
 	 *            le data à affecter.
 	 */
-	public void setData(List<CertificateInfo> data) {
+	public void setData(List<CertificateValue> data) {
 		this.data = data;
 
 	}

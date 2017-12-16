@@ -29,10 +29,10 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -75,7 +75,7 @@ public class MyKeys {
 		  
 		KSConfig.initResourceBundle();
 		try {
-			KSConfig.load();
+			KSConfig.init(".myKeys2");
 			checkConfig();
 		} catch (Exception e) {
 			MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
@@ -96,23 +96,18 @@ public class MyKeys {
 		Map<String, HashMap> typesKS = new HashMap<String, HashMap>();
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
-
+			log.info("found store info: "+key);
 			List list = KSConfig.getUserCfg().getList(key);
 			typesKS.put(key, new HashMap<String, String>());
 			for (Object o : list) {
 				String dirName = (String) o;
+				log.info("check file store info: "+dirName);
 				File f = new File(dirName);
 				if (f.exists()) {
 					typesKS.get(key).put(dirName, dirName);
+					log.info("exist ok: "+dirName);
 				} else {
-					// StoreModel type =
-					// StoreModel.valueOf(key.split("\\.")[1]);
-					// if (type.equals(StoreModel.CASTORE)){
-					// String acName = createACKeystore();
-					// if (acName != null){
-					// typesKS.get(key).put(acName, acName);
-					// }
-					// }
+
 					update = true;
 
 				}
@@ -143,12 +138,12 @@ public class MyKeys {
 	 * 
 	 */
 	private static KeyStoreInfo getACKeystore() {
-		String path = InternalKeystores.getACPath();
+		String path = KSConfig.getInternalKeystores().getACPath();
 		KeyTools kt = new KeyTools();
-		String pwd = InternalKeystores.password;
+		String pwd = KSConfig.getInternalKeystores().getPassword();
 		KeyStoreInfo kinfo = null;
 
-		kinfo = new KeyStoreInfo("interne", InternalKeystores.getACPath(),
+		kinfo = new KeyStoreInfo("interne", KSConfig.getInternalKeystores().getACPath(),
 				StoreModel.CASTORE, StoreFormat.JKS, StoreLocationType.INTERNAL);
 		return kinfo;
 		// try {
@@ -158,9 +153,9 @@ public class MyKeys {
 		// e.printStackTrace();
 		// }
 		// kt.createKeyStore(StoreFormat.JKS,
-		// InternalKeystores.getACPath(), pwd.toCharArray());
+		// KSConfig.getInternalKeystores().getACPath(), pwd.toCharArray());
 		// //InternalKeystores.path=path;
-		// return new KeyStoreInfo("interne", InternalKeystores.getACPath(),
+		// return new KeyStoreInfo("interne", KSConfig.getInternalKeystores().getACPath(),
 		// StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
 
 	}

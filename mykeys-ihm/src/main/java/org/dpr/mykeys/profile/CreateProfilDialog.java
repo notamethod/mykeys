@@ -25,10 +25,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -42,7 +42,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 
 	protected LabelValuePanel infosPanel;
 
-	protected CertificateInfo certInfo = new CertificateInfo();
+	protected CertificateValue certInfo = new CertificateValue();
 
 	public CreateProfilDialog(Frame owner, boolean modal) {
 
@@ -145,8 +145,8 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			infosPanel = new LabelValuePanel();
 			Map<String, String> mapAC = null;
 			try {
-				mapAC = TreeKeyStorePanel.getListCerts(InternalKeystores.getACPath(), "JKS",
-						InternalKeystores.password);
+				mapAC = TreeKeyStorePanel.getListCerts(KSConfig.getInternalKeystores().getACPath(), "JKS",
+						KSConfig.getInternalKeystores().getPassword());
 			} catch (Exception e) {
 				//
 			}

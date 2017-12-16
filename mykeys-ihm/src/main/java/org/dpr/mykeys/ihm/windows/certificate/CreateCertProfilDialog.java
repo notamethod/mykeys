@@ -29,7 +29,7 @@ import javax.swing.border.Border;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
@@ -48,7 +48,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 	protected LabelValuePanel infosPanel;
 	protected LabelValuePanel panelInfoVisible;
 
-	protected CertificateInfo certInfo = new CertificateInfo();
+	protected CertificateValue certInfo = new CertificateValue();
 
 	private Properties profile = null;
 
@@ -224,9 +224,10 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 					CertificateHelper cm = new CertificateHelper(certInfo);
 					KeyTools ktools = new KeyTools();
 					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
-					xCerts = cm.generateX509();
+					//FIXME
+					xCerts = cm.generateX509(null);
 					// TODO manage ksinfo
-					kserv.addCertToKeyStore(xCerts, certInfo);
+					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {

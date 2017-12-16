@@ -43,7 +43,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.profile.Profil;
@@ -70,7 +70,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		public ListTransferHandler() {
 			try {
 				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-						+ org.dpr.mykeys.app.certificate.CertificateInfo.class.getName() + "\"";
+						+ org.dpr.mykeys.app.certificate.CertificateValue.class.getName() + "\"";
 				certFlavor = new DataFlavor(certType);
 			} catch (ClassNotFoundException e) {
 				log.trace("ClassNotFound: " + e.getMessage());
@@ -394,13 +394,13 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 
 			case EXPORT_CERT:
 				if (listCerts != null && listCerts.getSelectedValue() != null
-						&& listCerts.getSelectedValue() instanceof CertificateInfo) {
-					exporterCertificate(ksInfo, (CertificateInfo) listCerts.getSelectedValue(), false);
+						&& listCerts.getSelectedValue() instanceof CertificateValue) {
+					exporterCertificate(ksInfo, (CertificateValue) listCerts.getSelectedValue(), false);
 				}
 				break;
 			case DELETE_CERT:
 				if (listCerts != null && listCerts.getSelectedValue() != null
-						&& listCerts.getSelectedValue() instanceof CertificateInfo) {
+						&& listCerts.getSelectedValue() instanceof CertificateValue) {
 					Profil certInfo = (Profil) listCerts.getSelectedValue();
 					if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
 						try {
@@ -464,7 +464,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * @param ksInfo2
 	 * @param certificateInfo
 	 */
-	public void deleteCertificate(NodeInfo info, CertificateInfo certificateInfo) {
+	public void deleteCertificate(NodeInfo info, CertificateValue certificateInfo) {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 	
 		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
@@ -479,7 +479,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 
 	}
 
-	public void exporterCertificate(NodeInfo info, CertificateInfo certificateInfo, boolean b) {
+	public void exporterCertificate(NodeInfo info, CertificateValue certificateInfo, boolean b) {
 		KeyStoreInfo kinfo = (KeyStoreInfo) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 

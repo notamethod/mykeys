@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.Profil;
 import org.dpr.mykeys.ihm.windows.certificate.CertDetailPanel;
 import org.dpr.mykeys.profile.ProfilDetailPanel;
@@ -27,7 +27,7 @@ public class DetailPanel extends JPanel {
 	// Map<String, String> elements = new HashMap<String, String>();
 	LabelValuePanel infosPanel;
 
-	CertificateInfo certificatInfo;
+	CertificateValue certificatInfo;
 
 	ActionPanel dAction;
 
@@ -74,8 +74,8 @@ public class DetailPanel extends JPanel {
 	}
 
 	private Component getDetailInstance(ChildInfo info) {
-		if(info instanceof CertificateInfo){
-			return new CertDetailPanel((CertificateInfo)info);
+		if(info instanceof CertificateValue){
+			return new CertDetailPanel((CertificateValue)info);
 		}else{
 			return new ProfilDetailPanel((Profil)info);
 		}

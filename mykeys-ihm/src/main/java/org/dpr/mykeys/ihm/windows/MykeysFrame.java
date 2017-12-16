@@ -36,8 +36,8 @@ import javax.swing.plaf.ColorUIResource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -331,7 +331,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	}
 
 	public void updateKeyStoreList() {
-		InternalKeystores.getACPath();
+		KSConfig.getInternalKeystores().getACPath();
 		Iterator iter = KSConfig.getUserCfg().getKeys(KSConfig.STORE_PREFIX);
 		while (iter.hasNext()) {
 			String key = (String) iter.next();

@@ -33,7 +33,7 @@ import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 
@@ -49,7 +49,7 @@ public class SignTools {
 		
 	}
 
-	public void SignData(Object object, CertificateInfo certInfo, String string, boolean isInclude) {
+	public void SignData(Object object, CertificateValue certInfo, String string, boolean isInclude) {
 		// TODO Auto-generated method stub
 		
 	}

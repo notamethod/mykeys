@@ -76,14 +76,14 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.PkiTools;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
@@ -250,7 +250,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	}
 
-	private void displayCertDetail(CertificateInfo info) {
+	private void displayCertDetail(CertificateValue info) {
 		detailPanel.updateInfo(info);
 
 	}
@@ -300,10 +300,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	private void addInternalKS() {
 		DefaultMutableTreeNode nodei = addObject(acNode,
-				InternalKeystores.getACKeystore(), true);
+				KSConfig.getInternalKeystores().getStoreAC(), true);
 		// addObject(nodei, "[Vide]", false);
-		nodei = addObject(cliNode, InternalKeystores.getCertKeystore(), true);
-		nodei = addObject(adminNode, InternalKeystores.getProfilsStore(), true);
+		nodei = addObject(cliNode, KSConfig.getInternalKeystores().getStoreCertificate(), true);
+		nodei = addObject(adminNode, KSConfig.getInternalKeystores().getStoreProfils(), true);
 	}
 
 	/** Remove all nodes except the root node. */
@@ -559,8 +559,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 				DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) selPath
 						.getLastPathComponent();
 				Object object = tNode.getUserObject();
-				if (object instanceof CertificateInfo) {
-					CertificateInfo certInfo = ((CertificateInfo) object);
+				if (object instanceof CertificateValue) {
+					CertificateValue certInfo = ((CertificateValue) object);
 					displayCertDetail(certInfo);
 
 				} else {
@@ -725,10 +725,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	public void exporterCertificate(DefaultMutableTreeNode node, boolean b) {
 		JFrame frame = (JFrame) tree.getTopLevelAncestor();
 		// KeyStoreInfo ksInfo = null;
-		CertificateInfo certInfo = null;
+		CertificateValue certInfo = null;
 		Object object = node.getUserObject();
-		if (object instanceof CertificateInfo) {
-			certInfo = ((CertificateInfo) object);
+		if (object instanceof CertificateValue) {
+			certInfo = ((CertificateValue) object);
 		}
 		KeyStoreInfo ksInfo = null;
 		DefaultMutableTreeNode objectKs = (DefaultMutableTreeNode) node
@@ -784,7 +784,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		
 			KeyStoreHelper ksv = new KeyStoreHelper(null);
-			CertificateInfo certInfo = ksv.fillCertInfo(ks, alias);
+			CertificateValue certInfo = ksv.fillCertInfo(ks, alias);
 
 			certsAC.put(alias, alias);
 

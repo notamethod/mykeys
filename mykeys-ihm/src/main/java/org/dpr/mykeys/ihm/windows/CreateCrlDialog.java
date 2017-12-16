@@ -28,10 +28,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.CrlInfo;
+import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.swingutils.JFieldsPanel;
@@ -134,8 +134,8 @@ public class CreateCrlDialog extends JDialog {
 		Map<String, String> mapAC = null;
 		try {
 			mapAC = TreeKeyStorePanel.getListCerts(
-					InternalKeystores.getACPath(), "JKS",
-					InternalKeystores.password);
+					KSConfig.getInternalKeystores().getACPath(), "JKS",
+					KSConfig.getInternalKeystores().getPassword());
 		} catch (Exception e) {
 			//
 		}

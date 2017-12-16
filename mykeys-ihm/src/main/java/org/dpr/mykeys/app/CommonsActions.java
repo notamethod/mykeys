@@ -10,7 +10,7 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509CRL;
 
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CrlTools;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -25,19 +25,19 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
  */
 public class CommonsActions {
 
-	public void exportCert(StoreFormat storeFormat, String path, char[] password, CertificateInfo certInfo)
+	public void exportCert(StoreFormat storeFormat, String path, char[] password, CertificateValue certInfo)
 			throws Exception {
 		exportCert(null, storeFormat, path, password, certInfo, false);
 	}
 
 	public void exportCert(KeyStoreInfo ksInfo, StoreFormat pkcs12, String path, char[] password,
-			CertificateInfo certInfo, boolean isExportCle) throws Exception {
+			CertificateValue certInfo, boolean isExportCle) throws Exception {
 		exportCert(ksInfo, pkcs12, path, password, certInfo, isExportCle, null);
 
 	}
 
 	public void exportCert(KeyStoreInfo ksInfoIn, StoreFormat storeFormat, String path, char[] passwordExport,
-			CertificateInfo certInfo, boolean isExportCle, char[] privKeyPwd) throws Exception {
+			CertificateValue certInfo, boolean isExportCle, char[] privKeyPwd) throws Exception {
 		StoreModel storeModel = StoreModel.P12STORE;
 		KeyStoreInfo ksInfoOut = new KeyStoreInfo("store", path, storeModel, storeFormat);
 		ksInfoOut.setPassword(passwordExport);
@@ -45,7 +45,7 @@ public class CommonsActions {
 
 		if (isExportCle && certInfo.getPrivateKey() == null) {
 			KeystoreBuilder ksBuilder = new KeystoreBuilder();
-			CertificateInfo certInfoEx = new CertificateInfo();
+			CertificateValue certInfoEx = new CertificateValue();
 			certInfoEx.setAlias(certInfo.getAlias());
 			certInfoEx.setCertificate(certInfo.getCertificate());
 			certInfoEx.setCertificateChain(certInfo.getCertificateChain());
@@ -78,7 +78,7 @@ public class CommonsActions {
 
 	}
 
-	public void signData(KeyStoreInfo kInfo, char[] password, CertificateInfo certInfo, boolean isInclude) {
+	public void signData(KeyStoreInfo kInfo, char[] password, CertificateValue certInfo, boolean isInclude) {
 		KeyTools kt = new KeyTools();
 		KeystoreBuilder ksBuilder = new KeystoreBuilder();
 		KeyStore ks;
@@ -142,9 +142,9 @@ public class CommonsActions {
 	public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
 
 		KeyStoreHelper ktools = new KeyStoreHelper(null);
-		CertificateInfo certSign;
+		CertificateValue certSign;
 		try {
-			certSign = ktools.getCertificateACByAlias(aliasEmetteur);
+			certSign = ktools.findACByAlias(aliasEmetteur);
 			X509CRL xCRL = CrlTools.generateCrl(certSign, crlInfo);
 			CrlTools.saveCRL(xCRL, crlInfo.getPath());
 		} catch (Exception e) {

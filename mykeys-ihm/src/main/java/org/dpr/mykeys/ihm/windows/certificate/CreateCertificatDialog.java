@@ -13,14 +13,15 @@ import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
-import org.dpr.mykeys.app.keystore.InternalKeystores;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Usage;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 public class CreateCertificatDialog extends SuperCreate implements ItemListener {
@@ -83,7 +84,7 @@ public static void main(String[] args) {
 				certInfo.setSubjectMap(elements);
 				
 			    if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-			        certInfo.setPassword(InternalKeystores.password.toCharArray());
+			        certInfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 			    }else{
 			        certInfo.setPassword(pkPassword);
 			    }
@@ -102,11 +103,11 @@ public static void main(String[] args) {
 					KeyStore ks = kserv.getKeystore();
 				
 					CertificateHelper certServ = new CertificateHelper(null);
-					CertificateInfo infoEmetteur = kserv.fillCertInfo(ks , (String) elements.get("emetteur"));
-					xCerts = certServ.genererX509(ks, infoEmetteur,certInfo,
-							(String) elements.get("emetteur"), isAC);
+					CertificateValue infoEmetteur = kserv.fillCertInfo(ks , (String) elements.get("emetteur"));
+					CertificateValue issuer = kserv.findACByAlias((String) elements.get("emetteur"));
+					xCerts = certServ.genererX509(certInfo, issuer, isAC, Usage.CODESIGNING);
 
-					kserv.addCertToKeyStore(xCerts, certInfo);
+					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertificatDialog.this.setVisible(false);
 
 				} catch (Exception e) {

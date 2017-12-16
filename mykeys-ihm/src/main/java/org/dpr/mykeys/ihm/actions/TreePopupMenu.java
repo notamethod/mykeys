@@ -12,7 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.certificate.CertificateInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
@@ -236,8 +236,8 @@ public class TreePopupMenu extends JPopupMenu {
 				
 			}
 
-		} else if (node.getUserObject() instanceof CertificateInfo) {
-			CertificateInfo certInfo = (CertificateInfo) node.getUserObject();
+		} else if (node.getUserObject() instanceof CertificateValue) {
+			CertificateValue certInfo = (CertificateValue) node.getUserObject();
 
 			exportCert.setVisible(true);
 
