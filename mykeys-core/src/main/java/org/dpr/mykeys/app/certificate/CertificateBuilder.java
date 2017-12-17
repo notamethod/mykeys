@@ -72,8 +72,6 @@ public class CertificateBuilder extends KeyTools {
 	X509Certificate[] certificates;
 	
 	X509V3CertificateGenerator certGen;
-	
-	
 
 	public CertificateBuilder() {
 		super();

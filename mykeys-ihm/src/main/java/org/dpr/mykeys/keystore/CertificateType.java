@@ -1,7 +1,7 @@
 package org.dpr.mykeys.keystore;
 
 public enum CertificateType {
-	STANDARD, AC, SERVER, CODE_SIGNING;
+	STANDARD, AC, SERVER, CODE_SIGNING, AUTH;
 	public static CertificateType fromValue(String v) {
 		return valueOf(v);
 	}

@@ -67,6 +67,10 @@ public class CertificateHelper {
 		super();
 		this.certInfo = certInfo;
 	}
+	
+	public CertificateHelper() {
+		super();
+	}
 
 	public X509Certificate[] generateX509(CertificateValue issuer) throws CertificateException, KeyToolsException {
 

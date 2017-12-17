@@ -251,6 +251,7 @@ public class CertificateValue implements ChildInfo{
 	 *            the privateKey to set
 	 */
 	public void setPrivateKey(PrivateKey privateKey) {
+		this.containsPrivateKey = true;
 		this.privateKey = privateKey;
 	}
 

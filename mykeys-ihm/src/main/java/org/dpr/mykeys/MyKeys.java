@@ -16,6 +16,7 @@
  */
 package org.dpr.mykeys;
 
+import java.awt.Toolkit;
 import java.io.File;
 import java.security.KeyStoreException;
 import java.security.Security;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,7 +40,9 @@ import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.UpdateAppDialog;
 
 /**
  * @author Christophe Roger
@@ -82,8 +86,10 @@ public class MyKeys {
 		KSConfig.initResourceBundle();
 		try {
 			KSConfig.init(".myKeys2");
+			checkUpdate();
 			checkConfig();
 		} catch (Exception e) {
+
 			MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
 			throw new RuntimeException("Fatal Error");
 		}
@@ -94,6 +100,26 @@ public class MyKeys {
 	}
 
 
+
+	private void checkUpdate() {
+		if (!KSConfig.getInternalKeystores().existsUserDatabase()) {
+			
+			boolean retour = MykeysFrame.askConfirmDialog(null, "Vous devez créer un utilisateur avant de continuer");
+			if (!retour) {
+				System.exit(0);
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					UpdateAppDialog cs = new UpdateAppDialog(
+							null, true);
+					//cs.setLocationRelativeTo(MykeysFrame);
+					cs.setVisible(true);
+				}
+			});
+
+		}
+		
+	}
 
 	private void checkConfig() {
 

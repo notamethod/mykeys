@@ -11,7 +11,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.MkUtils;
+import org.dpr.mykeys.app.certificate.CertificateBuilder;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.StoreFormat;
@@ -106,7 +108,7 @@ public class InternalKeystores {
 		return kinfo;
 	}
 
-	public CertificateValue createUserDB(CertificateValue cert) throws KeyStoreException {
+	public CertificateValue createUserDB(CertificateValue cert) throws Exception {
 		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 		KeyTools kt = new KeyTools();
 		String pwd = password;
@@ -125,6 +127,10 @@ public class InternalKeystores {
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
+		KeyStoreHelper kh = new KeyStoreHelper(kinfo);
+		CertificateBuilder cb = new CertificateBuilder();
+		cb.generate(cert, cert, false);
+		kh.addCertToKeyStore(cert, kinfo.getPassword());
 		return null;
 	}
 

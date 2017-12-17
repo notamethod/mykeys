@@ -90,7 +90,7 @@ public class KeystoreBuilder extends KeyTools {
 	public KeystoreBuilder addCert(KeyStoreInfo ksInfo, CertificateValue certInfo, char[] password) throws KeyToolsException {
 
 		// FIXME
-		if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
+		if (password != null && ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
 			certInfo.setPassword(password);
 		}
 

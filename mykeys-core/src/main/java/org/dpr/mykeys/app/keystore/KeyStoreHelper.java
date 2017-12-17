@@ -44,6 +44,11 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		this.ksInfo = ksInfo;
 	}
 
+	public KeyStoreHelper() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public void setKsInfo(KeyStoreInfo ksInfo) {
 		this.ksInfo = ksInfo;
 	}
@@ -409,7 +414,11 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	}
 
 
-
+	/**
+	 * @param certificate The certificate to add in keystore
+	 * @param password keystore's password
+	 * @throws ServiceException
+	 */
 	public void addCertToKeyStore(CertificateValue certificate, char[] password) throws ServiceException {
 		if (StringUtils.isBlank(certificate.getAlias())) {
 			BigInteger bi = KeyTools.RandomBI(30);
@@ -425,21 +434,38 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		}
 		
 	}
+	
+	/**
+	 * @param certificate The certificate to add in keystore
+	 * @param password keystore's password
+	 * @throws ServiceException
+	 */
+	public void addCertToKeyStore(KeyStoreInfo ki, CertificateValue certificate, char[] password) throws ServiceException {
+		
+		try {
+			KeyStore ks = load(ksInfo);
+			KeystoreBuilder ksb = new KeystoreBuilder(ks);
+			ksb.addCert(ksInfo, certificate, password);
+		} catch (KeyToolsException e) {
+			throw new ServiceException(e);
+		}
+		
+	}
 
-	public CertificateValue findACByAlias(KeyStoreInfo storeAC, String alias) throws ServiceException {
+	public CertificateValue findCertificateByAliasOld(KeyStoreInfo store, String alias) throws ServiceException {
 		if (null == alias || alias.trim().isEmpty()) {
 			return null;
 		}
 		
 		CertificateValue certInfo = new CertificateValue();
 		try {
-			KeyStore ks = load(storeAC);
+			KeyStore ks = load(store);
 
 			Certificate certificate = ks.getCertificate(alias);
 			Certificate[] certs = ks.getCertificateChain(alias);
 			if (ks.isKeyEntry(alias)) {
 				certInfo.setContainsPrivateKey(true);
-				certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, storeAC.getPassword()));
+				certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, store.getPassword()));
 
 			}
 			X509Certificate x509Cert = (X509Certificate) certificate;
@@ -464,8 +490,45 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		return certInfo;
 	}
 
+	
+	public CertificateValue findCertificateByAlias(KeyStoreInfo store, String alias) throws ServiceException {
+		if (null == alias || alias.trim().isEmpty()) {
+			return null;
+		}
+		
+		CertificateValue certInfo = null;
+		try {
+			KeyStore ks = load(store);
+
+			Certificate certificate = ks.getCertificate(alias);
+			Certificate[] certs = ks.getCertificateChain(alias);
+			 certInfo = new CertificateValue(alias, (X509Certificate) certificate);
+			if (ks.isKeyEntry(alias)) {
+		
+				//FIXME
+				certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, store.getPassword()));
+
+			}
+	
+			StringBuffer bf = new StringBuffer();
+			if (certs == null) {
+				log.error("chaine de certification nulle pour" + alias + "("+alias+")");
+				return null;
+			}
+			for (Certificate chainCert : certs) {
+				bf.append(chainCert.toString());
+			}
+			certInfo.setCertChain(bf.toString());
+			certInfo.setCertificateChain(certs);
+
+		} catch (KeyStoreException | KeyToolsException | UnrecoverableKeyException | NoSuchAlgorithmException e) {
+			throw new ServiceException(e);
+		}
+		return certInfo;
+	}
+	
 	public CertificateValue findACByAlias(String issuer) throws ServiceException {
-		return findACByAlias(ksInfo, issuer);
+		return findCertificateByAlias(ksInfo, issuer);
 		
 	}
 	

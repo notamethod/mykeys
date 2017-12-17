@@ -177,7 +177,6 @@ public class KeyTools {
 		} catch (KeyStoreException e) {
 			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
 		}
-
 	}
 	
 	public void saveKeyStore(KeyStore ks, KeyStoreInfo ksInfo) throws KeyToolsException {
@@ -188,9 +187,7 @@ public class KeyTools {
 			fos.close();
 		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
 			throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
-		}
-			
-		
+		}	
 	}
 
 	@Deprecated
