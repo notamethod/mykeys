@@ -18,6 +18,7 @@ package org.dpr.mykeys;
 
 import java.awt.Toolkit;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.security.KeyStoreException;
 import java.security.Security;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.ihm.windows.UpdateAppDialog;
+import org.dpr.mykeys.ihm.windows.CreateUserDialog;
 
 /**
  * @author Christophe Roger
@@ -84,6 +85,10 @@ public class MyKeys {
 		log.debug("loading configuration...");
 		  
 		KSConfig.initResourceBundle();
+		log.info("initializing securiy provider...");
+		Security.addProvider(new BouncyCastleProvider());
+		ProviderUtil.init("BC");
+		
 		try {
 			KSConfig.init(".myKeys2");
 			checkUpdate();
@@ -93,24 +98,23 @@ public class MyKeys {
 			MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
 			throw new RuntimeException("Fatal Error");
 		}
-		Security.addProvider(new BouncyCastleProvider());
-		ProviderUtil.init("BC");
+		
 		// buildComponents();
 		// updateKeyStoreList();
 	}
 
-
-
-	private void checkUpdate() {
+	private void checkUpdate() throws InvocationTargetException, InterruptedException {
 		if (!KSConfig.getInternalKeystores().existsUserDatabase()) {
 			
 			boolean retour = MykeysFrame.askConfirmDialog(null, "Vous devez créer un utilisateur avant de continuer");
 			if (!retour) {
 				System.exit(0);
 			}
-			SwingUtilities.invokeLater(new Runnable() {
+			
+			
+			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
-					UpdateAppDialog cs = new UpdateAppDialog(
+					CreateUserDialog cs = new CreateUserDialog(
 							null, true);
 					//cs.setLocationRelativeTo(MykeysFrame);
 					cs.setVisible(true);
@@ -118,6 +122,9 @@ public class MyKeys {
 			});
 
 		}
+		if (!KSConfig.getInternalKeystores().existsUserDatabase())
+			System.exit(0);
+
 		
 	}
 

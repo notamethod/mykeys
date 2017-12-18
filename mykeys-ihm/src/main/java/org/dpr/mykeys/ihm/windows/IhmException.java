@@ -1,0 +1,24 @@
+package org.dpr.mykeys.ihm.windows;
+
+import org.dpr.mykeys.app.keystore.ServiceException;
+
+public class IhmException extends Exception {
+
+	public IhmException(String arg0, Throwable arg1) {
+		super(arg0, arg1);
+		// TODO Auto-generated constructor stub
+	}
+
+	public IhmException(String arg0) {
+		super(arg0);
+		// TODO Auto-generated constructor stub
+	}
+
+	public IhmException(Throwable arg0) {
+		super(arg0);
+		// TODO Auto-generated constructor stub
+	}
+
+	
+
+}

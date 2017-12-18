@@ -1,5 +1,7 @@
 package org.dpr.swingutils;
 
+import java.util.Map;
+
 import org.dpr.mykeys.ihm.windows.ComponentType;
 
 public class PanelBuilder {
@@ -31,6 +33,11 @@ public class PanelBuilder {
 
 	public void addComponent(String label, String key, String value) {
 		lvPanel.put(label, key,value);
+		
+	}
+
+	public void addComponent(String label, String key, Map<String, String> users, ComponentType componentType) {
+		lvPanel.put(label, componentType.getValue(), key,  users, true);
 		
 	}
 

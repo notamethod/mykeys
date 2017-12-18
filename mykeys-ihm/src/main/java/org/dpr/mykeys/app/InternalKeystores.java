@@ -4,8 +4,11 @@
 package org.dpr.mykeys.app;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,7 +41,7 @@ public class InternalKeystores {
 	public InternalKeystores(String pathUDB, String pathAC, String pathCert, String pathProfils) {
 		this.pathAC = pathAC;
 		this.pathCert = pathCert;
-		this.pathProfils=pathProfils;
+		this.pathProfils = pathProfils;
 		this.pathUDB = pathUDB;
 	}
 
@@ -85,30 +88,32 @@ public class InternalKeystores {
 
 	public boolean existsUserDatabase() {
 
-		KeyTools kt = new KeyTools();
-		String pwd = password;
-		KeyStoreInfo kinfo = null;
 		File f = new File(pathUDB);
 		if (!f.exists())
 			return false;
 		return true;
 	}
 
-	public KeyStoreInfo getUserDB() {
+	public KeyStoreInfo getUserDB() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 
-		KeyTools kt = new KeyTools();
+		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
+
 		String pwd = password;
 		KeyStoreInfo kinfo = null;
 		File f = new File(pathUDB);
+		if (!existsUserDatabase()) {
 
-		kinfo = new KeyStoreInfo(KSConfig.getMessage().getString("magasin.interne"), pathAC, StoreModel.CASTORE,
+			ksBuilder.create(pathUDB, pwd.toCharArray());
+
+		}
+		kinfo = new KeyStoreInfo(KSConfig.getMessage().getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
 		return kinfo;
 	}
 
-	public CertificateValue createUserDB(CertificateValue cert) throws Exception {
+	public void createUserDB() throws Exception {
 		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 		KeyTools kt = new KeyTools();
 		String pwd = password;
@@ -127,11 +132,7 @@ public class InternalKeystores {
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
-		KeyStoreHelper kh = new KeyStoreHelper(kinfo);
-		CertificateBuilder cb = new CertificateBuilder();
-		cb.generate(cert, cert, false);
-		kh.addCertToKeyStore(cert, kinfo.getPassword());
-		return null;
+
 	}
 
 	public KeyStoreInfo getStoreCertificate() throws KeyStoreException {

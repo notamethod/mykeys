@@ -48,23 +48,13 @@ import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.PanelBuilder;
 
-public class UpdateAppDialog extends JDialog {
-	public static final Log log = LogFactory.getLog(ListPanel.class);
-	// JTextField x509PrincipalC;
-	// JTextField x509PrincipalO;
-	// JTextField x509PrincipalL;
-	// JTextField x509PrincipalST;
-	// JTextField x509PrincipalE;
-	// JTextField x509PrincipalCN;
+public class CreateUserDialog extends JDialog {
+	public static final Log log = LogFactory.getLog(CreateUserDialog.class);
 
 	LabelValuePanel infosPanel;
 
-	// CertificateInfo certInfo = new CertificateInfo();
 
-	boolean isAC = false;
-	public JFileChooser jfc;
-
-	public UpdateAppDialog(JFrame owner, boolean modal) {
+	public CreateUserDialog(JFrame owner, boolean modal) {
 
 		super(owner, modal);
 
@@ -74,7 +64,7 @@ public class UpdateAppDialog extends JDialog {
 	}
 
 	public static void main(String[] args) {
-		UpdateAppDialog di = new UpdateAppDialog(null, true);
+		CreateUserDialog di = new CreateUserDialog(null, true);
 	}
 
 	private void init() {
@@ -143,21 +133,23 @@ public class UpdateAppDialog extends JDialog {
 
 				Map<String, Object> elements = infosPanel.getElements();
 
-				if (elements.get("nom") == null) {
-					MykeysFrame.showError(UpdateAppDialog.this, "nom obligatoire");
+				String nom=(String) elements.get("nom");
+				String pwd=(String) elements.get("password");
+				if (nom == null|| nom.isEmpty()) {
+					MykeysFrame.showError(CreateUserDialog.this, "nom obligatoire");
 					return;
 				}
-				if (elements.get("password") == null) {
-					MykeysFrame.showError(UpdateAppDialog.this, "password obligatoire");
+				if (pwd == null|| pwd.isEmpty()) {
+					MykeysFrame.showError(CreateUserDialog.this, "password obligatoire");
 					return;
 				}
 				
-				String id = (String) elements.get("nom");
-				char[] pwd = ((String) elements.get("password")).toCharArray();
+			
+				char[] pwdChar =pwd.toCharArray();
 				CertificateHelperNew ch = new CertificateHelperNew();
 				AuthenticationService auth = new AuthenticationService();
 				try {
-					auth.createUser(id, pwd);
+					auth.createUser(nom, pwdChar);
 				} catch (ServiceException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -166,7 +158,7 @@ public class UpdateAppDialog extends JDialog {
 
 	
 			} else if (command.equals("CANCEL")) {
-				UpdateAppDialog.this.setVisible(false);
+				CreateUserDialog.this.setVisible(false);
 			}
 
 		}

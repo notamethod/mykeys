@@ -40,19 +40,20 @@ public class KeystoreBuilder extends KeyTools {
 	 *            .toString()
 	 * @param name
 	 * @param password
+	 * @throws IOException 
+	 * @throws CertificateException 
+	 * @throws NoSuchAlgorithmException 
+	 * @throws KeyStoreException 
 	 * @throws Exception
 	 */
-	public KeystoreBuilder create(String name, char[] password) throws Exception {
+	public KeystoreBuilder create(String name, char[] password) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException{
 		
-		try {
-		
+
 			keystore.load(null, password);
 			OutputStream fos = new FileOutputStream(new File(name));
 			keystore.store(fos, password);
 			fos.close();
-		} catch (Exception e) {
-			throw new Exception(e);
-		}
+		
 
 		return this;
 

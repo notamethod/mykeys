@@ -27,13 +27,18 @@ public class KSConfig {
 
 	static String path;
 	
+	public static String externalPath;
+	
 	static InternalKeystores internalKeystores;
 	
 	private static ResourceBundle messages;
 
 	public static void init(String cfgPathName) {
 
-		path = System.getProperty("user.home") + File.separator + cfgPathName  + File.separator;
+		if (externalPath==null)
+			path = System.getProperty("user.home") + File.separator + cfgPathName  + File.separator;
+		else 
+			path=externalPath;
 		try {
 			userConfig = new PropertiesConfiguration(path + File.separator
 					+ usrFileName);

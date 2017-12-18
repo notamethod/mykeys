@@ -224,6 +224,39 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		return certs;
 
 	}
+	
+	public List<CertificateValue> getCertificates(KeyStoreInfo ki) throws ServiceException, KeyToolsException {
+		List<CertificateValue> certs = new ArrayList<CertificateValue>();
+		KeyTools kt = new KeyTools();
+		KeyStore ks = null;
+		if (ki.getPassword() == null && ki.getStoreFormat().equals(StoreFormat.PKCS12)) {
+			return certs;
+		}
+
+		ks = loadKeyStore(ki.getPath(), ki.getStoreFormat(), null);
+
+		log.trace("addcerts");
+		Enumeration<String> enumKs;
+		try {
+			enumKs = ks.aliases();
+			if (enumKs != null && enumKs.hasMoreElements()) {
+
+				while (enumKs.hasMoreElements()) {
+					String alias = enumKs.nextElement();
+
+					CertificateValue certInfo = fillCertInfo(ks, alias);
+					certs.add(certInfo);
+				}
+			}
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return certs;
+
+	}
+
+	
 
 	/*
 	 * (non-Javadoc)
@@ -443,9 +476,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	public void addCertToKeyStore(KeyStoreInfo ki, CertificateValue certificate, char[] password) throws ServiceException {
 		
 		try {
-			KeyStore ks = load(ksInfo);
+			KeyStore ks = load(ki);
 			KeystoreBuilder ksb = new KeystoreBuilder(ks);
-			ksb.addCert(ksInfo, certificate, password);
+			ksb.addCert(ki, certificate, password);
 		} catch (KeyToolsException e) {
 			throw new ServiceException(e);
 		}

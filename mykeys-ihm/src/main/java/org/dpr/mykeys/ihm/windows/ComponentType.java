@@ -1,13 +1,11 @@
 package org.dpr.mykeys.ihm.windows;
 
+import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
-
-import org.apache.commons.lang.StringUtils;
-import org.dpr.mykeys.ihm.actions.TypeAction;
 
 public enum ComponentType {
 
-	PASSWORD(JPasswordField.class);
+	PASSWORD(JPasswordField.class), COMBOBOX(JComboBox.class);
 
 
 	private final Class<?> value;
