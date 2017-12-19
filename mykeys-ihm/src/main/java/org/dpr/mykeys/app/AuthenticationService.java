@@ -43,7 +43,7 @@ public class AuthenticationService {
 		CertificateValue cer = null;
 
 		try {
-			cer = ch.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id);
+			cer = ch.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

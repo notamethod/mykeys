@@ -77,7 +77,7 @@ public static void main(String[] args) {
 				certInfo.setNotBefore((Date) elements.get("notBefore"));
 				certInfo.setNotAfter((Date) elements.get("notAfter"));
 				KeyTools ktools = new KeyTools();
-				KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
+				KeyStoreHelper kserv = new KeyStoreHelper();
 				char[] pkPassword = ((String) elements.get("pwd1"))
 						.toCharArray();
 
@@ -104,7 +104,7 @@ public static void main(String[] args) {
 				
 					CertificateHelper certServ = new CertificateHelper(null);
 					CertificateValue infoEmetteur = kserv.fillCertInfo(ks , (String) elements.get("emetteur"));
-					CertificateValue issuer = kserv.findACByAlias((String) elements.get("emetteur"));
+					CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(ksInfo, (String) elements.get("emetteur"));
 					xCerts = certServ.genererX509(certInfo, issuer, isAC, Usage.CODESIGNING);
 
 					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());

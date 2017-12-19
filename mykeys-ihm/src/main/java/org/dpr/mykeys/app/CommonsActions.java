@@ -106,9 +106,9 @@ public class CommonsActions {
 	 * <BR>
 	 * 
 	 * 
+	 * @param format
+	 * @param dir
 	 * @param pwd
-	 * @param string
-	 * @param format2
 	 * @return
 	 * @throws Exception
 	 * 
@@ -137,10 +137,11 @@ public class CommonsActions {
 
 	public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
 
-		KeyStoreHelper ktools = new KeyStoreHelper(null);
+		KeyStoreHelper ktools = new KeyStoreHelper();
 		CertificateValue certSign;
 		try {
-			certSign = ktools.findACByAlias(aliasEmetteur);
+			//FIXME
+			certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasEmetteur);
 			X509CRL xCRL = CrlTools.generateCrl(certSign, crlInfo);
 			CrlTools.saveCRL(xCRL, crlInfo.getPath());
 		} catch (Exception e) {

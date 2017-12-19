@@ -63,6 +63,9 @@ public class AuthenticationTest {
 			
 			for (CertificateValue val : lst) {
 				assertTrue("", val.getAlias().startsWith("user"));
+				assertTrue("", val.isContainsPrivateKey());
+
+
 			}
 		} catch (ServiceException e) {
 

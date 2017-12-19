@@ -173,11 +173,10 @@ public class CertificateValue implements ChildInfo{
 		
 	}
 
-	private void init(X509Certificate cert) {
-		this.setCertificate((X509Certificate) cert);
+	private void init(X509Certificate certX509) {
+		this.setCertificate(certX509);
 		Map<ASN1ObjectIdentifier, String> oidMap = new HashMap<ASN1ObjectIdentifier, String>();
-		X509Certificate certX509 = (X509Certificate) cert;
-		this.setAlgoPubKey(cert.getPublicKey().getAlgorithm());
+		this.setAlgoPubKey(certX509.getPublicKey().getAlgorithm());
 		this.setAlgoSig(certX509.getSigAlgName());
 		this.setSignature(certX509.getSignature());
 		if (certX509.getPublicKey() instanceof RSAPublicKey) {
@@ -188,7 +187,6 @@ public class CertificateValue implements ChildInfo{
 		//why ?
 		certX509.getSubjectX500Principal().getName("RFC2253");
 		X500Name name = new X500Name(certX509.getSubjectX500Principal().getName("RFC2253"));
-
 		this.x509NameToMap(name);
 		this.setKeyUsage(certX509.getKeyUsage());
 		this.setNotBefore(certX509.getNotBefore());
@@ -204,10 +202,7 @@ public class CertificateValue implements ChildInfo{
 
 			this.setDigestSHA256(md.digest());
 
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateEncodingException e) {
+		} catch (NoSuchAlgorithmException | CertificateEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -331,7 +326,7 @@ public class CertificateValue implements ChildInfo{
 	}
 
 	/**
-	 * @param principalMap
+	 * @param sourceMap
 	 *            the x509PrincipalMap to set
 	 */
 	@Deprecated
@@ -437,7 +432,7 @@ public class CertificateValue implements ChildInfo{
 	}
 
 	/**
-	 * @param subjectMap
+	 * @param elementMap
 	 *            the subjectMap to set
 	 */
 	public void setSubjectMap(Map<String, Object> elementMap) {
@@ -594,8 +589,10 @@ public class CertificateValue implements ChildInfo{
 	 * @return
 	 */
 	public Certificate[] getCertificateChain() {
-		// TODO Auto-generated method stub
-		return certificateChain;
+		if (certificateChain == null)
+			return new  Certificate[]{certificate};
+		else
+			return certificateChain;
 	}
 
 	/**

@@ -55,8 +55,6 @@ public class CertificateHelperNew {
 		BigInteger serial = new BigInteger(32, new SecureRandom());
 		Date from = new Date();
 		Date to = new Date(System.currentTimeMillis() + (validity * 86400000L));
-
-		
 		KeyPair keypair = generateKeyPair("RSA", 2048);
 		 // Prepare the information required for generating an X.509 certificate.
 		X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(subject, serial, from, to, subject,
@@ -66,10 +64,11 @@ public class CertificateHelperNew {
 	    ContentSigner signer = new JcaContentSignerBuilder("SHA256WithRSAEncryption").build(keypair.getPrivate());
 	    X509CertificateHolder certHolder = builder.build(signer);
 	    X509Certificate cert = new JcaX509CertificateConverter().setProvider(ProviderUtil.provider).getCertificate(certHolder);
-
 	   
 	    cert.verify(keypair.getPublic());
-	    return new CertificateValue(id, cert);
+		CertificateValue value = new CertificateValue(id, cert);
+		value.setPrivateKey(keypair.getPrivate());
+		return value;
 	    
 		
 	}
@@ -79,7 +78,6 @@ public class CertificateHelperNew {
 	 * 
 	 * @param algo
 	 * @param keyLength
-	 * @param certModel
 	 */
 	public KeyPair generateKeyPair(String algo, int keyLength) {
 		KeyPair keypair =null;

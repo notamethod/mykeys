@@ -142,7 +142,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 				CertificateHelper cm = new CertificateHelper(certInfo);
 				KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 				try (InputStream is = new FileInputStream(tfDirectory.getText())) {
-					CertificateValue issuer = kserv.findACByAlias((String) infosPanel.getElements().get("emetteur"));
+					CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(ksInfo, (String) infosPanel.getElements().get("emetteur"));
 					CertificateValue xCerts = cm.generateFromCSR(is, issuer);
 					KeyTools ktools = new KeyTools();
 				

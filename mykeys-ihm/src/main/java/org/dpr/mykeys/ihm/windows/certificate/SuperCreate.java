@@ -188,7 +188,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 	 * @param mapAlgoKey
 	 * @param mapAlgoSig
 	 * 
-	 * @param isAC2
+	 * @param isAC
 	 * @return
 	 */
 	private LabelValuePanel createInfoPanel(boolean isAC, Map<String, String> mapKeyLength,
@@ -316,11 +316,11 @@ public class SuperCreate extends JDialog implements ItemListener {
 					fillCertInfo();
 					X509Certificate[] xCerts = null;
 					KeyTools ktools = new KeyTools();
-					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
+					KeyStoreHelper kserv = new KeyStoreHelper();
 					
 					certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 					CertificateHelper certServ = new CertificateHelper(certInfo);
-					CertificateValue issuer =  kserv.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
+					CertificateValue issuer =  kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 					xCerts = certServ.generateX509(isAC, issuer);
 
 					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());

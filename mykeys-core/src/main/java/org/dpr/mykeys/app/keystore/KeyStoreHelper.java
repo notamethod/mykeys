@@ -524,7 +524,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 	}
 
 	
-	public CertificateValue findCertificateByAlias(KeyStoreInfo store, String alias) throws ServiceException {
+	public CertificateValue findCertificateAndPrivateKeyByAlias(KeyStoreInfo store, String alias) throws ServiceException {
 		if (null == alias || alias.trim().isEmpty()) {
 			return null;
 		}
@@ -559,12 +559,43 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		}
 		return certInfo;
 	}
-	
-	public CertificateValue findACByAlias(String issuer) throws ServiceException {
-		return findCertificateByAlias(ksInfo, issuer);
-		
+
+	public CertificateValue findCertificateByAlias(KeyStoreInfo store, String alias, char[] password) throws ServiceException {
+		if (null == alias || alias.trim().isEmpty()) {
+			return null;
+		}
+
+		CertificateValue certInfo = null;
+		try {
+			KeyStore ks = load(store);
+
+			Certificate certificate = ks.getCertificate(alias);
+			Certificate[] certs = ks.getCertificateChain(alias);
+			certInfo = new CertificateValue(alias, (X509Certificate) certificate);
+			if (ks.isKeyEntry(alias)) {
+				certInfo.setContainsPrivateKey(true);
+				if (password !=null)
+					certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, password));
+
+			}
+
+			StringBuffer bf = new StringBuffer();
+			if (certs == null) {
+				log.error("chaine de certification nulle pour" + alias + "("+alias+")");
+				return null;
+			}
+			for (Certificate chainCert : certs) {
+				bf.append(chainCert.toString());
+			}
+			certInfo.setCertChain(bf.toString());
+			certInfo.setCertificateChain(certs);
+
+		} catch (KeyStoreException | KeyToolsException | UnrecoverableKeyException | NoSuchAlgorithmException e) {
+			throw new ServiceException(e);
+		}
+		return certInfo;
 	}
-	
+
 	/**
 	 * 
 	 * @param ksName

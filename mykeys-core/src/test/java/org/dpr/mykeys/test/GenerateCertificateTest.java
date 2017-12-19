@@ -87,8 +87,8 @@ public class GenerateCertificateTest {
 		certModel.setNotAfter(cal.getTime());
 	
 		CertificateHelper certServ = new CertificateHelper(certModel);
-		KeyStoreHelper ksh = new KeyStoreHelper(getStoreAC());
-		CertificateValue certIssuer = ksh.findACByAlias(AC_NAME);
+		KeyStoreHelper ksh = new KeyStoreHelper();
+		CertificateValue certIssuer = ksh.findCertificateAndPrivateKeyByAlias(getStoreAC(), AC_NAME);
 		try {
 			certServ.generateFromCSR(new FileInputStream(new File("src/test/resources/data/cert1.csr")), certIssuer);
 		} catch (IOException e) {
