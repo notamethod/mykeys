@@ -16,6 +16,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.CertificateHelperNew;
+import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
 import org.dpr.mykeys.keystore.CertificateType;
 
 public class AuthenticationService {
@@ -47,6 +48,20 @@ public class AuthenticationService {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		cer.setPassword(pwd);
+		return cer;
+	}
+
+	public CertificateValue AuthenticateUSer(String id, char[] pwd) throws AuthenticationException {
+		KeyStoreHelper ch = new KeyStoreHelper();
+		CertificateValue cer = null;
+
+		try {
+			cer = ch.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
+		} catch (Exception e) {
+			throw new AuthenticationException("authentication failed");
 		}
 
 		cer.setPassword(pwd);

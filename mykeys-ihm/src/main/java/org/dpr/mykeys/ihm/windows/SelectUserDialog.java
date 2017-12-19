@@ -39,6 +39,7 @@ import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
 import org.dpr.mykeys.ihm.windows.certificate.FillUtils;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.CertificateType;
@@ -76,7 +77,7 @@ public class SelectUserDialog extends JDialog {
 		DialogAction dAction = new DialogAction();
 		// FIXME:
 
-		setTitle("Nouvel utilisateur");
+		setTitle("Sélection utilisateur");
 
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
@@ -104,14 +105,7 @@ public class SelectUserDialog extends JDialog {
 	}
 
 	/**
-	 * .
-	 * 
-	 * 
-	 * @param mapKeyLength
-	 * @param mapAlgoKey
-	 * @param mapAlgoSig
-	 * 
-	 * @param isAC2
+	 * Return an infoPanel .
 	 * @return
 	 * @throws ServiceException 
 	 */
@@ -149,7 +143,7 @@ public class SelectUserDialog extends JDialog {
 
 				Map<String, Object> elements = infosPanel.getElements();
 
-				String nom=(String) elements.get("nom");
+				String nom=(String) elements.get("user");
 				String pwd=(String) elements.get("password");
 				if (nom == null|| nom.isEmpty()) {
 					MykeysFrame.showError(SelectUserDialog.this, "nom obligatoire");
@@ -165,14 +159,15 @@ public class SelectUserDialog extends JDialog {
 				CertificateHelperNew ch = new CertificateHelperNew();
 				AuthenticationService auth = new AuthenticationService();
 				try {
-					auth.createUser(nom, pwdChar);
-				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					auth.AuthenticateUSer(nom, pwdChar);
+
+				} catch (AuthenticationException e) {
+					log.error("authentication failure", e);
+					MykeysFrame.showError(SelectUserDialog.this, "Echec d'authentification");
+					System.exit(1);
 				}
 
 
-	
 			} else if (command.equals("CANCEL")) {
 				SelectUserDialog.this.setVisible(false);
 			}

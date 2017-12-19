@@ -6,7 +6,7 @@ import org.dpr.mykeys.ihm.windows.ComponentType;
 
 public class PanelBuilder {
 
-	LabelValuePanel lvPanel;
+	private LabelValuePanel lvPanel;
 
 	public PanelBuilder() {
 		super();
@@ -37,8 +37,9 @@ public class PanelBuilder {
 	}
 
 	public void addComponent(String label, String key, Map<String, String> users, ComponentType componentType) {
-		lvPanel.put(label, componentType.getValue(), key,  users, true);
-		
+		lvPanel.put(label, componentType.getValue(), key,  users);
+
+
 	}
 
 }
