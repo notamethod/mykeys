@@ -101,9 +101,9 @@ public class ChangePasswordDialog extends JDialog {
 					return;
 				}
 				ksInfo.setPassword(((String)elements.get("pwd_old")).toCharArray());
-				KeyStoreHelper service = new KeyStoreHelper(ksInfo);
+				KeyStoreHelper service = new KeyStoreHelper();
 				try {
-					service.changePassword(((String)elements.get("pwd_new")).toCharArray());
+					service.changePassword(ksInfo, ((String)elements.get("pwd_new")).toCharArray());
 					ksInfo.setOpen(false);
 					ChangePasswordDialog.this.setVisible(false);
 				} catch (TamperedWithException | KeyToolsException e) {

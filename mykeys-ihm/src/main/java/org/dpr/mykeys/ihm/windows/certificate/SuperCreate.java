@@ -323,7 +323,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 					CertificateValue issuer =  kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 					xCerts = certServ.generateX509(isAC, issuer);
 
-					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
+					kserv.addCertToKeyStore(ksInfo, xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					SuperCreate.this.setVisible(false);
 
 				} catch (Exception e) {

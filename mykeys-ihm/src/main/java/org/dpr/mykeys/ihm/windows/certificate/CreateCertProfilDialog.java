@@ -158,8 +158,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 	 * @param mapKeyLength
 	 * @param mapAlgoKey
 	 * @param mapAlgoSig
-	 * 
-	 * @param isAC2
+	 *
 	 * @return
 	 */
 	private LabelValuePanel createInfoPanel(Map<String, String> mapKeyLength, Map<String, String> mapAlgoKey,
@@ -227,7 +226,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 					//FIXME
 					xCerts = cm.generateX509(null);
 					// TODO manage ksinfo
-					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
+					kserv.addCertToKeyStore(ksInfo, xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {

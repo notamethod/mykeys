@@ -34,7 +34,7 @@ public class TestCerts {
 
 
 	@Test
-	public void ImportCert() {
+	public void ChangePwd() {
 		KeyTools kt = new KeyTools();
 		try {
 			String typeCert = null;

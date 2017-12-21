@@ -1,8 +1,9 @@
 package org.dpr.mykeys.ihm.windows;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,16 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.AbstractAction;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.logging.Log;
@@ -49,7 +41,7 @@ import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.PanelBuilder;
 
-public class SelectUserDialog extends JDialog {
+public class SelectUserDialog extends MkDialog {
 	public static final Log log = LogFactory.getLog(SelectUserDialog.class);
 
 	LabelValuePanel infosPanel;
@@ -58,13 +50,16 @@ public class SelectUserDialog extends JDialog {
 
 	boolean isAC = false;
 	public JFileChooser jfc;
+	int cpt=0;
+	private final int CPTMAX=4;
 
 	public SelectUserDialog(JFrame owner, boolean modal) throws IhmException {
 
 		super(owner, modal);
-
+		initLookAndFeel();
 		init();
 		this.pack();
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
 
 	}
 
@@ -101,6 +96,19 @@ public class SelectUserDialog extends JDialog {
 		jp.add(panelInfo);
 
 		jp.add(jf4);
+
+        this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+
+        // add a window listener
+        this.addWindowListener(new WindowAdapter()
+        {
+
+
+            public void windowClosing(WindowEvent e)
+            {
+                System.exit(0);
+            }
+        });
 
 	}
 
@@ -153,24 +161,30 @@ public class SelectUserDialog extends JDialog {
 					MykeysFrame.showError(SelectUserDialog.this, "password obligatoire");
 					return;
 				}
-				
-			
+
 				char[] pwdChar =pwd.toCharArray();
 				CertificateHelperNew ch = new CertificateHelperNew();
 				AuthenticationService auth = new AuthenticationService();
 				try {
 					auth.AuthenticateUSer(nom, pwdChar);
-
+					SelectUserDialog.this.setVisible(false);
+					return;
+                //stay alive until cpt max
 				} catch (AuthenticationException e) {
 					log.error("authentication failure", e);
 					MykeysFrame.showError(SelectUserDialog.this, "Echec d'authentification");
-					System.exit(1);
+                    if (cpt++>CPTMAX)
+					    System.exit(1);
+                    return;
 				}
 
 
 			} else if (command.equals("CANCEL")) {
 				SelectUserDialog.this.setVisible(false);
+				System.exit(0);
 			}
+			System.exit(0);
+
 
 		}
 	}

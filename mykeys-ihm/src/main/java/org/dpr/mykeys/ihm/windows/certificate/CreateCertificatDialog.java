@@ -107,7 +107,7 @@ public static void main(String[] args) {
 					CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(ksInfo, (String) elements.get("emetteur"));
 					xCerts = certServ.genererX509(certInfo, issuer, isAC, Usage.CODESIGNING);
 
-					kserv.addCertToKeyStore(xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
+					kserv.addCertToKeyStore(ksInfo, xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertificatDialog.this.setVisible(false);
 
 				} catch (Exception e) {

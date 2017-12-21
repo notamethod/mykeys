@@ -1,11 +1,6 @@
 package org.dpr.mykeys.app.keystore;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -63,7 +58,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 
 	}
 
-	public void changePassword(char[] newPwd) throws TamperedWithException, KeyToolsException {
+	public void changePassword(KeyStoreInfo ksInfo, char[] newPwd) throws TamperedWithException, KeyToolsException {
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
 		
@@ -72,11 +67,45 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		} catch (KeyToolsException e) {
 			throw new TamperedWithException(e);
 		}
+		Enumeration<String> enumKs;
+		try {
+			enumKs = ks.aliases();
+			if (enumKs != null && enumKs.hasMoreElements()) {
+
+				while (enumKs.hasMoreElements()) {
+					String alias = enumKs.nextElement();
+                    if (ks.isKeyEntry(alias)) {
+                        try {
+                            PrivateKey pk = (PrivateKey) ks.getKey(alias, ksInfo.getPassword());
+                            ks.setKeyEntry(alias, pk,newPwd, ks.getCertificateChain(alias) );
+                        }
+                            catch (NoSuchAlgorithmException | UnrecoverableKeyException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+				}
+			}
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		ksInfo.setPassword(newPwd);
 		// TODO:l create save file
-		kt.saveKeyStore(ks, ksInfo);
+		saveKeyStore(ks, ksInfo.getPath(), newPwd);
 	}
 
+	public void saveKeyStore(KeyStore ks, String path, char[] password) throws KeyToolsException {
+
+		try {
+			OutputStream fos = new FileOutputStream(new File(path));
+			ks.store(fos, password);
+			fos.close();
+		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+			throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
+		}
+	}
 
 	public ActionStatus loadKeystore(String path) {
 		StoreFormat format = findTypeKS(path);
@@ -271,7 +300,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		return certs;
 	}
 
-	public void addCertToKeyStore(X509Certificate[] xCerts, CertificateValue certInfo, char[] password) throws ServiceException {
+	public void addCertToKeyStore(KeyStoreInfo ksInfo, X509Certificate[] xCerts, CertificateValue certInfo, char[] password) throws ServiceException {
 	
 	
 		try {
