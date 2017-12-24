@@ -93,6 +93,27 @@ public class InternalKeystores {
 			return false;
 		return true;
 	}
+	public boolean existsCertDatabase() {
+
+		File f = new File(pathCert);
+		if (!f.exists())
+			return false;
+		return true;
+	}
+	public boolean existsACDatabase() {
+
+		File f = new File(pathAC);
+		if (!f.exists())
+			return false;
+		return true;
+	}
+	public boolean existsProfilDatabase() {
+
+		File f = new File(pathProfils);
+		if (!f.exists())
+			return false;
+		return true;
+	}
 
 	public KeyStoreInfo getUserDB() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 

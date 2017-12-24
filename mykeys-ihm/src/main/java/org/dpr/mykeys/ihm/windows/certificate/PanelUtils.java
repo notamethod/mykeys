@@ -15,8 +15,6 @@ public class PanelUtils {
 	public static final String ORG_UNIT_KEY="x509.subject.email";
 	public static final String STREET_KEY="x509.subject.email";
 
-	ResourceBundle messages = ResourceBundle.getBundle(
-			"Messages", Locale.getDefault());
 
 	public  void addSubjectToPanel(CertificateType type, LabelValuePanel infosPanel) {
 

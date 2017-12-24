@@ -20,8 +20,6 @@ public class MenuAction extends AbstractAction {
 
 	private MykeysFrame MykeysFrame;
 
-	ResourceBundle messages = ResourceBundle.getBundle(
-			"Messages", Locale.getDefault());
 
 	public MenuAction(Object MykeysFrame, String string) {
 		super(string);

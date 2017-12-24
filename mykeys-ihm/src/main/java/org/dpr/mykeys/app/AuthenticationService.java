@@ -37,6 +37,8 @@ public class AuthenticationService {
 		KeyStoreHelper kh = new KeyStoreHelper();
 
 		kh.addCertToKeyStore(ki, cer, null);
+		MkSession.password=cer.getPassword();
+		MkSession.user=id;
 	}
 
 	public CertificateValue loadUser(String id, char[] pwd) throws ServiceException {

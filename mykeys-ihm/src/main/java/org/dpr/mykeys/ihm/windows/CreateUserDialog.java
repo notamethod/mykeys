@@ -1,7 +1,6 @@
 package org.dpr.mykeys.ihm.windows;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Calendar;
@@ -48,7 +47,7 @@ import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.PanelBuilder;
 
-public class CreateUserDialog extends JDialog {
+public class CreateUserDialog extends MkDialog {
 	public static final Log log = LogFactory.getLog(CreateUserDialog.class);
 
 	LabelValuePanel infosPanel;
@@ -60,6 +59,7 @@ public class CreateUserDialog extends JDialog {
 
 		init();
 		this.pack();
+		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
 
 	}
 
@@ -69,6 +69,7 @@ public class CreateUserDialog extends JDialog {
 
 	private void init() {
 
+		initLookAndFeel();;
 		DialogAction dAction = new DialogAction();
 		// FIXME:
 

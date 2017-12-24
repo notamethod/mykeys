@@ -37,6 +37,7 @@ import javax.swing.plaf.ColorUIResource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
@@ -177,24 +178,23 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 	private void buildMenu() {
 
-		ResourceBundle messages = KSConfig.getMessage();
 		// menu
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu1 = new JMenu(KSConfig.getMessage().getString("magasin"));
+		JMenu menu1 = new JMenu(Messages.getString("magasin"));
 		// ImageIcon icon = createImageIcon("/images/images/keystore.png");
 		// menu1.setIcon(icon);
-		JMenuItem itemStart1 = new JMenuItem(new MenuAction(this, KSConfig.getMessage().getString("magasin.new")));
+		JMenuItem itemStart1 = new JMenuItem(new MenuAction(this, Messages.getString("magasin.new")));
 		itemStart1.setActionCommand("newStore");
 		menu1.add(itemStart1);
-		JMenuItem itemLoad = new JMenuItem(new MenuAction(this, KSConfig.getMessage().getString("magasin.load")));
+		JMenuItem itemLoad = new JMenuItem(new MenuAction(this, Messages.getString("magasin.load")));
 		itemLoad.setActionCommand("loadStore");
 		menu1.add(itemLoad);
 
-		JMenu menuOptions = new JMenu(KSConfig.getMessage().getString("options"));
+		JMenu menuOptions = new JMenu(Messages.getString("options"));
 
-		JMenuItem itemLog = new JMenuItem(new MenuAction(this, messages.getString("options")));
+		JMenuItem itemLog = new JMenuItem(new MenuAction(this, Messages.getString("options")));
 		itemLog.setActionCommand("options");
-		JMenuItem menuCrl = new JMenuItem(new MenuAction(this, messages.getString("crl.add")));
+		JMenuItem menuCrl = new JMenuItem(new MenuAction(this, Messages.getString("crl.add")));
 		menuCrl.setActionCommand("addCrl");
 		// menuOptions.add(menuCrl);
 

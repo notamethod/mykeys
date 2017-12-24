@@ -22,10 +22,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
-import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.ihm.windows.CreateUserDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -109,10 +106,14 @@ public class MyKeys {
         ProviderUtil.init("BC");
 
         try {
-            KSConfig.init(".myKeys2");
-            checkUpdate();
+            KSConfig.init(".myKeys24");
+            boolean justCreated = checkUpdate();
             checkConfig();
-            login();
+            if (justCreated) {
+                migrate();
+            }else{
+                login();
+            }
         } catch (Exception e) {
 
             MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
@@ -121,6 +122,21 @@ public class MyKeys {
 
         // buildComponents();
         // updateKeyStoreList();
+    }
+
+    /**
+     * not sure to continue on this...
+     */
+    private void migrate() {
+        log.info("migration not implemented");
+        char[] password = null;
+        if (KSConfig.getInternalKeystores().existsACDatabase()){
+
+            KeyStoreInfo ki = KSConfig.getInternalKeystores().getStoreAC();
+            KeyStoreHelper kh = new KeyStoreHelper();
+             password = MykeysFrame.showPasswordDialog(null, "Veuillez renseigner votre mot de passe pour upgrader les magasins");
+
+        }
     }
 
     private void login() {
@@ -143,10 +159,11 @@ public class MyKeys {
         }
     }
 
-    private void checkUpdate() throws InvocationTargetException, InterruptedException {
+    private boolean checkUpdate() throws InvocationTargetException, InterruptedException {
+        boolean justCreated=false;
         if (!KSConfig.getInternalKeystores().existsUserDatabase()) {
 
-            boolean retour = MykeysFrame.askConfirmDialog(null, "Vous devez créer un utilisateur avant de continuer");
+            boolean retour = MykeysFrame.askConfirmDialog(null, Messages.getString("prompt.createUser"));
             if (!retour) {
                 System.exit(0);
             }
@@ -157,14 +174,14 @@ public class MyKeys {
                         null, true);
                 //cs.setLocationRelativeTo(MykeysFrame);
                 cs.setVisible(true);
-
             });
+            justCreated=true;
 
         }
         if (!KSConfig.getInternalKeystores().existsUserDatabase())
             System.exit(0);
 
-
+        return justCreated;
     }
 
     private void checkConfig() {

@@ -509,11 +509,13 @@ public class KeyStoreHelper implements StoreService<KeyStoreInfo> {
 		try {
 			KeyStore ks = load(ki);
 			KeystoreBuilder ksb = new KeystoreBuilder(ks);
+			if (password==null)
+				password = ki.getPassword();
 			ksb.addCert(ki, certificate, password);
 		} catch (KeyToolsException e) {
 			throw new ServiceException(e);
 		}
-		
+
 	}
 
 	public CertificateValue findCertificateByAliasOld(KeyStoreInfo store, String alias) throws ServiceException {
