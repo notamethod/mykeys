@@ -399,10 +399,9 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		}
 		KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfo);
-	
-		KeyStore ks = null;
+
 		try {
-			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
+			ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
 					ksInfo.getPassword());
 			ksInfo.setOpen(true);
 		} catch (Exception e1) {
@@ -776,7 +775,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
 		KeyStoreHelper ksv = new KeyStoreHelper(null);
-		ks = ksv.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray());
+		ks = ksv.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray()).getKeystore();
 		Map<String, String> certsAC = new HashMap<String, String>();
 		Enumeration<String> enumKs = ks.aliases();
 		while (enumKs.hasMoreElements()) {

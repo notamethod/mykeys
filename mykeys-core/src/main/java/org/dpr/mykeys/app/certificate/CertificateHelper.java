@@ -8,21 +8,16 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.SignatureException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -48,9 +43,6 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.keystore.InternalKSTmp;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.ServiceException;
 
 public class CertificateHelper {
@@ -72,28 +64,55 @@ public class CertificateHelper {
 		super();
 	}
 
-	public X509Certificate[] generateX509(CertificateValue issuer) throws CertificateException, KeyToolsException {
+	public CertificateValue createCertificate(CertificateValue issuer) throws CertificateException, KeyToolsException {
 
-		return generateX509(false, issuer);
+		return createCertificate(false, issuer);
 	}
 
-	public X509Certificate[] generateX509(boolean isAC, CertificateValue issuer) throws CertificateException, KeyToolsException {
+	public CertificateValue createCertificate(boolean isAC, CertificateValue issuer) throws CertificateException, KeyToolsException {
 
 		CertificateBuilder builder = new CertificateBuilder();
-		X509Certificate[] xCerts;
-
 		try {
 
 			if (issuer == null) {
 				issuer = certInfo;
 			}
-			xCerts = builder.generate(certInfo, issuer, isAC).getCertificates();
+			return builder.generate(certInfo, issuer, isAC).getValue();
 		} catch (Exception e) {
 			log.error(e);
 			throw new CertificateException(e);
 		}
-		return xCerts;
 	}
+
+    public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer) throws CertificateException, KeyToolsException {
+
+        CertificateBuilder builder = new CertificateBuilder();
+        try {
+
+            if (issuer == null) {
+                issuer = certInfo;
+            }
+            return builder.generate(certModel, issuer, false).getValue();
+        } catch (Exception e) {
+            log.error(e);
+            throw new CertificateException(e);
+        }
+    }
+	public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer, Usage usage) throws CertificateException, KeyToolsException {
+
+		CertificateBuilder builder = new CertificateBuilder();
+		try {
+
+			if (issuer == null) {
+				issuer = certInfo;
+			}
+			return builder.generate(certModel, issuer, false,usage).getValue();
+		} catch (Exception e) {
+			log.error(e);
+			throw new CertificateException(e);
+		}
+	}
+
 
 	public X509Certificate[] generateCrlToFix() throws CertificateException {
 		// if (ktool == null) {
@@ -144,19 +163,6 @@ public class CertificateHelper {
 //		return builder.generate(certInfo, infoEmetteur, isAC, usage).getCertificates();
 //	}
 
-	public X509Certificate[] genererX509(CertificateValue certInfo, CertificateValue infoEmetteur, boolean isAC)
-			throws Exception {
-		CertificateBuilder builder = new CertificateBuilder();
-		return builder.generate(certInfo, infoEmetteur, isAC, Usage.DEFAULT).getCertificates();
-	}
-	
-	public X509Certificate[] genererX509(CertificateValue certInfo, CertificateValue infoEmetteur, boolean isAC, Usage usage)
-			throws Exception {
-		CertificateBuilder builder = new CertificateBuilder();
-		return builder.generate(certInfo, infoEmetteur, isAC,usage).getCertificates();
-	}
-
-	
 
 	/**
 	 * Generate a X509 certificate from CSR file

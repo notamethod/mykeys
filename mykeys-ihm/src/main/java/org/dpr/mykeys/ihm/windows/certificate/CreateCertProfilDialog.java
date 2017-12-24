@@ -224,9 +224,9 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 					KeyTools ktools = new KeyTools();
 					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
 					//FIXME
-					xCerts = cm.generateX509(null);
+					 CertificateValue newCertificate = cm.createCertificate(null);
 					// TODO manage ksinfo
-					kserv.addCertToKeyStore(ksInfo, xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
+					kserv.addCertToKeyStore(ksInfo, newCertificate, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertProfilDialog.this.setVisible(false);
 
 				} catch (Exception e) {

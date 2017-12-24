@@ -105,7 +105,8 @@ public static void main(String[] args) {
 					CertificateHelper certServ = new CertificateHelper(null);
 					CertificateValue infoEmetteur = kserv.fillCertInfo(ks , (String) elements.get("emetteur"));
 					CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(ksInfo, (String) elements.get("emetteur"));
-					xCerts = certServ.genererX509(certInfo, issuer, isAC, Usage.CODESIGNING);
+					//FIXME
+					xCerts = (X509Certificate[]) certServ.createCertificate(certInfo, issuer, Usage.CODESIGNING).getCertificateChain();
 
 					kserv.addCertToKeyStore(ksInfo, xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertificatDialog.this.setVisible(false);

@@ -76,7 +76,7 @@ public class CertDetailPanel extends LabelValuePanel {
 //		this.put("Digest SHA256", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", false),
 //				false);
 		this.putEmptyLine();
-		this.put("Chaine de certificats", JTextArea.class, "xCertChain", info.getCertChain(), false);
+		this.put("Chaine de certificats", JTextArea.class, "xCertChain", info.getChaineStringValue(), false);
 		this.putEmptyLine();
 		this.put("Signature", JTextArea.class, "signature", X509Util.toHexString(info.getSignature(), " ", false),
 				false);

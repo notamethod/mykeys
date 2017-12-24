@@ -1,23 +1,14 @@
 package org.dpr.mykeys.app.certificate;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
-import java.security.SignatureException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -27,16 +18,12 @@ import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.DisplayText;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.DistributionPointName;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
-import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
@@ -47,20 +34,8 @@ import org.bouncycastle.asn1.x509.PolicyQualifierInfo;
 import org.bouncycastle.asn1.x509.UserNotice;
 import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
-import org.bouncycastle.crypto.util.PrivateKeyFactory;
 import org.bouncycastle.jce.X509Principal;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.operator.ContentSigner;
-import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder;
-import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
-import org.bouncycastle.operator.OperatorCreationException;
-import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder;
-import org.bouncycastle.pkcs.PKCS10CertificationRequest;
-import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.dpr.mykeys.app.KeyTools;
@@ -68,8 +43,9 @@ import org.dpr.mykeys.app.KeyTools;
 public class CertificateBuilder extends KeyTools {
 
 	final Log log = LogFactory.getLog(CertificateBuilder.class);
-	
-	X509Certificate[] certificates;
+
+
+	CertificateValue certificateValue;
 	
 	X509V3CertificateGenerator certGen;
 
@@ -92,8 +68,12 @@ public class CertificateBuilder extends KeyTools {
 	}
 
 	public X509Certificate get() {
-		return certificates[0];
+		return certificateValue.getCertificate();
 	}
+
+    public CertificateValue getValue() {
+        return certificateValue;
+    }
 
 	/**
 	 * .
@@ -101,8 +81,8 @@ public class CertificateBuilder extends KeyTools {
 	 * <BR>
 	 * 
 	 * 
-	 * @param certInfo
-	 * @param string
+	 * @param certModel
+	 * @param certIssuer
 	 * @return
 	 * @throws Exception
 	 */
@@ -125,11 +105,15 @@ public class CertificateBuilder extends KeyTools {
 	// }
 
 	@SuppressWarnings("deprecation")
-	private X509Certificate[] genererX509(CertificateValue certModel, CertificateValue certIssuer, boolean isAC)
+	private CertificateValue genererX509(CertificateValue certModel, CertificateValue certIssuer, boolean isAC)
 			throws Exception {
 
+
 		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
-		keyPairGen(certModel.getAlgoPubKey(), certModel.getKeyLength(), certModel);
+
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(certModel.getAlgoPubKey(), "BC");
+		keyGen.initialize(certModel.getKeyLength());
+		KeyPair keypair = keyGen.genKeyPair();
 
 		// SerialNumber
 		BigInteger bi = RandomBI(30);
@@ -144,7 +128,7 @@ public class CertificateBuilder extends KeyTools {
 			certGen.setIssuerDN(new X509Principal(new X509Principal(certModel.subjectMapToX509Name())));
 		}
 
-		certGen.setPublicKey(certModel.getPublicKey());
+		certGen.setPublicKey(keypair.getPublic());
 		setDuration(certModel);
 
 		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
@@ -164,7 +148,7 @@ public class CertificateBuilder extends KeyTools {
 		// certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 		// new AuthorityKeyIdentifierStructure( caCert));
 		certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false,
-				extUtils.createSubjectKeyIdentifier(certModel.getPublicKey()));
+				extUtils.createSubjectKeyIdentifier(keypair.getPublic()));
 
 		// X509Extensions.ExtendedKeyUsage.
 
@@ -186,7 +170,7 @@ public class CertificateBuilder extends KeyTools {
 					new AuthorityKeyIdentifierStructure(certIssuer.getCertificate()));
 		} else {
 			certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
-					new AuthorityKeyIdentifierStructure(certModel.getPublicKey()));
+					new AuthorityKeyIdentifierStructure(keypair.getPublic()));
 		}
 
 		if (StringUtils.isNotBlank(certModel.getPolicyCPS())) {
@@ -198,15 +182,23 @@ public class CertificateBuilder extends KeyTools {
 		}
 		// gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
 		// new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
-
-		X509Certificate cert = certGen.generate(certIssuer.getPrivateKey());
+        X509Certificate cert = null;
+		if (certModel.getSubjectString().equalsIgnoreCase(certIssuer.getSubjectString())) {
+             cert = certGen.generate(keypair.getPrivate());
+        } else {
+             cert = certGen.generate(certIssuer.getPrivateKey());
+        }
 		// TODO: let generate expired certificate for test purpose ?
 		try {
 			cert.checkValidity(new Date());
 		} catch (Exception e) {
 			log.warn("invalid certificate", e);
 		}
-		cert.verify(certIssuer.getPublicKey());
+        if (certModel.getSubjectString().equalsIgnoreCase(certIssuer.getSubjectString())) {
+            cert.verify(keypair.getPublic());
+        }else{
+            cert.verify(certIssuer.getPublicKey());
+        }
 		X509Certificate[] certChain = null;
 		// FIXME: gérer la chaine de l'émetteur
 		if (certIssuer.getCertificateChain() != null) {
@@ -224,8 +216,10 @@ public class CertificateBuilder extends KeyTools {
 		} else {
 			certChain = new X509Certificate[] { cert };
 		}
-
-		return certChain;
+		CertificateValue certReturn = new CertificateValue(certChain);
+		certReturn.setPrivateKey(keypair.getPrivate());
+		certReturn.setPublicKey(keypair.getPublic());
+		return certReturn;
 
 	}
 
@@ -346,7 +340,6 @@ public class CertificateBuilder extends KeyTools {
 	/**
 	 * @param certModel
 	 * @param certIssuer
-	 * @param certGen
 	 */
 	CertificateBuilder addCrlDistributionPoint(CertificateValue certModel, CertificateValue certIssuer
 			) { // point
@@ -373,11 +366,12 @@ public class CertificateBuilder extends KeyTools {
 			Usage usage) throws Exception {
 		switch (usage) {
 		case CODESIGNING:
-			certificates = genererX509CodeSigning(certInfo, infoEmetteur, isAC);
+		    //FIXME change signature
+			genererX509CodeSigning(certInfo, infoEmetteur, isAC);
 			break;
 
 		default:
-			certificates = genererX509(certInfo, infoEmetteur, isAC);
+			certificateValue =  genererX509(certInfo, infoEmetteur, isAC);
 			//FIXME: crl dispitribuion point?
 			break;
 		}
@@ -392,7 +386,7 @@ public class CertificateBuilder extends KeyTools {
 	}
 
 	public X509Certificate[] getCertificates() {
-		return certificates;
+		return (X509Certificate[]) certificateValue.getCertificateChain();
 	}
 
 

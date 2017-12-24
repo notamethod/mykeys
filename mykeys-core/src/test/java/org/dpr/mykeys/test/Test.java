@@ -64,7 +64,7 @@ public class Test {
 		ksInfo.setPassword("111".toCharArray());
 		try {
 			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword());
+					ksInfo.getPassword()).getKeystore();
 
 		} catch (Exception e1) {
 

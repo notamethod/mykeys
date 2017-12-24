@@ -102,7 +102,7 @@ public class TestCerts {
 		ksInfo.setPassword("1234".toCharArray());
 		try {
 			ks = ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword());
+					ksInfo.getPassword()).getKeystore();
 
 		} catch (Exception e1) {
 
@@ -154,7 +154,7 @@ public class TestCerts {
 		KeyStoreHelper ksHelper = new KeyStoreHelper(ksInfo);
 		try {
 			ks = ksHelper.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-					ksInfo.getPassword());
+					ksInfo.getPassword()).getKeystore();
 
 		} catch (Exception e1) {
 

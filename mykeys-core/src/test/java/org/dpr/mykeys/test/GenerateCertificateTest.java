@@ -59,11 +59,11 @@ public class GenerateCertificateTest {
 		certModel.setNotBefore(new Date());
 		certModel.setNotAfter(cal.getTime());
 		CertificateValue certIssuer = new CertificateValue();
-
+		certModel.setSubjectMap("CN=toto");
 		CertificateHelper certServ = new CertificateHelper(certModel);
 
 		try {
-			certServ.genererX509(certModel, certModel, isAC);
+			certServ.createCertificate(certModel, certModel);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e);

@@ -59,12 +59,13 @@ public class KeysAction implements ActionListener {
 		//
 		case OPEN_STORE:
 			if (this.listPanel.openStore(false, true)) {
-			}
+
 			try {
 				this.listPanel.updateInfo(this.listPanel.ksInfo);
 			} catch (ServiceException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			}
 			}
 			break;
 		//

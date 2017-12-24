@@ -79,7 +79,7 @@ public class CommonsActions {
 		KeyStoreHelper ksBuilder = new KeyStoreHelper(kInfo);
 		KeyStore ks;
 		try {
-			ks = ksBuilder.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo.getPassword());
+			ks = ksBuilder.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo.getPassword()).getKeystore();
 			certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(), kInfo.getPassword()));
 		} catch (KeyToolsException e) {
 			// TODO Auto-generated catch block

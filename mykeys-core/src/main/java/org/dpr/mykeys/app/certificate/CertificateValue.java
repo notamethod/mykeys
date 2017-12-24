@@ -26,7 +26,7 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
-public class CertificateValue implements ChildInfo {
+public class CertificateValue implements ChildInfo, Cloneable  {
     public static final Log log = LogFactory.getLog(CertificateValue.class);
     private final List<GeneralName> subjectNames = new ArrayList<GeneralName>();
     private Certificate[] certificateChain;
@@ -49,7 +49,7 @@ public class CertificateValue implements ChildInfo {
     private byte[] digestSHA1;
     private byte[] digestSHA256;
     private boolean containsPrivateKey = false;
-    private String certChain;
+    private String chaineStringValue;
     private String crlDistributionURL;
     private X509Certificate certificate;
     private String policyNotice;
@@ -120,21 +120,21 @@ public class CertificateValue implements ChildInfo {
     }
 
     /**
-     * Retourne le certChain.
+     * Retourne le chaineStringValue.
      *
-     * @return String - le certChain.
+     * @return String - le chaineStringValue.
      */
-    public String getCertChain() {
-        return certChain;
+    public String getChaineStringValue() {
+        return chaineStringValue;
     }
 
     /**
-     * Affecte le certChain.
+     * Affecte le chaineStringValue.
      *
-     * @param certChain le certChain à affecter.
+     * @param chaineStringValue le chaineStringValue à affecter.
      */
-    public void setCertChain(String certChain) {
-        this.certChain = certChain;
+    public void setChaineStringValue(String chaineStringValue) {
+        this.chaineStringValue = chaineStringValue;
     }
 
     private void init(X509Certificate[] certs) {
@@ -545,9 +545,7 @@ public class CertificateValue implements ChildInfo {
      * @return
      */
     public Certificate[] getCertificateChain() {
-        if (certificateChain == null)
-            return new Certificate[]{certificate};
-        else
+
             return certificateChain;
     }
 
@@ -689,5 +687,22 @@ public class CertificateValue implements ChildInfo {
     public ChildType getChildType() {
         // TODO Auto-generated method stub
         return ChildType.CERTIFICATE;
+    }
+
+    public Object clone() {
+        CertificateValue certificate = null;
+        try {
+            // On récupère l'instance à renvoyer par l'appel de la
+            // méthode super.clone()
+            certificate = (CertificateValue) super.clone();
+        } catch(CloneNotSupportedException cnse) {
+            // Ne devrait jamais arriver car nous implémentons
+            // l'interface Cloneable
+            cnse.printStackTrace(System.err);
+        }
+
+
+        // on renvoie le clone
+        return certificate;
     }
 }

@@ -272,7 +272,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		cs.setResizable(false);
 		cs.setVisible(true);
 		updateInfo(info);
-
 		return;
 	}
 

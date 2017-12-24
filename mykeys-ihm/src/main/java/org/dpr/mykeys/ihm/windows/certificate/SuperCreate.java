@@ -29,14 +29,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
@@ -314,16 +312,15 @@ public class SuperCreate extends JDialog implements ItemListener {
 			} else if (command.equals("OK")) {
 				try {
 					fillCertInfo();
-					X509Certificate[] xCerts = null;
-					KeyTools ktools = new KeyTools();
+
 					KeyStoreHelper kserv = new KeyStoreHelper();
 					
 					certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 					CertificateHelper certServ = new CertificateHelper(certInfo);
 					CertificateValue issuer =  kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
-					xCerts = certServ.generateX509(isAC, issuer);
 
-					kserv.addCertToKeyStore(ksInfo, xCerts, certInfo, KSConfig.getInternalKeystores().getPassword().toCharArray());
+					CertificateValue newCertificate = certServ.createCertificate(isAC, issuer);
+					kserv.addCertToKeyStore(ksInfo, newCertificate,  ksInfo.getPassword());
 					SuperCreate.this.setVisible(false);
 
 				} catch (Exception e) {

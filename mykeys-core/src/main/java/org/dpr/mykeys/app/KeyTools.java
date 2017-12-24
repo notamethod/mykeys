@@ -1,29 +1,5 @@
 package org.dpr.mykeys.app;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.cert.CRLException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -37,37 +13,39 @@ import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 
+import java.io.*;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.*;
+import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class KeyTools {
-	// FIXME:en création de magasin si l'extension est saisie ne pas la mettre 2
-	// fois.
-	// FIXME: ne pas autoriser la saisie de la clé privée dans les magasins
-	// internes
-	final Log log = LogFactory.getLog(KeyTools.class);
+    public static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
+    public static final String END_PEM = "-----END CERTIFICATE-----";
+    public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
+    public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
+    private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
+    public static String EXT_P12 = ".p12";
+    public static String EXT_PEM = ".pem";
+    public static String EXT_DER = ".der";
+    // FIXME:en création de magasin si l'extension est saisie ne pas la mettre 2
+    // fois.
+    // FIXME: ne pas autoriser la saisie de la clé privée dans les magasins
+    // internes
+    final Log log = LogFactory.getLog(KeyTools.class);
 
-	public static String EXT_P12 = ".p12";
-	public static String EXT_PEM = ".pem";
-	public static String EXT_DER = ".der";
-
-
-	public static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
-	public static final String END_PEM = "-----END CERTIFICATE-----";
-
-	public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
-
-	public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
-
-	private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
-
-	public static void main(String[] args) {
-		KeyTools test = new KeyTools();
-		// test.KeyPairGen("RSA", 512, new CertificateInfo());
-		// KeyStore ks= test.loadKeyStore("keystorePub.p12", TYPE_P12);
-		// X509Certificate cert = test.genererX509();
-		// test.saveCert("cert001", ks, cert);
-		// test.saveKeyStore(ks, "password".toCharArray());
-		// test.createKeyStore("JKS");
-		// test.createKeyStore(TYPE_P12, "keystorePub.p12");
-		Security.addProvider(new BouncyCastleProvider());
+    public static void main(String[] args) {
+        KeyTools test = new KeyTools();
+        // test.KeyPairGen("RSA", 512, new CertificateInfo());
+        // KeyStore ks= test.loadKeyStore("keystorePub.p12", TYPE_P12);
+        // X509Certificate cert = test.genererX509();
+        // test.saveCert("cert001", ks, cert);
+        // test.saveKeyStore(ks, "password".toCharArray());
+        // test.createKeyStore("JKS");
+        // test.createKeyStore(TYPE_P12, "keystorePub.p12");
+        Security.addProvider(new BouncyCastleProvider());
 //		try {
 //			test.generateCrl2();
 //		} catch (UnrecoverableKeyException e) {
@@ -104,244 +82,202 @@ public class KeyTools {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		// Set aa = Security.getProvider("BC").getServices();
-		// Object o = Security.getProvider("BC").get("Signature");
-		//
-		// Set bb = Security.getProvider("BC").keySet();
-		// Set cc = Security.getProvider("BC").getServices();
+        // Set aa = Security.getProvider("BC").getServices();
+        // Object o = Security.getProvider("BC").get("Signature");
+        //
+        // Set bb = Security.getProvider("BC").keySet();
+        // Set cc = Security.getProvider("BC").getServices();
 
-	}
+    }
 
-	/**
-	 * KeyPAirGen with String as keyLength
-	 * 
-	 * @param algo
-	 * @param keyLength
-	 * @param certModel
-	 */
-	public void keyPairGen(String algo, String keyLength, CertificateValue certModel) {
-		int kl = Integer.valueOf(keyLength).intValue();
-		keyPairGen(algo, kl, certModel);
-	}
+    /**
+     * get a random BigInteger
+     *
+     * @param numBits
+     * @return
+     */
+    public static BigInteger RandomBI(int numBits) {
+        SecureRandom random = new SecureRandom();
+        // byte bytes[] = new byte[20];
+        // random.nextBytes(bytes);
+        BigInteger bi = new BigInteger(numBits, random);
+        return bi;
 
-	/**
-	 * Key pair generation
-	 * 
-	 * @param algo
-	 * @param keyLength
-	 * @param certModel
-	 */
-	public void keyPairGen(String algo, int keyLength, CertificateValue certModel) {
-		try {
-			if (log.isDebugEnabled()) {
-				log.debug("generating keypair: " + algo + " keypair: " + keyLength);
-			}
+    }
 
-			KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algo, "BC");
-			keyGen.initialize(keyLength);
+    /**
+     * KeyPAirGen with String as keyLength
+     *
+     * @param algo
+     * @param keyLength
+     * @param certModel
+     */
+    public void keyPairGen(String algo, String keyLength, CertificateValue certModel) {
+        int kl = Integer.valueOf(keyLength).intValue();
+        keyPairGen(algo, kl, certModel);
+    }
 
-			KeyPair keypair = keyGen.genKeyPair();
-			certModel.setPrivateKey(keypair.getPrivate());
-			certModel.setPublicKey(keypair.getPublic());
+    /**
+     * Key pair generation
+     *
+     * @param algo
+     * @param keyLength
+     * @param certModel
+     * @deprecated replace with own code
+     */
+    @Deprecated
+    public void keyPairGen(String algo, int keyLength, CertificateValue certModel) {
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("generating keypair: " + algo + " keypair: " + keyLength);
+            }
 
-		} catch (java.security.NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-		}
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algo, "BC");
+            keyGen.initialize(keyLength);
 
-	}
+            KeyPair keypair = keyGen.genKeyPair();
+            certModel.setPrivateKey(keypair.getPrivate());
+            certModel.setPublicKey(keypair.getPublic());
 
+        } catch (java.security.NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        }
 
-	/**
-	 * .
-	 * 
-	 * 
-	 * @param kstore
-	 * @param xCerts
-	 * @param certInfo
-	 * @throws KeyToolsException
-	 */
-	@Deprecated
-	protected void saveCertChain(KeyStore kstore, X509Certificate[] xCerts, CertificateValue certInfo)
-			throws KeyToolsException {
-		try {
-			if (certInfo.getPrivateKey() == null) {
-				// kstore.setCertificateEntry(certInfo.getAlias(), cert);
-			} else {
-				// FIXME: isinternal: password = kspwd
-				kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), xCerts);
-			}
+    }
 
-			// ks.setCertificateEntry(alias, cer);
-		} catch (KeyStoreException e) {
-			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
-		}
-	}
-	
-	public void saveKeyStore(KeyStore ks, KeyStoreInfo ksInfo) throws KeyToolsException {
+    public void saveKeyStore(KeyStore ks, KeyStoreInfo ksInfo) throws KeyToolsException {
 
-		try {
-			OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
-			ks.store(fos, ksInfo.getPassword());
-			fos.close();
-		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
-			throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
-		}	
-	}
+        try {
+            OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
+            ks.store(fos, ksInfo.getPassword());
+            fos.close();
+        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+            throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
+        }
+    }
 
-	@Deprecated
-	public void saveCert(KeyStore kstore, X509Certificate cert, CertificateValue certInfo) throws KeyToolsException {
-		try {
-			// X509Certificate x509Cert = (X509Certificate) cert;
-			Certificate[] chaine = new Certificate[] { cert };
-			if (certInfo.getPrivateKey() == null) {
-				kstore.setCertificateEntry(certInfo.getAlias(), cert);
-			} else {
+    @Deprecated
+    public void saveCert(KeyStore kstore, X509Certificate cert, CertificateValue certInfo) throws KeyToolsException {
+        try {
+            // X509Certificate x509Cert = (X509Certificate) cert;
+            Certificate[] chaine = new Certificate[]{cert};
+            if (certInfo.getPrivateKey() == null) {
+                kstore.setCertificateEntry(certInfo.getAlias(), cert);
+            } else {
 
-				kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
-			}
+                kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
+            }
 
-			// ks.setCertificateEntry(alias, cer);
-		} catch (KeyStoreException e) {
-			throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
-		}
-	}
+            // ks.setCertificateEntry(alias, cer);
+        } catch (KeyStoreException e) {
+            throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
+        }
+    }
 
+    public String getKey(String alias, KeyStore keyStore, char[] motDePasse) throws GeneralSecurityException {
 
-	public String getKey(String alias, KeyStore keyStore, char[] motDePasse) throws GeneralSecurityException {
+        PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
+        if (privateKey != null) {
+            return ("Clé privée  trouvée");
+        } else {
+            return ("Clé privée absente ");
+        }
+    }
 
-		PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
-		if (privateKey != null) {
-			return ("Clé privée  trouvée");
-		} else {
-			return ("Clé privée absente ");
-		}
-	}
+    public void importX509CertOld(String alias, KeyStoreInfo ksInfo, String fileName, String typeCert, char[] charArray)
+            throws KeyToolsException, FileNotFoundException, CertificateException, GeneralSecurityException {
+        return;
 
+    }
 
+    public void exportDer(CertificateValue certInfo, String fName) throws KeyToolsException {
+        /* save the public key in a file */
+        try {
 
-	
+            FileOutputStream keyfos = new FileOutputStream(new File(fName + ".der"));
+            keyfos.write(certInfo.getCertificate().getEncoded());
+            keyfos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            throw new KeyToolsException("Export de la clé publique impossible:" + certInfo.getAlias(), e);
+        }
+    }
 
-	public void importX509CertOld(String alias, KeyStoreInfo ksInfo, String fileName, String typeCert, char[] charArray)
-			throws KeyToolsException, FileNotFoundException, CertificateException, GeneralSecurityException {
-		return ;
+    public void exportPem(CertificateValue certInfo, String fName) throws KeyToolsException {
+        /* save the public key in a file */
+        try {
+            List<String> lines = new ArrayList<String>();
+            lines.add(BEGIN_PEM);
+            // FileUtils.writeLines(file, lines)
+            File f = new File(fName + ".pem");
+            // FileOutputStream keyfos = new FileOutputStream(new File(fName
+            // + ".pem"));
+            byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
+            String tmpString = new String(b);
+            String[] datas = tmpString.split("(?<=\\G.{64})");
+            for (String data : datas) {
+                lines.add(data);
+            }
 
-	}
+            lines.add(END_PEM);
+            FileUtils.writeLines(f, lines);
+            // keyfos.write(certInfo.getCertificate().getEncoded());
+            // keyfos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            throw new KeyToolsException("Export de la clé publique impossible:" + certInfo.getAlias(), e);
+        }
+    }
 
-	
+    public CRLDistPoint getDistributionPoints(X509Certificate certX509) {
 
+        X509CertificateObject certificateImpl = (X509CertificateObject) certX509;
 
-	public void exportDer(CertificateValue certInfo, String fName) throws KeyToolsException {
-		/* save the public key in a file */
-		try {
+        byte[] extension = certificateImpl.getExtensionValue(X509Extensions.CRLDistributionPoints.getId());
 
-			FileOutputStream keyfos = new FileOutputStream(new File(fName + ".der"));
-			keyfos.write(certInfo.getCertificate().getEncoded());
-			keyfos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e);
-			throw new KeyToolsException("Export de la clé publique impossible:" + certInfo.getAlias(), e);
-		}
-	}
+        if (extension == null) {
+            if (log.isWarnEnabled()) {
+                log.warn("Pas de CRLDistributionPoint pour: " + certificateImpl.getSubjectDN());//
+            }
+            return null;
+        }
 
-	public void exportPem(CertificateValue certInfo, String fName) throws KeyToolsException {
-		/* save the public key in a file */
-		try {
-			List<String> lines = new ArrayList<String>();
-			lines.add(BEGIN_PEM);
-			// FileUtils.writeLines(file, lines)
-			File f = new File(fName + ".pem");
-			// FileOutputStream keyfos = new FileOutputStream(new File(fName
-			// + ".pem"));
-			byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
-			String tmpString = new String(b);
-			String[] datas = tmpString.split("(?<=\\G.{64})");
-			for (String data : datas) {
-				lines.add(data);
-			}
+        CRLDistPoint distPoints = null;
 
-			lines.add(END_PEM);
-			FileUtils.writeLines(f, lines);
-			// keyfos.write(certInfo.getCertificate().getEncoded());
-			// keyfos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e);
-			throw new KeyToolsException("Export de la clé publique impossible:" + certInfo.getAlias(), e);
-		}
-	}
+        try {
+            distPoints = CRLDistPoint.getInstance(X509ExtensionUtil.fromExtensionValue(extension));
+        } catch (Exception e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Extension de CRLDistributionPoint non reconnue pour: " + certificateImpl.getSubjectDN());//
+            }
+            if (log.isDebugEnabled()) {
+                log.debug(e);
+            }
 
-	/**
-	 * get a random BigInteger
-	 * 
-	 * @param numBits
-	 * @return
-	 */
-	public static BigInteger RandomBI(int numBits) {
-		SecureRandom random = new SecureRandom();
-		// byte bytes[] = new byte[20];
-		// random.nextBytes(bytes);
-		BigInteger bi = new BigInteger(numBits, random);
-		return bi;
+        }
+        return distPoints;
 
-	}
-
-	
+    }
 
 
+    /**
+     * .
+     * <p>
+     * <BR>
+     *
+     * @param xCerts
+     * @throws IOException
+     * @throws CRLException
+     */
+    public void saveCRL(X509CRL crl, File crlFile) throws CRLException, IOException {
+        OutputStream output = new FileOutputStream(crlFile);
+        IOUtils.write(crl.getEncoded(), output);
 
-	public CRLDistPoint getDistributionPoints(X509Certificate certX509) {
-
-		X509CertificateObject certificateImpl = (X509CertificateObject) certX509;
-
-		byte[] extension = certificateImpl.getExtensionValue(X509Extensions.CRLDistributionPoints.getId());
-
-		if (extension == null) {
-			if (log.isWarnEnabled()) {
-				log.warn("Pas de CRLDistributionPoint pour: " + certificateImpl.getSubjectDN());//
-			}
-			return null;
-		}
-
-		CRLDistPoint distPoints = null;
-
-		try {
-			distPoints = CRLDistPoint.getInstance(X509ExtensionUtil.fromExtensionValue(extension));
-		} catch (Exception e) {
-			if (log.isWarnEnabled()) {
-				log.warn("Extension de CRLDistributionPoint non reconnue pour: " + certificateImpl.getSubjectDN());//
-			}
-			if (log.isDebugEnabled()) {
-				log.debug(e);
-			}
-
-		}
-		return distPoints;
-
-	}
-
-
-	/**
-	 * .
-	 * 
-	 * <BR>
-	 * 
-	 * 
-	 * @param xCerts
-	 * @throws IOException
-	 * @throws CRLException
-	 */
-	public void saveCRL(X509CRL crl, File crlFile) throws CRLException, IOException {
-		OutputStream output = new FileOutputStream(crlFile);
-		IOUtils.write(crl.getEncoded(), output);
-
-	}
-
-
-
-	
+    }
 
 
 }
