@@ -1,6 +1,7 @@
 package org.dpr.mykeys.app;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -150,11 +151,16 @@ public class KSConfig {
 		}
 		return messages;
 	}
-	
-	public static InternalKeystores getInternalKeystores() {
+
+	public static InternalKeystores getOldInternalKeystores() {
 		if (internalKeystores == null) {
 			internalKeystores = new InternalKeystores(getCfgPath() +  "userDB.jks", getCfgPath() +  "mykeysAc.jks",getCfgPath() + "mykeysCert.jks",getProfilsPath());
-			
+		}
+		return internalKeystores;
+	}
+	public static InternalKeystores getInternalKeystores()  {
+		if (internalKeystores == null) {
+			internalKeystores = new InternalKeystores(getCfgPath() ,getProfilsPath());
 		}
 		return internalKeystores;
 	}

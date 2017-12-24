@@ -66,7 +66,6 @@ public class MyKeys {
 
             }
         });
-
     }
 
     /**
@@ -114,10 +113,11 @@ public class MyKeys {
             }else{
                 login();
             }
+            KSConfig.getInternalKeystores().init();
         } catch (Exception e) {
 
             MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
-            throw new RuntimeException("Fatal Error");
+            throw new RuntimeException("Fatal Error",e);
         }
 
         // buildComponents();

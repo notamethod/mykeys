@@ -7,9 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStoreException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
@@ -23,11 +25,36 @@ import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
+import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 
 public class InternalKeystores {
 
 	public static final Log log = LogFactory.getLog(InternalKeystores.class);
 	public String password = "mKeys983178";
+	static String USERDB =  "userDB.jks";
+	static String cfgPath =  "userDB.jks";
+
+	public InternalKeystores(String cfgPath, String profilsPath)  {
+//        try {
+//          //  this.pathAC = cfgPath +generateName(StoreModel.CASTORE);
+//            this.pathCert = cfgPath + generateName(StoreModel.CERTSTORE);
+//
+//        } catch (NoSuchAlgorithmException e) {
+//           throw new RuntimeException(e);
+//        }
+		this.cfgPath = cfgPath;
+		this.pathProfils = profilsPath;
+		this.pathUDB = cfgPath + USERDB;
+	}
+
+	private String generateName(StoreModel castore) throws NoSuchAlgorithmException {
+		if (MkSession.user==null)
+			throw new IllegalArgumentException("session is empty");
+		String hdigest = new DigestUtils(SHA_256).digestAsHex((MkSession.user+castore.toString()).getBytes());
+
+		return hdigest+".jks";
+
+	}
 
 	public String getPassword() {
 		return password;
@@ -198,4 +225,13 @@ public class InternalKeystores {
 				KSConfig.getInternalKeystores().getPassword().toCharArray());
 	}
 
+	public void init() throws NoSuchAlgorithmException {
+		if (null == pathAC) {
+			this.pathAC = cfgPath + generateName(StoreModel.CASTORE);
+		}
+		if (null == pathCert) {
+			this.pathCert = cfgPath + generateName(StoreModel.CERTSTORE);
+		}
+
+	}
 }
