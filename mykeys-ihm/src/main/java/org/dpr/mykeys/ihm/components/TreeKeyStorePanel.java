@@ -492,8 +492,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	}
 
 	@Override
-	public void treeWillCollapse(TreeExpansionEvent event)
-			throws ExpandVetoException {
+	public void treeWillCollapse(TreeExpansionEvent event) {
 		// log.trace("collapse1");
 
 	}

@@ -156,15 +156,7 @@ public class KeystoreBuilder extends KeyTools {
             OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
             keystore.store(fos, ksInfo.getPassword());
             fos.close();
-        } catch (FileNotFoundException e) {
-            throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
-        } catch (KeyStoreException e) {
-            throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
-        } catch (CertificateException e) {
-            throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
-        } catch (IOException e) {
+        } catch (KeyStoreException | IOException | CertificateException | NoSuchAlgorithmException e) {
             throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
         }
     }
@@ -186,17 +178,13 @@ public class KeystoreBuilder extends KeyTools {
             java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
             ks.load(fis, pwd);
             fis.close();
-        } catch (KeyStoreException e) {
+        } catch (KeyStoreException | CertificateException | IOException e) {
             throw new KeyToolsException("Echec du chargement de:" + ksName, e);
 
         } catch (FileNotFoundException e) {
             throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
         } catch (NoSuchAlgorithmException e) {
             throw new KeyToolsException("Format inconnu:" + ksName, e);
-        } catch (CertificateException e) {
-            throw new KeyToolsException("Echec du chargement de:" + ksName, e);
-        } catch (IOException e) {
-            throw new KeyToolsException("Echec du chargement de:" + ksName, e);
         }
         return ks;
     }

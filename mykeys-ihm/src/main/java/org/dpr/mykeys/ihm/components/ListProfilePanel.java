@@ -627,7 +627,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 
 	// This method handles a drop for a list of files
 	protected boolean dropFile(Transferable transferable)
-			throws IOException, UnsupportedFlavorException, MalformedURLException {
+			throws IOException, UnsupportedFlavorException {
 		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 		File transferFile = (File) fileList.get(0);
 

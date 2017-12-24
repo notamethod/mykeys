@@ -42,12 +42,12 @@ public class InternalKeystores {
 //        } catch (NoSuchAlgorithmException e) {
 //           throw new RuntimeException(e);
 //        }
-		this.cfgPath = cfgPath;
+		InternalKeystores.cfgPath = cfgPath;
 		this.pathProfils = profilsPath;
 		this.pathUDB = cfgPath + USERDB;
 	}
 
-	private String generateName(StoreModel castore) throws NoSuchAlgorithmException {
+	private String generateName(StoreModel castore) {
 		if (MkSession.user==null)
 			throw new IllegalArgumentException("session is empty");
 		String hdigest = new DigestUtils(SHA_256).digestAsHex((MkSession.user+castore.toString()).getBytes());
@@ -116,30 +116,22 @@ public class InternalKeystores {
 	public boolean existsUserDatabase() {
 
 		File f = new File(pathUDB);
-		if (!f.exists())
-			return false;
-		return true;
+		return f.exists();
 	}
 	public boolean existsCertDatabase() {
 
 		File f = new File(pathCert);
-		if (!f.exists())
-			return false;
-		return true;
+		return f.exists();
 	}
 	public boolean existsACDatabase() {
 
 		File f = new File(pathAC);
-		if (!f.exists())
-			return false;
-		return true;
+		return f.exists();
 	}
 	public boolean existsProfilDatabase() {
 
 		File f = new File(pathProfils);
-		if (!f.exists())
-			return false;
-		return true;
+		return f.exists();
 	}
 
 	public KeyStoreInfo getUserDB() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {

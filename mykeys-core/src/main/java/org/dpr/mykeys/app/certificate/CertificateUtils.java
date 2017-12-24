@@ -129,10 +129,7 @@ public class CertificateUtils {
 				certsRetour.add(certInfo);
 			}
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (GeneralSecurityException e) {
+		} catch (FileNotFoundException | GeneralSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {

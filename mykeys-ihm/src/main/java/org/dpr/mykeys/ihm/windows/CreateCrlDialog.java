@@ -200,9 +200,8 @@ public class CreateCrlDialog extends JDialog {
 					return;
 				}
 				CrlInfo crlInfo = new CrlInfo();
-				;
 
-				// certInfo.setX509PrincipalMap(elements);
+                // certInfo.setX509PrincipalMap(elements);
 				HashMap<String, String> subjectMap = new HashMap<String, String>();
 				crlInfo.setName((String) elements.get("alias"));
 				crlInfo.setThisUpdate((Date) elements.get("notBefore"));

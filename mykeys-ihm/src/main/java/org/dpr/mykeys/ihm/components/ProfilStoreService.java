@@ -15,7 +15,7 @@ public class ProfilStoreService implements StoreService<ProfilStoreInfo> {
 	}
 
 	@Override
-	public List<? extends ChildInfo> getChildList() throws ServiceException {
+	public List<? extends ChildInfo> getChildList() {
 		// TODO Auto-generated method stub
 		 return ProfileManager.getProfils();
 	}

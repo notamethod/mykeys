@@ -121,25 +121,23 @@ public class CRLManager {
 
 			GeneralName[] gns = ((GeneralNames) name.getName()).getNames();
 
-			for (int j = 0; j < gns.length; j++) {
+            for (GeneralName gn : gns) {
 
-				GeneralName gn = gns[j];
+                if (gn.getTagNo() == GeneralName.uniformResourceIdentifier) {
 
-				if (gn.getTagNo() == GeneralName.uniformResourceIdentifier) {
+                    //FIXME to test
+                    String distPointName = (gn.getName())
+                            .toString();
 
-					//FIXME to test
-					String distPointName = (gn.getName())
-							.toString();
- 
-					distPointSet.add(distPointName);
+                    distPointSet.add(distPointName);
 
-					if (log.isDebugEnabled()) {
-						log.debug("récupération url: " + distPointName);
-					}
+                    if (log.isDebugEnabled()) {
+                        log.debug("récupération url: " + distPointName);
+                    }
 
-				}
+                }
 
-			}
+            }
 		}
 
 	}

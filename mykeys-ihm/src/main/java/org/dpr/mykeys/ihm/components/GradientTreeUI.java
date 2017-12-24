@@ -65,7 +65,7 @@ public class GradientTreeUI extends BasicTreeUI {
 		public void componentResized(ComponentEvent e) {
 			treeState.invalidateSizes();
 			tree.repaint();
-		};
-	};
+		}
+    };
 
 }

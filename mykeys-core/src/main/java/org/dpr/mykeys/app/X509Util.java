@@ -155,10 +155,10 @@ public class X509Util {
 
 		for (RDN rdn : x509Name.getRDNs()) {
 			AttributeTypeAndValue[] atrs = rdn.getTypesAndValues();
-			for (int i = 0; i < atrs.length; i++) {
+			for (AttributeTypeAndValue atr : atrs) {
 
-				String val = (String) atrs[i].getValue().toString();
-				ASN1ObjectIdentifier type = atrs[i].getType();
+				String val = (String) atr.getValue().toString();
+				ASN1ObjectIdentifier type = atr.getType();
 				if (log.isDebugEnabled()) {
 					log.debug(type + ":" + val);
 				}

@@ -10,7 +10,7 @@ public enum ComponentType {
 
 	private final Class<?> value;
 
-	private ComponentType(Class<?> value) {
+	ComponentType(Class<?> value) {
 		this.value = value;
 	}
 

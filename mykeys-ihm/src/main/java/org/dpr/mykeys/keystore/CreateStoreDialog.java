@@ -163,7 +163,6 @@ public class CreateStoreDialog extends JDialog {
                 if (!p.isAbsolute()) {
 
                     dir = getDataDir() + File.separator + correctExtension(dir, typeKS);
-                    ;
                 }
 
 

@@ -41,7 +41,7 @@ public class AuthenticationService {
 		MkSession.user=id;
 	}
 
-	public CertificateValue loadUser(String id, char[] pwd) throws ServiceException {
+	public CertificateValue loadUser(String id, char[] pwd) {
 		KeyStoreHelper ch = new KeyStoreHelper();
 		CertificateValue cer = null;
 

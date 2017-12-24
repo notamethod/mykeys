@@ -94,7 +94,7 @@ public class TrustCertUtil {
 	public static X509Certificate[] getTrustedCerts(KeyStore ks, String provider)
 			throws GeneralSecurityException {
 		Enumeration<String> en = ks.aliases();
-		Set<X509Certificate> lstCerts = new HashSet<X509Certificate>();
+		Set<X509Certificate> lstCerts = new HashSet<>();
 		while (en.hasMoreElements()) {
 			String alias = en.nextElement();
 			lstCerts.add((X509Certificate) ks.getCertificate(alias));
@@ -169,7 +169,7 @@ public class TrustCertUtil {
 			InvalidAlgorithmParameterException, NoSuchProviderException {
 
 		/* Construct a valid path. */
-		List<TrustAnchor> listAnchors = new ArrayList<TrustAnchor>();
+		List<TrustAnchor> listAnchors = new ArrayList<>();
 
 		for (X509Certificate cert : anchors) {
 			TrustAnchor ta = new TrustAnchor(cert, null);
@@ -177,7 +177,7 @@ public class TrustCertUtil {
 		}
 
 		Set anchorSet = new HashSet(listAnchors);
-		List<X509Certificate> lstChaine = new ArrayList<X509Certificate>();
+		List<X509Certificate> lstChaine = new ArrayList<>();
 		for (Certificate cc0 : certs) {
 			lstChaine.add((X509Certificate) cc0);
 		}
@@ -228,7 +228,7 @@ public class TrustCertUtil {
 	protected static Set<X509Certificate> listerCertificats(
 			String aCertificatesDirectory, String typeCert, String provider,
 			boolean recursive) throws IOException, GeneralSecurityException {
-		List<X509Certificate> lstCert = new ArrayList<X509Certificate>();
+		List<X509Certificate> lstCert = new ArrayList<>();
 		// Set<X509Certificate> lstCert = new HashSet<X509Certificate>();
 		// recherche des certificats dans le répertoire (*.cer ou *.CER)
 
@@ -250,7 +250,7 @@ public class TrustCertUtil {
 				lstCert.addAll(trustedCerts);
 			}
 		}
-		Set<X509Certificate> trustedCertificates = new HashSet<X509Certificate>(
+		Set<X509Certificate> trustedCertificates = new HashSet<>(
 				lstCert);
 		return trustedCertificates;
 	}
@@ -314,7 +314,7 @@ public class TrustCertUtil {
 		Collection<X509Certificate> trustedCerts = chargerCertificatsX509(
 				certStream, typeCert, securityProvider);
 		// suppression des doublons
-		Set<X509Certificate> trustedCertificates = new HashSet<X509Certificate>(
+		Set<X509Certificate> trustedCertificates = new HashSet<>(
 				trustedCerts);
 		X509Certificate[] certsArray = null;
 		// Chargement de la liste des certificats de confiance

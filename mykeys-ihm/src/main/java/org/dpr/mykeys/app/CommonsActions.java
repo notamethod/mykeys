@@ -25,11 +25,6 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
  */
 public class CommonsActions {
 
-	public void exportCert(StoreFormat storeFormat, String path, char[] password, CertificateValue certInfo)
-			throws Exception {
-		exportCert(null, storeFormat, path, password, certInfo, false);
-	}
-
 	public void exportCert(KeyStoreInfo ksInfo, StoreFormat pkcs12, String path, char[] password,
 			CertificateValue certInfo, boolean isExportCle) throws Exception {
 		exportCert(ksInfo, pkcs12, path, password, certInfo, isExportCle, null);
@@ -41,7 +36,7 @@ public class CommonsActions {
 		StoreModel storeModel = StoreModel.P12STORE;
 		KeyStoreInfo ksInfoOut = new KeyStoreInfo("store", path, storeModel, storeFormat);
 		ksInfoOut.setPassword(passwordExport);
-		KeyTools kt = new KeyTools();
+
 
 		if (isExportCle && certInfo.getPrivateKey() == null) {
 			KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfoIn);
@@ -75,7 +70,7 @@ public class CommonsActions {
 	}
 
 	public void signData(KeyStoreInfo kInfo, char[] password, CertificateValue certInfo, boolean isInclude) {
-		KeyTools kt = new KeyTools();
+
 		KeyStoreHelper ksBuilder = new KeyStoreHelper(kInfo);
 		KeyStore ks;
 		try {
@@ -100,40 +95,6 @@ public class CommonsActions {
 
 	}
 
-	/**
-	 * .
-	 * 
-	 * <BR>
-	 * 
-	 * 
-	 * @param format
-	 * @param dir
-	 * @param pwd
-	 * @return
-	 * @throws Exception
-	 * 
-	 */
-	public KeyStore createStore(StoreFormat format, String dir, char[] pwd) throws Exception {
-
-		KeystoreBuilder kt = new KeystoreBuilder(format);
-		KeyStore ks = kt.create(dir, pwd).get();
-		KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
-		return ks;
-
-	}
-
-	// public KeyStore addCert(CertificateInfo ci, KeyStore ks, char[] pwd)
-	// throws Exception {
-	// KeyStoreInfo ksinfo=new Keys
-	// ksinfo.s
-	//
-	// KeyStore kstore = loadKeyStore(ksInfo.getPath(), ksInfo
-	// .getStoreFormat(), ksInfo.getPassword());
-	// saveCertChain(kstore, cert, certInfo);
-	// saveKeyStore(kstore, ksInfo);
-	//
-	//
-	// }
 
 	public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
 

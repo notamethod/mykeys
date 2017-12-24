@@ -78,7 +78,7 @@ public class JDropTextField extends JTextField implements DropTargetListener {
 
 	// This method handles a drop for a list of files
 	protected boolean dropFile(Transferable transferable) throws IOException,
-			UnsupportedFlavorException, MalformedURLException {
+			UnsupportedFlavorException {
 		List fileList = (List) transferable
 				.getTransferData(DataFlavor.javaFileListFlavor);
 		File transferFile = (File) fileList.get(0);

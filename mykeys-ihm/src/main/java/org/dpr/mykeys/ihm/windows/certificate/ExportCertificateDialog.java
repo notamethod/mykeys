@@ -297,14 +297,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
             String extension = FilenameUtils.getExtension(f.getName());
             if (extension != null)
             {
-                if (extension.equalsIgnoreCase(filterExtension))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return extension.equalsIgnoreCase(filterExtension);
             }
 
             return false;

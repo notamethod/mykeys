@@ -19,6 +19,7 @@ import java.security.*;
 import java.security.cert.*;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class KeyTools {
@@ -106,18 +107,6 @@ public class KeyTools {
     }
 
     /**
-     * KeyPAirGen with String as keyLength
-     *
-     * @param algo
-     * @param keyLength
-     * @param certModel
-     */
-    public void keyPairGen(String algo, String keyLength, CertificateValue certModel) {
-        int kl = Integer.valueOf(keyLength).intValue();
-        keyPairGen(algo, kl, certModel);
-    }
-
-    /**
      * Key pair generation
      *
      * @param algo
@@ -139,9 +128,7 @@ public class KeyTools {
             certModel.setPrivateKey(keypair.getPrivate());
             certModel.setPublicKey(keypair.getPublic());
 
-        } catch (java.security.NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             e.printStackTrace();
         }
 
@@ -176,22 +163,6 @@ public class KeyTools {
         }
     }
 
-    public String getKey(String alias, KeyStore keyStore, char[] motDePasse) throws GeneralSecurityException {
-
-        PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
-        if (privateKey != null) {
-            return ("Clé privée  trouvée");
-        } else {
-            return ("Clé privée absente ");
-        }
-    }
-
-    public void importX509CertOld(String alias, KeyStoreInfo ksInfo, String fileName, String typeCert, char[] charArray)
-            throws KeyToolsException, FileNotFoundException, CertificateException, GeneralSecurityException {
-        return;
-
-    }
-
     public void exportDer(CertificateValue certInfo, String fName) throws KeyToolsException {
         /* save the public key in a file */
         try {
@@ -218,9 +189,7 @@ public class KeyTools {
             byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
             String tmpString = new String(b);
             String[] datas = tmpString.split("(?<=\\G.{64})");
-            for (String data : datas) {
-                lines.add(data);
-            }
+            Collections.addAll(lines, datas);
 
             lines.add(END_PEM);
             FileUtils.writeLines(f, lines);

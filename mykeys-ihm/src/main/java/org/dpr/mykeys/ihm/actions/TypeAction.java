@@ -13,7 +13,7 @@ public enum TypeAction {
 	private final String value;
 
 	/** Le constructeur qui associe une valeur à l'enum */
-	private TypeAction(String value) {
+    TypeAction(String value) {
 		this.value = value;
 	}
 

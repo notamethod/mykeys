@@ -44,14 +44,11 @@ public class PkiTools {
 	    public static TypeObject get(String value)
 	    {
 	    	TypeObject[] types = TypeObject.values();
-	        for (int i = 0; i < types.length; i++)
-	        {
-	        	TypeObject type = types[i];
-	            if (StringUtils.equals(type.getValue(), value))
-	            {
-	                return type;
-	            }
-	        }
+			for (TypeObject type : types) {
+				if (StringUtils.equals(type.getValue(), value)) {
+					return type;
+				}
+			}
 	        return UNKNOWN;
 	    }
 

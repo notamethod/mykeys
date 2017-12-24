@@ -38,9 +38,9 @@ public class VerifSigDialog extends JDialog {
 
 	enum FIELDS {
 		typeSig, certificat
-	};
+	}
 
-	// Map<String, String> elements = new HashMap<String, String>();
+    // Map<String, String> elements = new HashMap<String, String>();
 
 	public VerifSigDialog(Frame owner, boolean modal) {
 		super(owner, modal);

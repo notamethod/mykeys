@@ -354,12 +354,12 @@ public class CertificateValue implements ChildInfo, Cloneable  {
 
         for (RDN rdn : name.getRDNs()) {
             AttributeTypeAndValue[] atrs = rdn.getTypesAndValues();
-            for (int i = 0; i < atrs.length; i++) {
+            for (AttributeTypeAndValue atr : atrs) {
 
-                String val = (String) atrs[i].getValue().toString();
+                String val = (String) atr.getValue().toString();
 
                 //String type = RFC4519Style.INSTANCE.oidToDisplayName(atrs[i].getType());
-                String type = BCStyle.INSTANCE.oidToDisplayName(atrs[i].getType());
+                String type = BCStyle.INSTANCE.oidToDisplayName(atr.getType());
 
                 if (log.isDebugEnabled()) {
                     log.debug(type + ":" + val);
@@ -367,7 +367,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
 
                 }
                 if (null == type) {
-                    log.error("o.i.d type not found for " + atrs[i].getType());
+                    log.error("o.i.d type not found for " + atr.getType());
 
                 } else
                     subjectMap.put(type.toUpperCase(), val);

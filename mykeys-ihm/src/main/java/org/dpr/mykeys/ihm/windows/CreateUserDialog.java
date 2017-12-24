@@ -69,8 +69,8 @@ public class CreateUserDialog extends MkDialog {
 
 	private void init() {
 
-		initLookAndFeel();;
-		DialogAction dAction = new DialogAction();
+		initLookAndFeel();
+        DialogAction dAction = new DialogAction();
 		// FIXME:
 
 		setTitle("Nouvel utilisateur");

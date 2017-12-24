@@ -68,32 +68,6 @@ public class MyKeys {
         });
     }
 
-    /**
-     * .
-     */
-    private static KeyStoreInfo getACKeystore() {
-        String path = KSConfig.getInternalKeystores().getACPath();
-        KeyTools kt = new KeyTools();
-        String pwd = KSConfig.getInternalKeystores().getPassword();
-        KeyStoreInfo kinfo = null;
-
-        kinfo = new KeyStoreInfo("interne", KSConfig.getInternalKeystores().getACPath(),
-                StoreModel.CASTORE, StoreFormat.JKS, StoreLocationType.INTERNAL);
-        return kinfo;
-        // try {
-        // kt.loadKeyStore(path, StoreFormat.JKS, pwd.toCharArray());
-        // } catch (KeyToolsException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // kt.createKeyStore(StoreFormat.JKS,
-        // KSConfig.getInternalKeystores().getACPath(), pwd.toCharArray());
-        // //InternalKeystores.path=path;
-        // return new KeyStoreInfo("interne", KSConfig.getInternalKeystores().getACPath(),
-        // StoreModel.CASTORE, StoreFormat.JKS, StoreType.INTERNAL);
-
-    }
-
     private void init() {
 
         // Locale.setDefault(Locale.ENGLISH);

@@ -174,7 +174,7 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 				public void actionPerformed(ActionEvent e) {
 					JRadioButton radio = (JRadioButton) e.getSource();
 					if (radio.isSelected()) {
-						String key = (String) radio.getText();
+						String key = radio.getText();
 						elements.put(globalKey, map.get(key));
 					}
 				}

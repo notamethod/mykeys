@@ -106,12 +106,7 @@ public class ProfileManager
 
 	public String[] getProfiles() {
 		File profDir = new File(KSConfigTmp.getProfilsPath());
-		String[] list = profDir.list(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".mkprof");
-			}
-		});
+		String[] list = profDir.list((dir, name) -> name.toLowerCase().endsWith(".mkprof"));
 		return list;
 	}
 
