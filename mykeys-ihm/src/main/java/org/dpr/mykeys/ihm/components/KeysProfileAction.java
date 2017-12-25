@@ -33,7 +33,7 @@ public class KeysProfileAction implements ActionListener {
 
 	private JComponent frameSource;
 
-	// private KeyStoreInfo ksInfo;
+    // private KeyStoreValue ksInfo;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

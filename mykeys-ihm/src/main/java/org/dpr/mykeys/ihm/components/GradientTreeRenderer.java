@@ -16,8 +16,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.dpr.mykeys.app.CrlInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.crl.CrlValue;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 
 
 public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
@@ -43,8 +43,8 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 		if (value instanceof DefaultMutableTreeNode) {
 
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-			if (node.getUserObject() instanceof KeyStoreInfo) {
-				KeyStoreInfo kInfo = (KeyStoreInfo) node.getUserObject();
+            if (node.getUserObject() instanceof KeyStoreValue) {
+                KeyStoreValue kInfo = (KeyStoreValue) node.getUserObject();
 				tooltip = kInfo.getPath();
 				// if (kInfo.isOpen()) {
 				ImageIcon icon = null;
@@ -78,10 +78,8 @@ public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 				if (isSelected) {
 					rc.setForeground(colorb);
 				}
-			}
-
-			else if (node.getUserObject() instanceof CrlInfo) {
-				CrlInfo cInfo = (CrlInfo) node.getUserObject();
+            } else if (node.getUserObject() instanceof CrlValue) {
+                CrlValue cInfo = (CrlValue) node.getUserObject();
 				tooltip = cInfo.getPath();
 				// if (kInfo.isOpen()) {
 				ImageIcon icon = null;

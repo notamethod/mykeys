@@ -67,20 +67,20 @@ public class KeystoreBuilder extends KeyTools {
         return keystore;
     }
 
-    public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreInfo ksInfo, CertificateValue certInfo)
+    public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreValue ksInfo, CertificateValue certInfo)
             throws KeyToolsException {
 
         saveCertChain(keystore, cert, certInfo);
         saveKeyStore(keystore, ksInfo);
     }
 
-    public void addCert(X509Certificate cert, KeyStoreInfo ksInfo, CertificateValue certInfo) throws KeyToolsException {
+    public void addCert(X509Certificate cert, KeyStoreValue ksInfo, CertificateValue certInfo) throws KeyToolsException {
         saveCertChain(keystore, cert, certInfo);
         saveKeyStore(keystore, ksInfo);
     }
 
     @Deprecated
-    public KeystoreBuilder addCert(X509Certificate[] xCerts, KeyStoreInfo ksInfo, CertificateValue certInfo, char[] password)
+    public KeystoreBuilder addCert(X509Certificate[] xCerts, KeyStoreValue ksInfo, CertificateValue certInfo, char[] password)
             throws KeyToolsException {
         // FIXME
         if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
@@ -92,7 +92,7 @@ public class KeystoreBuilder extends KeyTools {
         return this;
     }
 
-    public KeystoreBuilder addCert(KeyStoreInfo ksInfo, CertificateValue certInfo, char[] password) throws KeyToolsException {
+    public KeystoreBuilder addCert(KeyStoreValue ksInfo, CertificateValue certInfo, char[] password) throws KeyToolsException {
 
         // FIXME
         if (null == certInfo.getPassword()) {
@@ -150,7 +150,7 @@ public class KeystoreBuilder extends KeyTools {
     }
 
 
-    public void save(KeyStoreInfo ksInfo) throws KeyToolsException {
+    public void save(KeyStoreValue ksInfo) throws KeyToolsException {
 
         try {
             OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
@@ -178,11 +178,11 @@ public class KeystoreBuilder extends KeyTools {
             java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
             ks.load(fis, pwd);
             fis.close();
+        } catch (FileNotFoundException e) {
+            throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
         } catch (KeyStoreException | CertificateException | IOException e) {
             throw new KeyToolsException("Echec du chargement de:" + ksName, e);
 
-        } catch (FileNotFoundException e) {
-            throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
         } catch (NoSuchAlgorithmException e) {
             throw new KeyToolsException("Format inconnu:" + ksName, e);
         }

@@ -90,7 +90,7 @@ public class CertificateBuilder extends KeyTools {
 	// aliasEmetteur, boolean isAC)
 	// throws Exception {
 	//
-	// KeyStoreInfo ksInfo = null;
+	// KeyStoreValue ksInfo = null;
 	// if (!StringUtils.isBlank(aliasEmetteur)) {
 	// char[] password = KSConfig.getInternalKeystores().getPassword().toCharArray();
 	// ksInfo = KSConfig.getInternalKeystores().getACKeystore();

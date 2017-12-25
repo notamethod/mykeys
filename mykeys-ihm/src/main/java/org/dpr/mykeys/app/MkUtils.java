@@ -24,8 +24,7 @@ public class MkUtils {
 		} finally {
 			if (is != null)
 				is.close();
-			if (fos != null)
-				fos.close();
+			fos.close();
 		}
 	}
 

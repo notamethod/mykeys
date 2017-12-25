@@ -90,7 +90,7 @@ public class KSConfig {
 	}
 
 	public static List getSubjectKeys() {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		Iterator<String> iter = userConfig.getKeys("subject.key.");
 		while (iter.hasNext()) {
 			String name = iter.next();

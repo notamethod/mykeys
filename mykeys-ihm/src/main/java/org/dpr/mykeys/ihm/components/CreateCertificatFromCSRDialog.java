@@ -8,8 +8,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.security.cert.X509Certificate;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,27 +19,20 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
-import org.dpr.mykeys.ihm.windows.certificate.PanelUtils;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.swingutils.JDropText;
 import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemListener, ActionListener {
@@ -53,7 +44,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 
 	protected CertificateValue certInfo = new CertificateValue();
 
-	public CreateCertificatFromCSRDialog(Frame owner, KeyStoreInfo ksInfo, boolean modal) {
+    public CreateCertificatFromCSRDialog(Frame owner, KeyStoreValue ksInfo, boolean modal) {
 
 		super(owner, true);
 		this.ksInfo = ksInfo;
@@ -137,18 +128,15 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 					MykeysFrame.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
 					return;
 				}
-
 				// certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 				CertificateHelper cm = new CertificateHelper(certInfo);
-				KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
+                KeyStoreHelper kserv = new KeyStoreHelper();
 				try (InputStream is = new FileInputStream(tfDirectory.getText())) {
-					CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(ksInfo, (String) infosPanel.getElements().get("emetteur"));
-					CertificateValue xCerts = cm.generateFromCSR(is, issuer);
-					KeyTools ktools = new KeyTools();
-				
-					
-					// TODO manage ksinfo
-					kserv.addCertToKeyStore(xCerts, KSConfig.getInternalKeystores().getPassword().toCharArray());
+                    // load issuer
+                    CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), (String) infosPanel.getElements().get("emetteur"));
+                    CertificateValue certificate = cm.generateFromCSR(is, issuer);
+
+                    kserv.addCertToKeyStore(ksInfo, certificate, KSConfig.getInternalKeystores().getPassword().toCharArray());
 					CreateCertificatFromCSRDialog.this.setVisible(false);
 
 				} catch (Exception e) {

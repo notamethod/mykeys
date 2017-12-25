@@ -7,50 +7,50 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Utilities from dragndrop features
+ */
 public class PkiTools {
 
-	public static TypeObject getTypeObject(File transferFile) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("p12", "p12");
-		map.put("pfx", "p12");
-		map.put("cer", "cer");
-		map.put("der", "der");
-		map.put("pem", "pem");
-		String ext=FilenameUtils.getExtension(transferFile.getName());
-		if (map.get(ext)!=null){
-			return TypeObject.get(map.get(ext));
-		}
-		return null;
-	}
+    public static TypeObject getTypeObject(File transferFile) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("p12", "p12");
+        map.put("pfx", "p12");
+        map.put("cer", "cer");
+        map.put("der", "der");
+        map.put("pem", "pem");
+        String ext = FilenameUtils.getExtension(transferFile.getName());
+        if (map.get(ext) != null) {
+            return TypeObject.get(map.get(ext));
+        }
+        return null;
+    }
 
-	
-	public enum TypeObject {
 
-	    X509("x509"), MAGP12("p12"), MAGCER("cer"), UNKNOWN("unknown");
+    public enum TypeObject {
 
-	    private final String value;
+        X509("x509"), MAGP12("p12"), MAGCER("cer"), UNKNOWN("unknown");
 
-	    private TypeObject(String value)
-	    {
-	        this.value = value;
-	    }
+        private final String value;
 
-	 
-	    public String getValue()
-	    {
-	        return this.value;
-	    }
+        private TypeObject(String value) {
+            this.value = value;
+        }
 
-	    public static TypeObject get(String value)
-	    {
-	    	TypeObject[] types = TypeObject.values();
-			for (TypeObject type : types) {
-				if (StringUtils.equals(type.getValue(), value)) {
-					return type;
-				}
-			}
-	        return UNKNOWN;
-	    }
 
-	}
+        public String getValue() {
+            return this.value;
+        }
+
+        public static TypeObject get(String value) {
+            TypeObject[] types = TypeObject.values();
+            for (TypeObject type : types) {
+                if (StringUtils.equals(type.getValue(), value)) {
+                    return type;
+                }
+            }
+            return UNKNOWN;
+        }
+
+    }
 }

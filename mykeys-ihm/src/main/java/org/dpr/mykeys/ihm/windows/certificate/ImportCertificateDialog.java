@@ -20,7 +20,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -42,12 +42,12 @@ public class ImportCertificateDialog extends JDialog {
 
 	LabelValuePanel infosPanel;
 
-	KeyStoreInfo ksInfo;
+    KeyStoreValue ksInfo;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
-	public ImportCertificateDialog(Frame owner, KeyStoreInfo ksInfo,
-			boolean modal) {
+    public ImportCertificateDialog(Frame owner, KeyStoreValue ksInfo,
+                                   boolean modal) {
 		super(owner, modal);
 		this.ksInfo = ksInfo;
 		init();

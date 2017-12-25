@@ -55,7 +55,7 @@ public class TestKeystore {
         KeyStoreHelper service = new KeyStoreHelper();
 
         String fileName = resourceDirectory.toAbsolutePath().toString();
-        KeyStoreInfo ksInfo = new KeyStoreInfo("aaz", fileName,
+        KeyStoreValue ksInfo = new KeyStoreValue("aaz", fileName,
                 StoreModel.CERTSTORE, StoreFormat.JKS);
         ksInfo.setPassword("aaa".toCharArray());
         try {
@@ -76,7 +76,7 @@ public class TestKeystore {
         KeyStoreHelper service = new KeyStoreHelper();
 
         String fileName = target.toAbsolutePath().toString();
-        KeyStoreInfo ksInfo = new KeyStoreInfo("aa", fileName,
+        KeyStoreValue ksInfo = new KeyStoreValue("aa", fileName,
                 StoreModel.CERTSTORE, StoreFormat.JKS);
         ksInfo.setPassword("111".toCharArray());
         try {
@@ -96,7 +96,7 @@ public class TestKeystore {
         KeyStoreHelper service = new KeyStoreHelper();
 
         String fileName = target.toAbsolutePath().toString();
-        KeyStoreInfo ksInfo = new KeyStoreInfo("aaz", fileName,
+        KeyStoreValue ksInfo = new KeyStoreValue("aaz", fileName,
                 StoreModel.CERTSTORE, StoreFormat.JKS);
         ksInfo.setPassword("111".toCharArray());
         try {
@@ -131,7 +131,7 @@ public class TestKeystore {
 
         delete(target);
 
-        KeyStoreInfo ki = null;
+        KeyStoreValue ki = null;
         KeystoreBuilder ksBuilder = null;
         KeyStoreHelper service = new KeyStoreHelper();
 
@@ -162,7 +162,7 @@ public class TestKeystore {
     }
 
     @Test
-    public void create_ks() throws IOException {
+    public void create_ks_jks() throws IOException {
 
         KeyStoreHelper service = new KeyStoreHelper();
 
@@ -183,6 +183,32 @@ public class TestKeystore {
             service.loadKeyStore(filename, StoreFormat.JKS, "111".toCharArray());
         } catch (Exception e) {
 
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void create_ks_p12() throws IOException {
+
+        KeyStoreHelper service = new KeyStoreHelper();
+
+        String filename = "target/test-classes/data/test-create_create_ks.p12";
+        Path target = Paths.get(filename);
+        delete(target);
+        KeystoreBuilder ksBuilder = null;
+
+        try {
+            ksBuilder = new KeystoreBuilder(StoreFormat.PKCS12);
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        try {
+            ksBuilder.create(filename, "111".toCharArray());
+            service.loadKeyStore(filename, StoreFormat.PKCS12, "111".toCharArray());
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }

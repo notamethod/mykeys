@@ -13,7 +13,7 @@ import javax.swing.tree.TreePath;
 
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
@@ -104,7 +104,7 @@ public class TreePopupMenu extends JPopupMenu {
 				break;
 
 			case REMOVE_STORE:
-				KeyStoreInfo ksInfo = (KeyStoreInfo) node.getUserObject();
+                KeyStoreValue ksInfo = (KeyStoreValue) node.getUserObject();
 				MykeysFrame.removeKeyStore(ksInfo.getPath());
 				treeKeyStoreParent.removeNode(node);
 				break;
@@ -219,8 +219,8 @@ public class TreePopupMenu extends JPopupMenu {
 			addStore.setVisible(true);
 			importStore.setVisible(true);
 
-		} else if (node.getUserObject() instanceof KeyStoreInfo) {
-			KeyStoreInfo ksInfo = (KeyStoreInfo) node.getUserObject();
+        } else if (node.getUserObject() instanceof KeyStoreValue) {
+            KeyStoreValue ksInfo = (KeyStoreValue) node.getUserObject();
 
 			if (ksInfo.isOpen()) {
 				addCertMenu.setVisible(true);

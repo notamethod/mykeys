@@ -68,6 +68,13 @@ public class SelectUserDialog extends MkDialog {
         jbCancel.setActionCommand("CANCEL");
         JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
+        JButton jbAdd = new JButton("+");
+        jbAdd.addActionListener(dAction);
+        jbAdd.setActionCommand("ADD");
+        JPanel jfAdd = new JPanel();
+        jfAdd.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        jfAdd.add(jbAdd);
+        jp.add(jfAdd);
         jp.add(panelInfo);
 
         jp.add(jf4);
@@ -158,7 +165,18 @@ public class SelectUserDialog extends MkDialog {
             } else if (command.equals("CANCEL")) {
                 SelectUserDialog.this.setVisible(false);
                 System.exit(0);
+            } else if (command.equals("ADD")) {
+                SelectUserDialog.this.setVisible(false);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        CreateUserDialog cs = new CreateUserDialog(null, true);
+                        cs.setLocationRelativeTo(SelectUserDialog.this);
+                        cs.setVisible(true);
+                    }
+                });
+                return;
             }
+
             System.exit(0);
 
 

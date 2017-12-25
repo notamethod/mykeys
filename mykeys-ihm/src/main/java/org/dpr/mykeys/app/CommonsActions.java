@@ -11,13 +11,10 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.X509CRL;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.crl.CrlTools;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeystoreBuilder;
-import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 
 /**
  * @author Buck
@@ -25,16 +22,16 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
  */
 public class CommonsActions {
 
-	public void exportCert(KeyStoreInfo ksInfo, StoreFormat pkcs12, String path, char[] password,
-			CertificateValue certInfo, boolean isExportCle) throws Exception {
+    public void exportCert(KeyStoreValue ksInfo, StoreFormat pkcs12, String path, char[] password,
+                           CertificateValue certInfo, boolean isExportCle) throws Exception {
 		exportCert(ksInfo, pkcs12, path, password, certInfo, isExportCle, null);
 
 	}
 
-	public void exportCert(KeyStoreInfo ksInfoIn, StoreFormat storeFormat, String path, char[] passwordExport,
-			CertificateValue certInfo, boolean isExportCle, char[] privKeyPwd) throws Exception {
+    public void exportCert(KeyStoreValue ksInfoIn, StoreFormat storeFormat, String path, char[] passwordExport,
+                           CertificateValue certInfo, boolean isExportCle, char[] privKeyPwd) throws Exception {
 		StoreModel storeModel = StoreModel.P12STORE;
-		KeyStoreInfo ksInfoOut = new KeyStoreInfo("store", path, storeModel, storeFormat);
+        KeyStoreValue ksInfoOut = new KeyStoreValue("store", path, storeModel, storeFormat);
 		ksInfoOut.setPassword(passwordExport);
 
 
@@ -69,7 +66,7 @@ public class CommonsActions {
 
 	}
 
-	public void signData(KeyStoreInfo kInfo, char[] password, CertificateValue certInfo, boolean isInclude) {
+    public void signData(KeyStoreValue kInfo, char[] password, CertificateValue certInfo, boolean isInclude) {
 
 		KeyStoreHelper ksBuilder = new KeyStoreHelper(kInfo);
 		KeyStore ks;
@@ -96,15 +93,15 @@ public class CommonsActions {
 	}
 
 
-	public void generateCrl(String aliasEmetteur, CrlInfo crlInfo) throws Exception {
+    public void generateCrl(String aliasEmetteur, CrlValue crlValue) throws Exception {
 
 		KeyStoreHelper ktools = new KeyStoreHelper();
 		CertificateValue certSign;
 		try {
 			//FIXME
 			certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasEmetteur);
-			X509CRL xCRL = CrlTools.generateCrl(certSign, crlInfo);
-			CrlTools.saveCRL(xCRL, crlInfo.getPath());
+            X509CRL xCRL = CrlTools.generateCrl(certSign, crlValue);
+            CrlTools.saveCRL(xCRL, crlValue.getPath());
 		} catch (Exception e) {
 			// log.error
 			throw e;

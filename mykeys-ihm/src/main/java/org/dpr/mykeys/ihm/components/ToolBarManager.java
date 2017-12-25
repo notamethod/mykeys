@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateToolBar;
 import org.dpr.mykeys.profile.ProfileToolBar;
 
@@ -15,7 +15,7 @@ public class ToolBarManager {
 	ProfileToolBar profToolBar;
 
 	public <T extends ObjToolBar> T getInstance(NodeInfo info) {
-		if (info instanceof KeyStoreInfo) {
+        if (info instanceof KeyStoreValue) {
 			return (T) certToolbar;
 
 		} else {
@@ -25,7 +25,7 @@ public class ToolBarManager {
 	}
 	
 	public <T extends ObjToolBar> T getInvInstance(NodeInfo info) {
-		if (info instanceof KeyStoreInfo) {
+        if (info instanceof KeyStoreValue) {
 			return (T) profToolBar;
 
 		} else {
@@ -43,7 +43,7 @@ public class ToolBarManager {
 	}
 
 	public ObjToolBar getInstance2(NodeInfo info) {
-		if (info instanceof KeyStoreInfo) {
+        if (info instanceof KeyStoreValue) {
 			if (certToolbar == null)
 				return certToolbar;
 

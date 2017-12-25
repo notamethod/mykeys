@@ -18,9 +18,8 @@ import org.bouncycastle.tsp.TimeStampToken;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.TimeStampManager;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -42,7 +41,7 @@ public class TestCerts {
 			String alias = "aaa";
 			String path = "c:/dev/empty.jks";
 			String pathCert = "c:/dev/cpi.cer";
-			KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path,
+            KeyStoreValue ksInfo = new KeyStoreValue("aa", path,
 					StoreModel.CERTSTORE, StoreFormat.JKS);
 		
 			
@@ -64,7 +63,7 @@ public class TestCerts {
 	@Test
 	public  void loadKS() throws ServiceException {
 		// String path = "data/test01.jks";
-		// KeyStoreInfo ksInfo = new KeyStoreInfo("aa", path,
+        // KeyStoreValue ksInfo = new KeyStoreValue("aa", path,
 		// StoreModel.CERTSTORE, StoreFormat.JKS);
 		String path = System.getProperty("user.dir");
 
@@ -96,7 +95,7 @@ public class TestCerts {
 		}
 		Path resourceDirectory = Paths.get("src/test/resources/data/test01.jks");
 		fileName = resourceDirectory.toAbsolutePath().toString();
-		KeyStoreInfo ksInfo = new KeyStoreInfo("aa", fileName,
+        KeyStoreValue ksInfo = new KeyStoreValue("aa", fileName,
 				StoreModel.CERTSTORE, StoreFormat.JKS);
 		KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfo);
 		ksInfo.setPassword("1234".toCharArray());
@@ -132,7 +131,7 @@ public class TestCerts {
 
 	}
 
-	private static CertificateValue fillCertInfo(KeyStoreInfo ksInfo, KeyStore ks, String alias) throws ServiceException {
+    private static CertificateValue fillCertInfo(KeyStoreValue ksInfo, KeyStore ks, String alias) throws ServiceException {
 		KeyStoreHelper ksv = new KeyStoreHelper(ksInfo);
 		return ksv.fillCertInfo(ks, alias);
 		
@@ -148,7 +147,7 @@ public class TestCerts {
 		String fileName = null;
 		Path resourceDirectory = Paths.get("src/test/resources/data/test01.jks");
 		fileName = resourceDirectory.toAbsolutePath().toString();
-		KeyStoreInfo ksInfo = new KeyStoreInfo("aa", fileName,
+        KeyStoreValue ksInfo = new KeyStoreValue("aa", fileName,
 				StoreModel.CERTSTORE, StoreFormat.JKS);
 		ksInfo.setPassword("1234".toCharArray());
 		KeyStoreHelper ksHelper = new KeyStoreHelper(ksInfo);

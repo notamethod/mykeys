@@ -3,39 +3,7 @@
  */
 package org.dpr.mykeys.app;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.Security;
-import java.security.cert.CRLException;
-import java.security.cert.CertStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CollectionCertStoreParameters;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.cms.CMSProcessable;
-import org.bouncycastle.cms.CMSProcessableByteArray;
-import org.bouncycastle.cms.CMSSignedData;
-import org.bouncycastle.cms.CMSSignedDataGenerator;
-import org.bouncycastle.cms.SignerInformation;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.crl.CRLManager;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
 
 
 /**
@@ -113,7 +81,7 @@ public class SignTools {
 //		// tools.generateCMS(certifs, file, addFile);
 //	}
 //
-//	public void SignData(KeyStoreInfo ksInfo, CertificateInfo certInfo,
+//	public void SignData(KeyStoreValue ksInfo, CertificateInfo certInfo,
 //			String file, boolean addFile) {
 //		// TODO:
 //		// ajouter le timestamp

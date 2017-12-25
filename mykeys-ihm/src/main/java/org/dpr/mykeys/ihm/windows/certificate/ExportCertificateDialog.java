@@ -28,7 +28,7 @@ import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -50,14 +50,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
     CertificateValue certInfo;
 
-    KeyStoreInfo ksInfo;
+    KeyStoreValue ksInfo;
 
     private boolean isExportCle = false;
 
     // Map<String, String> elements = new HashMap<String, String>();
 
-    public ExportCertificateDialog(Frame owner, KeyStoreInfo ksInfo,
-            CertificateValue certInfo, boolean modal)
+    public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo,
+                                   CertificateValue certInfo, boolean modal)
     {
         super(owner, modal);
         this.certInfo = certInfo;

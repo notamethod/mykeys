@@ -19,15 +19,15 @@ import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.certificate.Usage;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 
 public class CreateCertificatDialog extends SuperCreate implements ItemListener {
 
-	public CreateCertificatDialog(JFrame owner, KeyStoreInfo ksInfo,
-			boolean modal) {
+	public CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo,
+								  boolean modal) {
 
 		super(owner, modal);
 		this.ksInfo = ksInfo;

@@ -76,7 +76,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
@@ -84,13 +83,8 @@ import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.PkiTools;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeystoreBuilder;
-import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
@@ -274,7 +268,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 * @param ksList
 	 * @throws KeyStoreException 
 	 */
-	public void updateKSList(HashMap<String, KeyStoreInfo> ksList) throws KeyStoreException {
+	public void updateKSList(HashMap<String, KeyStoreValue> ksList) throws KeyStoreException {
 		clear();
 		// Set<String> dirs = ksList.keySet();
 		SortedSet<String> dirs = new TreeSet<String>(
@@ -285,7 +279,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		Iterator<String> iter = dirs.iterator();
 		while (iter.hasNext()) {
 			String dir = iter.next();
-			KeyStoreInfo ksinfo = ksList.get(dir);
+			KeyStoreValue ksinfo = ksList.get(dir);
 			DefaultMutableTreeNode node = null;
 			if (ksinfo.getStoreModel().equals(StoreModel.CASTORE)) {
 				node = addObject(acNode, ksinfo, true);
@@ -369,7 +363,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	}
 
 	public boolean closeStore(DefaultMutableTreeNode node, boolean collapse) {
-		KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
+		KeyStoreValue ksInfo = ((KeyStoreValue) node.getUserObject());
 		removeChildrenObjects(node);
 		addObject(node, "[Vide]", false);
 		if (collapse) {
@@ -382,7 +376,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	public boolean openStore(DefaultMutableTreeNode node,
 			boolean useInternalPwd, boolean expand) {
-		KeyStoreInfo ksInfo = ((KeyStoreInfo) node.getUserObject());
+		KeyStoreValue ksInfo = ((KeyStoreValue) node.getUserObject());
 		if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) { // equals(StoreModel.CASTORE))
 			// {
 			useInternalPwd = true;
@@ -505,8 +499,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 				.getLastPathComponent();
 		if (tNode.getParent() != null) {
 			Object object = tNode.getUserObject();
-			if (object instanceof KeyStoreInfo) {
-				if (((KeyStoreInfo) object).isOpen()) {
+			if (object instanceof KeyStoreValue) {
+				if (((KeyStoreValue) object).isOpen()) {
 					return;
 				} else {
 
@@ -564,8 +558,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 				} else {
 					displayCertDetail(null);
-					if (object instanceof KeyStoreInfo) {
-						KeyStoreInfo ksiInfo = ((KeyStoreInfo) object);
+					if (object instanceof KeyStoreValue) {
+						KeyStoreValue ksiInfo = ((KeyStoreValue) object);
 						if (ksiInfo != null)
 							try {
 								displayKeystoreList(ksiInfo);
@@ -601,8 +595,8 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 				// selPath
 				// .getLastPathComponent();
 				// Object object = tNode.getUserObject();
-				// if (object instanceof KeyStoreInfo) {
-				// KeyStoreInfo ksInfo = ((KeyStoreInfo) object);
+				// if (object instanceof KeyStoreValue) {
+				// KeyStoreValue ksInfo = ((KeyStoreValue) object);
 				//
 				// if (!ksInfo.isOpen()) {
 				// openStore(tNode, false, true);
@@ -664,10 +658,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	public void addCertificate(DefaultMutableTreeNode node, boolean b) throws ServiceException {
 		JFrame frame = (JFrame) tree.getTopLevelAncestor();
-		KeyStoreInfo ksInfo = null;
+		KeyStoreValue ksInfo = null;
 		Object object = node.getUserObject();
-		if (object instanceof KeyStoreInfo) {
-			ksInfo = ((KeyStoreInfo) object);
+		if (object instanceof KeyStoreValue) {
+			ksInfo = ((KeyStoreValue) object);
 		}
 		SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
 				true);
@@ -682,10 +676,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	public void importCertificate(DefaultMutableTreeNode node, boolean b) {
 		JFrame frame = (JFrame) tree.getTopLevelAncestor();
-		KeyStoreInfo ksInfo = null;
+		KeyStoreValue ksInfo = null;
 		Object object = node.getUserObject();
-		if (object instanceof KeyStoreInfo) {
-			ksInfo = ((KeyStoreInfo) object);
+		if (object instanceof KeyStoreValue) {
+			ksInfo = ((KeyStoreValue) object);
 		}
 		ImportCertificateDialog cs = new ImportCertificateDialog(frame, ksInfo,
 				true);
@@ -698,10 +692,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	
 	public void changePassword(DefaultMutableTreeNode node, boolean b) {
 		JFrame frame = (JFrame) tree.getTopLevelAncestor();
-		KeyStoreInfo ksInfo = null;
+		KeyStoreValue ksInfo = null;
 		Object object = node.getUserObject();
-		if (object instanceof KeyStoreInfo) {
-			ksInfo = ((KeyStoreInfo) object);
+		if (object instanceof KeyStoreValue) {
+			ksInfo = ((KeyStoreValue) object);
 		}
 		ChangePasswordDialog cs = new ChangePasswordDialog(frame, ksInfo);
 		cs.setLocationRelativeTo(frame);
@@ -723,17 +717,17 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 */
 	public void exporterCertificate(DefaultMutableTreeNode node, boolean b) {
 		JFrame frame = (JFrame) tree.getTopLevelAncestor();
-		// KeyStoreInfo ksInfo = null;
+		// KeyStoreValue ksInfo = null;
 		CertificateValue certInfo = null;
 		Object object = node.getUserObject();
 		if (object instanceof CertificateValue) {
 			certInfo = ((CertificateValue) object);
 		}
-		KeyStoreInfo ksInfo = null;
+		KeyStoreValue ksInfo = null;
 		DefaultMutableTreeNode objectKs = (DefaultMutableTreeNode) node
 				.getParent();// .getUserObject();
-		if (objectKs.getUserObject() instanceof KeyStoreInfo) {
-			ksInfo = ((KeyStoreInfo) objectKs.getUserObject());
+		if (objectKs.getUserObject() instanceof KeyStoreValue) {
+			ksInfo = ((KeyStoreValue) objectKs.getUserObject());
 		}
 		ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
 				certInfo, true);
@@ -754,10 +748,10 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	 */
 	public void addCertificateAC(DefaultMutableTreeNode node, boolean b) {
 		JFrame frame = (JFrame) tree.getTopLevelAncestor();
-		KeyStoreInfo ksInfo = null;
+		KeyStoreValue ksInfo = null;
 		Object object = node.getUserObject();
-		if (object instanceof KeyStoreInfo) {
-			ksInfo = ((KeyStoreInfo) object);
+		if (object instanceof KeyStoreValue) {
+			ksInfo = ((KeyStoreValue) object);
 		}
 		SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
 				true);

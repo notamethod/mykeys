@@ -32,7 +32,7 @@ import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
@@ -52,7 +52,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
 	private Properties profile = null;
 
-	public CreateCertProfilDialog(Frame owner, KeyStoreInfo ksInfo, boolean modal) {
+    public CreateCertProfilDialog(Frame owner, KeyStoreValue ksInfo, boolean modal) {
 
 		super(owner, true);
 		this.ksInfo = ksInfo;

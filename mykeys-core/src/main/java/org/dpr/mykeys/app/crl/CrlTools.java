@@ -32,7 +32,6 @@ import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
-import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
@@ -89,8 +88,8 @@ public class CrlTools {
 
 	}
 
-	public X509CRL generateCrl(X509Certificate certSign, CrlInfo crlInfo,
-			Key privateKey) throws KeyStoreException, NoSuchProviderException,
+    public X509CRL generateCrl(X509Certificate certSign, CrlValue crlValue,
+                               Key privateKey) throws KeyStoreException, NoSuchProviderException,
 			NoSuchAlgorithmException, CertificateException, IOException,
 			UnrecoverableKeyException, InvalidKeyException, CRLException,
 			IllegalStateException, SignatureException {
@@ -105,8 +104,8 @@ public class CrlTools {
 		// crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
 		crlGen.setIssuerDN(certSign.getSubjectX500Principal());
 		String signAlgo = "SHA1WITHRSAENCRYPTION";
-		crlGen.setThisUpdate(crlInfo.getThisUpdate());
-		crlGen.setNextUpdate(crlInfo.getNextUpdate());
+        crlGen.setThisUpdate(crlValue.getThisUpdate());
+        crlGen.setNextUpdate(crlValue.getNextUpdate());
 		crlGen.setSignatureAlgorithm(signAlgo);
 		// BigInteger bi = new BigInteger("816384897");
 		// crlGen.addCRLEntry(BigInteger.ONE, now,
@@ -117,7 +116,7 @@ public class CrlTools {
 		crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 				new AuthorityKeyIdentifierStructure(certSign));
 		crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
-				crlInfo.getNumber()));
+                crlValue.getNumber()));
 
 		X509CRL crl = crlGen.generate((PrivateKey) privateKey, "BC");
 		// OutputStream os = new FileOutputStream(new
@@ -137,7 +136,7 @@ public class CrlTools {
 
 	}
 
-	// public void timeStamp(KeyStoreInfo ksInfo, CertificateInfo certInfo){
+    // public void timeStamp(KeyStoreValue ksInfo, CertificateInfo certInfo){
 	// TimeStampTokenGenerator ts = new TimeStampTokenGenerator(
 	// }
 
@@ -147,7 +146,7 @@ public class CrlTools {
 	 * <BR>
 	 * 
 	 * @param certSign
-	 * @param crlInfo
+     * @param crlValue
 	 * @return
 	 * @throws CertificateParsingException
 	 * @throws SignatureException
@@ -157,7 +156,7 @@ public class CrlTools {
 	 * @throws CRLException
 	 * @throws InvalidKeyException
 	 */
-	public static X509CRL generateCrl(CertificateValue certSign, CrlInfo crlInfo)
+    public static X509CRL generateCrl(CertificateValue certSign, CrlValue crlValue)
 			throws CertificateParsingException, InvalidKeyException,
 			CRLException, IllegalStateException, NoSuchProviderException,
 			NoSuchAlgorithmException, SignatureException {
@@ -166,14 +165,14 @@ public class CrlTools {
 		// crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
 		crlGen.setIssuerDN(certSign.getCertificate().getSubjectX500Principal());
 		String signAlgo = "SHA1WITHRSAENCRYPTION";
-		crlGen.setThisUpdate(crlInfo.getThisUpdate());
-		crlGen.setNextUpdate(crlInfo.getNextUpdate());
+        crlGen.setThisUpdate(crlValue.getThisUpdate());
+        crlGen.setNextUpdate(crlValue.getNextUpdate());
 		crlGen.setSignatureAlgorithm(signAlgo);
 
 		crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
 				new AuthorityKeyIdentifierStructure(certSign.getCertificate()));
 		crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
-				crlInfo.getNumber()));
+                crlValue.getNumber()));
 
 		X509CRL crl = crlGen.generate((PrivateKey) certSign.getPrivateKey(),
 				"BC");

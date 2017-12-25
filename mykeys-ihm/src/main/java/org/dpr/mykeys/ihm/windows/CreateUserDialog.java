@@ -2,48 +2,19 @@ package org.dpr.mykeys.ihm.windows;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.AuthenticationService;
-import org.dpr.mykeys.app.CommonsActions;
-import org.dpr.mykeys.app.CrlInfo;
-import org.dpr.mykeys.app.InternalKeystores;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
-import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
-import org.dpr.mykeys.ihm.components.ListPanel;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.windows.certificate.FillUtils;
-import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.keystore.CertificateType;
-import org.dpr.swingutils.FrameUtils;
 import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.PanelBuilder;
 
@@ -100,17 +71,7 @@ public class CreateUserDialog extends MkDialog {
 
 	}
 
-	/**
-	 * .
-	 * 
-	 * 
-	 * @param mapKeyLength
-	 * @param mapAlgoKey
-	 * @param mapAlgoSig
-	 * 
-	 * @param isAC2
-	 * @return
-	 */
+
 	private LabelValuePanel getInfoPanel() {
 		infosPanel = new LabelValuePanel();
 		Map<String, String> mapAC = null;
@@ -155,7 +116,7 @@ public class CreateUserDialog extends MkDialog {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				CreateUserDialog.this.setVisible(false);
 
 	
 			} else if (command.equals("CANCEL")) {

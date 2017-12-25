@@ -140,6 +140,13 @@ public class CertificateValue implements ChildInfo, Cloneable  {
     private void init(X509Certificate[] certs) {
         init(certs[0]);
         this.setCertificateChain(certs);
+        if (certs != null) {
+            StringBuilder bf = new StringBuilder();
+            for (Certificate chainCert : certs) {
+                bf.append(chainCert.toString());
+            }
+            setChaineStringValue(bf.toString());
+        }
     }
     /** Initialize certificate **/
      private void init(X509Certificate certX509) {

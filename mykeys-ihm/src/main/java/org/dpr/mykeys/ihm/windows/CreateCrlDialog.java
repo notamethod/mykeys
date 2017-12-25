@@ -27,8 +27,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CommonsActions;
-import org.dpr.mykeys.app.CrlInfo;
-import org.dpr.mykeys.app.InternalKeystores;
+import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
@@ -199,14 +198,14 @@ public class CreateCrlDialog extends JDialog {
 							"alias obligatoire");
 					return;
 				}
-				CrlInfo crlInfo = new CrlInfo();
+                CrlValue crlValue = new CrlValue();
 
                 // certInfo.setX509PrincipalMap(elements);
 				HashMap<String, String> subjectMap = new HashMap<String, String>();
-				crlInfo.setName((String) elements.get("alias"));
-				crlInfo.setThisUpdate((Date) elements.get("notBefore"));
-				crlInfo.setNextUpdate((Date) elements.get("notAfter"));
-				crlInfo.setPath(tfDirectoryOut.getText());
+                crlValue.setName((String) elements.get("alias"));
+                crlValue.setThisUpdate((Date) elements.get("notBefore"));
+                crlValue.setNextUpdate((Date) elements.get("notAfter"));
+                crlValue.setPath(tfDirectoryOut.getText());
 
 				KeyTools ktools = new KeyTools();
 				// CertificateInfo certSign =
@@ -218,9 +217,9 @@ public class CreateCrlDialog extends JDialog {
 				try {
 
 					cActions.generateCrl((String) elements.get("emetteur"),
-							crlInfo);
+                            crlValue);
 					// FIXME: add crl to tree
-					// ktools.generateCrl(certSign, crlInfo, privateKey);
+                    // ktools.generateCrl(certSign, crlValue, privateKey);
 					CreateCrlDialog.this.setVisible(false);
 
 				} catch (Exception e) {

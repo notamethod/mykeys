@@ -81,8 +81,8 @@ public class AuthenticationTest {
 			CertificateValue val = service.loadUser("user1", "pwd".toCharArray());
 
 			assertEquals("", val.getAlias(), "user1");
-			
-		} catch (ServiceException e) {
+
+        } catch (Exception e) {
 
 			e.printStackTrace();
 			fail("");

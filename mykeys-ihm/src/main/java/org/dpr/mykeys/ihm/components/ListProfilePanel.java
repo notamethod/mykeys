@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -44,7 +43,7 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.profile.Profil;
 import org.dpr.mykeys.app.profile.ProfileManager;
@@ -219,7 +218,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * 
 	 * @see
 	 * org.dpr.mykeys.ihm.components.IListPanel#updateInfo(org.dpr.mykeys.app.
-	 * KeyStoreInfo)
+     * KeyStoreValue)
 	 */
 
 	public void updateInfo(NodeInfo info) {
@@ -327,7 +326,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * @param ksInfo
 	 *            the ksInfo to set
 	 */
-	public void setKsInfo(KeyStoreInfo ksInfo) {
+    public void setKsInfo(KeyStoreValue ksInfo) {
 		this.ksInfo = ksInfo;
 	}
 
@@ -341,7 +340,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 
 		private JComponent frameSource;
 
-		// private KeyStoreInfo ksInfo;
+        // private KeyStoreValue ksInfo;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -425,8 +424,8 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
-		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertificatDialog(frame, (KeyStoreInfo) info, true);
+        if (info instanceof KeyStoreValue) {
+            cs = new CreateCertificatDialog(frame, (KeyStoreValue) info, true);
 		} else {
 			cs = new CreateProfilDialog(frame, true);
 		}
@@ -442,8 +441,8 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
-		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertProfilDialog(frame,  (KeyStoreInfo) info, true);
+        if (info instanceof KeyStoreValue) {
+            cs = new CreateCertProfilDialog(frame, (KeyStoreValue) info, true);
 		} 
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
@@ -465,7 +464,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * @param certificateInfo
 	 */
 	public void deleteCertificate(NodeInfo info, CertificateValue certificateInfo) {
-		KeyStoreInfo kinfo = (KeyStoreInfo) info;
+        KeyStoreValue kinfo = (KeyStoreValue) info;
 	
 		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
 		try {
@@ -480,7 +479,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	}
 
 	public void exporterCertificate(NodeInfo info, CertificateValue certificateInfo, boolean b) {
-		KeyStoreInfo kinfo = (KeyStoreInfo) info;
+        KeyStoreValue kinfo = (KeyStoreValue) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
 		ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificateInfo, true);
@@ -491,7 +490,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	}
 
 	public void importCertificate(NodeInfo info, boolean b) {
-		KeyStoreInfo kinfo = (KeyStoreInfo) info;
+        KeyStoreValue kinfo = (KeyStoreValue) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
 		ImportCertificateDialog cs = new ImportCertificateDialog(frame, kinfo, true);
@@ -514,7 +513,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		// ask for password
 		if (ksInfo.isProtected()) {
 
-			KeyStoreInfo kstInfo = (KeyStoreInfo) ksInfo;
+            KeyStoreValue kstInfo = (KeyStoreValue) ksInfo;
 			if (kstInfo.getPassword() == null) {
 				char[] password = MykeysFrame.showPasswordDialog(this);
 

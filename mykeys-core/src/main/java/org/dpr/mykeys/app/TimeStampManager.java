@@ -27,7 +27,7 @@ public class TimeStampManager {
 //		return instance;
 //	}
 //
-//	KeyStoreInfo ksInfo;
+//	KeyStoreValue ksInfo;
 //
 //	private TimeStampManager() {
 //
@@ -156,7 +156,7 @@ public class TimeStampManager {
 //	 * @throws java.lang.Exception
 //	 */
 //	public static byte[] getTimestamp(byte[] empreinte, String idJeton,
-//			KeyStoreInfo ksInfo) throws Exception {
+//			KeyStoreValue ksInfo) throws Exception {
 //		try {
 //			KeyTools kt = new KeyTools();
 //			KeystoreBuilder ksBuilder = new KeystoreBuilder();

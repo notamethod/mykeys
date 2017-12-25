@@ -115,7 +115,7 @@ public class CertificateUtils {
 	public static List<CertificateValue> loadX509Certs(String fileName)
 			throws KeyToolsException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException {
 
-		// NodeInfo nInfo = new KeyStoreInfo(new File(fileName));
+        // NodeInfo nInfo = new KeyStoreValue(new File(fileName));
 		List<CertificateValue> certsRetour = new ArrayList<CertificateValue>();
 
 		InputStream is = null;

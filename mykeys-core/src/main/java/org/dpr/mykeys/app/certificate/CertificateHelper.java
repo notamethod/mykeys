@@ -153,7 +153,7 @@ public class CertificateHelper {
 //			String aliasEmetteur, boolean isAC) throws Exception {
 //		CertificateBuilder builder = new CertificateBuilder();
 //		Usage usage = null;
-//		KeyStoreInfo ksInfo = null;
+//		KeyStoreValue ksInfo = null;
 //		if (!StringUtils.isBlank(aliasEmetteur)) {
 //			char[] password = InternalKSTmp.getPassword();
 //			ksInfo = InternalKSTmp.getStoreAC();

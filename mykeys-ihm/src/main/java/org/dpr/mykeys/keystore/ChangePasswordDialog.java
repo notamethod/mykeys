@@ -22,7 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -37,14 +37,13 @@ public class ChangePasswordDialog extends JDialog {
 	// JPasswordField pwd1;
 	// JPasswordField pwd2;
 	LabelValuePanel infosPanel;
-	
-	KeyStoreInfo ksInfo;
+
+    KeyStoreValue ksInfo;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
 
-
-	public ChangePasswordDialog(JFrame frame, KeyStoreInfo ksInfo) {
+    public ChangePasswordDialog(JFrame frame, KeyStoreValue ksInfo) {
 		super(frame, true);
 		this.ksInfo=ksInfo;
 		init();

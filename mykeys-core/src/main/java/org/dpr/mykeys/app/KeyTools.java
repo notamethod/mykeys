@@ -11,7 +11,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.provider.X509CertificateObject;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -134,7 +134,7 @@ public class KeyTools {
 
     }
 
-    public void saveKeyStore(KeyStore ks, KeyStoreInfo ksInfo) throws KeyToolsException {
+    public void saveKeyStore(KeyStore ks, KeyStoreValue ksInfo) throws KeyToolsException {
 
         try {
             OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));

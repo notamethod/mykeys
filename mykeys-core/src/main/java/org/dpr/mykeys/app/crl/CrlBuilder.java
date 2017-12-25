@@ -1,32 +1,18 @@
 package org.dpr.mykeys.app.crl;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateParsingException;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.util.Calendar;
-import java.util.Date;
 
-import org.bouncycastle.asn1.x509.CRLNumber;
-import org.bouncycastle.asn1.x509.CRLReason;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.x509.X509V2CRLGenerator;
-import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
-import org.dpr.mykeys.app.CrlInfo;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.certificate.CertificateValue;
 
 public class CrlBuilder extends KeyTools {
 
@@ -56,7 +42,7 @@ public static void main(String[] args) {
 //		CertificateInfo cinfo = new CertificateInfo();
 //		fillCertInfo(ks, cinfo, "MK DEV AC Intermediaire");
 //		Calendar nextupdate = Calendar.getInstance();
-//		CrlInfo crlInfo = new CrlInfo();
+//		CrlValue crlInfo = new CrlValue();
 //		nextupdate.add(Calendar.DAY_OF_YEAR, 30);
 //		crlInfo.setNextUpdate(nextupdate.getTime());
 //		Key key = ks.getKey("mk dev root ca", password);
@@ -66,7 +52,7 @@ public static void main(String[] args) {
 //		os.close();
 
 	}
-	// public void timeStamp(KeyStoreInfo ksInfo, CertificateInfo certInfo){
+    // public void timeStamp(KeyStoreValue ksInfo, CertificateInfo certInfo){
 	// TimeStampTokenGenerator ts = new TimeStampTokenGenerator(
 	// }
 
@@ -86,7 +72,7 @@ public static void main(String[] args) {
 	 * @throws CRLException
 	 * @throws InvalidKeyException
 	 */
-//	public X509CRL generateCrl(CertificateInfo certSign, CrlInfo crlInfo)
+//	public X509CRL generateCrl(CertificateInfo certSign, CrlValue crlInfo)
 //			throws CertificateParsingException, InvalidKeyException, CRLException, IllegalStateException,
 //			NoSuchProviderException, NoSuchAlgorithmException, SignatureException {
 //
@@ -105,9 +91,9 @@ public static void main(String[] args) {
 //		X509CRL crl = crlGen.generate((PrivateKey) certSign.getPrivateKey(), "BC");
 //		return crl;
 //	}
-	
-	
-//	public X509CRL generateCrl(X509Certificate certSign, CrlInfo crlInfo, Key privateKey) throws KeyStoreException,
+
+
+//	public X509CRL generateCrl(X509Certificate certSign, CrlValue crlInfo, Key privateKey) throws KeyStoreException,
 //	NoSuchProviderException, NoSuchAlgorithmException, CertificateException, IOException,
 //	UnrecoverableKeyException, InvalidKeyException, CRLException, IllegalStateException, SignatureException {
 //

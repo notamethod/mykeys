@@ -20,7 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.ihm.windows.CreateUserDialog;
@@ -37,8 +36,6 @@ import java.util.*;
 
 /**
  * @author Christophe Roger
- * @date 18 mai 2009 TODO: mode autonome: pas de stockage Mode sur: stockage des
- * clï¿½s avec un mot de passe maitre
  */
 public class MyKeys {
 
@@ -103,14 +100,14 @@ public class MyKeys {
      */
     private void migrate() {
         log.info("migration not implemented");
-        char[] password = null;
-        if (KSConfig.getInternalKeystores().existsACDatabase()){
-
-            KeyStoreInfo ki = KSConfig.getInternalKeystores().getStoreAC();
-            KeyStoreHelper kh = new KeyStoreHelper();
-             password = MykeysFrame.showPasswordDialog(null, "Veuillez renseigner votre mot de passe pour upgrader les magasins");
-
-        }
+//        char[] password = null;
+//        if (KSConfig.getInternalKeystores().existsACDatabase()){
+//
+//            KeyStoreValue ki = KSConfig.getInternalKeystores().getStoreAC();
+//            KeyStoreHelper kh = new KeyStoreHelper();
+//             password = MykeysFrame.showPasswordDialog(null, "Veuillez renseigner votre mot de passe pour upgrader les magasins");
+//
+//        }
     }
 
     private void login() {

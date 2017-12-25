@@ -16,12 +16,8 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
-import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
-import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -98,16 +94,15 @@ public class GenerateCertificateTest {
 		}
 
 	}
-	
-	public  KeyStoreInfo getStoreAC() {
+
+    public KeyStoreValue getStoreAC() {
 		
 	
 		 String pwd = "mKeys983178";
-		KeyStoreInfo kinfo = null;
+        KeyStoreValue kinfo = null;
 
-	
-		
-		kinfo = new KeyStoreInfo("", new File("src/test/resources/data/mykeysAc.jks").getAbsolutePath(),
+
+        kinfo = new KeyStoreValue("", new File("src/test/resources/data/mykeysAc.jks").getAbsolutePath(),
 				StoreModel.CASTORE, StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(pwd.toCharArray());
 		kinfo.setOpen(true);

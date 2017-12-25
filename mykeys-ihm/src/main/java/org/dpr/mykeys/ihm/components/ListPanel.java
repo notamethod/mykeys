@@ -16,7 +16,6 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -39,7 +38,7 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
@@ -181,7 +180,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 				listModel.addElement(ci);
 			}
 		} else {
-			KeyStoreHelper ks = new KeyStoreHelper((KeyStoreInfo) ksInfo);
+			KeyStoreHelper ks = new KeyStoreHelper((KeyStoreValue) ksInfo);
 			for (ChildInfo ci : ks.getChildList()) {
 				listModel.addElement(ci);
 			}
@@ -255,7 +254,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * @param ksInfo
 	 *            the ksInfo to set
 	 */
-	public void setKsInfo(KeyStoreInfo ksInfo) {
+	public void setKsInfo(KeyStoreValue ksInfo) {
 		this.ksInfo = ksInfo;
 	}
 
@@ -263,8 +262,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
-		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertificatDialog(frame, (KeyStoreInfo) info, true);
+		if (info instanceof KeyStoreValue) {
+			cs = new CreateCertificatDialog(frame, (KeyStoreValue) info, true);
 		} else {
 			cs = new CreateProfilDialog(frame, true);
 		}
@@ -279,8 +278,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
-		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertProfilDialog(frame, (KeyStoreInfo) info, true);
+		if (info instanceof KeyStoreValue) {
+			cs = new CreateCertProfilDialog(frame, (KeyStoreValue) info, true);
 		}
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
@@ -301,7 +300,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	 * @throws ServiceException
 	 */
 	public void deleteCertificate(NodeInfo info, CertificateValue certificateInfo) throws ServiceException {
-		KeyStoreInfo kinfo = (KeyStoreInfo) info;
+		KeyStoreValue kinfo = (KeyStoreValue) info;
 		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
 		try {
 			ksv.removeCertificate(certificateInfo);
@@ -315,7 +314,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	public void exporterCertificate(NodeInfo info, CertificateValue certificateInfo, boolean b) {
-		KeyStoreInfo kinfo = (KeyStoreInfo) info;
+		KeyStoreValue kinfo = (KeyStoreValue) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
 		ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificateInfo, true);
@@ -326,7 +325,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	public void importCertificate(NodeInfo info, boolean b) throws ServiceException {
-		KeyStoreInfo kinfo = (KeyStoreInfo) info;
+		KeyStoreValue kinfo = (KeyStoreValue) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
 		ImportCertificateDialog cs = new ImportCertificateDialog(frame, kinfo, true);
@@ -341,7 +340,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		if (ksInfo.isProtected()) {
 
-			KeyStoreInfo kstInfo = (KeyStoreInfo) ksInfo;
+			KeyStoreValue kstInfo = (KeyStoreValue) ksInfo;
 			if (kstInfo.getPassword() == null) {
 				char[] password = MykeysFrame.showPasswordDialog(this);
 
@@ -355,7 +354,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		}
 
 		try {
-			KeyStoreHelper kserv = new KeyStoreHelper((KeyStoreInfo) ksInfo);
+			KeyStoreHelper kserv = new KeyStoreHelper((KeyStoreValue) ksInfo);
 			kserv.open();
 
 			ksInfo.setOpen(true);
@@ -459,8 +458,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 		File transferFile = (File) fileList.get(0);
-		KeyStoreInfo ksin = new KeyStoreInfo(transferFile, null, null);
-		KeyStoreHelper service = new KeyStoreHelper((KeyStoreInfo) ksInfo);
+		KeyStoreValue ksin = new KeyStoreValue(transferFile, null, null);
+		KeyStoreHelper service = new KeyStoreHelper((KeyStoreValue) ksInfo);
 		final String transferURL = transferFile.getAbsolutePath();
 
 		ActionStatus act = null;
@@ -486,8 +485,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	public void addCertFromCSR(NodeInfo info, boolean b) throws ServiceException {
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
-		if (info instanceof KeyStoreInfo) {
-			cs = new CreateCertificatFromCSRDialog(frame, (KeyStoreInfo) info, true);
+		if (info instanceof KeyStoreValue) {
+			cs = new CreateCertificatFromCSRDialog(frame, (KeyStoreValue) info, true);
 		} 
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);

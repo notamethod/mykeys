@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -38,9 +37,8 @@ import javax.swing.plaf.ColorUIResource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.keystore.KeyStoreInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.MenuAction;
@@ -61,7 +59,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 	// messages
 
-	HashMap<String, KeyStoreInfo> ksList = new HashMap<String, KeyStoreInfo>();
+	HashMap<String, KeyStoreValue> ksList = new HashMap<String, KeyStoreValue>();
 
 	TreeKeyStorePanel mainPanel;
 
@@ -348,7 +346,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 				for (Object o : list) {
 					String dirName = (String) o;
 					String fileName = dirName.substring(dirName.lastIndexOf("\\") + 1, dirName.length());
-					KeyStoreInfo ki = new KeyStoreInfo(fileName, dirName, StoreModel.fromValue(typeTmp[1]),
+					KeyStoreValue ki = new KeyStoreValue(fileName, dirName, StoreModel.fromValue(typeTmp[1]),
 							StoreFormat.valueOf(typeTmp[2]));
 					// if (ki.getStoreModel().equals(StoreModel.CASTORE)){
 					// InternalKeystores.setPath(dirName);
