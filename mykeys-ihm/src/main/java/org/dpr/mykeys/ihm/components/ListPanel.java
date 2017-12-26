@@ -33,15 +33,13 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
+import org.dpr.mykeys.app.profile.ProfileManager;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
@@ -174,9 +172,10 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		listModel.removeAllElements();
 		// FIXME
 	
-		
+
 		if (ksInfo instanceof ProfilStoreInfo) {
-			for (ChildInfo ci : ksInfo.getChildList()) {
+
+            for (ChildInfo ci : ProfileManager.getProfils(KSConfig.getProfilsPath())) {
 				listModel.addElement(ci);
 			}
 		} else {

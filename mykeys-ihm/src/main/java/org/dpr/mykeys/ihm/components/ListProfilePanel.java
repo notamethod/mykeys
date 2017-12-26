@@ -38,10 +38,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -62,7 +59,7 @@ import org.dpr.swingutils.LabelValuePanel;
 public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	public static final Log log = LogFactory.getLog(ListProfilePanel.class);
 
-	ProfileManager profileService = new ProfileManager();
+	ProfileManager profileService = new ProfileManager(KSConfig.getProfilsPath());
 	public class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 

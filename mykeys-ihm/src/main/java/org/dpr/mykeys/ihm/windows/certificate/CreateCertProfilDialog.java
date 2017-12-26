@@ -93,7 +93,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		panelInfoVisible = new LabelValuePanel(model);
 		Map<String, String> mapProfiles = new HashMap<String, String>();
 		mapProfiles.put("", "");
-		ProfileManager pman = new ProfileManager();
+        ProfileManager pman = new ProfileManager(KSConfig.getProfilsPath());
 
 		for (String profile : pman.getProfiles()) {
 			if (profile != null) {
@@ -284,7 +284,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 			System.out.println("houlala");
 			String strProf = (String) ((JComboBox) e.getSource()).getSelectedItem();
 
-			ProfileManager pman = new ProfileManager();
+            ProfileManager pman = new ProfileManager(KSConfig.getProfilsPath());
 
 			if (strProf != null && profile == null) {
 				try {

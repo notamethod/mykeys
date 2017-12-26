@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.Profil;
 import org.dpr.mykeys.app.profile.ProfileManager;
@@ -20,8 +21,8 @@ public class KeysProfileAction implements ActionListener {
 	 * 
 	 */
 	private final ListPanel listPanel;
-	
-	ProfileManager profileService = new ProfileManager();
+
+	ProfileManager profileService = new ProfileManager(KSConfig.getProfilsPath());
 	
 
 	public KeysProfileAction(ListPanel listPanel, JComponent frameSource) {

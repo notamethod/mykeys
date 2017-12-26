@@ -180,7 +180,7 @@ public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 	@Override
 	public List<? extends ChildInfo> getChildList() {
 		// TODO Auto-generated method stub
-		return ProfileManager.getProfils();
+		return null;
 	}
 
 	@Override

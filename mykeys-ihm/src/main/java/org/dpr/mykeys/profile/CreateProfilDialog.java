@@ -214,7 +214,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			} else if (command.equals("OK")) {
 				try {
 					fillCertInfo();
-					ProfileManager pman = new ProfileManager();
+					ProfileManager pman = new ProfileManager(KSConfig.getProfilsPath());
 					pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"), certInfo);
 			
 					CreateProfilDialog.this.setVisible(false);
