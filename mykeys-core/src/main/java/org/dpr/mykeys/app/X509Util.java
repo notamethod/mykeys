@@ -1,5 +1,6 @@
 package org.dpr.mykeys.app;
 
+import java.math.BigInteger;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +58,22 @@ public class X509Util {
 			return retour.toLowerCase();
 		}
 	}
+
+    public static String toHexString(BigInteger bi, String separator, boolean upperCase) {
+        String retour = "";
+        String converted = bi.toString(16);
+        char[] charArray = converted.toCharArray();
+        for (int i = 0; i < charArray.length - 1; i = i + 2) {
+            retour += String.valueOf(charArray[i]);
+            retour += String.valueOf(charArray[i + 1]);
+            retour += separator;
+        }
+        if (upperCase) {
+            return retour.toUpperCase();
+        } else {
+            return retour.toLowerCase();
+        }
+    }
 
 	public static void getExtensions(X509Certificate certificate) {
 		

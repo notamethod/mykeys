@@ -238,7 +238,13 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	 * @param string
 	 */
 	public static void showError(Component c, String string) {
-		JOptionPane.showMessageDialog(c, string, "Erreur", JOptionPane.ERROR_MESSAGE);
+
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(c, string, Messages.getString("error.title"), JOptionPane.ERROR_MESSAGE);
+
+        });
+
+
 
 	}
 
@@ -391,7 +397,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	public static boolean askConfirmDialog(Component parent, String message) {
 
 		boolean retour = false;
-		int result = JOptionPane.showConfirmDialog(parent, message, "Confirmation de l'action",
+        int result = JOptionPane.showConfirmDialog(parent, message, Messages.getString("title.action.confirm"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 		if (result == JOptionPane.OK_OPTION) {

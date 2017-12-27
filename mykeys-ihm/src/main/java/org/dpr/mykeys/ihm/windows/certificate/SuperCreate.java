@@ -215,10 +215,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.putEmptyLine();
 				Calendar calendar = Calendar.getInstance();
 
-				infosPanel.put(KSConfig.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
+				infosPanel.put(KSConfig.getMessage().getString("x509.startdate"), JSpinnerDate.class, "notBefore",
 						calendar.getTime(), true);
 				calendar.add(Calendar.YEAR, 5);
-				infosPanel.put(KSConfig.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
+				infosPanel.put(KSConfig.getMessage().getString("x509.enddate"), JSpinnerDate.class, "notAfter",
 						calendar.getTime(), true);
 				//infosPanel.put("aaa", JTextField.class, "notAfter", calendar.getTime(), true);
 				infosPanel.put(KSConfig.getMessage().getString("certinfo.duration"), "duration", "3");
@@ -371,10 +371,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 		Calendar calendar = Calendar.getInstance();
 		if (durationPanel == null) {
 			durationPanel = new LabelValuePanel();
-			durationPanel.put(KSConfig.getMessage().getString("certinfo.notBefore"), JSpinnerDate.class, "notBefore",
+			durationPanel.put(KSConfig.getMessage().getString("x509.startdate"), JSpinnerDate.class, "notBefore",
 					calendar.getTime(), true);
 			calendar.add(Calendar.YEAR, duration);
-			durationPanel.put(KSConfig.getMessage().getString("certinfo.notAfter"), JSpinnerDate.class, "notAfter",
+			durationPanel.put(KSConfig.getMessage().getString("x509.enddate"), JSpinnerDate.class, "notAfter",
 					calendar.getTime(), true);
 			durationPanel.setVisible(false);
 

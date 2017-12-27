@@ -17,7 +17,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.Profil;
-import org.dpr.mykeys.ihm.windows.certificate.CertDetailPanel;
+import org.dpr.mykeys.ihm.windows.certificate.CertificateDetailPanel;
 import org.dpr.mykeys.profile.ProfilDetailPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -75,7 +75,7 @@ public class DetailPanel extends JPanel {
 
 	private Component getDetailInstance(ChildInfo info) {
 		if(info instanceof CertificateValue){
-			return new CertDetailPanel((CertificateValue)info);
+            return new CertificateDetailPanel((CertificateValue) info);
 		}else{
 			return new ProfilDetailPanel((Profil)info);
 		}
@@ -111,9 +111,11 @@ public class DetailPanel extends JPanel {
 		jp.removeAll();
 		//jtab.revalidate();
 		jp.add( getDetailInstance(info));
-
 		titre.setText(KSConfig.getMessage().getString("detail.cert.title"));
-		
+        if (info instanceof CertificateValue) {
+            jtab.setTitleAt(0, ((CertificateValue) ((CertificateValue) info)).getAlias());
+        }
+
 		jtab.setVisible(true);
 		jtab.revalidate();
 

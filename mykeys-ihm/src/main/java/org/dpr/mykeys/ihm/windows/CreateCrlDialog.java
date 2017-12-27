@@ -26,6 +26,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.KSConfig;
@@ -103,10 +104,10 @@ public class CreateCrlDialog extends JDialog {
 		jpDirectory2.add(tfDirectoryOut);
 		jpDirectory2.add(jbChoose2);
 
-		JButton jbOK = new JButton("Valider");
+        JButton jbOK = new JButton(Messages.getString("button.confirm"));
 		jbOK.addActionListener(dAction);
 		jbOK.setActionCommand("OK");
-		JButton jbCancel = new JButton("Annuler");
+        JButton jbCancel = new JButton(Messages.getString("button.cancel"));
 		jbCancel.addActionListener(dAction);
 		jbCancel.setActionCommand("CANCEL");
 		JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
@@ -153,10 +154,10 @@ public class CreateCrlDialog extends JDialog {
 		infosPanel.putEmptyLine();
 		Calendar calendar = Calendar.getInstance();
 
-		infosPanel.put(KSConfig.getMessage().getString("certinfo.notBefore"),
+        infosPanel.put(KSConfig.getMessage().getString("x509.startdate"),
 				JSpinnerDate.class, "notBefore", calendar.getTime(), true);
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
-		infosPanel.put(KSConfig.getMessage().getString("certinfo.notAfter"),
+        infosPanel.put(KSConfig.getMessage().getString("x509.enddate"),
 				JSpinnerDate.class, "notAfter", calendar.getTime(), true);
 		infosPanel.putEmptyLine();
 

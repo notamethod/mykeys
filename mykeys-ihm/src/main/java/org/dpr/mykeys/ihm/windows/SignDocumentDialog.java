@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.CommonsActions;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.StoreFormat;
@@ -104,10 +105,10 @@ public class SignDocumentDialog extends JDialog {
 		jpDirectory2.add(tfDirectoryOut);
 		jpDirectory2.add(jbChoose2);
 
-		JButton jbOK = new JButton("Valider");
+		JButton jbOK = new JButton(Messages.getString("button.confirm"));
 		jbOK.addActionListener(dAction);
 		jbOK.setActionCommand("OK");
-		JButton jbCancel = new JButton("Annuler");
+		JButton jbCancel = new JButton(Messages.getString("button.cancel"));
 		jbCancel.addActionListener(dAction);
 		jbCancel.setActionCommand("CANCEL");
 		JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);

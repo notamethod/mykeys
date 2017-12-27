@@ -11,6 +11,8 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
+import org.bouncycastle.operator.AlgorithmNameFinder;
+import org.bouncycastle.operator.DefaultAlgorithmNameFinder;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
@@ -319,6 +321,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
             String key = (String) iter.next();
             String value = subjectMap.get(key);
             Object oidKey = X509Name.DefaultLookUp.get(key.toLowerCase());
+            DefaultAlgorithmNameFinder a;
             if (oidKey != null && value != null && !value.equals("")) {
 
                 nameBuilder.addRDN((ASN1ObjectIdentifier) oidKey, subjectMap.get(key));

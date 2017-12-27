@@ -1,8 +1,11 @@
 package org.dpr.mykeys.ihm.windows;
 
+import org.dpr.mykeys.Messages;
+
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
+import java.util.Map;
 
 public class MkDialog extends JDialog{
 
@@ -34,5 +37,17 @@ public class MkDialog extends JDialog{
             // handle exception
         }
 
+    }
+
+    protected static boolean checkFields(Component c, Map<String, Object> elements, String... fields) {
+        for (String field : fields) {
+            String value = (String) elements.get(field);
+            if (value == null || value.isEmpty()) {
+                MykeysFrame.showError(c, Messages.getFullString("mandatory", "label." + field));
+                return false;
+            }
+        }
+
+        return true;
     }
 }

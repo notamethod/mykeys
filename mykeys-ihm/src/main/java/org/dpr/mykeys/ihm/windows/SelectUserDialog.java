@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.windows;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.AuthenticationService;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.keystore.ServiceException;
@@ -47,7 +48,7 @@ public class SelectUserDialog extends MkDialog {
         DialogAction dAction = new DialogAction();
         // FIXME:
 
-        setTitle("Sélection utilisateur");
+        setTitle(Messages.getString("title.user.select"));
 
         JPanel jp = new JPanel();
         BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
@@ -60,10 +61,10 @@ public class SelectUserDialog extends MkDialog {
         infosPanel = getInfoPanel();
         panelInfo.add(infosPanel);
 
-        JButton jbOK = new JButton("Valider");
+        JButton jbOK = new JButton(Messages.getString("button.confirm"));
         jbOK.addActionListener(dAction);
         jbOK.setActionCommand("OK");
-        JButton jbCancel = new JButton("Annuler");
+        JButton jbCancel = new JButton(Messages.getString("button.cancel"));
         jbCancel.addActionListener(dAction);
         jbCancel.setActionCommand("CANCEL");
         JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
@@ -113,10 +114,10 @@ public class SelectUserDialog extends MkDialog {
         }
         //	infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
         PanelBuilder pb = new PanelBuilder();
-        pb.addComponent("User", "user", users, ComponentType.COMBOBOX);
+        pb.addComponent(Messages.getString("label.name"), "name", users, ComponentType.COMBOBOX);
 
 
-        pb.addComponent("Mot de passe", "password", ComponentType.PASSWORD);
+        pb.addComponent(Messages.getString("label.password"), "password", ComponentType.PASSWORD);
 
         pb.addEmptyLine();
         return pb.toPanel();
@@ -132,14 +133,9 @@ public class SelectUserDialog extends MkDialog {
 
                 Map<String, Object> elements = infosPanel.getElements();
 
-                String nom = (String) elements.get("user");
+                String nom = (String) elements.get("name");
                 String pwd = (String) elements.get("password");
-                if (nom == null || nom.isEmpty()) {
-                    MykeysFrame.showError(SelectUserDialog.this, "nom obligatoire");
-                    return;
-                }
-                if (pwd == null || pwd.isEmpty()) {
-                    MykeysFrame.showError(SelectUserDialog.this, "password obligatoire");
+                if (!checkFields(SelectUserDialog.this, elements, "name", "password")) {
                     return;
                 }
 
@@ -155,7 +151,7 @@ public class SelectUserDialog extends MkDialog {
                     //stay alive until cpt max
                 } catch (AuthenticationException e) {
                     log.error("authentication failure", e);
-                    MykeysFrame.showError(SelectUserDialog.this, "Echec d'authentification");
+                    MykeysFrame.showError(SelectUserDialog.this, Messages.getString("error.authentication"));
                     if (cpt++ > CPTMAX)
                         System.exit(1);
                     return;
@@ -169,7 +165,7 @@ public class SelectUserDialog extends MkDialog {
                 SelectUserDialog.this.setVisible(false);
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        CreateUserDialog cs = new CreateUserDialog(null, true);
+                        CreateUserDialog cs = new CreateUserDialog(null, true, SelectUserDialog.class);
                         cs.setLocationRelativeTo(SelectUserDialog.this);
                         cs.setVisible(true);
                     }
