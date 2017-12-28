@@ -50,19 +50,7 @@ public class MyKeys {
     public static void main(String[] args) {
         MyKeys mk = new MyKeys();
         mk.init();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                //MykeysFrame frame = new MykeysFrame();
-                try {
-                    new MykeysFrame();
-                } catch (KeyStoreException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                // frame.addComponents();
 
-            }
-        });
     }
 
     private void init() {
@@ -84,7 +72,7 @@ public class MyKeys {
             }else{
                 login();
             }
-            KSConfig.getInternalKeystores().init();
+
         } catch (Exception e) {
 
             MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
@@ -111,23 +99,17 @@ public class MyKeys {
     }
 
     private void login() {
-        try {
-            SwingUtilities.invokeAndWait(() -> {
-                SelectUserDialog cs = null;
-                try {
-                    cs = new SelectUserDialog(
-                            null, true);
-                } catch (IhmException e) {
-                    e.printStackTrace();
-                }
+        SwingUtilities.invokeLater(() -> {
+            SelectUserDialog cs = null;
+            try {
+                cs = new SelectUserDialog(
+                        null, true);
+            } catch (IhmException e) {
+                e.printStackTrace();
+            }
 
-                cs.setVisible(true);
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+            cs.setVisible(true);
+        });
     }
 
     private boolean checkUpdate() throws InvocationTargetException, InterruptedException {

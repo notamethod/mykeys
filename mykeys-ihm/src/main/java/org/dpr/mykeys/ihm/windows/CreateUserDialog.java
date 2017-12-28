@@ -34,7 +34,7 @@ public class CreateUserDialog extends MkDialog {
 
     public CreateUserDialog(JFrame owner, boolean modal, Class<? extends Component> dialogClass) {
         super(owner, modal);
-
+		log.info("xxx");
         previousWindow = dialogClass;
         init();
         this.pack();

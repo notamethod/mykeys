@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.AuthenticationService;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
@@ -16,7 +17,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SelectUserDialog extends MkDialog {
@@ -28,6 +33,9 @@ public class SelectUserDialog extends MkDialog {
     LabelValuePanel infosPanel;
     boolean isAC = false;
     int cpt = 0;
+
+    List<String> userList = new ArrayList<>();
+    DefaultComboBoxModel modelCombo;
 
     public SelectUserDialog(JFrame owner, boolean modal) throws IhmException {
 
@@ -103,24 +111,43 @@ public class SelectUserDialog extends MkDialog {
         infosPanel = new LabelValuePanel();
         final Map<String, String> users = new HashMap<String, String>();
 
+
+        //	infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
+        PanelBuilder pb = new PanelBuilder();
+
+        //   pb.addComponent(Messages.getString("label.name"), "name", users, ComponentType.COMBOBOX);
+        JComboBox cb = new JComboBox(userList.toArray());
+
+        modelCombo = (DefaultComboBoxModel) cb.getModel();
+
+        update();
+        //  cb.setModel(modelCombo);
+        infosPanel.put(Messages.getString("label.name"), cb, true);
+//
+        infosPanel.put(Messages.getString("label.password"), ComponentType.PASSWORD.getValue(), "password", "", true);
+        //pb.addComponent(Messages.getString("label.password"), "password", ComponentType.PASSWORD);
+
+
+        pb.addEmptyLine();
+        return infosPanel;
+
+    }
+
+    public void update() throws IhmException {
         AuthenticationService auth = new AuthenticationService();
 
+        List<String> userList2 = new ArrayList<>();
 
-        users.put(" ", " ");
+        userList2.add("");
         try {
-            auth.listUsers().forEach(item -> users.put(item.getAlias(), item.getAlias()));
+            auth.listUsers().forEach(item -> userList2.add(item.getAlias()));
         } catch (ServiceException e) {
             throw new IhmException(e);
         }
-        //	infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
-        PanelBuilder pb = new PanelBuilder();
-        pb.addComponent(Messages.getString("label.name"), "name", users, ComponentType.COMBOBOX);
 
+        modelCombo.removeAllElements();
+        userList2.forEach(item2 -> modelCombo.addElement(item2));
 
-        pb.addComponent(Messages.getString("label.password"), "password", ComponentType.PASSWORD);
-
-        pb.addEmptyLine();
-        return pb.toPanel();
 
     }
 
@@ -147,7 +174,7 @@ public class SelectUserDialog extends MkDialog {
                     SelectUserDialog.this.setVisible(false);
                     MkSession.user = nom;
                     MkSession.password = pwdChar;
-                    return;
+                    loginOK();
                     //stay alive until cpt max
                 } catch (AuthenticationException e) {
                     log.error("authentication failure", e);
@@ -159,23 +186,51 @@ public class SelectUserDialog extends MkDialog {
 
 
             } else if (command.equals("CANCEL")) {
+                // userList.add("ffff");
+                modelCombo.addElement("klklklk");
                 SelectUserDialog.this.setVisible(false);
                 System.exit(0);
             } else if (command.equals("ADD")) {
                 SelectUserDialog.this.setVisible(false);
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        CreateUserDialog cs = new CreateUserDialog(null, true, SelectUserDialog.class);
-                        cs.setLocationRelativeTo(SelectUserDialog.this);
-                        cs.setVisible(true);
+                log.info("user creation dialog...");
+                SwingUtilities.invokeLater(() -> {
+                    CreateUserDialog cs = new CreateUserDialog(null, true, SelectUserDialog.class);
+                    //cs.setLocationRelativeTo(SelectUserDialog.this);
+                    cs.setVisible(true);
+                    try {
+
+                        update();
+                        SelectUserDialog.this.setVisible(true);
+                    } catch (IhmException e) {
+                        e.printStackTrace();
                     }
                 });
-                return;
+
+
             }
 
-            System.exit(0);
+            // System.exit(0);
 
 
+        }
+
+        private void loginOK() {
+            try {
+                KSConfig.getInternalKeystores().init();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            SwingUtilities.invokeLater(() -> {
+                //MykeysFrame frame = new MykeysFrame();
+                try {
+                    new MykeysFrame();
+                } catch (KeyStoreException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                // frame.addComponents();
+
+            });
         }
     }
 

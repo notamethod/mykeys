@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.dpr.mykeys.ihm.windows.ComponentType;
 
+import javax.swing.*;
+
 public class PanelBuilder {
 
 	private LabelValuePanel lvPanel;
@@ -42,4 +44,7 @@ public class PanelBuilder {
 
 	}
 
+    public void addComponent(JComponent cb) {
+        lvPanel.put(cb);
+    }
 }
