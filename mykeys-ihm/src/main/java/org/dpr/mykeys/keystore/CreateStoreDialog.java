@@ -61,7 +61,7 @@ public class CreateStoreDialog extends JDialog {
 
         infosPanel.putEmptyLine();
 
-        JLabel jl4 = new JLabel(KSConfig.getMessage().getString("label.filename"));
+        JLabel jl4 = new JLabel(Messages.getString("label.filename"));
         tfDirectory = new JTextField(30);
 
         JButton jbChoose = new JButton("...");
@@ -114,7 +114,7 @@ public class CreateStoreDialog extends JDialog {
             // } else {
             // document dir in windows
             File f = FileSystemView.getFileSystemView().getDefaultDirectory();
-            File data = new File(f, KSConfig.getMessage().getString("default.datadir"));
+            File data = new File(f, Messages.getString("default.datadir"));
             data.mkdirs();
             dir = data.getAbsolutePath();
             // }

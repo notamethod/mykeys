@@ -3,7 +3,9 @@ package org.dpr.mykeys.ihm.windows.certificate;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.keystore.CertificateType;
+import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class PanelUtils {
@@ -16,17 +18,15 @@ public class PanelUtils {
 	public static final String STREET_KEY="x509.subject.email";
 
 
-	public  void addSubjectToPanel(CertificateType type, LabelValuePanel infosPanel) {
+	public static void addSubjectToPanel(CertificateType type, LabelValuePanel infosPanel) {
 
+		infosPanel.addTitle(Messages.getString("x509.subject"));
 		switch (type) {
 		case STANDARD:
-			infosPanel.put("Nom (CN)", "CN", "Nom");
-			infosPanel.put("Pays (C)", "C", "FR");
-			infosPanel.put("Organisation (O)", "O", "Orga");
-			infosPanel.put("Section (OU)", "OU", "Développement");
-			infosPanel.put("Localité (L)", "L", "Saint-Etienne");
-			infosPanel.put("Rue (ST)", "SR", "");
-			infosPanel.put("Email (E)", "E", "");
+			for (String attribute : SubjectUtil.getStandardList()) {
+				String key = SubjectUtil.getLabels().get(attribute);
+				infosPanel.put(Messages.getString(key), attribute, Messages.getString(key + ".default"));
+			}
 			break;
 		case AC:
 			infosPanel.put("Nom (CN)", "CN", "MyKeys Root CA");

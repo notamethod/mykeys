@@ -11,6 +11,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -126,12 +127,12 @@ public class TreePopupMenu extends JPopupMenu {
 	}
 
 	private void init() {
-		addStore = new JMenuItem(KSConfig.getMessage().getString("magasin.new"));
+        addStore = new JMenuItem(Messages.getString("magasin.new"));
 		addStore.addActionListener(new TreePopupAction());
 		addStore.setActionCommand(TypeAction.ADD_STORE.getValue());
 		addStore.setVisible(false);
 
-		importStore = new JMenuItem(KSConfig.getMessage().getString(
+        importStore = new JMenuItem(Messages.getString(
 				"magasin.load"));
 		importStore.addActionListener(new TreePopupAction());
 		importStore.setActionCommand(TypeAction.IMPORT_STORE.getValue());
@@ -141,13 +142,13 @@ public class TreePopupMenu extends JPopupMenu {
 		addCertMenu.addActionListener(new TreePopupAction());
 		addCertMenu.setActionCommand(TypeAction.ADD_CERT.getValue());
 		addCertMenu.setVisible(false);
-		importCert = new JMenuItem(KSConfig.getMessage().getString(
+        importCert = new JMenuItem(Messages.getString(
 				"certificat.import"));
 		importCert.addActionListener(new TreePopupAction());
 		importCert.setActionCommand(TypeAction.IMPORT_CERT.getValue());
 		importCert.setVisible(false);
 
-		exportCert = new JMenuItem(KSConfig.getMessage().getString(
+        exportCert = new JMenuItem(Messages.getString(
 				"certificat.export"));
 		exportCert.addActionListener(new TreePopupAction());
 		exportCert.setActionCommand(TypeAction.EXPORT_CERT.getValue());
@@ -175,8 +176,8 @@ public class TreePopupMenu extends JPopupMenu {
 		deleteStore.addActionListener(new TreePopupAction());
 		deleteStore.setActionCommand(TypeAction.DELETE_STORE.getValue());
 		deleteStore.setVisible(false);
-		
-		menuChangePwd = new JMenuItem(KSConfig.getMessage().getString("magasin.change.password"));
+
+        menuChangePwd = new JMenuItem(Messages.getString("magasin.change.password"));
 		menuChangePwd.addActionListener(new TreePopupAction());
 		menuChangePwd.setActionCommand(TypeAction.CHANGE_PWD.getValue());
 		menuChangePwd.setVisible(false);

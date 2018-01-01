@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
@@ -73,14 +74,16 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertFromCSRButton.setToolTipText("create certificate from a CSR request");
 		importButton = new JButton(createImageIcon("/images/import.png")); 
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
-		importButton.setToolTipText(getMessage("import_button.tooltip"));
+        importButton.setToolTipText(Messages.getString("import_button.tooltip"));
 		exportButton = new JButton(createImageIcon("/images/export.png"));
 		exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
-		exportButton.setToolTipText(getMessage("export_button.tooltip"));
+        exportButton.setToolTipText(Messages.getString("export_button.tooltip"));
 		
 		// FIXME libelles
 		deleteButton = new JButton(createImageIcon("/images/trash_can.png"));
 		deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
+        deleteButton.setToolTipText(Messages.getString("delete_certificate.tooltip"));
+
 		deleteButton.setEnabled(false);
 		exportButton.setEnabled(false);
 		importButton.setEnabled(false);

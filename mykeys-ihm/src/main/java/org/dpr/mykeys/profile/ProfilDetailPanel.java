@@ -4,6 +4,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.bouncycastle.asn1.x509.KeyUsage;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.profile.Profil;
@@ -20,27 +21,27 @@ public class ProfilDetailPanel extends LabelValuePanel {
   
 	public void getPanel(){
 		//infosPanel = new LabelValuePanel();
-		this.put(KSConfig.getMessage().getString("label.name"),
+        this.put(Messages.getString("label.name"),
 				JTextField.class, "", info.getName(), false);
 		
 		this.putEmptyLine();
-	this.put(KSConfig.getMessage().getString("x509.pubkeysize"),
+        this.put(Messages.getString("x509.pubkeysize"),
 				JTextField.class, "keyLength",
 				info.getValue("keyLength"), false);
-	
-	this.put(KSConfig.getMessage().getString("x509.pubkeyalgo"),
+
+        this.put(Messages.getString("x509.pubkeyalgo"),
 	JTextField.class, "algoPubKey", info.getValue("algoPubKey"), false);
-	this.put(KSConfig.getMessage().getString("x509.sigalgo"),
+        this.put(Messages.getString("x509.sigalgo"),
 	JTextField.class, "algoPubKey", info.getValue("algoSig"), false);
 	this.putEmptyLine();
-	this.put(KSConfig.getMessage().getString("certinfo.duration"),
+        this.put(Messages.getString("certinfo.duration"),
 	JTextField.class, "algoPubKey", info.getValue("duration"), false);
 	this.putEmptyLine();
-	this.put(KSConfig.getMessage().getString("x509.subject.organisation"),
+        this.put(Messages.getString("x509.subject.organisation"),
 	JTextField.class, "algoPubKey", info.getValue("O"), false);
-	this.put(KSConfig.getMessage().getString("x509.subject.location"),
+        this.put(Messages.getString("x509.subject.location"),
 	JTextField.class, "algoPubKey", info.getValue("L"), false);
-	this.put(KSConfig.getMessage().getString("x509.subject.organisationUnit"),
+        this.put(Messages.getString("x509.subject.organisationUnit"),
 	JTextField.class, "algoPubKey", info.getValue("OU"), false);
 	
 	KeyUsage ku = new KeyUsage(info.getIntValue("keyUSage"));
@@ -51,9 +52,9 @@ public class ProfilDetailPanel extends LabelValuePanel {
 		System.out.println("yy");
 	if ((ku2 & KeyUsage.dataEncipherment) == KeyUsage.dataEncipherment)
 		System.out.println("zz");
-	
 
-	this.put(KSConfig.getMessage().getString("x509.subject.organisationUnit"),
+
+        this.put(Messages.getString("x509.subject.organisationUnit"),
 			JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("keyUSage")), false);
 
 	
@@ -74,18 +75,18 @@ public class ProfilDetailPanel extends LabelValuePanel {
 //		// this.put("Clé publique", JTextArea.class, "pubKey",
 //		// X509Util.toHexString(info.getPublicKey().getEncoded()," ",
 //		// false),false);
-	
-//		this.put(KSConfig.getMessage().getString("x509.sigalgo"),
+
+//		this.put(Messages.getString("x509.sigalgo"),
 //				JTextField.class, "algoSig", info.getAlgoSig(), false);
-//		this.put(KSConfig.getMessage().getString("x509.startdate"),
+//		this.put(Messages.getString("x509.startdate"),
 //				JSpinnerDate.class, "notBefore", info.getNotBefore(), false);
-//		this.put(KSConfig.getMessage().getString("x509.enddate"),
+//		this.put(Messages.getString("x509.enddate"),
 //				JSpinnerDate.class, "notAfter", info.getNotAfter(), false);
 //		this.putEmptyLine();
-//		this.put(KSConfig.getMessage().getString("x509.serial"),
+//		this.put(Messages.getString("x509.serial"),
 //				JTextField.class, "numser", info.getCertificate()
 //						.getSerialNumber().toString(), false);
-//		this.put(KSConfig.getMessage().getString("x509.issuer"),
+//		this.put(Messages.getString("x509.issuer"),
 //				JTextField.class, "emetteur", info.getCertificate()
 //						.getIssuerX500Principal().toString(), false);
 //		if (info.getSubjectMap() != null) {
@@ -94,7 +95,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
 //				String key = iter.next();
 //				String name;
 //				try {
-//					name = KSConfig.getMessage().getString(
+//					name = Messages.getString(
 //							X509Util.getMapNames().get(key));
 //				} catch (Exception e) {
 //					name = key;

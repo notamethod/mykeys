@@ -1,11 +1,6 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -17,23 +12,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
@@ -48,6 +34,8 @@ import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
+import org.jdesktop.swingx.JXCollapsiblePane;
+import org.jdesktop.swingx.VerticalLayout;
 
 public class SuperCreate extends JDialog implements ItemListener {
 
@@ -119,29 +107,34 @@ public class SuperCreate extends JDialog implements ItemListener {
 		panel.add(button1);
 		// panel.add(button2);
 		// panel.add(button3);
-
-		JOptionPane.showMessageDialog(this.getParent(), panel, "Type de certificat", 1, null);
+//Server Authentication (1.3.6.1.5.5.7.3.1).
+//
+//        Other "common" types of X.509 certs are Client Authentication (1.3.6.1.5.5.7.3.2), Code Signing (1.3.6.1.5.5.7.3.3), and a handful of others are used for various encryption and authentication schemes.
+		JOptionPane.showMessageDialog(this.getParent(), panel, Messages.getString("type.certificat"), 1, null);
 		DialogAction dAction = new DialogAction();
 
 		System.out.println(typeCer);
 		if (isAC) {
-			setTitle("Création d'une autorité de certification");
+			setTitle(Messages.getString("ac.creation.title"));
 		} else {
-			setTitle("Création de Certificat");
+			setTitle(Messages.getString("certificat.creation.title"));
 		}
 		JPanel jp = new JPanel();
-		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
-		jp.setLayout(bl);
+		//BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
+		jp.setLayout(new VerticalLayout());
+		//jp.setLayout(bl);
 		setContentPane(jp);
 
-		JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		panelInfo.setMinimumSize(new Dimension(400, 100));
+		//JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		//panelInfo.setMinimumSize(new Dimension(400, 100));
 
-		Map<String, String> mapKeyLength = new HashMap<String, String>();
+		Map<String, String> mapKeyLength = new LinkedHashMap<String, String>();
 		mapKeyLength.put("512 bits", "512");
 		mapKeyLength.put("1024 bits", "1024");
 		mapKeyLength.put("2048 bits", "2048");
 		mapKeyLength.put("4096 bits", "4096");
+		mapKeyLength.put("8192 bits*", "8192");
+		mapKeyLength.put("16384 bits*", "16384");
 		// fill with provider's available algorithms
 		Map<String, String> mapAlgoKey = new LinkedHashMap<String, String>();
 		for (String algo : ProviderUtil.getKeyPairGeneratorList()) {
@@ -153,8 +146,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 			mapAlgoSig.put(algo, algo);
 		}
 
+		LabelValuePanel subjectPanel = new LabelValuePanel();
+		PanelUtils.addSubjectToPanel(CertificateType.STANDARD, subjectPanel);
 		createInfoPanel(isAC, mapKeyLength, mapAlgoKey, mapAlgoSig);
-		panelInfo.add(infosPanel);
+		//panelInfo.add(infosPanel);
 
 		// JPanel panelInfo2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		JPanel checkPanel = new JPanel(new GridLayout(0, 3));
@@ -169,11 +164,50 @@ public class SuperCreate extends JDialog implements ItemListener {
 			}
 			checkPanel.add(item);
 		}
+		JXCollapsiblePane cp = new JXCollapsiblePane();
 
-		jp.add(panelInfo);
-		jp.add(checkPanel);
+		// JXCollapsiblePane can be used like any other container
+		cp.setLayout(new BorderLayout());
+
+		jp.add(subjectPanel);
+
+		jp.add(infosPanel);
+		infosPanel.getElements().putAll(subjectPanel.getElements());
+		cp.add(checkPanel);
+		cp.add(getPubKeyPanel());
+		jp.add(cp);
 		jp.add(new OkCancelPanel(dAction, FlowLayout.RIGHT));
+		// Show/hide the "Controls"
+		JButton toggle = new JButton(cp.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION));
+		toggle.setText("Show/Hide Search Panel");
+		this.add(toggle);
 
+	}
+
+	private Component getPubKeyPanel() {
+		Map<String, String> mapAlgoKey = new LinkedHashMap<String, String>();
+		for (String algo : ProviderUtil.getKeyPairGeneratorList()) {
+			mapAlgoKey.put(algo, algo);
+		}
+		Map<String, String> mapKeyLength = new LinkedHashMap<String, String>();
+		mapKeyLength.put("512 bits", "512");
+		mapKeyLength.put("1024 bits", "1024");
+		mapKeyLength.put("2048 bits", "2048");
+		mapKeyLength.put("4096 bits", "4096");
+		mapKeyLength.put("8192 bits*", "8192");
+		mapKeyLength.put("16384 bits*", "16384");
+
+		LabelValuePanel pubKeyPanel = new LabelValuePanel();
+		pubKeyPanel.put("Taille clé publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
+		pubKeyPanel.put("Algorithme clé publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
+
+		JXCollapsiblePane cp = new JXCollapsiblePane();
+
+		// JXCollapsiblePane can be used like any other container
+		cp.setLayout(new BorderLayout());
+		cp.add(pubKeyPanel);
+		infosPanel.getElements().putAll(pubKeyPanel.getElements());
+		return cp;
 	}
 
 	/**
@@ -189,6 +223,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 	 */
 	private LabelValuePanel createInfoPanel(boolean isAC, Map<String, String> mapKeyLength,
 			Map<String, String> mapAlgoKey, Map<String, String> mapAlgoSig) {
+
 		if (infosPanel == null) {
 			infosPanel = new LabelValuePanel();
 			Map<String, String> mapAC = null;
@@ -202,28 +237,30 @@ public class SuperCreate extends JDialog implements ItemListener {
 				mapAC = new HashMap<String, String>();
 			}
 			mapAC.put(" ", " ");
-			infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
-			PanelUtils putil = new PanelUtils();
+
+			infosPanel = new LabelValuePanel();
 			if (isAC) {
+				infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
 				infosPanel.put("Alias (nom du certificat)", "alias", "MyKeys Root CA");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Taille clé publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
-				infosPanel.put("Algorithme clé publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
+
+
 				infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig", mapAlgoSig,
 						"SHA256WithRSAEncryption");
+
 				// subject
 				infosPanel.putEmptyLine();
 				Calendar calendar = Calendar.getInstance();
 
-				infosPanel.put(KSConfig.getMessage().getString("x509.startdate"), JSpinnerDate.class, "notBefore",
+				infosPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore",
 						calendar.getTime(), true);
 				calendar.add(Calendar.YEAR, 5);
-				infosPanel.put(KSConfig.getMessage().getString("x509.enddate"), JSpinnerDate.class, "notAfter",
+				infosPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter",
 						calendar.getTime(), true);
 				//infosPanel.put("aaa", JTextField.class, "notAfter", calendar.getTime(), true);
-				infosPanel.put(KSConfig.getMessage().getString("certinfo.duration"), "duration", "3");
+				infosPanel.put(Messages.getString("certinfo.duration"), "duration", "3");
 				infosPanel.putEmptyLine();
-				putil.addSubjectToPanel(CertificateType.AC, infosPanel);
+				PanelUtils.addSubjectToPanel(CertificateType.AC, infosPanel);
 
 				infosPanel.putEmptyLine();
 				infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib", "");
@@ -238,19 +275,21 @@ public class SuperCreate extends JDialog implements ItemListener {
 				}
 
 			} else {
+
+				//	PanelUtils.addSubjectToPanel(CertificateType.STANDARD, infosPanel);
+				infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
 				infosPanel.put("Alias (nom du certificat)", "alias", "");
 				infosPanel.putEmptyLine();
-				infosPanel.put("Taille clé publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
-				infosPanel.put("Algorithme clé publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
+
 				infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig", mapAlgoSig,
 						"SHA256WithRSAEncryption");
 				// subject
 				infosPanel.putEmptyLine();
 				Calendar calendar = Calendar.getInstance();
 
-				infosPanel.put(KSConfig.getMessage().getString("certinfo.duration"), "duration",
+				infosPanel.put(Messages.getString("certinfo.duration"), "duration",
 						getDefaultDuration(CertificateType.STANDARD));
-				JCheckBox cbDuration = new JCheckBox(KSConfig.getMessage().getString("extended_mode"));
+				JCheckBox cbDuration = new JCheckBox(Messages.getString("extended_mode"));
 
 				cbDuration.setName("extendDuration");
 				cbDuration.addItemListener(this);
@@ -258,7 +297,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 				infosPanel.put("", cbDuration);
 				infosPanel.put(getDurationPanel(3));
 				infosPanel.putEmptyLine();
-				putil.addSubjectToPanel(CertificateType.STANDARD, infosPanel);
+
 
 				infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib", "");
 				infosPanel.put("Policy notice", "PolicyNotice", "");
@@ -315,7 +354,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 					
 					certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 					CertificateHelper certServ = new CertificateHelper(certInfo);
-					CertificateValue issuer =  kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
+
+					CertificateValue issuer = null;
+					if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
+						issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 
 					CertificateValue newCertificate = certServ.createCertificate(isAC, issuer);
 					kserv.addCertToKeyStore(ksInfo, newCertificate,  ksInfo.getPassword());
@@ -371,10 +413,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 		Calendar calendar = Calendar.getInstance();
 		if (durationPanel == null) {
 			durationPanel = new LabelValuePanel();
-			durationPanel.put(KSConfig.getMessage().getString("x509.startdate"), JSpinnerDate.class, "notBefore",
+			durationPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore",
 					calendar.getTime(), true);
 			calendar.add(Calendar.YEAR, duration);
-			durationPanel.put(KSConfig.getMessage().getString("x509.enddate"), JSpinnerDate.class, "notAfter",
+			durationPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter",
 					calendar.getTime(), true);
 			durationPanel.setVisible(false);
 
@@ -382,5 +424,6 @@ public class SuperCreate extends JDialog implements ItemListener {
 		return durationPanel;
 
 	}
+
 
 }

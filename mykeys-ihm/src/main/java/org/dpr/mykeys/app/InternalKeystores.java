@@ -13,6 +13,7 @@ import java.security.cert.CertificateException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
@@ -97,7 +98,7 @@ public class InternalKeystores {
 			}
 
 		}
-        kinfo = new KeyStoreValue(KSConfig.getMessage().getString("magasin.interne"), pathAC, StoreModel.CASTORE,
+        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathAC, StoreModel.CASTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
@@ -137,7 +138,7 @@ public class InternalKeystores {
 			ksBuilder.create(pathUDB, pwd.toCharArray());
 
 		}
-        kinfo = new KeyStoreValue(KSConfig.getMessage().getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
+        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
@@ -159,7 +160,7 @@ public class InternalKeystores {
 				e.printStackTrace();
 			}
 		}
-        kinfo = new KeyStoreValue(KSConfig.getMessage().getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
+        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
@@ -181,7 +182,7 @@ public class InternalKeystores {
 				e.printStackTrace();
 			}
 		}
-        kinfo = new KeyStoreValue(KSConfig.getMessage().getString("magasin.interne"), pathCert, StoreModel.CERTSTORE,
+        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathCert, StoreModel.CERTSTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
@@ -196,7 +197,7 @@ public class InternalKeystores {
 			f.mkdirs();
 
 		}
-		kinfo = new ProfilStoreInfo(KSConfig.getMessage().getString("profil.name"), pathProfils,
+        kinfo = new ProfilStoreInfo(Messages.getString("profil.name"), pathProfils,
 				StoreFormat.PROPERTIES);
 		kinfo.setPassword("null".toCharArray());
 		kinfo.setOpen(true);

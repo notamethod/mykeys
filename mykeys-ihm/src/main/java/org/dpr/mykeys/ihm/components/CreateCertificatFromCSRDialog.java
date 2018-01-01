@@ -68,7 +68,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 	protected void init() {
 
 		DialogAction dAction = new DialogAction();
-		setTitle(KSConfig.getMessage().getString("frame.create.fromcsr"));
+        setTitle(Messages.getString("frame.create.fromcsr"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);

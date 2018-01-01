@@ -33,6 +33,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 
 public class LabelValuePanel2 extends JPanel implements DocumentListener {
@@ -596,7 +597,7 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 
 	public static String getString(String string) {
 		try {
-			string = KSConfig.getMessage().getString(string);
+			string = Messages.getString(string);
 		} catch (Exception e) {
 			//
 		}

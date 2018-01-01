@@ -70,7 +70,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
     public void init()
     {
         DialogAction dAction = new DialogAction();
-        setTitle(KSConfig.getMessage().getString("dialog.export.title"));
+        setTitle(Messages.getString("dialog.export.title"));
         JPanel jp = new JPanel();
         BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
         jp.setLayout(bl);

@@ -31,19 +31,19 @@ public class SelectUserDialog extends MkDialog {
     // CertificateInfo certInfo = new CertificateInfo();
     public JFileChooser jfc;
     LabelValuePanel infosPanel;
-    boolean isAC = false;
     int cpt = 0;
 
-    List<String> userList = new ArrayList<>();
     DefaultComboBoxModel modelCombo;
 
     public SelectUserDialog(JFrame owner, boolean modal) throws IhmException {
+
 
         super(owner, modal);
         initLookAndFeel();
         init();
         this.pack();
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - getWidth() / 2, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - getHeight() / 2);
+        log.info("user creation dialog...construct");
 
     }
 
@@ -116,7 +116,7 @@ public class SelectUserDialog extends MkDialog {
         PanelBuilder pb = new PanelBuilder();
 
         //   pb.addComponent(Messages.getString("label.name"), "name", users, ComponentType.COMBOBOX);
-        JComboBox cb = new JComboBox(userList.toArray());
+        JComboBox cb = new JComboBox();
 
         modelCombo = (DefaultComboBoxModel) cb.getModel();
 
@@ -160,9 +160,14 @@ public class SelectUserDialog extends MkDialog {
 
                 Map<String, Object> elements = infosPanel.getElements();
 
-                String nom = (String) elements.get("name");
+                String name = (String) modelCombo.getSelectedItem();
                 String pwd = (String) elements.get("password");
-                if (!checkFields(SelectUserDialog.this, elements, "name", "password")) {
+
+                if (name == null || name.isEmpty()) {
+                    MykeysFrame.showError(SelectUserDialog.this, Messages.getFullString("mandatory", "label." + name));
+                    return;
+                }
+                if (!checkFields(SelectUserDialog.this, elements, "password")) {
                     return;
                 }
 
@@ -170,9 +175,9 @@ public class SelectUserDialog extends MkDialog {
                 CertificateHelperNew ch = new CertificateHelperNew();
                 AuthenticationService auth = new AuthenticationService();
                 try {
-                    auth.AuthenticateUSer(nom, pwdChar);
+                    auth.AuthenticateUSer(name, pwdChar);
                     SelectUserDialog.this.setVisible(false);
-                    MkSession.user = nom;
+                    MkSession.user = name;
                     MkSession.password = pwdChar;
                     loginOK();
                     //stay alive until cpt max
@@ -186,21 +191,22 @@ public class SelectUserDialog extends MkDialog {
 
 
             } else if (command.equals("CANCEL")) {
-                // userList.add("ffff");
-                modelCombo.addElement("klklklk");
                 SelectUserDialog.this.setVisible(false);
                 System.exit(0);
             } else if (command.equals("ADD")) {
                 SelectUserDialog.this.setVisible(false);
-                log.info("user creation dialog...");
+                log.info("hide select");
+                log.info("add new user.");
                 SwingUtilities.invokeLater(() -> {
                     CreateUserDialog cs = new CreateUserDialog(null, true, SelectUserDialog.class);
+                    log.info("show. new user");
                     //cs.setLocationRelativeTo(SelectUserDialog.this);
                     cs.setVisible(true);
                     try {
-
+                        log.info("update");
                         update();
                         SelectUserDialog.this.setVisible(true);
+                        log.info("show again...");
                     } catch (IhmException e) {
                         e.printStackTrace();
                     }

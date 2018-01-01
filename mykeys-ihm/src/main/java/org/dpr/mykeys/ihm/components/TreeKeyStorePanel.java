@@ -76,6 +76,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
@@ -174,18 +175,18 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 		// Create the nodes.
 		rootNode = new DefaultMutableTreeNode("Magasins");
-		acNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
+		acNode = new DefaultMutableTreeNode(Messages.getString(
 				"store.ac.name"));
-		cliNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
+		cliNode = new DefaultMutableTreeNode(Messages.getString(
 				"store.cert.name"));
-		adminNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
+		adminNode = new DefaultMutableTreeNode(Messages.getString(
 				"admin.name"));
 		//
-		// crlNode = new DefaultMutableTreeNode(KSConfig.getMessage().getString(
+		// crlNode = new DefaultMutableTreeNode(Messages.getString(
 		// "store.crl.name"));
 		//
 		// sandBoxNode = new
-		// DefaultMutableTreeNode(KSConfig.getMessage().getString(
+		// DefaultMutableTreeNode(Messages.getString(
 		// "store.sandbox.name"));
 
 		treeModel = new TreeModel(rootNode);

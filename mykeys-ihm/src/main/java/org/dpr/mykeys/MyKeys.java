@@ -75,7 +75,7 @@ public class MyKeys {
 
         } catch (Exception e) {
 
-            MykeysFrame.showError(null, KSConfig.getMessage().getString("error.config"));
+            MykeysFrame.showError(null, Messages.getString("error.config"));
             throw new RuntimeException("Fatal Error",e);
         }
 

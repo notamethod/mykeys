@@ -154,10 +154,10 @@ public class CreateCrlDialog extends JDialog {
 		infosPanel.putEmptyLine();
 		Calendar calendar = Calendar.getInstance();
 
-        infosPanel.put(KSConfig.getMessage().getString("x509.startdate"),
+        infosPanel.put(Messages.getString("x509.startdate"),
 				JSpinnerDate.class, "notBefore", calendar.getTime(), true);
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
-        infosPanel.put(KSConfig.getMessage().getString("x509.enddate"),
+        infosPanel.put(Messages.getString("x509.enddate"),
 				JSpinnerDate.class, "notAfter", calendar.getTime(), true);
 		infosPanel.putEmptyLine();
 

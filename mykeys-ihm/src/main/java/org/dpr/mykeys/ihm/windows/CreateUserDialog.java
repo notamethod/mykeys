@@ -132,19 +132,19 @@ public class CreateUserDialog extends MkDialog {
 	
 			} else if (command.equals("CANCEL")) {
 				CreateUserDialog.this.setVisible(false);
-                if (null != previousWindow && previousWindow.getName().equals(SelectUserDialog.class.getName())) {
-                    SwingUtilities.invokeLater(() -> {
-                        SelectUserDialog cs = null;
-                        try {
-                            cs = new SelectUserDialog(
-                                    null, true);
-                        } catch (IhmException e) {
-                            e.printStackTrace();
-                        }
-
-                        cs.setVisible(true);
-                    });
-                }
+//                if (null != previousWindow && previousWindow.getName().equals(SelectUserDialog.class.getName())) {
+//                    SwingUtilities.invokeLater(() -> {
+//                        SelectUserDialog cs = null;
+//                        try {
+//                            cs = new SelectUserDialog(
+//                                    null, true);
+//                        } catch (IhmException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        cs.setVisible(true);
+//                    });
+//                }
 			}
 
 		}

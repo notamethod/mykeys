@@ -21,6 +21,7 @@ import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -186,7 +187,7 @@ public class CertificateHelper {
 			//xCert = builder.generateFromCSR(buf, issuer).get();
 			PemReader reader = new PemReader(buf);
 			PKCS10CertificationRequest csr = convertPemToPKCS10CertificationRequest(reader);
-		
+
 			X500Name x500Name = csr.getSubject();
 			log.info("x500Name is: " + x500Name + "\n");
 			log.info("x500Name is: " + csr.getSignatureAlgorithm() + "\n");
@@ -232,33 +233,38 @@ public class CertificateHelper {
 	
 	private byte[] sign(PKCS10CertificationRequest inputCSR, PrivateKey caPrivate, X509Certificate caCert)
 			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException,
-			IOException, OperatorCreationException, CertificateException {
+            IOException, OperatorCreationException, CertificateException {
 
-		AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find(CSR_SIGN_ALGORITHM);
-		AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
+        AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find(CSR_SIGN_ALGORITHM);
+        AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
 
-		int validity = CSR_VALIDITY;
-		X500Name issuer = new X500Name(caCert.getSubjectX500Principal().getName());
-		BigInteger serial = new BigInteger(32, new SecureRandom());
-		Date from = new Date();
-		Date to = new Date(System.currentTimeMillis() + (validity * 86400000L));
+        int validity = CSR_VALIDITY;
+        X500Name issuer = new X500Name(caCert.getSubjectX500Principal().getName());
+        BigInteger serial = new BigInteger(32, new SecureRandom());
+        Date from = new Date();
+        Date to = new Date(System.currentTimeMillis() + (validity * 86400000L));
 
-		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
-		X509v3CertificateBuilder certgen = new X509v3CertificateBuilder(issuer, serial, from, to, inputCSR.getSubject(),
-				inputCSR.getSubjectPublicKeyInfo());
-		certgen.addExtension(Extension.basicConstraints, false, new BasicConstraints(false));
-		certgen.addExtension(Extension.subjectKeyIdentifier, false,
-				extUtils.createSubjectKeyIdentifier(inputCSR.getSubjectPublicKeyInfo()));
-		certgen.addExtension(Extension.authorityKeyIdentifier, false,
-				new AuthorityKeyIdentifier(
-						new GeneralNames(new GeneralName(new X509Name(caCert.getSubjectX500Principal().getName()))),
-						caCert.getSerialNumber()));
+        JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
+        X509v3CertificateBuilder certgen = new X509v3CertificateBuilder(issuer, serial, from, to, inputCSR.getSubject(),
+                inputCSR.getSubjectPublicKeyInfo());
+        certgen.addExtension(Extension.basicConstraints, false, new BasicConstraints(false));
+        certgen.addExtension(Extension.subjectKeyIdentifier, false,
+                extUtils.createSubjectKeyIdentifier(inputCSR.getSubjectPublicKeyInfo()));
+        certgen.addExtension(Extension.authorityKeyIdentifier, false,
+                new AuthorityKeyIdentifier(
+                        new GeneralNames(new GeneralName(new X509Name(caCert.getSubjectX500Principal().getName()))),
+                        caCert.getSerialNumber()));
 
-		ContentSigner signer = new BcRSAContentSignerBuilder(sigAlgId, digAlgId)
-				.build(PrivateKeyFactory.createKey(caPrivate.getEncoded()));
-		X509CertificateHolder holder = certgen.build(signer);
-		byte[] certencoded = holder.toASN1Structure().getEncoded();
-		return certencoded;
+        ContentSigner signer = new BcRSAContentSignerBuilder(sigAlgId, digAlgId)
+                .build(PrivateKeyFactory.createKey(caPrivate.getEncoded()));
+        X509CertificateHolder holder = certgen.build(signer);
+        byte[] certencoded = holder.toASN1Structure().getEncoded();
+        return certencoded;
 
-	}
+    }
+
+    public void namebuilder() {
+
+
+    }
 }

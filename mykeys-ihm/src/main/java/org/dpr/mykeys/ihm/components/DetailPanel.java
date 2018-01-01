@@ -12,6 +12,7 @@ import javax.swing.JTabbedPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
@@ -111,7 +112,7 @@ public class DetailPanel extends JPanel {
 		jp.removeAll();
 		//jtab.revalidate();
 		jp.add( getDetailInstance(info));
-		titre.setText(KSConfig.getMessage().getString("detail.cert.title"));
+		titre.setText(Messages.getString("detail.cert.title"));
         if (info instanceof CertificateValue) {
             jtab.setTitleAt(0, ((CertificateValue) ((CertificateValue) info)).getAlias());
         }
