@@ -3,6 +3,7 @@ package org.dpr.mykeys.app;
 import java.math.BigInteger;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -31,16 +32,17 @@ public class X509Util {
 	 */
 	public static Map<String, String> getMapNames() {
 		if (mapNames == null) {
-			mapNames = new HashMap<String, String>();
-			mapNames.put("C", "x509.subject.country");
+            mapNames = new LinkedHashMap<String, String>();
+            mapNames.put("CN", "x509.subject.name");
 			mapNames.put("O", "x509.subject.organisation");
 			mapNames.put("OU", "x509.subject.organisationUnit");
+            mapNames.put("E", "x509.subject.email");
+            mapNames.put("C", "x509.subject.country");
 			mapNames.put("L", "x509.subject.location");
 			mapNames.put("ST", "x509.subject.street");
-			mapNames.put("E", "x509.subject.email");
-			mapNames.put("CN", "x509.subject.name");
 
-		}
+
+        }
 		return mapNames;
 	}
 

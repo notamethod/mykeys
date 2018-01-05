@@ -1,32 +1,41 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
+import java.awt.*;
 import java.util.Iterator;
 
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
+import org.jdesktop.swingx.JXCollapsiblePane;
+import org.jdesktop.swingx.VerticalLayout;
 
-public class CertificateDetailPanel extends LabelValuePanel {
+public class CertificateDetailPanel extends JPanel {
 
     // LabelValuePanel infosPanel;
     CertificateValue info;
 
     public CertificateDetailPanel(CertificateValue info) {
         this.info = info;
+        setLayout(new VerticalLayout());
         getPanel();
+
     }
 
     public void getPanel() {
-        // infosPanel = new LabelValuePanel();
-        this.addTitle(Messages.getString("x509.subject"));
+
+        LabelValuePanel infosPanel = new LabelValuePanel();
+        LabelValuePanel otherInfosPanel = new LabelValuePanel();
+        infosPanel.addTitle(Messages.getString("x509.subject"));
         if (info.getSubjectMap() != null) {
             Iterator<String> iter = info.getSubjectMap().keySet().iterator();
             while (iter.hasNext()) {
@@ -41,54 +50,83 @@ public class CertificateDetailPanel extends LabelValuePanel {
                 if (value.startsWith("#")) {
                     value = new String(Hex.decode(value.substring(1, value.length())));
                 }
-                this.put(name, JTextField.class, "", value, false);
+                infosPanel.put(name, JTextField.class, "", value, false);
             }
         }
-        this.putEmptyLine();
-        this.addTitle(Messages.getString("x509.validity"));
-        this.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore", info.getNotBefore(),
+
+        infosPanel.putEmptyLine();
+        infosPanel.addTitle(Messages.getString("x509.validity"));
+        infosPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore", info.getNotBefore(),
                 false);
-        this.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter", info.getNotAfter(),
+        infosPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter", info.getNotAfter(),
                 false);
 
-        this.putEmptyLine();
-        this.put(Messages.getString("x509.pubkeysize"), JTextField.class, "keyLength",
+        infosPanel.putEmptyLine();
+        infosPanel.put(Messages.getString("x509.pubkeysize"), JTextField.class, "keyLength",
                 String.valueOf(info.getKeyLength()), false);
-        this.put(Messages.getString("x509.pubkeyalgo"), JTextField.class, "algoPubKey", info.getAlgoPubKey(),
+        infosPanel.put(Messages.getString("x509.pubkeyalgo"), JTextField.class, "algoPubKey", info.getAlgoPubKey(),
                 false);
-        // this.put("Clé publique", JTextArea.class, "pubKey",
+        // infosPanel.put("Clé publique", JTextArea.class, "pubKey",
         // X509Util.toHexString(info.getPublicKey().getEncoded()," ",
         // false),false);
-        this.put(Messages.getString("x509.sigalgo"), JTextField.class, "algoSig", info.getAlgoSig(), false);
+        infosPanel.put(Messages.getString("x509.sigalgo"), JTextField.class, "algoSig", info.getAlgoSig(), false);
 
-        this.putEmptyLine();
-        this.put(Messages.getString("x509.serial"), JTextField.class, "numser",
+        infosPanel.putEmptyLine();
+        infosPanel.put(Messages.getString("x509.serial"), JTextField.class, "numser",
                 X509Util.toHexString(info.getCertificate().getSerialNumber(), " ", true), false);
+        infosPanel.putEmptyLine();
 
-        this.put(Messages.getString("x509.issuer"), JTextArea.class, "emetteur",
-                info.getCertificate().getIssuerX500Principal().toString(), false);
+        infosPanel.addTitle(Messages.getString("x509.issuer"));
+        //TODO; sort elements !
+        final X500Name name2 = X500Name.getInstance(info.getCertificate().getIssuerX500Principal().getEncoded());
+        for (org.bouncycastle.asn1.x500.RDN rdn : name2.getRDNs()) {
 
-
+            for (AttributeTypeAndValue tv : rdn.getTypesAndValues()) {
+                String oidName;
+                String type = BCStyle.INSTANCE.oidToDisplayName(tv.getType());
+                try {
+                    oidName = Messages.getString(X509Util.getMapNames().get(type));
+                } catch (Exception e) {
+                    oidName = type;
+                }
+                infosPanel.put(oidName, JTextField.class, "", tv.getValue(), false);
+            }
+        }
+        infosPanel.putEmptyLine();
         String keyUsage = info.keyUsageToString();
         if (keyUsage != null) {
-            this.put("Utilisation (key usage)", JLabel.class, "keyUsage", keyUsage, false);
+            infosPanel.put("Utilisation (key usage)", JLabel.class, "keyUsage", keyUsage, false);
         }
+        infosPanel.putEmptyLine();
+        infosPanel.put(Messages.getString("x509.alias"), JTextField.class, "", info.getAlias(), false);
+        infosPanel.putEmptyLine();
 
-        this.putEmptyLine();
-
-        this.put("Digest SHA1", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA1(), " ", false),
+        infosPanel.put("Digest SHA1", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA1(), " ", true),
                 false);
 
-        this.put("Digest SHA256", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", false),
+        otherInfosPanel.put("Digest SHA256", JTextArea.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", true),
                 false);
-//		this.put("Digest SHA256", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", false),
-//				false);
-        this.putEmptyLine();
-        this.put("Chaine de certificats", JTextArea.class, "xCertChain", info.getChaineStringValue(), false);
-        this.putEmptyLine();
-        this.put("Signature", JTextArea.class, "signature", X509Util.toHexString(info.getSignature(), " ", false),
+
+
+        otherInfosPanel.put("Chaine de certificats", JTextArea.class, "xCertChain", info.getChaineStringValue(), false);
+        otherInfosPanel.putEmptyLine();
+        otherInfosPanel.put("Signature", JTextArea.class, "signature", X509Util.toHexString(info.getSignature(), " ", false),
                 false);
-        this.put(Messages.getString("x509.alias"), JTextField.class, "", info.getAlias(), false);
+
+
+        JXCollapsiblePane cp = new JXCollapsiblePane();
+        cp.setCollapsed(true);
+        cp.setLayout(new BorderLayout());
+
+        cp.add(otherInfosPanel);
+        // Show/hide the "Controls"
+        JButton toggle = new JButton(cp.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION));
+        toggle.setText(Messages.getString("show.extended.info"));
+        this.add(infosPanel);
+        this.add(toggle);
+        this.add(cp);
+
+
     }
 
 }
