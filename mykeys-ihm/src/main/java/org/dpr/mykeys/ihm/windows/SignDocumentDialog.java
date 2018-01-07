@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.CommonsActions;
+import org.dpr.mykeys.app.CommonServices;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
@@ -169,7 +169,7 @@ public class SignDocumentDialog extends JDialog {
 					return;
 				}
 
-				CommonsActions cact = new CommonsActions();
+                CommonServices cact = new CommonServices();
 				// cact.signData(ksInfo, password, certInfo, false);
 				// FIXME
 				// cact.exportCert(StoreFormat.PKCS12, path, password,

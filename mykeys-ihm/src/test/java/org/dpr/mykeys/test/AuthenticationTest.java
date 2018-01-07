@@ -1,9 +1,14 @@
 package org.dpr.mykeys.test;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -14,7 +19,9 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AuthenticationTest {
@@ -32,12 +39,18 @@ public class AuthenticationTest {
 		log.debug("loading configuration...");
 
 		KSConfig.initResourceBundle();
-		KSConfig.externalPath = "src/test/resources/data/";
+        KSConfig.externalPath = "target/test-classes/data/";
 		KSConfig.init(".myKeys2");
 
 		ProviderUtil.initBC();
 	}
 
+    @Before
+    public void setupTests() throws IOException {
+        Path source = Paths.get("target/test-classes/data/userDBOri.jks");
+        Path target = Paths.get("target/test-classes/data/userDB.jks");
+        Files.copy(source, target, REPLACE_EXISTING);
+    }
 	@Test
 	public void list_users() {
 		AuthenticationService service = new AuthenticationService();
@@ -89,4 +102,22 @@ public class AuthenticationTest {
 		}
 	}
 
+    @Test
+    public void delete_users() {
+        AuthenticationService service = new AuthenticationService();
+        System.out.println(KSConfig.getInternalKeystores().existsUserDatabase());
+        try {
+            service.createUser("user1", "pwd".toCharArray());
+            service.createUser("user2", "pwd".toCharArray());
+            List<CertificateValue> lst = service.listUsers();
+            assertEquals("", lst.size(), 2);
+            service.deleteUser("user1");
+            lst = service.listUsers();
+            assertEquals("", lst.size(), 1);
+        } catch (ServiceException e) {
+
+            e.printStackTrace();
+            fail("");
+        }
+    }
 }

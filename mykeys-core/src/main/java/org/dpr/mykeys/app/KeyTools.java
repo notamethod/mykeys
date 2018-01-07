@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class KeyTools {
-    public static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
-    public static final String END_PEM = "-----END CERTIFICATE-----";
+    private static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
+    private static final String END_PEM = "-----END CERTIFICATE-----";
     public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
     public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
     private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
@@ -35,7 +35,7 @@ public class KeyTools {
     // fois.
     // FIXME: ne pas autoriser la saisie de la clé privée dans les magasins
     // internes
-    final Log log = LogFactory.getLog(KeyTools.class);
+    private final Log log = LogFactory.getLog(KeyTools.class);
 
     public static void main(String[] args) {
         KeyTools test = new KeyTools();
@@ -134,7 +134,7 @@ public class KeyTools {
 
     }
 
-    public void saveKeyStore(KeyStore ks, KeyStoreValue ksInfo) throws KeyToolsException {
+    protected void saveKeyStore(KeyStore ks, KeyStoreValue ksInfo) throws KeyToolsException {
 
         try {
             OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
@@ -202,7 +202,7 @@ public class KeyTools {
         }
     }
 
-    public CRLDistPoint getDistributionPoints(X509Certificate certX509) {
+    protected CRLDistPoint getDistributionPoints(X509Certificate certX509) {
 
         X509CertificateObject certificateImpl = (X509CertificateObject) certX509;
 

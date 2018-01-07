@@ -4,7 +4,6 @@
 package org.dpr.mykeys.app.crl;
 
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 
 import java.math.BigInteger;
@@ -16,12 +15,12 @@ import java.util.List;
  * @author Buck
  */
 public class CrlValue implements NodeInfo {
-    Date thisUpdate = new Date();
-    Date nextUpdate;
-    String name;
-    String path;
+    private Date thisUpdate = new Date();
+    private Date nextUpdate;
+    private String name;
+    private String path;
 
-    BigInteger number = BigInteger.ONE;
+    private BigInteger number = BigInteger.ONE;
 
     /**
      * Retourne le thisUpdate.
@@ -174,7 +173,7 @@ public class CrlValue implements NodeInfo {
     }
 
     @Override
-    public void open() throws KeyToolsException {
+    public void open() {
         // TODO Auto-generated method stub
 
     }

@@ -8,13 +8,11 @@ import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.SignatureException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -32,7 +30,6 @@ import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
 public class CrlTools {
@@ -89,9 +86,9 @@ public class CrlTools {
 	}
 
     public X509CRL generateCrl(X509Certificate certSign, CrlValue crlValue,
-                               Key privateKey) throws KeyStoreException, NoSuchProviderException,
-			NoSuchAlgorithmException, CertificateException, IOException,
-			UnrecoverableKeyException, InvalidKeyException, CRLException,
+                               Key privateKey) throws NoSuchProviderException,
+            NoSuchAlgorithmException, CertificateException,
+            InvalidKeyException, CRLException,
 			IllegalStateException, SignatureException {
 
 		Calendar calendar = Calendar.getInstance();
@@ -127,10 +124,8 @@ public class CrlTools {
 	}
 
 	public void revokeCert(X509Certificate cert, X509CRL crl)
-			throws KeyStoreException, NoSuchProviderException,
-			NoSuchAlgorithmException, CertificateException, IOException,
-			UnrecoverableKeyException, InvalidKeyException, CRLException,
-			IllegalStateException, SignatureException, KeyToolsException {
+            throws
+            IllegalStateException {
 
 		// crl.
 
@@ -174,7 +169,7 @@ public class CrlTools {
 		crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
                 crlValue.getNumber()));
 
-		X509CRL crl = crlGen.generate((PrivateKey) certSign.getPrivateKey(),
+        X509CRL crl = crlGen.generate(certSign.getPrivateKey(),
 				"BC");
 		return crl;
 	}

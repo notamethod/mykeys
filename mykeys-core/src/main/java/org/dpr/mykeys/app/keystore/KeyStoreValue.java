@@ -5,7 +5,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.BagInfo;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 
 import java.io.File;
@@ -42,7 +41,7 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
      *
      * @param path full keystore's pathname
      */
-    public KeyStoreValue(String path) {
+    private KeyStoreValue(String path) {
         this.name = path;
         this.path = path;
         this.storeModel = StoreModel.CERTSTORE;
@@ -72,7 +71,7 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
 
     @Override
     @Deprecated
-    public void open() throws KeyToolsException {
+    public void open() {
 
 
     }

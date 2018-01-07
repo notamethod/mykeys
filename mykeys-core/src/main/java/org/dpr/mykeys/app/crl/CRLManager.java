@@ -51,7 +51,7 @@ public class CRLManager {
 	 * 
 	 * @param securityProvider
 	 */
-	public CRLManager(String securityProvider) {
+    private CRLManager(String securityProvider) {
 		provider = securityProvider;
 	}
 
@@ -87,8 +87,7 @@ public class CRLManager {
 		}
 
 		CRLDistPoint distPoints = null;
-		;
-		try {
+        try {
 			distPoints = CRLDistPoint.getInstance(X509ExtensionUtil
 					.fromExtensionValue(extension));
 		} catch (Exception e) {
@@ -208,7 +207,7 @@ public class CRLManager {
 	 * @throws NoSuchProviderException
 	 * @throws CertificateException
 	 */
-	public EtatCrl validateCRL(Date date, InputStream inStream)
+    private EtatCrl validateCRL(Date date, InputStream inStream)
 			throws GeneralSecurityException {
 		EtatCrl etatCrl = EtatCrl.UNKNOWN;
 		X509CRL crl = null;
@@ -234,7 +233,7 @@ public class CRLManager {
 	 * @throws CRLException
 	 * @throws CertificateException
 	 */
-	public X509CRL getCrl(InputStream inStream) throws CRLException,
+    private X509CRL getCrl(InputStream inStream) throws CRLException,
 			NoSuchProviderException, CertificateException {
 
 		CertificateFactory cf = null;
@@ -252,16 +251,16 @@ public class CRLManager {
 
 	public enum EtatCrl {
 
-		UNKNOWN, NOT_YET_VALID, UP_TO_DATE, TO_UPDATE;
+        UNKNOWN, NOT_YET_VALID, UP_TO_DATE, TO_UPDATE
 
-	}
+    }
 
 	// http://www.ca-certificat.com/doc/LatestCRL.crl
 	public enum EtatRevocation {
 
-		UNKNOWN, REVOKED, NOT_REVOKED;
+        UNKNOWN, REVOKED, NOT_REVOKED
 
-	}
+    }
 
 	/**
 	 * Construction chemin du fichier de crl.

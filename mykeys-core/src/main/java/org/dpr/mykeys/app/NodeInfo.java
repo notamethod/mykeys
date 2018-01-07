@@ -16,47 +16,47 @@ public interface NodeInfo {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString();
+    String toString();
 
 	/**
 	 * @return the name
 	 */
-	public String getName();
+    String getName();
 
 	/**
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name);
+    void setName(String name);
 
 	/**
 	 * @return the path
 	 */
-	public String getPath();
+    String getPath();
 
 	/**
 	 * @param path
 	 *            the path to set
 	 */
-	public void setPath(String path);
+    void setPath(String path);
 
 	/**
 	 * @return the isOpen
 	 */
-	public boolean isOpen();
+    boolean isOpen();
 
 	/**
 	 * @param isOpen
 	 *            the isOpen to set
 	 */
-	public void setOpen(boolean isOpen);
-	
-	 
-	public List<? extends ChildInfo> getChildList();
+    void setOpen(boolean isOpen);
 
-	public boolean isProtected();
 
-	public void open() throws KeyToolsException;
+    List<? extends ChildInfo> getChildList();
+
+    boolean isProtected();
+
+    void open() throws KeyToolsException;
 
 
 

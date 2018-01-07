@@ -42,12 +42,12 @@ import org.dpr.mykeys.app.KeyTools;
 
 public class CertificateBuilder extends KeyTools {
 
-	final Log log = LogFactory.getLog(CertificateBuilder.class);
+	private final Log log = LogFactory.getLog(CertificateBuilder.class);
 
 
-	CertificateValue certificateValue;
-	
-	X509V3CertificateGenerator certGen;
+	private CertificateValue certificateValue;
+
+	private X509V3CertificateGenerator certGen;
 
 	public CertificateBuilder() {
 		super();
@@ -224,7 +224,7 @@ public class CertificateBuilder extends KeyTools {
 	}
 
 	@SuppressWarnings("deprecation")
-	public X509Certificate[] genererX509CodeSigning(CertificateValue certModel, CertificateValue certIssuer, boolean isAC)
+	private X509Certificate[] genererX509CodeSigning(CertificateValue certModel, CertificateValue certIssuer, boolean isAC)
 			throws Exception {
 
 		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
@@ -316,7 +316,7 @@ public class CertificateBuilder extends KeyTools {
 		}
 	}
 
-	PolicyInformation getPolicyInformation(String policyOID, String cps, String unotice) {
+	private PolicyInformation getPolicyInformation(String policyOID, String cps, String unotice) {
 
 		ASN1EncodableVector qualifiers = new ASN1EncodableVector();
 

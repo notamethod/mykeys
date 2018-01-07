@@ -33,16 +33,16 @@ public class PkiTools {
 
         private final String value;
 
-        private TypeObject(String value) {
+        TypeObject(String value) {
             this.value = value;
         }
 
 
-        public String getValue() {
+        String getValue() {
             return this.value;
         }
 
-        public static TypeObject get(String value) {
+        static TypeObject get(String value) {
             TypeObject[] types = TypeObject.values();
             for (TypeObject type : types) {
                 if (StringUtils.equals(type.getValue(), value)) {

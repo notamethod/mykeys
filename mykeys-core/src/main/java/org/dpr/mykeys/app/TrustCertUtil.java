@@ -49,10 +49,10 @@ import org.apache.commons.logging.LogFactory;
  * @author Buck
  *
  */
-public class TrustCertUtil {
+class TrustCertUtil {
 
-	public static final String FILTRE_CERTIFICAT_X509 = "*.CER";
-	public static final String X509_CERTIFICATE_TYPE = "X.509";
+	private static final String FILTRE_CERTIFICAT_X509 = "*.CER";
+	private static final String X509_CERTIFICATE_TYPE = "X.509";
 	private static final Log log = LogFactory.getLog(TrustCertUtil.class);
 
 	/**
@@ -162,9 +162,9 @@ public class TrustCertUtil {
 	 * @throws CertPathBuilderException
 	 * @throws NoSuchProviderException
 	 */
-	protected static void checkTrusted(X509Certificate[] anchors,
-			Certificate[] certs, Collection<?> crls, String provider,
-			boolean isCheckCrl) throws CertPathValidatorException,
+	private static void checkTrusted(X509Certificate[] anchors,
+									 Certificate[] certs, Collection<?> crls, String provider,
+									 boolean isCheckCrl) throws CertPathValidatorException,
 			NoSuchAlgorithmException, CertificateException,
 			InvalidAlgorithmParameterException, NoSuchProviderException {
 
@@ -225,7 +225,7 @@ public class TrustCertUtil {
 		}
 	}
 
-	protected static Set<X509Certificate> listerCertificats(
+	private static Set<X509Certificate> listerCertificats(
 			String aCertificatesDirectory, String typeCert, String provider,
 			boolean recursive) throws IOException, GeneralSecurityException {
 		List<X509Certificate> lstCert = new ArrayList<>();
@@ -255,7 +255,7 @@ public class TrustCertUtil {
 		return trustedCertificates;
 	}
 
-	protected static Set<X509Certificate> listerCertificats(
+	private static Set<X509Certificate> listerCertificats(
 			String aCertificatesDirectory, String typeCert, String provider)
 			throws IOException, GeneralSecurityException {
 		return listerCertificats(aCertificatesDirectory, typeCert, provider,
@@ -294,7 +294,7 @@ public class TrustCertUtil {
 	 * @throws IOException
 	 */
 	public static void validate(X509Certificate[] trusted, Certificate[] certs,
-			String provider) throws CertPathValidatorException,
+								String provider) throws
 			GeneralSecurityException {
 		checkTrusted(trusted, certs, null, provider, false);
 	}

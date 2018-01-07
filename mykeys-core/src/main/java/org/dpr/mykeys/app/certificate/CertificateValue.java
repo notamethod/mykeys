@@ -11,7 +11,6 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.X509Principal;
-import org.bouncycastle.operator.AlgorithmNameFinder;
 import org.bouncycastle.operator.DefaultAlgorithmNameFinder;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
@@ -28,8 +27,8 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
-public class CertificateValue implements ChildInfo, Cloneable  {
-    public static final Log log = LogFactory.getLog(CertificateValue.class);
+public class CertificateValue implements ChildInfo, Cloneable {
+    private static final Log log = LogFactory.getLog(CertificateValue.class);
     private final List<GeneralName> subjectNames = new ArrayList<GeneralName>();
     private Certificate[] certificateChain;
     // private X509PrincipalModel x509PrincipalModel;
@@ -150,8 +149,11 @@ public class CertificateValue implements ChildInfo, Cloneable  {
             setChaineStringValue(bf.toString());
         }
     }
-    /** Initialize certificate **/
-     private void init(X509Certificate certX509) {
+
+    /**
+     * Initialize certificate
+     **/
+    private void init(X509Certificate certX509) {
         this.setCertificate(certX509);
         Map<ASN1ObjectIdentifier, String> oidMap = new HashMap<ASN1ObjectIdentifier, String>();
         this.setAlgoPubKey(certX509.getPublicKey().getAlgorithm());
@@ -249,15 +251,15 @@ public class CertificateValue implements ChildInfo, Cloneable  {
     /**
      * @param keyLength the keyLength to set
      */
-    public void setKeyLength(String keyLength) {
-        this.keyLength = Integer.valueOf(keyLength).intValue();
+    public void setKeyLength(int keyLength) {
+        this.keyLength = keyLength;
     }
 
     /**
      * @param keyLength the keyLength to set
      */
-    public void setKeyLength(int keyLength) {
-        this.keyLength = keyLength;
+    public void setKeyLength(String keyLength) {
+        this.keyLength = Integer.valueOf(keyLength);
     }
 
     /**
@@ -317,9 +319,8 @@ public class CertificateValue implements ChildInfo, Cloneable  {
         //TODO
         X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
         Set setKey = subjectMap.keySet();
-        Iterator iter = setKey.iterator();
-        while (iter.hasNext()) {
-            String key = (String) iter.next();
+        for (Object aSetKey : setKey) {
+            String key = (String) aSetKey;
             String value = subjectMap.get(key);
             Object oidKey = X509Name.DefaultLookUp.get(key.toLowerCase());
             DefaultAlgorithmNameFinder a;
@@ -355,7 +356,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
      *
      * @param name
      */
-    public void x509NameToMap(X500Name name) {
+    private void x509NameToMap(X500Name name) {
 
 
         ASN1ObjectIdentifier[] v = name.getAttributeTypes();
@@ -367,7 +368,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
             AttributeTypeAndValue[] atrs = rdn.getTypesAndValues();
             for (AttributeTypeAndValue atr : atrs) {
 
-                String val = (String) atr.getValue().toString();
+                String val = atr.getValue().toString();
 
                 //String type = RFC4519Style.INSTANCE.oidToDisplayName(atrs[i].getType());
                 String type = BCStyle.INSTANCE.oidToDisplayName(atr.getType());
@@ -396,15 +397,6 @@ public class CertificateValue implements ChildInfo, Cloneable  {
         return subjectMap;
     }
 
-    public void setSubjectMap(String name) {
-        this.subjectMap.clear();
-        for (String pair : name.split(",")) {
-            String[] value = pair.split("=");
-            subjectMap.put(value[0], value[1]);
-        }
-
-    }
-
     /**
      * @param elementMap the subjectMap to set
      */
@@ -421,11 +413,20 @@ public class CertificateValue implements ChildInfo, Cloneable  {
 
     }
 
+    public void setSubjectMap(String name) {
+        this.subjectMap.clear();
+        for (String pair : name.split(",")) {
+            String[] value = pair.split("=");
+            subjectMap.put(value[0], value[1]);
+        }
+
+    }
+
     public byte[] getSignature() {
         return signature;
     }
 
-    public void setSignature(byte[] sig) {
+    private void setSignature(byte[] sig) {
         signature = sig;
 
     }
@@ -486,16 +487,16 @@ public class CertificateValue implements ChildInfo, Cloneable  {
         return notBefore;
     }
 
-    public void setNotBefore(String string) {
-        // TODO Auto-generated method stub
-
-    }
-
     /**
      * @param notBefore the notBefore to set
      */
     public void setNotBefore(Date notBefore) {
         this.notBefore = notBefore;
+    }
+
+    public void setNotBefore(String string) {
+        // TODO Auto-generated method stub
+
     }
 
     /**
@@ -522,7 +523,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
     /**
      * @param digestSHA1 the digestSHA1 to set
      */
-    public void setDigestSHA1(byte[] digestSHA1) {
+    private void setDigestSHA1(byte[] digestSHA1) {
         this.digestSHA1 = digestSHA1;
     }
 
@@ -540,7 +541,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
     /**
      * @param digestSHA256 the digestSHA256 to set
      */
-    public void setDigestSHA256(byte[] digestSHA256) {
+    private void setDigestSHA256(byte[] digestSHA256) {
         this.digestSHA256 = digestSHA256;
     }
 
@@ -557,7 +558,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
      */
     public Certificate[] getCertificateChain() {
 
-            return certificateChain;
+        return certificateChain;
     }
 
     /**
@@ -706,7 +707,7 @@ public class CertificateValue implements ChildInfo, Cloneable  {
             // On récupère l'instance à renvoyer par l'appel de la
             // méthode super.clone()
             certificate = (CertificateValue) super.clone();
-        } catch(CloneNotSupportedException cnse) {
+        } catch (CloneNotSupportedException cnse) {
             // Ne devrait jamais arriver car nous implémentons
             // l'interface Cloneable
             cnse.printStackTrace(System.err);

@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.dpr.mykeys.app.BagInfo;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -184,7 +183,7 @@ public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 	}
 
 	@Override
-	public void open() throws KeyToolsException {
+	public void open() {
 		// TODO Auto-generated method stub
 		
 	}

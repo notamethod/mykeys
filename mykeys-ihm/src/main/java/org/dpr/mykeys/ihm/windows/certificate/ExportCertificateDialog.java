@@ -25,13 +25,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.CommonsActions;
+import org.dpr.mykeys.app.CommonServices;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
+import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -189,16 +191,19 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
-                if (isExportCle)
-                {
-                    privKeyPwd = MykeysFrame.showPasswordDialog(null, "mot de passe de la cl� priv�e");
-                }
+                if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
+                    if (isExportCle) {
+                        privKeyPwd = MykeysFrame.showPasswordDialog(null, "mot de passe de la cl� priv�e");
+                    }
+                } else
+                    privKeyPwd = MkSession.password;
+                certInfo.setPassword(privKeyPwd);
                 if (format.equalsIgnoreCase("pkcs12"))
                 {
                     password = MykeysFrame.showPasswordDialog(null, "mot de passe d'exportation");
 
 
-                    CommonsActions cact = new CommonsActions();
+                    CommonServices cact = new CommonServices();
 
                     try
                     {

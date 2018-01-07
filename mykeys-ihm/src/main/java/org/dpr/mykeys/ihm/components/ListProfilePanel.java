@@ -465,7 +465,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	
 		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
 		try {
-			ksv.removeCertificate( certificateInfo);
+            ksv.removeCertificate(kinfo, certificateInfo);
 
 		} catch (Exception e1) {
 			MykeysFrame.showError(this, e1.getMessage());

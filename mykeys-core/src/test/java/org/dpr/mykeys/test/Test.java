@@ -9,11 +9,10 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 
 public class Test {
 
-	final static Log log = LogFactory.getLog(Test.class);
+	private final static Log log = LogFactory.getLog(Test.class);
 
 	/**
 	 * .

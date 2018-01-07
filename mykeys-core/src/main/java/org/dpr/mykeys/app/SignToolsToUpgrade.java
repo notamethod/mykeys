@@ -8,7 +8,7 @@ package org.dpr.mykeys.app;
  * @author Buck
  *
  */
-public class SignToolsToUpgrade {
+class SignToolsToUpgrade {
 
 //	public static final Log log = LogFactory.getLog(SignTools.class);
 //	public static void main(String[] args) {

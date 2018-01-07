@@ -23,7 +23,7 @@ public class KeystoreBuilder extends KeyTools {
 
 
     public static final Log log = LogFactory.getLog(KeyStoreHelper.class);
-    KeyStore keystore;
+    private KeyStore keystore;
 
     public KeystoreBuilder(KeyStore keystore) {
         super();
@@ -33,7 +33,6 @@ public class KeystoreBuilder extends KeyTools {
     public KeystoreBuilder(StoreFormat format) throws KeyStoreException {
         super();
         this.keystore = KeyStore.getInstance(format.toString());
-        ;
     }
 
     /**
@@ -50,7 +49,7 @@ public class KeystoreBuilder extends KeyTools {
     public KeystoreBuilder create(String name, char[] password) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
         Path path = Paths.get(name);
         if (Files.exists(path)) {
-            throw new IOException("File already exists "+path.toString());
+            throw new IOException("File already exists " + path.toString());
         }
 
         keystore.load(null, password);
@@ -92,18 +91,15 @@ public class KeystoreBuilder extends KeyTools {
         return this;
     }
 
-    public KeystoreBuilder addCert(KeyStoreValue ksInfo, CertificateValue certInfo, char[] password) throws KeyToolsException {
+    public KeystoreBuilder addCert(KeyStoreValue ksInfo, CertificateValue certInfo) throws KeyToolsException {
 
-        // FIXME
-        if (null == certInfo.getPassword()) {
-            log.info("setting keystore password to protect private key");
-            certInfo.setPassword(password);
+        if (null == certInfo.getPassword() || certInfo.getPassword().length == 0) {
+            throw new IllegalArgumentException("password can't be null empty");
         }
 
         saveCertChain(keystore, certInfo);
         try {
             System.out.println(keystore.size());
-            System.out.println(new String(password));
             System.out.println(new String(certInfo.getPassword()));
             System.out.println(new String(ksInfo.getPassword()));
 
@@ -128,9 +124,9 @@ public class KeystoreBuilder extends KeyTools {
             if (certInfo.getPrivateKey() == null) {
                 keystore.setCertificateEntry(certInfo.getAlias(), certInfo.getCertificate());
             } else {
-               Certificate[] chaine = certInfo.getCertificateChain();
-               if (chaine==null)
-                   chaine  = new Certificate[]{certInfo.getCertificate()};
+                Certificate[] chaine = certInfo.getCertificateChain();
+                if (chaine == null)
+                    chaine = new Certificate[]{certInfo.getCertificate()};
                 keystore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
             }
 
@@ -142,7 +138,7 @@ public class KeystoreBuilder extends KeyTools {
 
     }
 
-    public KeystoreBuilder removeCert(CertificateValue certificateInfo) throws KeyToolsException, KeyStoreException {
+    public KeystoreBuilder removeCert(CertificateValue certificateInfo) throws KeyStoreException {
 
         keystore.deleteEntry(certificateInfo.getAlias());
 
@@ -189,7 +185,7 @@ public class KeystoreBuilder extends KeyTools {
         return ks;
     }
 
-    public void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateValue certInfo)
+    private void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateValue certInfo)
             throws KeyToolsException {
         try {
             // pas bonne chaine

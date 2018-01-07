@@ -6,10 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -20,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.KeyUsageEnum;
 import org.dpr.mykeys.app.X509Constants;
 
@@ -93,7 +88,7 @@ public class CertificateUtils {
 	 * @throws GeneralSecurityException
 	 */
 	private static X509Certificate loadX509CertOld(InputStream aCertStream)
-			throws GeneralSecurityException, CertificateException {
+            throws GeneralSecurityException {
 		// création d'une fabrique de certificat X509
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
@@ -102,7 +97,7 @@ public class CertificateUtils {
 		return cert;
 	}
 
-	public static Set<X509Certificate> loadX509Certs(InputStream aCertStream) throws GeneralSecurityException {
+    private static Set<X509Certificate> loadX509Certs(InputStream aCertStream) throws GeneralSecurityException {
 
 		CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
 
@@ -112,8 +107,7 @@ public class CertificateUtils {
 		return certificates;
 	}
 
-	public static List<CertificateValue> loadX509Certs(String fileName)
-			throws KeyToolsException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException {
+    public static List<CertificateValue> loadX509Certs(String fileName) {
 
         // NodeInfo nInfo = new KeyStoreValue(new File(fileName));
 		List<CertificateValue> certsRetour = new ArrayList<CertificateValue>();

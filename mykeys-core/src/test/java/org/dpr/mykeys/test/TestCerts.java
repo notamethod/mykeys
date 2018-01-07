@@ -28,7 +28,7 @@ import org.junit.Test;
 
 public class TestCerts {
 
-	final static Log log = LogFactory.getLog(Test.class);
+	private final static Log log = LogFactory.getLog(Test.class);
 
 
 

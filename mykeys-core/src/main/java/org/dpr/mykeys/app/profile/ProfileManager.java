@@ -3,7 +3,6 @@ package org.dpr.mykeys.app.profile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -25,7 +24,7 @@ public class ProfileManager
 
 {
 	public static final Log log = LogFactory.getLog(ProfileManager.class);
-	public final static String PROFIL_EXTENSION = ".mkprof";
+	private final static String PROFIL_EXTENSION = ".mkprof";
     private String profilPath;
 
     public ProfileManager(String profilPath) {

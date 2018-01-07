@@ -17,13 +17,12 @@ import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class GenerateCertificateTest {
 
-	final static Log log = LogFactory.getLog(GenerateCertificateTest.class);
+	private final static Log log = LogFactory.getLog(GenerateCertificateTest.class);
 
 	private static final String AC_NAME = "mykeys root ca 2";
 
@@ -95,7 +94,7 @@ public class GenerateCertificateTest {
 
 	}
 
-    public KeyStoreValue getStoreAC() {
+	private KeyStoreValue getStoreAC() {
 		
 	
 		 String pwd = "mKeys983178";

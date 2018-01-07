@@ -32,7 +32,7 @@ public class AuthenticationService {
 
         KeyStoreHelper kh = new KeyStoreHelper();
 
-        kh.addCertToKeyStore(ki, cer, null);
+        kh.addCertToKeyStore(ki, cer);
         MkSession.password = cer.getPassword();
         MkSession.user = id;
     }
@@ -79,4 +79,17 @@ public class AuthenticationService {
         return cer;
     }
 
+    public void deleteUser(String id) throws ServiceException {
+        KeyStoreHelper kh = new KeyStoreHelper();
+        CertificateValue cer = null;
+        char[] pwd = null;
+        KeyStoreValue ki = null;
+        try {
+            cer = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
+            ki = KSConfig.getInternalKeystores().getUserDB();
+            kh.removeCertificate(ki, cer);
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
+    }
 }

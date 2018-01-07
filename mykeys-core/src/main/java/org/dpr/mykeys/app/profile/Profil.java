@@ -1,24 +1,19 @@
 package org.dpr.mykeys.app.profile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.bouncycastle.asn1.DERBitString;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 
 public class Profil implements ChildInfo {
 
-	Properties p;
-	String name;
+	private Properties p;
+	private String name;
 	private Path path;
 
 	public String getName() {

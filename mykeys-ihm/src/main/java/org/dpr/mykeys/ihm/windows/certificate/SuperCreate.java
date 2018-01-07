@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
@@ -361,7 +362,10 @@ public class SuperCreate extends JDialog implements ItemListener {
                         issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 
                     CertificateValue newCertificate = certServ.createCertificate(isAC, issuer);
-                    kserv.addCertToKeyStore(ksInfo, newCertificate, ksInfo.getPassword());
+
+                    if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
+                        newCertificate.setPassword(MkSession.password);
+                    kserv.addCertToKeyStore(ksInfo, newCertificate);
                     SuperCreate.this.setVisible(false);
 
                 } catch (Exception e) {

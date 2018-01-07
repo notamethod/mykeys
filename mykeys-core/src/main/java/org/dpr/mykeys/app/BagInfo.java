@@ -15,8 +15,8 @@ import org.apache.commons.io.FilenameUtils;
  */
 public abstract class BagInfo implements NodeInfo {
 
-	String name;
-	String path;
+	private String name;
+	private String path;
 	//test
 
 	/**
@@ -36,8 +36,8 @@ public abstract class BagInfo implements NodeInfo {
         setPath(FilenameUtils.getPath(path));
         setName(FilenameUtils.getName(path));
 	}
-	
-	   public BagInfo() {
+
+	protected BagInfo() {
 
 	    }
 

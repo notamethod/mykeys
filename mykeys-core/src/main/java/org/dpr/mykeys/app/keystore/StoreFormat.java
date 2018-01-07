@@ -1,6 +1,5 @@
 package org.dpr.mykeys.app.keystore;
 
-import org.dpr.mykeys.app.PkiTools;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 
 public enum StoreFormat {

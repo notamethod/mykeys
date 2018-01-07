@@ -23,14 +23,13 @@ import java.security.Security;
 import java.util.Calendar;
 import java.util.Date;
 
-
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.junit.Assert.fail;
 
 
 public class TestKeystore {
 
-    final static Log log = LogFactory.getLog(TestKeystore.class);
+    private final static Log log = LogFactory.getLog(TestKeystore.class);
 
     private static final String AC_NAME = "mykeys root ca 2";
 
@@ -124,8 +123,9 @@ public class TestKeystore {
 
 
     @Test
-    public void add_cert() throws IOException, ServiceException {
+    public void add_cert() throws ServiceException {
 
+        char[] pwd = "111".toCharArray();
         String filename = "target/test-classes/data/add_cert.jks";
         Path target = Paths.get(filename);
 
@@ -139,7 +139,7 @@ public class TestKeystore {
             ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 
             ksBuilder.create(filename, "111".toCharArray());
-            ki=service.loadKeyStore(filename, StoreFormat.JKS, "111".toCharArray());
+            ki = service.loadKeyStore(filename, StoreFormat.JKS, "111".toCharArray());
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -148,9 +148,10 @@ public class TestKeystore {
 
 
         CertificateValue val = createCert();
+        val.setPassword(pwd);
+        //ki.setPassword(pwd);
 
-
-        service.addCertToKeyStore(ki, val,"111".toCharArray());
+        service.addCertToKeyStore(ki, val);
     }
 
     private void delete(Path target) {
@@ -162,7 +163,7 @@ public class TestKeystore {
     }
 
     @Test
-    public void create_ks_jks() throws IOException {
+    public void create_ks_jks() {
 
         KeyStoreHelper service = new KeyStoreHelper();
 
@@ -189,7 +190,7 @@ public class TestKeystore {
     }
 
     @Test
-    public void create_ks_p12() throws IOException {
+    public void create_ks_p12() {
 
         KeyStoreHelper service = new KeyStoreHelper();
 

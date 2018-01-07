@@ -136,8 +136,8 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
                     // load issuer
                     CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), (String) infosPanel.getElements().get("emetteur"));
                     CertificateValue certificate = cm.generateFromCSR(is, issuer);
-
-                    kserv.addCertToKeyStore(ksInfo, certificate, KSConfig.getInternalKeystores().getPassword().toCharArray());
+                    //FIXME if password in ksinfo null
+                    kserv.addCertToKeyStore(ksInfo, certificate);
 					CreateCertificatFromCSRDialog.this.setVisible(false);
 
 				} catch (Exception e) {

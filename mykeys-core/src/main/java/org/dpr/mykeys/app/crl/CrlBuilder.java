@@ -1,18 +1,13 @@
 package org.dpr.mykeys.app.crl;
 
-import java.io.IOException;
 import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CRLException;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateParsingException;
 
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.KeyToolsException;
 
 public class CrlBuilder extends KeyTools {
 
@@ -31,9 +26,8 @@ public static void main(String[] args) {
 	  
 }
 
-	public void generateCrl2ToFix() throws KeyStoreException, NoSuchProviderException, NoSuchAlgorithmException,
-			CertificateException, IOException, UnrecoverableKeyException, InvalidKeyException, CRLException,
-			IllegalStateException, SignatureException, KeyToolsException {
+	public void generateCrl2ToFix() throws
+			IllegalStateException {
 
 //		String kst = "C:/Documents and Settings/n096015/.myKeys/mykeysAc.jks";
 //

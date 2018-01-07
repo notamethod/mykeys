@@ -5,7 +5,6 @@ import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -19,13 +18,12 @@ import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 public class X509Util {
 
-	static Map<String, String> mapNames = null;
-	final static Log log = LogFactory.getLog(X509Util.class);
+	private static Map<String, String> mapNames = null;
+	private final static Log log = LogFactory.getLog(X509Util.class);
 
 	/**
 	 * @return the mapNames
@@ -81,6 +79,10 @@ public class X509Util {
 		
 		//FIXME
 		byte[] b = certificate.getExtensionValue(X509Extensions.KeyUsage.getId());
+		if (b == null) {
+			log.info("extension unknown: " + X509Extensions.KeyUsage.getId());
+			return;
+		}
 		ASN1Primitive obj = null;
 		try {
 			obj = X509ExtensionUtil.fromExtensionValue(b);
@@ -176,7 +178,7 @@ public class X509Util {
 			AttributeTypeAndValue[] atrs = rdn.getTypesAndValues();
 			for (AttributeTypeAndValue atr : atrs) {
 
-				String val = (String) atr.getValue().toString();
+				String val = atr.getValue().toString();
 				ASN1ObjectIdentifier type = atr.getType();
 				if (log.isDebugEnabled()) {
 					log.debug(type + ":" + val);

@@ -7,12 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
-import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -21,7 +18,6 @@ import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -53,15 +49,15 @@ public class CertificateHelper {
 	private static final String CSR_SIGN_ALGORITHM = "SHA256withRSA";
 	
 	KeyTools ktool;
-	CertificateValue certInfo;
-	public static final Log log = LogFactory.getLog(CertificateHelper.class);
+	private CertificateValue certInfo;
+	private static final Log log = LogFactory.getLog(CertificateHelper.class);
 
 	public CertificateHelper(CertificateValue certInfo) {
 		super();
 		this.certInfo = certInfo;
 	}
-	
-	public CertificateHelper() {
+
+	private CertificateHelper() {
 		super();
 	}
 
@@ -70,7 +66,7 @@ public class CertificateHelper {
 		return createCertificate(false, issuer);
 	}
 
-	public CertificateValue createCertificate(boolean isAC, CertificateValue issuer) throws CertificateException, KeyToolsException {
+	public CertificateValue createCertificate(boolean isAC, CertificateValue issuer) throws CertificateException {
 
 		CertificateBuilder builder = new CertificateBuilder();
 		try {
@@ -85,7 +81,7 @@ public class CertificateHelper {
 		}
 	}
 
-    public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer) throws CertificateException, KeyToolsException {
+	public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer) throws CertificateException {
 
         CertificateBuilder builder = new CertificateBuilder();
         try {
@@ -99,7 +95,8 @@ public class CertificateHelper {
             throw new CertificateException(e);
         }
     }
-	public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer, Usage usage) throws CertificateException, KeyToolsException {
+
+	public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer, Usage usage) throws CertificateException {
 
 		CertificateBuilder builder = new CertificateBuilder();
 		try {
@@ -115,7 +112,7 @@ public class CertificateHelper {
 	}
 
 
-	public X509Certificate[] generateCrlToFix() throws CertificateException {
+	public X509Certificate[] generateCrlToFix() {
 		// if (ktool == null) {
 		// ktool = new KeyTools();
 		// }
@@ -168,7 +165,6 @@ public class CertificateHelper {
 	/**
 	 * Generate a X509 certificate from CSR file
 	 * @param fic
-	 * @param strIssuer
 	 * @return
 	 * @throws ServiceException
 	 * @throws IOException
@@ -201,8 +197,7 @@ public class CertificateHelper {
 			if (certificate != null) {
 				log.info("certificate " + certificate.getSubjectDN().getName() + " created !");
 			}
-		} catch (CertificateException | InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException
-				| SignatureException | OperatorCreationException e) {
+		} catch (CertificateException | NoSuchAlgorithmException | OperatorCreationException e) {
 			throw new ServiceException("error on certificate generation fro csr file " + fic, e);
 		}
 		CertificateValue cert = new CertificateValue(certificates);
@@ -232,8 +227,8 @@ public class CertificateHelper {
 	}
 	
 	private byte[] sign(PKCS10CertificationRequest inputCSR, PrivateKey caPrivate, X509Certificate caCert)
-			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException,
-            IOException, OperatorCreationException, CertificateException {
+			throws NoSuchAlgorithmException,
+			IOException, OperatorCreationException {
 
         AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find(CSR_SIGN_ALGORITHM);
         AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
