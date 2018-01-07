@@ -154,7 +154,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         jp.add(getPubKeyPanel());
         jp.add(getSignaturePanel());
         jp.add(infosPanel);
-        infosPanel.getElements().putAll(subjectPanel.getElements());
+        infosPanel.addChild(subjectPanel);
 
 
         jp.add(cp);
@@ -190,7 +190,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         // JXCollapsiblePane can be used like any other container
         cp.setLayout(new BorderLayout());
         cp.add(pubKeyPanel);
-        infosPanel.getElements().putAll(pubKeyPanel.getElements());
+        infosPanel.addChild(pubKeyPanel);
         return cp;
     }
 
@@ -226,7 +226,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         // JXCollapsiblePane can be used like any other container
         cp.setLayout(new BorderLayout());
         cp.add(sigPanel);
-        infosPanel.getElements().putAll(sigPanel.getElements());
+        infosPanel.addChild(sigPanel);
         return cp;
     }
 
@@ -244,16 +244,9 @@ public class SuperCreate extends JDialog implements ItemListener {
 
         if (infosPanel == null) {
             infosPanel = new LabelValuePanel();
-
-            infosPanel = new LabelValuePanel();
             infosPanel.put(Messages.getString("x509.alias"), "alias", "");
-
-
             if (isAC) {
-
-
                 infosPanel.putEmptyLine();
-
 
                 // subject
                 infosPanel.putEmptyLine();
@@ -283,25 +276,12 @@ public class SuperCreate extends JDialog implements ItemListener {
 
             } else {
 
-
                 infosPanel.putEmptyLine();
-
 
                 // subject
                 infosPanel.putEmptyLine();
                 Calendar calendar = Calendar.getInstance();
-
-//                infosPanel.put(Messages.getString("certinfo.duration"), "duration",
-//                        getDefaultDuration(CertificateType.STANDARD));
-//                JCheckBox cbDuration = new JCheckBox(Messages.getString("extended_mode"));
-//
-//                cbDuration.setName("extendDuration");
-//                cbDuration.addItemListener(this);
-
-                //  infosPanel.put("", cbDuration);
-                //    infosPanel.put(getDurationPanel(3));
                 infosPanel.putEmptyLine();
-
 
                 infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib", "");
                 infosPanel.put("Policy notice", "PolicyNotice", "");
@@ -341,7 +321,6 @@ public class SuperCreate extends JDialog implements ItemListener {
 
     public LabelValuePanel getDurationPanel(int duration) {
 
-
         Calendar calendar = Calendar.getInstance();
         if (durationPanel == null) {
             durationPanel = new LabelValuePanel();
@@ -354,7 +333,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                     calendar.getTime(), true);
             // durationPanel.setVisible(false);
             durationPanel.putEmptyLine();
-            infosPanel.getElements().putAll(durationPanel.getElements());
+            infosPanel.addChild(durationPanel);
 
         }
         return durationPanel;

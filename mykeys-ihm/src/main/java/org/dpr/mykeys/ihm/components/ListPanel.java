@@ -40,6 +40,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileManager;
+import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
@@ -89,7 +90,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 					if (((JList) e.getSource()).getSelectedValue() instanceof ChildInfo) {
 						displayDetail((ChildInfo) ((JList) e.getSource()).getSelectedValue());
 						if (ksInfo.isOpen()) {
-							toolBarManager.enableActions(ksInfo);
+							toolBarManager.enableElementActions(ksInfo, true);
 
 						}
 					}
@@ -188,7 +189,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		// addCertProfButton.removeActionListener(actions);
 		if (ksInfo.isOpen()) {
 
-			toolBarManager.enableActions(info);
+			toolBarManager.enableGenericActions(info, true);
 			toolBarManager.enableListeners(info);
 
 			// addCertProfButton.addActionListener(actions);
@@ -288,13 +289,26 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		return;
 	}
 
+	public void createCrl(NodeInfo info, CertificateValue certificateInfo, boolean b) throws ServiceException {
+
+		JFrame frame = (JFrame) this.getTopLevelAncestor();
+		CreateCrlDialog cs = new CreateCrlDialog(frame, certificateInfo);
+
+		cs.setLocationRelativeTo(frame);
+		cs.setResizable(false);
+		cs.setVisible(true);
+		updateInfo(info);
+
+		return;
+	}
+
 	/**
 	 * .
 	 * 
 	 * <BR>
 	 * 
-	 * 
-	 * @param ksInfo2
+	 *
+	 * @param info
 	 * @param certificateInfo
 	 * @throws ServiceException
 	 */

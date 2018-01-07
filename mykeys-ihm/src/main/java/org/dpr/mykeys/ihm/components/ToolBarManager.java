@@ -69,6 +69,16 @@ public class ToolBarManager {
 
 	}
 
+    public void enableGenericActions(NodeInfo info, boolean b) {
+        getInstance(info).enableGenericActions(b);
+
+    }
+
+    public void enableElementActions(NodeInfo info, boolean b) {
+        getInstance(info).enableElementActions(b);
+
+    }
+
 	public void enableListeners(NodeInfo info) {
 		getInstance(info).enableListeners();
 

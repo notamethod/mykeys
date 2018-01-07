@@ -105,4 +105,14 @@ public class ProfileToolBar extends ObjToolBar {
 
 	}
 
+    @Override
+    public void enableGenericActions(boolean b) {
+
+    }
+
+    @Override
+    public void enableElementActions(boolean b) {
+
+    }
+
 }

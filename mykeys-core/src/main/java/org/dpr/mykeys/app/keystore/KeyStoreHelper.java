@@ -473,6 +473,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
+
     public CertificateValue findCertificateAndPrivateKeyByAlias(KeyStoreValue store, String alias) throws ServiceException {
         if (null == store || null == alias || alias.trim().isEmpty()) {
             throw new IllegalArgumentException();

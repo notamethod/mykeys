@@ -23,6 +23,7 @@ public class CertificateToolBar extends ObjToolBar  {
 	JButton importButton;
 	JButton exportButton;
 	JButton deleteButton;
+    JButton CrlManagerButton;
 	JToggleButton unlockButton;
 	
 	String title;
@@ -78,7 +79,14 @@ public class CertificateToolBar extends ObjToolBar  {
 		exportButton = new JButton(createImageIcon("/images/export.png"));
 		exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
         exportButton.setToolTipText(Messages.getString("export_button.tooltip"));
-		
+
+
+        CrlManagerButton = new JButton(createImageIcon("/images/export.png"));
+        CrlManagerButton.setActionCommand(TypeAction.CREATE_CRL.getValue());
+        CrlManagerButton.setToolTipText(Messages.getString("export_button.tooltip"));
+        CrlManagerButton.setEnabled(false);
+        CrlManagerButton.addActionListener(actions);
+
 		// FIXME libelles
 		deleteButton = new JButton(createImageIcon("/images/trash_can.png"));
 		deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
@@ -87,8 +95,9 @@ public class CertificateToolBar extends ObjToolBar  {
 		deleteButton.setEnabled(false);
 		exportButton.setEnabled(false);
 		importButton.setEnabled(false);
-		
-		exportButton.addActionListener(actions);
+
+
+        exportButton.addActionListener(actions);
 		importButton.addActionListener(actions);
 		unlockButton.addActionListener(actions);
 		deleteButton.addActionListener(actions);
@@ -100,6 +109,7 @@ public class CertificateToolBar extends ObjToolBar  {
 		add(addCertButton);
 		add(addCertProfButton);
 		add(addCertFromCSRButton);
+        add(CrlManagerButton);
 		add(importButton);
 		add(exportButton);
 		add(deleteButton);
@@ -144,5 +154,27 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertButton.removeActionListener(actions);
 		
 	}
+
+    @Override
+    public void enableGenericActions(boolean b) {
+        unlockButton.setSelected(false);
+        unlockButton.setEnabled(false);
+        exportButton.setEnabled(false);
+        deleteButton.setEnabled(false);
+        CrlManagerButton.setEnabled(false);
+        importButton.setEnabled(true);
+        addCertButton.setEnabled(true);
+        addCertFromCSRButton.setEnabled(true);
+        addCertProfButton.setEnabled(true);
+
+    }
+
+    @Override
+    public void enableElementActions(boolean b) {
+
+        exportButton.setEnabled(b);
+        deleteButton.setEnabled(b);
+        CrlManagerButton.setEnabled(b);
+    }
 
 }

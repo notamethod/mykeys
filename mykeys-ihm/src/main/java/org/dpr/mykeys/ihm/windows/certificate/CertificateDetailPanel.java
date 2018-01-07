@@ -1,6 +1,8 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
 import java.awt.*;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.util.Iterator;
 
 import javax.swing.*;
@@ -55,7 +57,7 @@ public class CertificateDetailPanel extends JPanel {
         }
 
         infosPanel.putEmptyLine();
-        infosPanel.addTitle(Messages.getString("x509.validity"));
+        infosPanel.addTitle(Messages.getString("x509.validity"), getValidityColor(info));
         infosPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore", info.getNotBefore(),
                 false);
         infosPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter", info.getNotAfter(),
@@ -127,6 +129,19 @@ public class CertificateDetailPanel extends JPanel {
         this.add(cp);
 
 
+    }
+
+    private Color getValidityColor(CertificateValue info) {
+        if (info.getCertificate() != null) {
+            try {
+                info.getCertificate().checkValidity();
+            } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+                return Color.RED;
+            }
+            return Color.GREEN;
+
+        }
+        return Color.orange;
     }
 
 }

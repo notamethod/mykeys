@@ -32,6 +32,10 @@ public abstract class ObjToolBar extends JToolBar {
 
 	public abstract void removeListeners();
 
+    public abstract void enableGenericActions(boolean b);
+
+    public abstract void enableElementActions(boolean b);
+
 	public  void setVisible() {
 		setVisible(!isVisible());
 		

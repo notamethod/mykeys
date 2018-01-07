@@ -129,9 +129,21 @@ public class KeysAction implements ActionListener {
 				}
 			}
 			break;
-
+            case CREATE_CRL:
+                if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
+                        && this.listPanel.listCerts.getSelectedValue() instanceof CertificateValue) {
+                    CertificateValue certInfo = (CertificateValue) this.listPanel.listCerts.getSelectedValue();
+                    try {
+                        this.listPanel.createCrl(this.listPanel.ksInfo, (CertificateValue) this.listPanel.listCerts.getSelectedValue(), false);
+                    } catch (ServiceException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                break;
 		default:
 			break;
 		}
 	}
+
+
 }
