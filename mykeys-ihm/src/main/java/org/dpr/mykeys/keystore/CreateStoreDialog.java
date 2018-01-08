@@ -13,7 +13,6 @@ import org.dpr.swingutils.LabelValuePanel;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -105,23 +104,6 @@ public class CreateStoreDialog extends JDialog {
         return name;
     }
 
-    public String getDataDir() {
-
-        String dir = KSConfig.getUserCfg().getString("data.dir");
-        if (dir == null) {
-            // if (OSInfo.getOs().equals(OS.UNIX)) {
-            // dir = KSConfig.getCfgPath();
-            // } else {
-            // document dir in windows
-            File f = FileSystemView.getFileSystemView().getDefaultDirectory();
-            File data = new File(f, Messages.getString("default.datadir"));
-            data.mkdirs();
-            dir = data.getAbsolutePath();
-            // }
-        }
-        return dir;
-    }
-
     public void createKeyStore(StoreFormat format, String text, char[] charArray) {
         // TODO Auto-generated method stub
 
@@ -135,7 +117,7 @@ public class CreateStoreDialog extends JDialog {
             String command = event.getActionCommand();
             if (command.equals("CHOOSE_IN")) {
 
-                JFileChooser jfc = new JFileChooser(getDataDir());
+                JFileChooser jfc = new JFileChooser(KSConfig.getDataDir());
                 // jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
                 // jPanel1.add(jfc);
@@ -163,7 +145,7 @@ public class CreateStoreDialog extends JDialog {
 
                 if (!p.isAbsolute()) {
 
-                    dir = getDataDir() + File.separator + correctExtension(dir, typeKS);
+                    dir = KSConfig.getDataDir() + File.separator + correctExtension(dir, typeKS);
                 }
 
 

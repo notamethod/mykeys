@@ -81,7 +81,7 @@ public class CertificateToolBar extends ObjToolBar  {
         exportButton.setToolTipText(Messages.getString("export_button.tooltip"));
 
 
-        CrlManagerButton = new JButton(createImageIcon("/images/export.png"));
+		CrlManagerButton = new JButton(createImageIcon("/images/revok.png"));
         CrlManagerButton.setActionCommand(TypeAction.CREATE_CRL.getValue());
         CrlManagerButton.setToolTipText(Messages.getString("export_button.tooltip"));
         CrlManagerButton.setEnabled(false);

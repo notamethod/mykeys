@@ -186,8 +186,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-
     }
 
     public String toString() {

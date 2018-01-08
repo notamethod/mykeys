@@ -12,6 +12,9 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
+
+import javax.swing.filechooser.FileSystemView;
 
 public class KSConfig {
 
@@ -168,7 +171,22 @@ public class KSConfig {
 	public static void initUser() {
 		
 	}
-	
-	
 
+
+	/**
+	 * Return  directory used for certificates storage.
+	 *
+	 * @return directorny name
+	 */
+	public static String getDataDir() {
+
+		String dir = getUserCfg().getString("data.dir");
+		if (dir == null) {
+			File f = FileSystemView.getFileSystemView().getDefaultDirectory();
+			File data = new File(f, Messages.getString("default.datadir"));
+			data.mkdirs();
+			dir = data.getAbsolutePath();
+		}
+		return dir;
+	}
 }
