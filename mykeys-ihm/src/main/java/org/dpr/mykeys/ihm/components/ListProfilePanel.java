@@ -43,7 +43,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.profile.Profil;
-import org.dpr.mykeys.app.profile.ProfileManager;
+import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -59,7 +59,7 @@ import org.dpr.swingutils.LabelValuePanel;
 public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	public static final Log log = LogFactory.getLog(ListProfilePanel.class);
 
-	ProfileManager profileService = new ProfileManager(KSConfig.getProfilsPath());
+    ProfileServices profileService = new ProfileServices(KSConfig.getProfilsPath());
 	public class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 

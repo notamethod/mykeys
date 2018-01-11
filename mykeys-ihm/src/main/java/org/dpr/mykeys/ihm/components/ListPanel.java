@@ -39,7 +39,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
-import org.dpr.mykeys.app.profile.ProfileManager;
+import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -133,7 +133,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		actions = new KeysAction(this, this);
 
-		toolBarManager.init("Still draggable", actions, this);
+		toolBarManager.init("", actions, this);
 		listModel = new DefaultListModel();
 		ListSelectionListener listListener = new CertListListener();
 
@@ -176,7 +176,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		if (ksInfo instanceof ProfilStoreInfo) {
 
-            for (ChildInfo ci : ProfileManager.getProfils(KSConfig.getProfilsPath())) {
+			for (ChildInfo ci : ProfileServices.getProfils(KSConfig.getProfilsPath())) {
 				listModel.addElement(ci);
 			}
 		} else {
@@ -486,8 +486,9 @@ public class ListPanel extends JPanel implements DropTargetListener {
 			}
 			updateInfo(ksInfo);
 		} catch (KeyToolsException | GeneralSecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
+			MykeysFrame.showError(this, e.getLocalizedMessage());
+
 		}
 
 		// System.out.println("File URL is " + transferURL);

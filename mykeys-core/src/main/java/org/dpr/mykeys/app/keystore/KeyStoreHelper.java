@@ -547,7 +547,6 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         KeyStore keystore = ks;
         keystoreValue.setKeystore(ks);
         return keystoreValue;
-
     }
 
     public KeyStore load(KeyStoreValue ksin) throws KeyToolsException {

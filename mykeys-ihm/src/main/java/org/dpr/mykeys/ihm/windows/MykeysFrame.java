@@ -208,7 +208,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 		// menuBar.add(menu3);
 		// menuBar.add(menu4);
 		// Create a toolbar and give it an etched border.
-
+		menuOptions.add(menu3);
 		this.setJMenuBar(menuBar);
 		// JToolBar toolBar = new JToolBar();
 		// this.getContentPane().add(toolBar, BorderLayout.NORTH);

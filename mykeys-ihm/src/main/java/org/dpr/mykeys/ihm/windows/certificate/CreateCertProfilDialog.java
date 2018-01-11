@@ -37,7 +37,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
-import org.dpr.mykeys.app.profile.ProfileManager;
+import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.model.FrameModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
@@ -94,7 +94,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		panelInfoVisible = new LabelValuePanel(model);
 		Map<String, String> mapProfiles = new HashMap<String, String>();
 		mapProfiles.put("", "");
-        ProfileManager pman = new ProfileManager(KSConfig.getProfilsPath());
+		ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
 
 		for (String profile : pman.getProfiles()) {
 			if (profile != null) {
@@ -285,7 +285,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 			System.out.println("houlala");
 			String strProf = (String) ((JComboBox) e.getSource()).getSelectedItem();
 
-            ProfileManager pman = new ProfileManager(KSConfig.getProfilsPath());
+			ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
 
 			if (strProf != null && profile == null) {
 				try {
