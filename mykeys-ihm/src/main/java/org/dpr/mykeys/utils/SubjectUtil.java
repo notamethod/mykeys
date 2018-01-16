@@ -21,25 +21,47 @@ import java.util.Map;
 
 public class SubjectUtil {
 
-    static Map<String, String> mapNames = null;
+    static Map<String, String> mapSubjectLabels = null;
+    static Map<String, String> mapCertificateLabels = null;
     final static Log log = LogFactory.getLog(SubjectUtil.class);
 
     /**
      * @return the mapNames
      */
     public static Map<String, String> getLabels() {
-        if (mapNames == null) {
-            mapNames = new HashMap<String, String>();
-            mapNames.put("C", "x509.subject.country");
-            mapNames.put("O", "x509.subject.organisation");
-            mapNames.put("OU", "x509.subject.organisationUnit");
-            mapNames.put("L", "x509.subject.location");
-            mapNames.put("ST", "x509.subject.street");
-            mapNames.put("E", "x509.subject.email");
-            mapNames.put("CN", "x509.subject.name");
+        if (mapSubjectLabels == null) {
+            mapSubjectLabels = new HashMap<String, String>();
+            mapSubjectLabels.put("C", "x509.subject.country");
+            mapSubjectLabels.put("O", "x509.subject.organisation");
+            mapSubjectLabels.put("OU", "x509.subject.organisationUnit");
+            mapSubjectLabels.put("L", "x509.subject.location");
+            mapSubjectLabels.put("ST", "x509.subject.street");
+            mapSubjectLabels.put("E", "x509.subject.email");
+            mapSubjectLabels.put("CN", "x509.subject.name");
         }
-        return mapNames;
+        return mapSubjectLabels;
     }
+
+    /**
+     * @return the mapNames
+     */
+    public static Map<String, String> getCertificateLabels() {
+        if (mapCertificateLabels == null) {
+            mapCertificateLabels = new HashMap<String, String>();
+            mapCertificateLabels.put("duration", "certinfo.duration");
+            mapCertificateLabels.put("policyCPS", "x509.policycps");
+            mapCertificateLabels.put("crlDistrib", "x509.cdp");
+            mapCertificateLabels.put("keyUSage2", "certinfo.keyUsage");
+            mapCertificateLabels.put("keyUSage", "certinfo.keyUsage");
+            mapCertificateLabels.put("algoSig", "x509.sigalgo");
+            mapCertificateLabels.put("algoPubKey", "x509.pubkeyalgo");
+            mapCertificateLabels.put("issuer", "x509.issuer");
+            mapCertificateLabels.put("keyLength", "x509.pubkeysize");
+            mapCertificateLabels.put("description", "label.description");
+        }
+        return mapCertificateLabels;
+    }
+    //x509.policynotice
 
     public static String toHexString(byte[] b, String separator, boolean upperCase) {
         String retour = "";

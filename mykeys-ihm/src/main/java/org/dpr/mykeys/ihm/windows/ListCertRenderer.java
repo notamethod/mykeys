@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.profile.Profil;
+import org.dpr.mykeys.app.profile.CertificateTemplate;
 
 /**
  * @author Buck
@@ -70,8 +70,8 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 			sb.append("</html>");
 			this.setToolTipText(sb.toString());
 
-		} else if (value instanceof Profil) {
-			Profil prof = ((Profil) value);
+        } else if (value instanceof CertificateTemplate) {
+            CertificateTemplate prof = ((CertificateTemplate) value);
 			setIcon(createImageIcon("/images/profile1.png"));
 			setText(prof.getName());
 		}

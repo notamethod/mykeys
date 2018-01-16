@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.profile.Profil;
+import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.model.ProfileModel;
@@ -28,7 +28,7 @@ public class ProfileDialog extends JFrame {
         setTitle(Messages.getString("profil.title"));
         setPreferredSize(new Dimension(500, 400));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        modele = new ProfileModel((List<Profil>) ProfileServices.getProfils(KSConfig.getProfilsPath()));
+        modele = new ProfileModel((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath()));
 
         table = new JTable(modele);
 
@@ -91,17 +91,17 @@ public class ProfileDialog extends JFrame {
                     CreateProfilDialog cs = new CreateProfilDialog(ProfileDialog.this, true);
                     //cs.setLocationRelativeTo(this);
                     cs.setVisible(true);
-                    modele.setProfiles(((List<Profil>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
+                    modele.setProfiles(((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
                     modele.fireTableDataChanged();
                 });
 
             } else if (command.equals("delete")) {
                 ProfileServices ps = new ProfileServices(KSConfig.getProfilsPath());
                 int row = table.getSelectedRow();
-                Profil p = modele.getValueAt(row);
+                CertificateTemplate p = modele.getValueAt(row);
                 try {
                     ps.delete(p);
-                    modele.setProfiles(((List<Profil>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
+                    modele.setProfiles(((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
                     modele.fireTableDataChanged();
                 } catch (IOException e) {
                     e.printStackTrace();

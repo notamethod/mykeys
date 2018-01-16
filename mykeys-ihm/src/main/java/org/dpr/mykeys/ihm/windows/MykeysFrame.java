@@ -196,9 +196,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
 		menuCrl.setActionCommand("addCrl");
 		// menuOptions.add(menuCrl);
 
-		JMenuItem menu3 = new JMenuItem(new MenuAction(this, "Profil"));
+		JMenuItem menu3 = new JMenuItem(new MenuAction(this, "CertificateTemplate"));
 		menu3.setActionCommand("profil");
-		JMenuItem menu4 = new JMenuItem(new MenuAction(this, "Cert Profil"));
+		JMenuItem menu4 = new JMenuItem(new MenuAction(this, "Cert CertificateTemplate"));
 		menu4.setActionCommand("certprof");
 		// JMenuItem menu4 = new JMenuItem(new MenuAction(this, MyKeys
 		// .getMessage().getString("file.sign")));

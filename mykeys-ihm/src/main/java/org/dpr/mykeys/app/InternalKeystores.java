@@ -197,7 +197,7 @@ public class InternalKeystores {
 			f.mkdirs();
 
 		}
-        kinfo = new ProfilStoreInfo(Messages.getString("profil.name"), pathProfils,
+		kinfo = new ProfilStoreInfo(Messages.getString("certificateTemplate.name"), pathProfils,
 				StoreFormat.PROPERTIES);
 		kinfo.setPassword("null".toCharArray());
 		kinfo.setOpen(true);

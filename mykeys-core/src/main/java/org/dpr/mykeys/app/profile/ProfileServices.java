@@ -69,11 +69,11 @@ public class ProfileServices
     }
 
     public static List<? extends ChildInfo> getProfils(String cfgPath) {
-        List<Profil> profs = new ArrayList<Profil>();
+        List<CertificateTemplate> profs = new ArrayList<CertificateTemplate>();
 
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(cfgPath))) {
             for (Path path : directoryStream) {
-                profs.add(new Profil(path));
+                profs.add(new CertificateTemplate(path));
 
             }
         } catch (IOException ex) {
@@ -102,8 +102,8 @@ public class ProfileServices
             p.setProperty(entry.getKey(), (String) entry.getValue());
         }
 
-        p.setProperty("keyUSage", String.valueOf(certInfo.getIntKeyUsage()));
-        p.setProperty("keyUSage2", String.valueOf(certInfo.getKeyUsage()));
+        p.setProperty("&keyUSage", String.valueOf(certInfo.getIntKeyUsage()));
+        p.setProperty("&keyUSage2", String.valueOf(certInfo.getKeyUsage()));
         p.store(new FileOutputStream(f), "");
 
     }
@@ -114,8 +114,8 @@ public class ProfileServices
         return list;
     }
 
-    public void delete(Profil profil) throws IOException {
-        Files.delete(profil.getPath());
+    public void delete(CertificateTemplate certificateTemplate) throws IOException {
+        Files.delete(certificateTemplate.getPath());
 
     }
 }

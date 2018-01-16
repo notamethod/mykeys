@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.model;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.profile.Profil;
+import org.dpr.mykeys.app.profile.CertificateTemplate;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
@@ -10,13 +10,13 @@ public class ProfileModel extends AbstractTableModel {
 
     private final String[] entetes = {Messages.getString("label.name"), "Description"};
 
-    private List<Profil> profiles;
+    private List<CertificateTemplate> profiles;
 
-    public ProfileModel(List<Profil> profiles) {
+    public ProfileModel(List<CertificateTemplate> profiles) {
         this.profiles = profiles;
     }
 
-    public void setProfiles(List<Profil> profiles) {
+    public void setProfiles(List<CertificateTemplate> profiles) {
         this.profiles = profiles;
     }
 
@@ -37,7 +37,7 @@ public class ProfileModel extends AbstractTableModel {
     }
 
 
-    public Profil getValueAt(int rowIndex) {
+    public CertificateTemplate getValueAt(int rowIndex) {
         return profiles.get(rowIndex);
     }
 
@@ -52,7 +52,7 @@ public class ProfileModel extends AbstractTableModel {
         }
     }
 
-    public List<Profil> getProfiles() {
+    public List<CertificateTemplate> getProfiles() {
         return profiles;
     }
 }

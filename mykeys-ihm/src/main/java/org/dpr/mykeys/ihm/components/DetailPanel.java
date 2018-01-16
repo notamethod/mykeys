@@ -14,10 +14,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.profile.Profil;
+import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateDetailPanel;
 import org.dpr.mykeys.profile.ProfilDetailPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -78,7 +77,7 @@ public class DetailPanel extends JPanel {
 		if(info instanceof CertificateValue){
             return new CertificateDetailPanel((CertificateValue) info);
 		}else{
-			return new ProfilDetailPanel((Profil)info);
+			return new ProfilDetailPanel((CertificateTemplate) info);
 		}
 	}
 

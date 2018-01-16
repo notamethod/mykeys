@@ -84,7 +84,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 	protected void init() {
 
 		DialogAction dAction = new DialogAction();
-		setTitle(Messages.getString("frame.create.profil"));
+		setTitle(Messages.getString("frame.create.certificateTemplate"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -106,9 +106,9 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		// JComboBox comboProf = new JComboBox(getProfiles());
 		// JPanel jpProfil = new JPanel();
 		// jpProfil.setLayout(new FlowLayout(FlowLayout.LEADING));
-		// jpProfil.add(new JLabel("Profil: "));
+		// jpProfil.add(new JLabel("CertificateTemplate: "));
 		// jpProfil.add(comboProf);
-		SWComponent swc = new SWComponent("Profil", JComboBox.class, "profil", mapProfiles, null, this);
+		SWComponent swc = new SWComponent("CertificateTemplate", JComboBox.class, "profil", mapProfiles, null, this);
 		panelInfoVisible.put(swc);
 		panelInfoVisible.put(Messages.getString("label.name"), "name", "");
 		panelInfoVisible.putDisabled(Messages.getString("x509.subject.country"), "C", "");

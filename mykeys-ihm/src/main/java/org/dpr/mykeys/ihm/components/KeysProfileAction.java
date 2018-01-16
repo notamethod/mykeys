@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.profile.Profil;
+import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -79,8 +79,8 @@ public class KeysProfileAction implements ActionListener {
 
 		case DELETE_CERT:
 			if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
-					&& this.listPanel.listCerts.getSelectedValue() instanceof Profil) {
-				Profil info = (Profil) this.listPanel.listCerts.getSelectedValue();
+                    && this.listPanel.listCerts.getSelectedValue() instanceof CertificateTemplate) {
+                CertificateTemplate info = (CertificateTemplate) this.listPanel.listCerts.getSelectedValue();
 				if (MykeysFrame.askConfirmDialog(null, "Suppression du profil " + info.getName())) {
 					try {
 						profileService.delete( info);

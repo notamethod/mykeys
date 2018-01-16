@@ -42,7 +42,7 @@ import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.profile.Profil;
+import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
@@ -397,7 +397,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 			case DELETE_CERT:
 				if (listCerts != null && listCerts.getSelectedValue() != null
 						&& listCerts.getSelectedValue() instanceof CertificateValue) {
-					Profil certInfo = (Profil) listCerts.getSelectedValue();
+                    CertificateTemplate certInfo = (CertificateTemplate) listCerts.getSelectedValue();
 					if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
 						try {
 							profileService.delete( certInfo);

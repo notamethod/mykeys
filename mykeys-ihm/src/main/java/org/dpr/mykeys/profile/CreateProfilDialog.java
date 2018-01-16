@@ -16,13 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import org.dpr.mykeys.app.KSConfig;
@@ -69,7 +63,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 	protected void init() {
 
 		DialogAction dAction = new DialogAction();
-		setTitle(getMessage("frame.create.profil"));
+		setTitle(getMessage("frame.create.certificateTemplate"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -156,7 +150,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			mapAC.put(" ", " ");
 
 			infosPanel.put(getMessage("label.name"), "name", "");
-
+			infosPanel.put(getMessage("label.description"), JTextArea.class, "description", "", true);
 			infosPanel.putEmptyLine();
 			infosPanel.put(getMessage("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
 			infosPanel.put(getMessage("x509.pubkeysize"), JComboBox.class, "keyLength", mapKeyLength,
@@ -164,7 +158,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			infosPanel.put(getMessage("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey,
 					"RSA");
 			infosPanel.put(getMessage("x509.sigalgo"), JComboBox.class, "algoSig", mapAlgoSig,
-					"SHA256WithRSAEncryption");
+					"SHA256WithRSA");
 			// subject
 			infosPanel.putEmptyLine();
 			Calendar calendar = Calendar.getInstance();
