@@ -17,14 +17,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
@@ -41,6 +37,8 @@ import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.model.FrameModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
+import org.dpr.mykeys.keystore.CertificateType;
+import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.SWComponent;
 
@@ -53,6 +51,12 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
 	private Properties profile = null;
 
+    public void setStrProf(String strProf) {
+        this.strProf = strProf;
+    }
+
+    private String strProf = null;
+
     public CreateCertProfilDialog(Frame owner, KeyStoreValue ksInfo, boolean modal) {
 
 		super(owner, true);
@@ -62,9 +66,6 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		} else if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
 			isAC = true;
 		}
-
-		init();
-		this.pack();
 
 	}
 
@@ -81,10 +82,16 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		CreateCertificatDialog cr = new CreateCertificatDialog(f, null, false);
 	}
 
-	protected void init() {
+    public void init() {
+
+        String a = null;
+        final LabelValuePanel panel = new LabelValuePanel();
+
+
+
 
 		DialogAction dAction = new DialogAction();
-		setTitle(Messages.getString("frame.create.certificateTemplate"));
+        setTitle(Messages.getString("frame.create.certificateTemplate", strProf));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -92,40 +99,17 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
 		FrameModel model = new FrameModel();
 		panelInfoVisible = new LabelValuePanel(model);
-		Map<String, String> mapProfiles = new HashMap<String, String>();
-		mapProfiles.put("", "");
-		ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
 
-		for (String profile : pman.getProfiles()) {
-			if (profile != null) {
-				profile = profile.substring(0, profile.indexOf("."));
-			}
-			mapProfiles.put(profile, profile);
+        for (String attribute : SubjectUtil.getStandardList()) {
+            String key = SubjectUtil.getLabels().get(attribute);
+            panelInfoVisible.put(Messages.getString(key), JTextField.class, attribute, "", true);
 		}
-		// ComboBoxModel aModel = new DefaultComboBoxModel();
-		// JComboBox comboProf = new JComboBox(getProfiles());
-		// JPanel jpProfil = new JPanel();
-		// jpProfil.setLayout(new FlowLayout(FlowLayout.LEADING));
-		// jpProfil.add(new JLabel("CertificateTemplate: "));
-		// jpProfil.add(comboProf);
-		SWComponent swc = new SWComponent("CertificateTemplate", JComboBox.class, "profil", mapProfiles, null, this);
-		panelInfoVisible.put(swc);
-		panelInfoVisible.put(Messages.getString("label.name"), "name", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.country"), "C", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.organisation"), "O", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.organisationUnit"), "OU", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.location"), "L", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "E", "");
 
-		panelInfoVisible.putEmptyLine();
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "algoPubKey", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "algoSig", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "keyLength", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "duration", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "E", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "CrlDistrib", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "PolicyNotice", "");
-		panelInfoVisible.putDisabled(Messages.getString("x509.subject.email"), "PolicyCPS", "");
+        panelInfoVisible.putEmptyLine();
+
+        //TODO: check v.startsWith("&")
+        SubjectUtil.getCertificateLabels().forEach((k, v) ->
+                panelInfoVisible.put(Messages.getString(v), JTextField.class, k, "", true));
 
 		JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		panelInfo.setMinimumSize(new Dimension(400, 100));
@@ -149,6 +133,20 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		jp.add(checkPanelExt);
 
 		jp.add(new OkCancelPanel(dAction, FlowLayout.RIGHT));
+
+
+        ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
+        if (strProf != null && profile == null) {
+            try {
+                profile = pman.loadProfile(strProf);
+                fillCert(profile);
+
+            } catch (ProfilException e1) {
+                MykeysFrame.showError(this, e1.getMessage());
+            }
+        }
+
+        this.pack();
 
 	}
 
@@ -284,7 +282,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 		if (e.getSource() instanceof JComboBox) {
 			System.out.println("houlala");
 			String strProf = (String) ((JComboBox) e.getSource()).getSelectedItem();
-
+            System.out.println(strProf);
 			ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
 
 			if (strProf != null && profile == null) {
@@ -302,7 +300,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
 	private void fillCert(Properties myProfile) {
 		Enumeration<?> e = myProfile.propertyNames();
-
+        System.out.println(e);
 		while (e.hasMoreElements()) {
 			String key = (String) e.nextElement();
 			System.out.println(key + " -- " + myProfile.getProperty(key));

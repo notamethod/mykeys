@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
+import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
  
 public class KeysAction implements ActionListener {
@@ -85,10 +86,12 @@ public class KeysAction implements ActionListener {
 		case ADD_CERT_PROF: 
 			try {
 				this.listPanel.addCertFromPRofile(this.listPanel.ksInfo, false);
-			} catch (ServiceException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+            } catch (ServiceException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (IhmException e1) {
+                e1.printStackTrace();
+            }
 			// addCertificate(ksInfo, false);
 			break;
 		case ADD_CERT_FROMCSR: 

@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Properties;
-import java.util.Set;
+import java.util.Enumeration;
 
 import org.apache.commons.io.FilenameUtils;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
+import org.dpr.mykeys.utils.OrderedProperties;
 
 public class CertificateTemplate implements ChildInfo {
 
-    private Properties p;
+    private OrderedProperties p;
     private String name;
     private Path path;
     private String description;
@@ -30,7 +30,7 @@ public class CertificateTemplate implements ChildInfo {
 
     public CertificateTemplate(Path path) throws IOException {
         try (InputStream fis = Files.newInputStream(path)) {
-            p = new Properties();
+            p = new OrderedProperties();
             p.load(fis);
 
             this.name = FilenameUtils.getBaseName(path.getFileName().toString());
@@ -52,9 +52,9 @@ public class CertificateTemplate implements ChildInfo {
         return p.getProperty(key);
     }
 
-    public Set<Object> getValues() {
+    public Enumeration<String> getValues() {
 
-        return p.keySet();
+        return p.propertyNames();
     }
 
     public int getIntValue(String string) {

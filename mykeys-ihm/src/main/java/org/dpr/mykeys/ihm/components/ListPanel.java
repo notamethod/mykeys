@@ -40,9 +40,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
-import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
-import org.dpr.mykeys.ihm.windows.ListCertRenderer;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.windows.*;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
@@ -274,13 +272,11 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		return;
 	}
 
-	public void addCertFromPRofile(NodeInfo info, boolean b) throws ServiceException {
+	public void addCertFromPRofile(NodeInfo info, boolean b) throws ServiceException, IhmException {
 
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
-		SuperCreate cs = null;
-		if (info instanceof KeyStoreValue) {
-			cs = new CreateCertProfilDialog(frame, (KeyStoreValue) info, true);
-		}
+		SelectTemplateDialog cs = new SelectTemplateDialog(frame, (KeyStoreValue) info);
+
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);

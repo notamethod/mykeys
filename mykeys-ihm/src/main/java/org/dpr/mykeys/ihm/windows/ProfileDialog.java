@@ -25,12 +25,13 @@ public class ProfileDialog extends JFrame {
     private ProfileModel modele;
 
     public ProfileDialog() {
-        setTitle(Messages.getString("profil.title"));
+        setTitle(Messages.getString("template.title"));
         setPreferredSize(new Dimension(500, 400));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         modele = new ProfileModel((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath()));
 
         table = new JTable(modele);
+        table.setRowSelectionAllowed(true);
 
 
         JPanel jp = new JPanel();
@@ -62,10 +63,10 @@ public class ProfileDialog extends JFrame {
         DialogAction dAction = new DialogAction();
         JPanel jp = new JPanel();
         jp.setLayout(new FlowLayout(FlowLayout.LEADING));
-        JButton jbAdd = new JButton(Messages.getString("profil.create.button"));
+        JButton jbAdd = new JButton(Messages.getString("template.create.button"));
         jbAdd.addActionListener(dAction);
         jbAdd.setActionCommand("add");
-        JButton JbDelete = new JButton(Messages.getString("profil.delete.button"));
+        JButton JbDelete = new JButton(Messages.getString("template.delete.button"));
         JbDelete.addActionListener(dAction);
         JbDelete.setActionCommand("delete");
 

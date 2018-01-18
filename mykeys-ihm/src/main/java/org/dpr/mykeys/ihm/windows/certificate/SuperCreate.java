@@ -103,8 +103,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         vanillaOrMod.add(button2);
         vanillaOrMod.add(button3);
         panel.add(button1);
-        // panel.add(button2);
-        // panel.add(button3);
+
 //Server Authentication (1.3.6.1.5.5.7.3.1).
 //
 //        Other "common" types of X.509 certs are Client Authentication (1.3.6.1.5.5.7.3.2), Code Signing (1.3.6.1.5.5.7.3.3), and a handful of others are used for various encryption and authentication schemes.

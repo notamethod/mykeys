@@ -149,7 +149,8 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			}
 			mapAC.put(" ", " ");
 
-			infosPanel.put(getMessage("label.name"), "name", "");
+            infosPanel.put(getMessage("profile.name"), "name", "");
+
 			infosPanel.put(getMessage("label.description"), JTextArea.class, "description", "", true);
 			infosPanel.putEmptyLine();
 			infosPanel.put(getMessage("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");

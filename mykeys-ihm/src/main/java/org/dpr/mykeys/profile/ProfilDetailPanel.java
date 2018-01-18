@@ -10,6 +10,8 @@ import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingutils.LabelValuePanel;
 
+import java.util.Enumeration;
+
 public class ProfilDetailPanel extends LabelValuePanel {
 
     private CertificateTemplate info;
@@ -32,23 +34,14 @@ public class ProfilDetailPanel extends LabelValuePanel {
             this.put(Messages.getString(key), JTextField.class, attribute, info.getValue((attribute)), false);
         }
         this.putEmptyLine();
-        for (Object o : info.getValues()) {
-            String attribute = (String) o;
+
+
+        for (Enumeration<String> e = info.getValues(); e.hasMoreElements(); ) {
+            String attribute = e.nextElement();
             String key = SubjectUtil.getCertificateLabels().get(attribute);
             if (key != null && !key.startsWith("&"))
                 this.put(Messages.getString(key), JTextField.class, attribute, info.getValue((attribute)), false);
         }
-
-
-        KeyUsage ku = new KeyUsage(info.getIntValue("&keyUSage"));
-        int ku2 = info.getIntValue("&keyUSage");
-	if ((ku2 & KeyUsage.digitalSignature) == KeyUsage.digitalSignature)
-		System.out.println("xx");
-	if ((ku2 & KeyUsage.decipherOnly) == KeyUsage.decipherOnly)
-		System.out.println("yy");
-	if ((ku2 & KeyUsage.dataEncipherment) == KeyUsage.dataEncipherment)
-		System.out.println("zz");
-
 
         this.put(Messages.getString("x509.subject.organisationUnit"),
                 JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("&keyUSage")), false);
