@@ -30,6 +30,7 @@ import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.FillUtils;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
+import org.dpr.mykeys.utils.X509AttributesUtils;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class CreateProfilDialog extends SuperCreate implements ItemListener {
@@ -72,21 +73,13 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 		JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		panelInfo.setMinimumSize(new Dimension(400, 100));
 
-		Map<String, String> mapKeyLength = new HashMap<String, String>();
-		mapKeyLength.put("512 bits", "512");
-		mapKeyLength.put("1024 bits", "1024");
-		mapKeyLength.put("2048 bits", "2048");
-		mapKeyLength.put("4096 bits", "4096");
+        Map<String, String> mapKeyLength = X509AttributesUtils.getMapKeyLength();
 		// fill with provider's available algorithms
-		Map<String, String> mapAlgoKey = new LinkedHashMap<String, String>();
-		for (String algo : ProviderUtil.getKeyPairGeneratorList()) {
-			mapAlgoKey.put(algo, algo);
-		}
+        Map<String, String> mapAlgoKey = X509AttributesUtils.getMapKeyPairAlgorithms();
+
 		// fill with provider's available algorithms
-		Map<String, String> mapAlgoSig = new LinkedHashMap<String, String>();
-		for (String algo : ProviderUtil.SignatureList) {
-			mapAlgoSig.put(algo, algo);
-		}
+        Map<String, String> mapAlgoSig = X509AttributesUtils.getMapSignatureAlgorithms();
+
 
 		createInfoPanel(mapKeyLength, mapAlgoKey, mapAlgoSig);
 		panelInfo.add(infosPanel);
@@ -149,7 +142,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			}
 			mapAC.put(" ", " ");
 
-            infosPanel.put(getMessage("profile.name"), "name", "");
+            infosPanel.put(getMessage("template.name"), "name", "");
 
 			infosPanel.put(getMessage("label.description"), JTextArea.class, "description", "", true);
 			infosPanel.putEmptyLine();
@@ -159,7 +152,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			infosPanel.put(getMessage("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey,
 					"RSA");
 			infosPanel.put(getMessage("x509.sigalgo"), JComboBox.class, "algoSig", mapAlgoSig,
-					"SHA256WithRSA");
+                    "SHA256WITHRSA");
 			// subject
 			infosPanel.putEmptyLine();
 			Calendar calendar = Calendar.getInstance();

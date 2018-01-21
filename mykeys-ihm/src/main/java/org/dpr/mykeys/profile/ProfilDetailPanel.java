@@ -44,7 +44,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
         }
 
         this.put(Messages.getString("x509.subject.organisationUnit"),
-                JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("&keyUSage")), false);
+                JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("&keyUsage")), false);
 
 
 	}

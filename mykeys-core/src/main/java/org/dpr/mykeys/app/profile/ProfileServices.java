@@ -102,8 +102,8 @@ public class ProfileServices
             p.setProperty(entry.getKey(), (String) entry.getValue());
         }
 
-        p.setProperty("&keyUSage", String.valueOf(certInfo.getIntKeyUsage()));
-        p.setProperty("&keyUSage2", String.valueOf(certInfo.getKeyUsage()));
+        p.setProperty("&keyUsage", String.valueOf(certInfo.getIntKeyUsage()));
+        p.setProperty("&keyUsage2", String.valueOf(certInfo.getKeyUsage()));
         p.store(new FileOutputStream(f), "");
 
     }
