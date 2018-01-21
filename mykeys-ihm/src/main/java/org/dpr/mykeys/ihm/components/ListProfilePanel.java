@@ -57,10 +57,11 @@ import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
 public class ListProfilePanel extends ListPanel implements DropTargetListener {
-	public static final Log log = LogFactory.getLog(ListProfilePanel.class);
+    private static final Log log = LogFactory.getLog(ListProfilePanel.class);
 
-    ProfileServices profileService = new ProfileServices(KSConfig.getProfilsPath());
-	public class ListTransferHandler extends TransferHandler {
+    private ProfileServices profileService = new ProfileServices(KSConfig.getProfilsPath());
+
+    class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 
 		public ListTransferHandler() {
@@ -75,13 +76,13 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	}
 
 	private DetailPanel detailPanel;
-	KeysAction actions;
+    private KeysAction actions;
 
 	/**
 	 * @author Buck
 	 *
 	 */
-	public class CertListListener implements ListSelectionListener {
+    class CertListListener implements ListSelectionListener {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
@@ -107,26 +108,26 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	// Map<String, String> elements = new HashMap<String, String>();
 	LabelValuePanel infosPanel;
 
-	NodeInfo ksInfo;
+    private NodeInfo ksInfo;
 
-	ActionPanel dAction;
+    private ActionPanel dAction;
 
-	JPanel jp;
+    private JPanel jp;
 
-	JLabel titre = new JLabel();
+    private JLabel titre = new JLabel();
 
-	JButton addCertButton;
-	JButton addCertProfButton;
-	JButton importButton;
-	JButton exportButton;
-	JButton deleteButton;
-	JToggleButton unlockButton;
+    private JButton addCertButton;
+    private JButton addCertProfButton;
+    private JButton importButton;
+    private JButton exportButton;
+    private JButton deleteButton;
+    private JToggleButton unlockButton;
 
-	DefaultListModel listModel;
-	JImgList listCerts;
-	DropTarget dropTarget;
+    private DefaultListModel listModel;
+    private JImgList listCerts;
+    private DropTarget dropTarget;
 
-	public ListProfilePanel() {
+    private ListProfilePanel() {
 		super();
 
 		init();
@@ -275,7 +276,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * @throws KeyToolsException
 	 */
 
-	public class ActionPanel extends AbstractAction {
+    class ActionPanel extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -327,9 +328,9 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		this.ksInfo = ksInfo;
 	}
 
-	public class KeysAction implements ActionListener {
+    class KeysAction implements ActionListener {
 
-		public KeysAction(JComponent frameSource) {
+        KeysAction(JComponent frameSource) {
 			super();
 			this.frameSource = frameSource;
 			// this.ksInfo = ksInfo;

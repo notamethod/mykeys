@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
@@ -38,12 +37,12 @@ import org.dpr.swingutils.LabelValuePanel;
 
 public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemListener, ActionListener {
 
-	protected LabelValuePanel infosPanel;
+	private LabelValuePanel infosPanel;
 	protected LabelValuePanel panelInfoVisible;
 
 	private JDropText tfDirectory;
 
-	protected CertificateValue certInfo = new CertificateValue();
+	private CertificateValue certInfo = new CertificateValue();
 
     public CreateCertificatFromCSRDialog(Frame owner, KeyStoreValue ksInfo, boolean modal) {
 
@@ -116,7 +115,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 
 	}
 
-	public class DialogAction extends AbstractAction {
+	class DialogAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -172,7 +171,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 				//
 			}
 			if (mapAC == null) {
-				mapAC = new HashMap<String, String>();
+				mapAC = new HashMap<>();
 			}
 			mapAC.put(" ", " ");
 			infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");

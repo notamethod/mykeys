@@ -12,7 +12,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
@@ -24,33 +23,33 @@ import org.dpr.mykeys.keystore.ImportStoreDialog;
 
 public class TreePopupMenu extends JPopupMenu {
 
-	JMenuItem addStore;
+	private JMenuItem addStore;
 
-	JMenuItem importStore;
+	private JMenuItem importStore;
 
-	JMenuItem addCertMenu;
+	private JMenuItem addCertMenu;
 
-	JMenuItem importCert;
+	private JMenuItem importCert;
 
-	JMenuItem openStore;
+	private JMenuItem openStore;
 
-	JMenuItem closeStore;
+	private JMenuItem closeStore;
 
-	JMenuItem removeStore;
+	private JMenuItem removeStore;
 
-	JMenuItem deleteStore;
+	private JMenuItem deleteStore;
 
-	JMenuItem exportCert;
-	
-	JMenuItem menuChangePwd;
+	private JMenuItem exportCert;
 
-	TreeKeyStorePanel treeKeyStoreParent;
+	private JMenuItem menuChangePwd;
+
+	private TreeKeyStorePanel treeKeyStoreParent;
 
 	private TreePath path;
 
 	private DefaultMutableTreeNode node;
 
-	public class TreePopupAction implements ActionListener {
+	class TreePopupAction implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

@@ -15,16 +15,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 
 public class InternalKeystores {
 
-	public static final Log log = LogFactory.getLog(InternalKeystores.class);
-    public static String password = "mKeys983178";
-	static String USERDB =  "userDB.jks";
-    static String cfgPath;
+	private static final Log log = LogFactory.getLog(InternalKeystores.class);
+	private static String password = "mKeys983178";
+	private static String USERDB = "userDB.jks";
+	private static String cfgPath;
 
 	public InternalKeystores(String cfgPath, String profilsPath)  {
 //        try {

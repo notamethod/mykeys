@@ -33,36 +33,36 @@ import java.util.*;
 
 public class SuperCreate extends JDialog implements ItemListener {
 
-    public static final Log log = LogFactory.getLog(SuperCreate.class);
-    protected LabelValuePanel infosPanel;
+    protected static final Log log = LogFactory.getLog(SuperCreate.class);
+    LabelValuePanel infosPanel;
 
-    protected CertificateType typeCer;
-    protected LabelValuePanel durationPanel;
+    private CertificateType typeCer;
+    private LabelValuePanel durationPanel;
     protected KeyStoreValue ksInfo;
-    protected CertificateValue certInfo = new CertificateValue();
+    CertificateValue certInfo = new CertificateValue();
     protected boolean isAC = false;
 
-    public SuperCreate() {
+    protected SuperCreate() {
         super();
     }
 
-    public SuperCreate(Frame owner) {
+    protected SuperCreate(Frame owner) {
         super(owner);
     }
 
-    public SuperCreate(Dialog owner) {
+    private SuperCreate(Dialog owner) {
         super(owner);
     }
 
-    public SuperCreate(Window owner) {
+    private SuperCreate(Window owner) {
         super(owner);
     }
 
-    public SuperCreate(Frame owner, boolean modal) {
+    protected SuperCreate(Frame owner, boolean modal) {
         super(owner, modal);
     }
 
-    public SuperCreate(Dialog owner, boolean modal) {
+    private SuperCreate(Dialog owner, boolean modal) {
         super(owner, modal);
     }
 
@@ -168,11 +168,11 @@ public class SuperCreate extends JDialog implements ItemListener {
     }
 
     private Component getPubKeyPanel() {
-        Map<String, String> mapAlgoKey = new LinkedHashMap<String, String>();
+        Map<String, String> mapAlgoKey = new LinkedHashMap<>();
         for (String algo : ProviderUtil.getKeyPairGeneratorList()) {
             mapAlgoKey.put(algo, algo);
         }
-        Map<String, String> mapKeyLength = new LinkedHashMap<String, String>();
+        Map<String, String> mapKeyLength = new LinkedHashMap<>();
         mapKeyLength.put("512 bits", "512");
         mapKeyLength.put("1024 bits", "1024");
         mapKeyLength.put("2048 bits", "2048");
@@ -203,12 +203,12 @@ public class SuperCreate extends JDialog implements ItemListener {
             //
         }
         if (mapAC == null) {
-            mapAC = new HashMap<String, String>();
+            mapAC = new HashMap<>();
         }
         mapAC.put(" ", " ");
 
         // fill with provider's available algorithms
-        Map<String, String> mapAlgoSig = new LinkedHashMap<String, String>();
+        Map<String, String> mapAlgoSig = new LinkedHashMap<>();
         for (String algo : ProviderUtil.SignatureList) {
             mapAlgoSig.put(algo, algo);
         }
@@ -319,7 +319,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
     }
 
-    public LabelValuePanel getDurationPanel(int duration) {
+    private LabelValuePanel getDurationPanel(int duration) {
 
         Calendar calendar = Calendar.getInstance();
         if (durationPanel == null) {
@@ -340,7 +340,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
     }
 
-    public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -380,7 +380,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
         }
 
-        public void fillCertInfo() {
+        void fillCertInfo() {
             Map<String, Object> elements = infosPanel.getElements();
             Set<String> keys = elements.keySet();
             Iterator<String> it = keys.iterator();
@@ -394,7 +394,7 @@ public class SuperCreate extends JDialog implements ItemListener {
             }
 
             // certInfo.setX509PrincipalMap(elements);
-            HashMap<String, String> subjectMap = new HashMap<String, String>();
+            HashMap<String, String> subjectMap = new HashMap<>();
             FillUtils.fillCertInfo(elements, certInfo);
             certInfo.setAlias((String) elements.get("alias"));
             certInfo.setNotBefore((Date) elements.get("notBefore"));

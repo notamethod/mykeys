@@ -13,9 +13,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class JDropText extends JPanel  {
-    
-    JDropTextField textfield;
-    JButton chooseButton;
+
+    private JDropTextField textfield;
+    private JButton chooseButton;
 
 	public JDropText(JComponent jc1, JComponent jc2) {
 		setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -49,10 +49,9 @@ public class JDropText extends JPanel  {
 	        
 	        DropTarget dropTarget = new DropTarget(textfield, textfield);	       
 	   }
-	   
-	   
-	   
-	    public class TextListener implements DocumentListener
+
+
+    private class TextListener implements DocumentListener
 	    {
 
 	        public void changedUpdate(DocumentEvent e)
@@ -74,9 +73,9 @@ public class JDropText extends JPanel  {
 
 	        }
 
-	    }	   
-	   
-	   public class GenericAction extends AbstractAction
+        }
+
+    class GenericAction extends AbstractAction
 	    {
 
 	        public void actionPerformed(ActionEvent event)
@@ -108,7 +107,7 @@ public class JDropText extends JPanel  {
      *FIN</pre>
      *
      */
-    public void updateOutput()
+    private void updateOutput()
     {
         // TODO Auto-generated method stub
         

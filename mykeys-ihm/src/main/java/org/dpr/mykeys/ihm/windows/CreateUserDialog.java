@@ -2,7 +2,6 @@ package org.dpr.mykeys.ihm.windows;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import javax.swing.*;
@@ -17,10 +16,10 @@ import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.PanelBuilder;
 
 public class CreateUserDialog extends MkDialog {
-	public static final Log log = LogFactory.getLog(CreateUserDialog.class);
+	private static final Log log = LogFactory.getLog(CreateUserDialog.class);
 
-	LabelValuePanel infosPanel;
-    Class<? extends Component> previousWindow;
+	private LabelValuePanel infosPanel;
+	private Class<? extends Component> previousWindow;
 
 	public CreateUserDialog(JFrame owner, boolean modal) {
 
@@ -94,7 +93,7 @@ public class CreateUserDialog extends MkDialog {
 
 	}
 
-	public class DialogAction extends AbstractAction {
+	class DialogAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {

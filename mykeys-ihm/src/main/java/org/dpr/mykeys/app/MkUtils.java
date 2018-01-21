@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-public class MkUtils {
+class MkUtils {
 
 	public MkUtils() {
 		// TODO Auto-generated constructor stub
@@ -19,8 +19,6 @@ public class MkUtils {
 			while ((i = is.read(buf)) != -1) {
 				fos.write(buf, 0, i);
 			}
-		} catch (Exception e) {
-			throw e;
 		} finally {
 			if (is != null)
 				is.close();

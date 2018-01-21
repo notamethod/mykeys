@@ -21,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.ihm.windows.CreateUserDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -30,7 +29,6 @@ import org.dpr.mykeys.ihm.windows.SelectUserDialog;
 import javax.swing.*;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.security.KeyStoreException;
 import java.security.Security;
 import java.util.*;
 
@@ -39,7 +37,7 @@ import java.util.*;
  */
 public class MyKeys {
 
-    public static final Log log = LogFactory.getLog(MyKeys.class);
+    private static final Log log = LogFactory.getLog(MyKeys.class);
     //private static final String ACFileName = "ACKS.jks";
     // messages
 
@@ -141,7 +139,7 @@ public class MyKeys {
 
         Iterator<?> iter = KSConfig.getUserCfg().getKeys("store");
         boolean update = false;
-        Map<String, HashMap> typesKS = new HashMap<String, HashMap>();
+        Map<String, HashMap> typesKS = new HashMap<>();
         while (iter.hasNext()) {
             String key = (String) iter.next();
             log.info("found store info: " + key);

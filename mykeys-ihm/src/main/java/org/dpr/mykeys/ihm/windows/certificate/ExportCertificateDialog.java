@@ -41,7 +41,7 @@ import org.dpr.swingutils.LabelValuePanel;
 public class ExportCertificateDialog extends JDialog implements ItemListener
 {
 
-    public static final Log log = LogFactory
+    private static final Log log = LogFactory
             .getLog(ExportCertificateDialog.class);
     private JTextField tfDirectory;
 
@@ -49,11 +49,11 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
     public static final String PEM_CERT_EXT = ".cer";
 
-    LabelValuePanel infosPanel;
+    private LabelValuePanel infosPanel;
 
-    CertificateValue certInfo;
+    private CertificateValue certInfo;
 
-    KeyStoreValue ksInfo;
+    private KeyStoreValue ksInfo;
 
     private boolean isExportCle = false;
 
@@ -69,7 +69,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
         this.pack();
     }
 
-    public void init()
+    private void init()
     {
         DialogAction dAction = new DialogAction();
         setTitle(Messages.getString("dialog.export.title"));
@@ -78,7 +78,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
         jp.setLayout(bl);
         setContentPane(jp);
 
-        Map<String, String> mapType = new LinkedHashMap<String, String>();
+        Map<String, String> mapType = new LinkedHashMap<>();
         mapType.put("der", "der");
         mapType.put("pem", "pem");
         mapType.put("pkcs12", "pkcs12");
@@ -132,7 +132,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
     }
 
-    public class DialogAction extends AbstractAction
+    class DialogAction extends AbstractAction
     {
 
         @Override
@@ -275,7 +275,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
      * @author Christophe Roger
      * @date 8 mai 2009
      */
-    public class KeyStoreFileFilter extends FileFilter
+    class KeyStoreFileFilter extends FileFilter
     {
 
         private String filterExtension;
@@ -330,7 +330,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
     }
 
-    public File getTargetFile(String format)
+    private File getTargetFile(String format)
     {
         File pathSrc = new File(KSConfig.getDataDir());
         if (pathSrc != null && !pathSrc.isDirectory())

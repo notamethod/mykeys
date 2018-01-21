@@ -41,9 +41,9 @@ public class ImportCertificateDialog extends JDialog {
 
 	public static final String CERTTYPE_EXT_P12 = ".p12";
 
-	LabelValuePanel infosPanel;
+	private LabelValuePanel infosPanel;
 
-    KeyStoreValue ksInfo;
+	private KeyStoreValue ksInfo;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
@@ -55,7 +55,7 @@ public class ImportCertificateDialog extends JDialog {
 		this.pack();
 	}
 
-	public void init() {
+	private void init() {
 		DialogAction dAction = new DialogAction();
 		setTitle("Importation de certificat");
 		JPanel jp = new JPanel();
@@ -63,7 +63,7 @@ public class ImportCertificateDialog extends JDialog {
 		jp.setLayout(bl);
 		setContentPane(jp);
 
-		Map<String, String> mapType = new LinkedHashMap<String, String>();
+		Map<String, String> mapType = new LinkedHashMap<>();
 		mapType.put("auto", "auto");
 		mapType.put("der", "der");
 		mapType.put("PKCS12", "PKCS12");
@@ -105,7 +105,7 @@ public class ImportCertificateDialog extends JDialog {
 
 	}
 
-	public class DialogAction extends AbstractAction {
+	class DialogAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -180,7 +180,7 @@ public class ImportCertificateDialog extends JDialog {
 	 * @author Christophe Roger
 	 * @date 8 mai 2009
 	 */
-	public class KeyStoreFileFilter extends FileFilter {
+	private class KeyStoreFileFilter extends FileFilter {
 
 		/*
 		 * (non-Javadoc)
@@ -211,7 +211,7 @@ public class ImportCertificateDialog extends JDialog {
 
 	}
 
-	public class TextListener implements DocumentListener {
+	private class TextListener implements DocumentListener {
 
 		public void changedUpdate(DocumentEvent e) {
 			updateFields();
@@ -231,7 +231,7 @@ public class ImportCertificateDialog extends JDialog {
 
 	}
 
-	public void updateFields() {
+	private void updateFields() {
 		// TODO Auto-generated method stub
 
 	}

@@ -10,7 +10,7 @@ public abstract class ObjToolBar extends JToolBar {
 	private static final long serialVersionUID = 6922678740807004941L;
 	private String title;
 
-	public ObjToolBar(String name) {
+    protected ObjToolBar(String name) {
 		super(name);
 	}
 

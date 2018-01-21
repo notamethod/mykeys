@@ -21,8 +21,9 @@ public class ListFrame extends JFrame {
 				lf.init();
 			}
 		});
-	}	
-	public void init(){
+    }
+
+    private void init() {
 		JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		listePanel = new ListPanel();
 		

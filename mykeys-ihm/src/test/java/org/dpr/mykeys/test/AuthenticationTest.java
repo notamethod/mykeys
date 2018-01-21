@@ -21,12 +21,11 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class AuthenticationTest {
 
-	final static Log log = LogFactory.getLog(AuthenticationTest.class);
+	private final static Log log = LogFactory.getLog(AuthenticationTest.class);
 
 	private static final String AC_NAME = "mykeys root ca 2";
 

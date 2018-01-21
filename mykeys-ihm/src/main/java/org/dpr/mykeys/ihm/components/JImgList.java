@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
-public class JImgList extends JList {
+class JImgList extends JList {
 
 	private final ImageIcon icon = createImageIcon("/images/cad1.png");
 	private Image grayImage = GrayFilter.createDisabledImage(icon.getImage());

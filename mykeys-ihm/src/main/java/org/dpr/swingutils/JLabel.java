@@ -1,9 +1,8 @@
 package org.dpr.swingutils;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.KSConfig;
 
-public class JLabel extends javax.swing.JLabel {
+class JLabel extends javax.swing.JLabel {
 
 	public JLabel(String text) {
 		//

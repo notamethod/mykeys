@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class ImageUtils {
 
-	public static final Log log = LogFactory.getLog(ImageUtils.class);
+    private static final Log log = LogFactory.getLog(ImageUtils.class);
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	public static ImageIcon createImageIcon(String path) {
 		log.trace(path + " in");

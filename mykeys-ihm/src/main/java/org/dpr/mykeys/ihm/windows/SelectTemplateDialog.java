@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 public class SelectTemplateDialog extends MkDialog {
-    public static final Log log = LogFactory.getLog(SelectTemplateDialog.class);
+    private static final Log log = LogFactory.getLog(SelectTemplateDialog.class);
     private final int CPTMAX = 4;
 
-    LabelValuePanel infosPanel;
-    KeyStoreValue ksInfo;
+    private LabelValuePanel infosPanel;
+    private KeyStoreValue ksInfo;
     int cpt = 0;
 
-    DefaultComboBoxModel modelCombo;
+    private DefaultComboBoxModel modelCombo;
 
     public SelectTemplateDialog(JFrame owner, KeyStoreValue ksInfo) throws IhmException {
 
@@ -100,7 +100,7 @@ public class SelectTemplateDialog extends MkDialog {
      */
     private LabelValuePanel getInfoPanel() throws IhmException {
         infosPanel = new LabelValuePanel();
-        final Map<String, String> users = new HashMap<String, String>();
+        final Map<String, String> users = new HashMap<>();
 
 
         //   pb.addComponent(Messages.getString("label.name"), "name", users, ComponentType.COMBOBOX);
@@ -116,13 +116,13 @@ public class SelectTemplateDialog extends MkDialog {
 
     }
 
-    public void update() throws IhmException {
+    private void update() throws IhmException {
         AuthenticationService auth = new AuthenticationService();
 
         List<String> profileList = new ArrayList<>();
 
         profileList.add("");
-        Map<String, String> mapProfiles = new HashMap<String, String>();
+        Map<String, String> mapProfiles = new HashMap<>();
         mapProfiles.put("", "");
         ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
         log.debug("listing available templates...");
@@ -139,7 +139,7 @@ public class SelectTemplateDialog extends MkDialog {
 
     }
 
-    public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {

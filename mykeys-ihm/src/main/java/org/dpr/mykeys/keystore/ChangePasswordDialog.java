@@ -37,9 +37,9 @@ public class ChangePasswordDialog extends JDialog {
 	// JComboBox ksType;
 	// JPasswordField pwd1;
 	// JPasswordField pwd2;
-	LabelValuePanel infosPanel;
+    private LabelValuePanel infosPanel;
 
-    KeyStoreValue ksInfo;
+    private KeyStoreValue ksInfo;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
@@ -51,7 +51,7 @@ public class ChangePasswordDialog extends JDialog {
 		this.pack();
 	}
 
-	public void init() {
+    private void init() {
 		DialogAction dAction = new DialogAction();
 		setTitle(getMessage("magasin.change.password"));
 		JPanel jp = new JPanel();
@@ -85,7 +85,7 @@ public class ChangePasswordDialog extends JDialog {
 
 	}
 
-	public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -124,7 +124,7 @@ public class ChangePasswordDialog extends JDialog {
 	 * @author Christophe Roger
 	 * @date 8 mai 2009
 	 */
-	public class KeyStoreFileFilter extends FileFilter {
+    private class KeyStoreFileFilter extends FileFilter {
 
 		/*
 		 * (non-Javadoc)

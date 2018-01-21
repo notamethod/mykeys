@@ -1,14 +1,11 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingutils.LabelValuePanel;
 
-public class PanelUtils {
+class PanelUtils {
 	
 	public static final String EMAIL_KEY="x509.subject.email";
 	public static final String LOCATION_KEY="x509.subject.email";
@@ -18,8 +15,8 @@ public class PanelUtils {
 	public static final String STREET_KEY="x509.subject.email";
 
 	//suffix key for default values in resource bundle
-	public static final String DEFAULT_STD = ".default";
-	public static final String DEFAULT_AC = ".acdefault";
+	private static final String DEFAULT_STD = ".default";
+	private static final String DEFAULT_AC = ".acdefault";
 
 	public static void addSubjectToPanel(CertificateType type, LabelValuePanel infosPanel) {
 

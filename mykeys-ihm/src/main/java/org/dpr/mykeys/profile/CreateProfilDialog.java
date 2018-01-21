@@ -12,7 +12,6 @@ import java.awt.event.ItemListener;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,7 +19,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.ProfileServices;
@@ -35,9 +33,9 @@ import org.dpr.swingutils.LabelValuePanel;
 
 public class CreateProfilDialog extends SuperCreate implements ItemListener {
 
-	protected LabelValuePanel infosPanel;
+    private LabelValuePanel infosPanel;
 
-	protected CertificateValue certInfo = new CertificateValue();
+    private CertificateValue certInfo = new CertificateValue();
 
 	public CreateProfilDialog(Frame owner, boolean modal) {
 
@@ -138,7 +136,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 				//
 			}
 			if (mapAC == null) {
-				mapAC = new HashMap<String, String>();
+                mapAC = new HashMap<>();
 			}
 			mapAC.put(" ", " ");
 
@@ -192,7 +190,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 
 	}
 
-	public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -228,7 +226,7 @@ public class CreateProfilDialog extends SuperCreate implements ItemListener {
 			}
 
 			// certInfo.setX509PrincipalMap(elements);
-			HashMap<String, String> subjectMap = new HashMap<String, String>();
+            HashMap<String, String> subjectMap = new HashMap<>();
 			
 			FillUtils.fillCertInfo(elements, certInfo);
 			//certInfo.setDuration((Integer) elements.get("duration"));

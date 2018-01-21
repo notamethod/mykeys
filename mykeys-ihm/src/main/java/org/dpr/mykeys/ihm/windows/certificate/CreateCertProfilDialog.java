@@ -33,9 +33,9 @@ import java.util.*;
 public class CreateCertProfilDialog extends SuperCreate implements ItemListener, ActionListener {
 
     protected LabelValuePanel infosPanel;
-    protected LabelValuePanel panelInfoVisible;
+    private LabelValuePanel panelInfoVisible;
 
-    protected CertificateValue certInfo = new CertificateValue();
+    private CertificateValue certInfo = new CertificateValue();
 
     private Properties profile = null;
     private String strProf = null;
@@ -190,7 +190,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
         // System.out.println(CertificateUtils.keyUsageToString(certInfo.getKeyUsage()));
     }
 
-    public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -234,7 +234,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
             }
 
             // certInfo.setX509PrincipalMap(elements);
-            HashMap<String, String> subjectMap = new HashMap<String, String>();
+            HashMap<String, String> subjectMap = new HashMap<>();
 
             FillUtils.fillCertInfo(elements, certInfo);
             certInfo.setDuration(Integer.valueOf((String) elements.get("duration")));

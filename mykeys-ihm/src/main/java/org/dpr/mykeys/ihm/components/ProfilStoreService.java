@@ -6,7 +6,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.keystore.StoreService;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 
-public class ProfilStoreService implements StoreService<ProfilStoreInfo> {
+class ProfilStoreService implements StoreService<ProfilStoreInfo> {
 
 	public ProfilStoreService(ProfilStoreInfo ksInfo) {
 		// TODO Auto-generated constructor stub

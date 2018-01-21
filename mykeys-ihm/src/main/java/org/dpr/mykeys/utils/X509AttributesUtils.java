@@ -11,7 +11,7 @@ import java.util.Map;
 public class X509AttributesUtils {
 
     final static Log log = LogFactory.getLog(X509AttributesUtils.class);
-    static Map<String, String> mapKeyLength = null;
+    private static Map<String, String> mapKeyLength = null;
     private static Map<String, String> mapSignatureAlgorithms;
     private static Map<String, String> mapKeyPairAlgoList;
 
@@ -52,7 +52,7 @@ public class X509AttributesUtils {
     }
 
 
-    public static String[] getStandardKeyLength() {
+    private static String[] getStandardKeyLength() {
         return new String[]{"512", "1024", "2048", "4096", "8192"};
     }
 }

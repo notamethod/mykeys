@@ -20,7 +20,7 @@ import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 
 
-public class GradientTreeRenderer extends DefaultTreeCellRenderer implements
+class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 		TreeCellRenderer {
 
 	public JTree jtree1;

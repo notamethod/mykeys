@@ -15,7 +15,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
  * @author Buck
  *
  */
-public class CertListModel implements ListModel {
+class CertListModel implements ListModel {
 
 	public CertListModel(List<CertificateValue> data) {
 		super();

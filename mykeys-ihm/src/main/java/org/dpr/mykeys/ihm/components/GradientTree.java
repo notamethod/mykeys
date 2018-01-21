@@ -8,7 +8,7 @@ import java.awt.dnd.DropTargetListener;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 
-public class GradientTree extends JTree implements DropTargetListener{
+class GradientTree extends JTree implements DropTargetListener {
 
 	public GradientTree(TreeModel newModel) {
 		super(newModel);

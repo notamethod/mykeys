@@ -1,7 +1,5 @@
 package org.dpr.mykeys.ihm.windows;
 
-import org.dpr.mykeys.app.keystore.ServiceException;
-
 public class IhmException extends Exception {
 
 	public IhmException(String arg0, Throwable arg1) {

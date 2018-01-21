@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 
-public class CreateCertificatDialogServer  extends CreateCertificatDialog implements ItemListener{
+class CreateCertificatDialogServer extends CreateCertificatDialog implements ItemListener {
     public CreateCertificatDialogServer(JFrame owner, KeyStoreValue ksInfo) {
 
 		super(owner, ksInfo, true);

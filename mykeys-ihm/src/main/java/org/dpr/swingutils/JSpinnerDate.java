@@ -9,7 +9,7 @@ import javax.swing.SpinnerDateModel;
 
 public class JSpinnerDate extends JSpinner {
 
-	SpinnerDateModel model;
+    private SpinnerDateModel model;
 
 	public JSpinnerDate(String format, Date initDate) {
 		super();

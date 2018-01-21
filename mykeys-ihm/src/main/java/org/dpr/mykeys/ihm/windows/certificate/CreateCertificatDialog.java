@@ -42,7 +42,7 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
                 false);
     }
 
-    public class DialogAction extends AbstractAction {
+    private class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -64,7 +64,7 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
                 }
 
                 // certInfo.setX509PrincipalMap(elements);
-                HashMap<String, String> subjectMap = new HashMap<String, String>();
+                HashMap<String, String> subjectMap = new HashMap<>();
                 FillUtils.fillCertInfo(elements, certInfo);
                 certInfo.setAlias((String) elements.get("alias"));
                 certInfo.setNotBefore((Date) elements.get("notBefore"));

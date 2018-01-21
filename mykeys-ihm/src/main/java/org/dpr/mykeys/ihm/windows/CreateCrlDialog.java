@@ -24,7 +24,7 @@ import java.security.cert.X509CRL;
 import java.util.*;
 
 public class CreateCrlDialog extends JDialog {
-    public static final Log log = LogFactory.getLog(ListPanel.class);
+    private static final Log log = LogFactory.getLog(ListPanel.class);
     // JTextField x509PrincipalC;
     // JTextField x509PrincipalO;
     // JTextField x509PrincipalL;
@@ -32,11 +32,11 @@ public class CreateCrlDialog extends JDialog {
     // JTextField x509PrincipalE;
     // JTextField x509PrincipalCN;
     public JFileChooser jfc;
-    JTextField tfDirectoryOut;
-    LabelValuePanel infosPanel;
+    private JTextField tfDirectoryOut;
+    private LabelValuePanel infosPanel;
 
     // CertificateInfo certInfo = new CertificateInfo();
-    CertificateValue certificateValue;
+    private CertificateValue certificateValue;
     boolean isAC = false;
 
     public CreateCrlDialog(JFrame owner, boolean modal) {
@@ -74,7 +74,7 @@ public class CreateCrlDialog extends JDialog {
         panelInfo.setMinimumSize(new Dimension(400, 100));
 
         // fill with provider's available algorithms
-        Map<String, String> mapAlgoSig = new LinkedHashMap<String, String>();
+        Map<String, String> mapAlgoSig = new LinkedHashMap<>();
         for (String algo : ProviderUtil.SignatureList) {
             mapAlgoSig.put(algo, algo);
         }
@@ -133,7 +133,7 @@ public class CreateCrlDialog extends JDialog {
                 //
             }
             if (mapAC == null) {
-                mapAC = new HashMap<String, String>();
+                mapAC = new HashMap<>();
             }
             mapAC.put(" ", " ");
             infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
@@ -159,7 +159,7 @@ public class CreateCrlDialog extends JDialog {
 
     }
 
-    public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -184,7 +184,7 @@ public class CreateCrlDialog extends JDialog {
                 CrlValue crlValue = new CrlValue();
 
                 // certInfo.setX509PrincipalMap(elements);
-                HashMap<String, String> subjectMap = new HashMap<String, String>();
+                HashMap<String, String> subjectMap = new HashMap<>();
                 crlValue.setName((String) elements.get("alias"));
                 crlValue.setThisUpdate((Date) elements.get("notBefore"));
                 crlValue.setNextUpdate((Date) elements.get("notAfter"));

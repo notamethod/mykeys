@@ -22,7 +22,7 @@ public class KeysProfileAction implements ActionListener {
 	 */
 	private final ListPanel listPanel;
 
-    ProfileServices profileService = new ProfileServices(KSConfig.getProfilsPath());
+    private ProfileServices profileService = new ProfileServices(KSConfig.getProfilsPath());
 	
 
 	public KeysProfileAction(ListPanel listPanel, JComponent frameSource) {

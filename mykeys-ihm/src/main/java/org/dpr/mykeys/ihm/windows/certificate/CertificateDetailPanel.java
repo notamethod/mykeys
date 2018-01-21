@@ -12,10 +12,8 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
@@ -24,7 +22,7 @@ import org.jdesktop.swingx.VerticalLayout;
 public class CertificateDetailPanel extends JPanel {
 
     // LabelValuePanel infosPanel;
-    CertificateValue info;
+    private CertificateValue info;
 
     public CertificateDetailPanel(CertificateValue info) {
         this.info = info;
@@ -33,7 +31,7 @@ public class CertificateDetailPanel extends JPanel {
 
     }
 
-    public void getPanel() {
+    private void getPanel() {
 
         LabelValuePanel infosPanel = new LabelValuePanel();
         LabelValuePanel otherInfosPanel = new LabelValuePanel();

@@ -12,7 +12,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.AbstractLayoutCache;
 
-public class GradientTreeUI extends BasicTreeUI {
+class GradientTreeUI extends BasicTreeUI {
 
 	public static ComponentUI createUI(JComponent c) {
 		return new GradientTreeUI();

@@ -1,28 +1,17 @@
 package org.dpr.mykeys.utils;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
-import org.bouncycastle.asn1.x500.RDN;
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.x509.extension.X509ExtensionUtil;
-import org.dpr.mykeys.Messages;
 
-import javax.security.auth.x500.X500Principal;
 import java.math.BigInteger;
-import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SubjectUtil {
 
-    static Map<String, String> mapSubjectLabels = null;
-    static Map<String, String> mapCertificateLabels = null;
+    private static Map<String, String> mapSubjectLabels = null;
+    private static Map<String, String> mapCertificateLabels = null;
     final static Log log = LogFactory.getLog(SubjectUtil.class);
 
     /**
@@ -30,7 +19,7 @@ public class SubjectUtil {
      */
     public static Map<String, String> getLabels() {
         if (mapSubjectLabels == null) {
-            mapSubjectLabels = new HashMap<String, String>();
+            mapSubjectLabels = new HashMap<>();
             mapSubjectLabels.put("C", "x509.subject.country");
             mapSubjectLabels.put("O", "x509.subject.organisation");
             mapSubjectLabels.put("OU", "x509.subject.organisationUnit");
@@ -47,7 +36,7 @@ public class SubjectUtil {
      */
     public static Map<String, String> getCertificateLabels() {
         if (mapCertificateLabels == null) {
-            mapCertificateLabels = new HashMap<String, String>();
+            mapCertificateLabels = new HashMap<>();
             mapCertificateLabels.put("duration", "certinfo.duration");
             mapCertificateLabels.put("policyCPS", "x509.policycps");
             mapCertificateLabels.put("crlDistrib", "x509.cdp");

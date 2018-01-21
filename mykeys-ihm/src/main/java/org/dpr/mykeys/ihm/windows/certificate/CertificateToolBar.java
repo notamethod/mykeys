@@ -1,6 +1,5 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 import static org.dpr.swingutils.ImageUtils.createImageIcon;
 
 import java.awt.event.ItemEvent;
@@ -17,16 +16,16 @@ import org.dpr.mykeys.ihm.components.ObjToolBar;
 
 public class CertificateToolBar extends ObjToolBar  {
 
-	JButton addCertButton;
-	JButton addCertProfButton;
-	JButton addCertFromCSRButton;
-	JButton importButton;
-	JButton exportButton;
-	JButton deleteButton;
-    JButton CrlManagerButton;
-	JToggleButton unlockButton;
-	
-	String title;
+	private JButton addCertButton;
+	private JButton addCertProfButton;
+	private JButton addCertFromCSRButton;
+	private JButton importButton;
+	private JButton exportButton;
+	private JButton deleteButton;
+	private JButton CrlManagerButton;
+	private JToggleButton unlockButton;
+
+	private String title;
 
 	
 	public String getTitle() {
@@ -126,7 +125,8 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertFromCSRButton.setEnabled(true);
 		addCertProfButton.setEnabled(true);
 	}
-	public void enableCertActions() {
+
+	void enableCertActions() {
 		
 		exportButton.setEnabled(true);
 		deleteButton.setEnabled(true);

@@ -7,13 +7,13 @@ import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.util.Map;
 
-public class MkDialog extends JDialog{
+class MkDialog extends JDialog {
 
-    public MkDialog(JFrame owner, boolean modal) {
+    MkDialog(JFrame owner, boolean modal) {
         super(owner, modal);
     }
 
-    protected void initLookAndFeel() {
+    void initLookAndFeel() {
 
         setDefaultLookAndFeelDecorated(true);
         try {
@@ -39,7 +39,7 @@ public class MkDialog extends JDialog{
 
     }
 
-    protected static boolean checkFields(Component c, Map<String, Object> elements, String... fields) {
+    static boolean checkFields(Component c, Map<String, Object> elements, String... fields) {
         for (String field : fields) {
             String value = (String) elements.get(field);
             if (value == null || value.isEmpty()) {

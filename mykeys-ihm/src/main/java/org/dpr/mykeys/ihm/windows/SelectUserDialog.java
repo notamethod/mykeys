@@ -25,15 +25,15 @@ import java.util.List;
 import java.util.Map;
 
 public class SelectUserDialog extends MkDialog {
-    public static final Log log = LogFactory.getLog(SelectUserDialog.class);
+    private static final Log log = LogFactory.getLog(SelectUserDialog.class);
     private final int CPTMAX = 4;
 
     // CertificateInfo certInfo = new CertificateInfo();
     public JFileChooser jfc;
-    LabelValuePanel infosPanel;
-    int cpt = 0;
+    private LabelValuePanel infosPanel;
+    private int cpt = 0;
 
-    DefaultComboBoxModel modelCombo;
+    private DefaultComboBoxModel modelCombo;
 
     public SelectUserDialog(JFrame owner, boolean modal) throws IhmException {
 
@@ -109,7 +109,7 @@ public class SelectUserDialog extends MkDialog {
      */
     private LabelValuePanel getInfoPanel() throws IhmException {
         infosPanel = new LabelValuePanel();
-        final Map<String, String> users = new HashMap<String, String>();
+        final Map<String, String> users = new HashMap<>();
 
 
         //	infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
@@ -133,7 +133,7 @@ public class SelectUserDialog extends MkDialog {
 
     }
 
-    public void update() throws IhmException {
+    private void update() throws IhmException {
         AuthenticationService auth = new AuthenticationService();
 
         List<String> userList2 = new ArrayList<>();
@@ -151,7 +151,7 @@ public class SelectUserDialog extends MkDialog {
 
     }
 
-    public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {

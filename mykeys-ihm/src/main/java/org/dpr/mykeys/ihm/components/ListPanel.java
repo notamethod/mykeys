@@ -41,7 +41,6 @@ import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.*;
-import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
@@ -52,11 +51,11 @@ import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
 public class ListPanel extends JPanel implements DropTargetListener {
-	public static final Log log = LogFactory.getLog(ListPanel.class);
+	private static final Log log = LogFactory.getLog(ListPanel.class);
 
-	ToolBarManager toolBarManager = new ToolBarManager();
+	private ToolBarManager toolBarManager = new ToolBarManager();
 
-	public class ListTransferHandler extends TransferHandler {
+	class ListTransferHandler extends TransferHandler {
 		DataFlavor certFlavor;
 
 		public ListTransferHandler() {
@@ -71,13 +70,13 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	private DetailPanel detailPanel;
-	KeysAction actions;
+	private KeysAction actions;
 
 	/**
 	 * @author Buck
 	 *
 	 */
-	public class CertListListener implements ListSelectionListener {
+	class CertListListener implements ListSelectionListener {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
@@ -105,13 +104,13 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 	NodeInfo ksInfo;
 
-	ActionPanel dAction;
+	private ActionPanel dAction;
 
-	JPanel jp;
+	private JPanel jp;
 
-	DefaultListModel listModel;
+	private DefaultListModel listModel;
 	JImgList listCerts;
-	DropTarget dropTarget;
+	private DropTarget dropTarget;
 
 	public ListPanel() {
 		super(new BorderLayout());
@@ -205,7 +204,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 		jp.setVisible(true);
 	}
 
-	public class ActionPanel extends AbstractAction {
+	class ActionPanel extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -462,7 +461,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 	}
 
 	// This method handles a drop for a list of files
-	protected boolean dropFile(Transferable transferable)
+	boolean dropFile(Transferable transferable)
 			throws IOException, UnsupportedFlavorException, ServiceException {
 
 		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);

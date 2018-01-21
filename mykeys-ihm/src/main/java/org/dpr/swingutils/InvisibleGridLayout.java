@@ -17,20 +17,20 @@ import javax.swing.border.BevelBorder;
 
 public class InvisibleGridLayout implements LayoutManager, java.io.Serializable
 {
-    int hgap;
-    int vgap;
-    int rows;
-    int cols;
+    private int hgap;
+    private int vgap;
+    private int rows;
+    private int cols;
 
     public InvisibleGridLayout() {
     this(1, 0, 0, 0);
     }
 
-    public InvisibleGridLayout(int rows, int cols) {
+    private InvisibleGridLayout(int rows, int cols) {
     this(rows, cols, 0, 0);
     }
 
-    public InvisibleGridLayout(int rows, int cols, int hgap, int vgap) {
+    private InvisibleGridLayout(int rows, int cols, int hgap, int vgap) {
     if ((rows == 0) && (cols == 0)) {
         throw new IllegalArgumentException("rows and cols cannot both be zero");
     }

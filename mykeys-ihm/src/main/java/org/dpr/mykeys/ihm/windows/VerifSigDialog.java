@@ -35,7 +35,7 @@ public class VerifSigDialog extends JDialog {
 	// JComboBox ksType;
 	// JPasswordField pwd1;
 	// JPasswordField pwd2;
-	LabelValuePanel infosPanel;
+	private LabelValuePanel infosPanel;
 
 	enum FIELDS {
 		typeSig, certificat
@@ -49,7 +49,7 @@ public class VerifSigDialog extends JDialog {
 		this.pack();
 	}
 
-	public void init() {
+	private void init() {
 		DialogAction dAction = new DialogAction();
 		setTitle("Vérification signature de document");
 		JPanel jp = new JPanel();
@@ -57,7 +57,7 @@ public class VerifSigDialog extends JDialog {
 		jp.setLayout(bl);
 		setContentPane(jp);
 
-		Map<String, String> mapType = new HashMap<String, String>();
+		Map<String, String> mapType = new HashMap<>();
 		mapType.put("CMS/PKCS#7", "CMS");
 
 		Map<String, String> mapCerts = null;
@@ -69,7 +69,7 @@ public class VerifSigDialog extends JDialog {
 			//
 		}
 		if (mapCerts == null) {
-			mapCerts = new HashMap<String, String>();
+			mapCerts = new HashMap<>();
 		}
 		mapCerts.put(" ", " ");
 
@@ -127,7 +127,7 @@ public class VerifSigDialog extends JDialog {
 
 	}
 
-	public class DialogAction extends AbstractAction {
+	class DialogAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -192,7 +192,7 @@ public class VerifSigDialog extends JDialog {
 	 * @author Christophe Roger
 	 * @date 8 mai 2009
 	 */
-	public class KeyStoreFileFilter extends FileFilter {
+	private class KeyStoreFileFilter extends FileFilter {
 
 		/*
 		 * (non-Javadoc)

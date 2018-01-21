@@ -34,7 +34,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.KSConfig;
 
 public class LabelValuePanel2 extends JPanel implements DocumentListener {
 
@@ -43,9 +42,9 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 	 */
 	private static final long serialVersionUID = 2550655426888407968L;
 
-	int nbRows;
+	private int nbRows;
 
-	int nbCols;
+	private int nbCols;
 
 	int tfSize;
 
@@ -57,18 +56,18 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 		this.dateFormat = dateFormat;
 	}
 
-	final static String DEFAULT_DATE_FORMAT = "dd/MM/yyyy HH:mm";
-	String dateFormat = DEFAULT_DATE_FORMAT;
+	private final static String DEFAULT_DATE_FORMAT = "dd/MM/yyyy HH:mm";
+	private String dateFormat = DEFAULT_DATE_FORMAT;
 
-	Map<String, Object> elements;
+	private Map<String, Object> elements;
 
-	Map<String, Object> components;
+	private Map<String, Object> components;
 
 	public LabelValuePanel2() {
 		super();
 		this.setLayout(new SpringLayout());
-		this.elements = new HashMap<String, Object>();
-		this.components = new HashMap<String, Object>();
+		this.elements = new HashMap<>();
+		this.components = new HashMap<>();
 
 	}
 
@@ -125,8 +124,8 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 
 	}
 
-	public JComponent putCombo(String keyValue, Map<String, String> values,
-			String defaultValue) {
+	private JComponent putCombo(String keyValue, Map<String, String> values,
+								String defaultValue) {
 
 		final String globalKey = keyValue;
 		final Map<String, String> map = values;
@@ -152,15 +151,15 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 		return combo;
 	}
 
-	public List<JComponent> putRadios(String keyValue,
-			Map<String, String> values, String defaultValue) {
+	private List<JComponent> putRadios(String keyValue,
+									   Map<String, String> values, String defaultValue) {
 
 		final String globalKey = keyValue;
 		final Map<String, String> map = values;
 		// JComboBox combo = new JComboBox();
 		ButtonGroup bg = new ButtonGroup();
 
-		List<JComponent> radios = new ArrayList<JComponent>();
+		List<JComponent> radios = new ArrayList<>();
 		Set<String> keys = values.keySet();
 		Iterator<String> it = keys.iterator();
 		while (it.hasNext()) {
@@ -194,8 +193,8 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 		return radios;
 	}
 
-	public void put(String label, Class<?> class1, String keyValue,
-			Object value, boolean isEditable) {
+	private void put(String label, Class<?> class1, String keyValue,
+					 Object value, boolean isEditable) {
 		JLabel jl = new JLabel(label);
 		String strValue = null;
 		if (value != null) {
@@ -586,7 +585,7 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 	 * 
 	 */
 
-	public void add(Component comp, String key) {
+	private void add(Component comp, String key) {
 		// TODO Auto-generated method stub
 		comp.setName(key);
 		// super.add(comp);

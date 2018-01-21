@@ -25,9 +25,9 @@ public class MessageUtils {
 			messages = ResourceBundle.getBundle(
 					"Messages", Locale.ENGLISH);
 		}
-	}	
-	
-	public static ResourceBundle getBundleMessage() {
+    }
+
+    private static ResourceBundle getBundleMessage() {
 
 		if (messages==null){
 			init();

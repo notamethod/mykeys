@@ -59,7 +59,7 @@ public class ProfileDialog extends JFrame {
         notesJFrame.setVisible(true);
     }
 
-    JPanel getButtonPanel() {
+    private JPanel getButtonPanel() {
         DialogAction dAction = new DialogAction();
         JPanel jp = new JPanel();
         jp.setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -82,7 +82,7 @@ public class ProfileDialog extends JFrame {
     }
 
 
-    public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {

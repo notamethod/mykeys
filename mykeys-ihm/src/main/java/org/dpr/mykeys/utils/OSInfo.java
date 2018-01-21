@@ -16,18 +16,18 @@ public class OSInfo {
 				throw new IOException("os.name not found");
 			}
 			osName = osName.toLowerCase(Locale.ENGLISH);
-			if (osName.indexOf("windows") != -1) {
+			if (osName.contains("windows")) {
 				os = OS.WINDOWS;
-			} else if (osName.indexOf("linux") != -1 || osName.indexOf("mpe/ix") != -1
-					|| osName.indexOf("freebsd") != -1 || osName.indexOf("irix") != -1
-					|| osName.indexOf("digital unix") != -1 || osName.indexOf("unix") != -1) {
+			} else if (osName.contains("linux") || osName.contains("mpe/ix")
+					|| osName.contains("freebsd") || osName.contains("irix")
+					|| osName.contains("digital unix") || osName.contains("unix")) {
 				os = OS.UNIX;
-			} else if (osName.indexOf("mac os x") != -1) {
+			} else if (osName.contains("mac os x")) {
 				os = OS.MAC;
-			} else if (osName.indexOf("sun os") != -1 || osName.indexOf("sunos") != -1
-					|| osName.indexOf("solaris") != -1) {
+			} else if (osName.contains("sun os") || osName.contains("sunos")
+					|| osName.contains("solaris")) {
 				os = OS.POSIX_UNIX;
-			} else if (osName.indexOf("hp-ux") != -1 || osName.indexOf("aix") != -1) {
+			} else if (osName.contains("hp-ux") || osName.contains("aix")) {
 				os = OS.POSIX_UNIX;
 			} else {
 				os = OS.OTHER;

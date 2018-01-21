@@ -1,7 +1,6 @@
 package org.dpr.mykeys.app;
 
 import java.io.File;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,21 +18,21 @@ import javax.swing.filechooser.FileSystemView;
 public class KSConfig {
 
 	private static final Log log = LogFactory.getLog(KSConfig.class);
-	static PropertiesConfiguration userConfig;
+	private static PropertiesConfiguration userConfig;
 
-	static PropertiesConfiguration defaultConfig;
+	private static PropertiesConfiguration defaultConfig;
 
-	static String usrFileName = "user.properties";
+	private static String usrFileName = "user.properties";
 
-	static String defaultFileName = "default.properties";
+	private static String defaultFileName = "default.properties";
 
 	public static final String STORE_PREFIX = "store";
 
-	static String path;
+	private static String path;
 	
 	public static String externalPath;
-	
-	static InternalKeystores internalKeystores;
+
+	private static InternalKeystores internalKeystores;
 	
 	private static ResourceBundle messages;
 
@@ -70,9 +69,9 @@ public class KSConfig {
 		defaultConfig.setAutoSave(true);
 
 	}
-	
 
-	public static String getCfgPath() {
+
+	private static String getCfgPath() {
 		return path;
 	}
 	

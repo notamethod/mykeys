@@ -50,7 +50,7 @@ import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 public class MykeysFrame extends JFrame implements WindowListener {
 
 	private static final Log log = LogFactory.getLog(MykeysFrame.class);
-	JPanel p;// panel principal qui contient les images
+	private JPanel p;// panel principal qui contient les images
 
 	// répertoire des images
 	String magRep = ".\\";
@@ -59,9 +59,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 	// messages
 
-	HashMap<String, KeyStoreValue> ksList = new HashMap<String, KeyStoreValue>();
+	private HashMap<String, KeyStoreValue> ksList = new HashMap<>();
 
-	TreeKeyStorePanel mainPanel;
+	private TreeKeyStorePanel mainPanel;
 
 	/**
 	 * Constructeur
@@ -98,7 +98,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 	}
 
 	private static List<? extends Image> createIConAppli() {
-		List<Image> images = new ArrayList<Image>();
+		List<Image> images = new ArrayList<>();
 		// URL imgURL = null;
 		images.add(getImage("/images/mkico24.png"));
 		images.add(getImage("/images/mkico32.png"));
@@ -137,7 +137,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 		Iterator iter = KSConfig.getUserCfg().getKeys(KSConfig.STORE_PREFIX);
 		boolean update = false;
-		Map<String, HashMap> typesKS = new HashMap<String, HashMap>();
+		Map<String, HashMap> typesKS = new HashMap<>();
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
 

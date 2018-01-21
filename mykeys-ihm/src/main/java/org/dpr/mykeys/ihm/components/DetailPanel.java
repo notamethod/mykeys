@@ -22,20 +22,20 @@ import org.dpr.mykeys.profile.ProfilDetailPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
 public class DetailPanel extends JPanel {
-	
-	public static final Log log = LogFactory.getLog(DetailPanel.class);
+
+    private static final Log log = LogFactory.getLog(DetailPanel.class);
 	// Map<String, String> elements = new HashMap<String, String>();
 	LabelValuePanel infosPanel;
 
 	CertificateValue certificatInfo;
 
-	ActionPanel dAction;
+    private ActionPanel dAction;
 
-	JPanel jp;
-	JPanel jpExt;
-	JTabbedPane jtab;
+    private JPanel jp;
+    private JPanel jpExt;
+    private JTabbedPane jtab;
 
-	JLabel titre = new JLabel();
+    private JLabel titre = new JLabel();
 
 	public DetailPanel() {
 		super();
@@ -82,7 +82,7 @@ public class DetailPanel extends JPanel {
 	}
 
 
-	public class ActionPanel extends AbstractAction {
+    class ActionPanel extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {

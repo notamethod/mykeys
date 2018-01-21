@@ -20,27 +20,27 @@ import java.util.List;
 
 public class LabelValuePanel extends JPanel implements DocumentListener {
 
-    final static String DEFAULT_DATE_FORMAT = "dd/MM/yyyy HH:mm";
+    private final static String DEFAULT_DATE_FORMAT = "dd/MM/yyyy HH:mm";
     /**
      *
      */
     private static final long serialVersionUID = 2550655426888407968L;
-    int nbRows;
-    FrameModel model = null;
+    private int nbRows;
+    private FrameModel model = null;
 
-    int nbCols;
+    private int nbCols;
 
     int tfSize;
-    String dateFormat = DEFAULT_DATE_FORMAT;
-    Map<String, Object> elements;
-    Map<String, Object> components;
-    List<LabelValuePanel> child = new ArrayList<>();
+    private String dateFormat = DEFAULT_DATE_FORMAT;
+    private Map<String, Object> elements;
+    private Map<String, Object> components;
+    private List<LabelValuePanel> child = new ArrayList<>();
 
     public LabelValuePanel() {
         super();
         this.setLayout(new SpringLayout());
-        this.elements = new HashMap<String, Object>();
-        this.components = new HashMap<String, Object>();
+        this.elements = new HashMap<>();
+        this.components = new HashMap<>();
     }
 
     public LabelValuePanel(Map<String, String> elements2, int cols) {
@@ -50,8 +50,8 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
     public LabelValuePanel(FrameModel model) {
         super();
         this.setLayout(new SpringLayout());
-        this.elements = new HashMap<String, Object>();
-        this.components = new HashMap<String, Object>();
+        this.elements = new HashMap<>();
+        this.components = new HashMap<>();
     }
 
     public static String getString(String string) {
@@ -120,8 +120,8 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
         put(label, class1, keyValue, values, defaultValue, null);
     }
 
-    public void put(String label, Class<?> class1, String keyValue, Map<String, String> values, String defaultValue,
-                    ActionListener listener) {
+    private void put(String label, Class<?> class1, String keyValue, Map<String, String> values, String defaultValue,
+                     ActionListener listener) {
         JLabel jl = new JLabel(label);
         if (model != null) {
             model.add(keyValue, keyValue);
@@ -151,12 +151,12 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 
     }
 
-    public JComponent putCombo(String keyValue, Map<String, String> values, String defaultValue) {
+    private JComponent putCombo(String keyValue, Map<String, String> values, String defaultValue) {
         return putCombo(keyValue, values, defaultValue, null);
     }
 
-    public JComponent putCombo(String keyValue, Map<String, String> values, String defaultValue,
-                               ActionListener listener) {
+    private JComponent putCombo(String keyValue, Map<String, String> values, String defaultValue,
+                                ActionListener listener) {
         final String globalKey = keyValue;
         final Map<String, String> map = values;
         JComboBox combo = new JComboBox();
@@ -185,14 +185,14 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
         return combo;
     }
 
-    public List<JComponent> putRadios(String keyValue, Map<String, String> values, String defaultValue) {
+    private List<JComponent> putRadios(String keyValue, Map<String, String> values, String defaultValue) {
 
         final String globalKey = keyValue;
         final Map<String, String> map = values;
         // JComboBox combo = new JComboBox();
         ButtonGroup bg = new ButtonGroup();
 
-        List<JComponent> radios = new ArrayList<JComponent>();
+        List<JComponent> radios = new ArrayList<>();
         Set<String> keys = values.keySet();
         Iterator<String> it = keys.iterator();
         while (it.hasNext()) {
@@ -642,7 +642,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
      * @param constraints
      */
 
-    public void add(Component comp, String key) {
+    private void add(Component comp, String key) {
         // TODO Auto-generated method stub
         comp.setName(key);
         // super.add(comp);

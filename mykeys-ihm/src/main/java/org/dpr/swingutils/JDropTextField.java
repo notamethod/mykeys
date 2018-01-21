@@ -10,12 +10,11 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 import javax.swing.JTextField;
 
-public class JDropTextField extends JTextField implements DropTargetListener {
+class JDropTextField extends JTextField implements DropTargetListener {
 
 	public JDropTextField(String string, int i) {
 		super(string, i);
@@ -77,7 +76,7 @@ public class JDropTextField extends JTextField implements DropTargetListener {
 	}
 
 	// This method handles a drop for a list of files
-	protected boolean dropFile(Transferable transferable) throws IOException,
+	private boolean dropFile(Transferable transferable) throws IOException,
 			UnsupportedFlavorException {
 		List fileList = (List) transferable
 				.getTransferData(DataFlavor.javaFileListFlavor);

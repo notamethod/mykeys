@@ -3,7 +3,7 @@ package org.dpr.swingutils;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-public class SWComponent
+class SWComponent
 {
 
 

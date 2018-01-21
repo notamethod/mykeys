@@ -12,14 +12,14 @@ import org.dpr.mykeys.ihm.components.ObjToolBar;
 
 public class ProfileToolBar extends ObjToolBar {
 
-	JButton addCertButton;
+    private JButton addCertButton;
 
-	JButton importButton;
+    private JButton importButton;
 
-	JButton deleteButton;
-	JToggleButton unlockButton;
+    private JButton deleteButton;
+    private JToggleButton unlockButton;
 
-	String title;
+    private String title;
 
 	public String getTitle() {
 		return title;
@@ -29,7 +29,7 @@ public class ProfileToolBar extends ObjToolBar {
 		this.title = title;
 	}
 
-	KeysProfileAction actions;
+    private KeysProfileAction actions;
 
 	public ProfileToolBar(String name, KeysProfileAction actions) {
 		super(name);

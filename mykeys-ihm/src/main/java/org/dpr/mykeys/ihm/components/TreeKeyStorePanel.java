@@ -85,7 +85,6 @@ import org.dpr.mykeys.app.PkiTools;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
@@ -100,7 +99,7 @@ import org.dpr.mykeys.keystore.ChangePasswordDialog;
 public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		TreeExpansionListener, TreeWillExpandListener, DropTargetListener {
 
-	public class TreeTransferHandler extends TransferHandler {
+	class TreeTransferHandler extends TransferHandler {
 		/**
 		 * .
 		 * 
@@ -147,20 +146,20 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	}
 
-	final static Log log = LogFactory.getLog(TreeKeyStorePanel.class);
+	private final static Log log = LogFactory.getLog(TreeKeyStorePanel.class);
 	private DetailPanel detailPanel;
 
 	private ListPanel listePanel; 
 
 	private GradientTree tree;
 
-	DefaultMutableTreeNode rootNode;
+	private DefaultMutableTreeNode rootNode;
 
-	DefaultMutableTreeNode cliNode;
-	
-	DefaultMutableTreeNode adminNode;
+	private DefaultMutableTreeNode cliNode;
 
-	DefaultMutableTreeNode acNode;
+	private DefaultMutableTreeNode adminNode;
+
+	private DefaultMutableTreeNode acNode;
 	//
 	// DefaultMutableTreeNode crlNode;
 	//
@@ -168,7 +167,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	private TreeModel treeModel;
 
-	TreePopupMenu popup;
+	private TreePopupMenu popup;
 
 	public TreeKeyStorePanel(Dimension dim) {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -272,7 +271,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	public void updateKSList(HashMap<String, KeyStoreValue> ksList) throws KeyStoreException {
 		clear();
 		// Set<String> dirs = ksList.keySet();
-		SortedSet<String> dirs = new TreeSet<String>(
+		SortedSet<String> dirs = new TreeSet<>(
 				String.CASE_INSENSITIVE_ORDER);
 		dirs.addAll(ksList.keySet());
 		addInternalKS();
@@ -303,7 +302,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 	}
 
 	/** Remove all nodes except the root node. */
-	public void clear() {
+	private void clear() {
 		acNode.removeAllChildren();
 		cliNode.removeAllChildren();
 		adminNode.removeAllChildren();
@@ -432,7 +431,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
 	}
 
-	public void showPopupMenu(MouseEvent e) {
+	private void showPopupMenu(MouseEvent e) {
 		DefaultMutableTreeNode tNode = null;
 		int selRow = tree.getRowForLocation(e.getX(), e.getY());
 		TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
@@ -770,7 +769,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		KeyStore ks = null;
 		KeyStoreHelper ksv = new KeyStoreHelper(null);
 		ks = ksv.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray()).getKeystore();
-		Map<String, String> certsAC = new HashMap<String, String>();
+		Map<String, String> certsAC = new HashMap<>();
 		Enumeration<String> enumKs = ks.aliases();
 		while (enumKs.hasMoreElements()) {
 			String alias = enumKs.nextElement();

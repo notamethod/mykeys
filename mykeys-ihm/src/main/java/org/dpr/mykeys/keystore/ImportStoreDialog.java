@@ -31,15 +31,15 @@ public class ImportStoreDialog extends JDialog {
 
 	private JDropText tfDirectory;
 
-	public static final String KSTYPE_KEY_JKS = "JKS";
+	private static final String KSTYPE_KEY_JKS = "JKS";
 
-	public static final String KSTYPE_KEY_PKCS12 = "p12";
+	private static final String KSTYPE_KEY_PKCS12 = "p12";
 
-	public static final String KSTYPE_EXT_JKS = "jks";
+	private static final String KSTYPE_EXT_JKS = "jks";
 
-	public static final String[] KSTYPE_EXT_PKCS12 = { "p12", "pfx", "pkcs12" };
+	private static final String[] KSTYPE_EXT_PKCS12 = {"p12", "pfx", "pkcs12"};
 
-	LabelValuePanel infosPanel;
+	private LabelValuePanel infosPanel;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
@@ -49,7 +49,7 @@ public class ImportStoreDialog extends JDialog {
 		this.pack();
 	}
 
-	public void init() {
+	private void init() {
 		DialogAction dAction = new DialogAction();
 		setTitle("Importation de magasin");
 		JPanel jp = new JPanel();
@@ -57,7 +57,7 @@ public class ImportStoreDialog extends JDialog {
 		jp.setLayout(bl);
 		setContentPane(jp);
 
-		Map<String, String> mapType = new LinkedHashMap<String, String>();
+		Map<String, String> mapType = new LinkedHashMap<>();
 		mapType.put("auto", "auto");
 		mapType.put("Java Key store", "JKS");
 		mapType.put("PKCS12", "PKCS12");
@@ -108,7 +108,7 @@ public class ImportStoreDialog extends JDialog {
 
 	}
 
-	public class DialogAction extends AbstractAction {
+	class DialogAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -189,7 +189,7 @@ public class ImportStoreDialog extends JDialog {
 	 * @author Christophe Roger
 	 * @date 8 mai 2009
 	 */
-	public class KeyStoreFileFilter extends FileFilter {
+	private class KeyStoreFileFilter extends FileFilter {
 
 		/*
 		 * (non-Javadoc)

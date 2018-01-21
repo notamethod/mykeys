@@ -28,7 +28,7 @@ public class PreferencesDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public PreferencesDialog() {
+    private PreferencesDialog() {
 		setBounds(100, 100, 619, 407);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 603, 336);

@@ -24,11 +24,11 @@ import java.util.Map;
 public class CreateStoreDialog extends JDialog {
 
 
-    public static final Log log = LogFactory.getLog(CreateStoreDialog.class);
+    private static final Log log = LogFactory.getLog(CreateStoreDialog.class);
     // JComboBox ksType;
     // JPasswordField pwd1;
     // JPasswordField pwd2;
-    LabelValuePanel infosPanel;
+    private LabelValuePanel infosPanel;
     private JTextField tfDirectory;
 
     // Map<String, String> elements = new HashMap<String, String>();
@@ -39,7 +39,7 @@ public class CreateStoreDialog extends JDialog {
         this.pack();
     }
 
-    public void init() {
+    private void init() {
         DialogAction dAction = new DialogAction();
         setTitle("Création de magasin");
         JPanel jp = new JPanel();
@@ -47,7 +47,7 @@ public class CreateStoreDialog extends JDialog {
         jp.setLayout(bl);
         setContentPane(jp);
 
-        Map<String, String> mapType = new HashMap<String, String>();
+        Map<String, String> mapType = new HashMap<>();
         mapType.put("Java Key store", "JKS");
         mapType.put("PKCS12", "PKCS12");
 
@@ -94,7 +94,7 @@ public class CreateStoreDialog extends JDialog {
 
     }
 
-    public String correctExtension(String name, String typeKS) {
+    private String correctExtension(String name, String typeKS) {
         if (!name.toUpperCase().endsWith("JKS") && typeKS.equals("JKS")) {
             name = name + ".jks";
         }
@@ -104,12 +104,12 @@ public class CreateStoreDialog extends JDialog {
         return name;
     }
 
-    public void createKeyStore(StoreFormat format, String text, char[] charArray) {
+    private void createKeyStore(StoreFormat format, String text, char[] charArray) {
         // TODO Auto-generated method stub
 
     }
 
-    public class DialogAction extends AbstractAction {
+    class DialogAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -174,7 +174,7 @@ public class CreateStoreDialog extends JDialog {
      * @author Christophe Roger
      * @date 8 mai 2009
      */
-    public class KeyStoreFileFilter extends FileFilter {
+    private class KeyStoreFileFilter extends FileFilter {
 
         /*
          * (non-Javadoc)

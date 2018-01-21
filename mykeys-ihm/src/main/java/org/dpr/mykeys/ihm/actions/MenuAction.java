@@ -1,8 +1,6 @@
 package org.dpr.mykeys.ihm.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -11,7 +9,6 @@ import javax.swing.SwingUtilities;
 import org.dpr.mykeys.ihm.windows.*;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
 import org.dpr.mykeys.keystore.ImportStoreDialog;
-import org.dpr.mykeys.profile.CreateProfilDialog;
 
 public class MenuAction extends AbstractAction {
 

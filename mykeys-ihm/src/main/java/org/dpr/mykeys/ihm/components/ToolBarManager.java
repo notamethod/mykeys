@@ -9,10 +9,10 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateToolBar;
 import org.dpr.mykeys.profile.ProfileToolBar;
 
-public class ToolBarManager {
+class ToolBarManager {
 
-	CertificateToolBar certToolbar;
-	ProfileToolBar profToolBar;
+	private CertificateToolBar certToolbar;
+	private ProfileToolBar profToolBar;
 
 	public <T extends ObjToolBar> T getInstance(NodeInfo info) {
         if (info instanceof KeyStoreValue) {
@@ -36,7 +36,7 @@ public class ToolBarManager {
 	}
 
 	public List<ObjToolBar> getToolBars() {
-		List<ObjToolBar> liste = new ArrayList<ObjToolBar>();
+		List<ObjToolBar> liste = new ArrayList<>();
 		liste.add(certToolbar);
 		liste.add(profToolBar);
 		return liste;

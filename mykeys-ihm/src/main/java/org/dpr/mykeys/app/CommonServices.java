@@ -14,7 +14,6 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.crl.CrlTools;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 
 /**
  * @author Buck
@@ -96,15 +95,10 @@ public class CommonServices {
 
 		KeyStoreHelper ktools = new KeyStoreHelper();
 		CertificateValue certSign;
-		try {
-			//FIXME
-			certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasEmetteur);
-            X509CRL xCRL = CrlTools.generateCrl(certSign, crlValue);
-            CrlTools.saveCRL(xCRL, crlValue.getPath());
-		} catch (Exception e) {
-			// log.error
-			throw e;
-		}
+		//FIXME
+		certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasEmetteur);
+		X509CRL xCRL = CrlTools.generateCrl(certSign, crlValue);
+		CrlTools.saveCRL(xCRL, crlValue.getPath());
 
 	}
 

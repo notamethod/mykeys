@@ -28,7 +28,7 @@ import org.dpr.mykeys.keystore.CertificateType;
 
 public class CertificateHelperNew {
 
-	final Log log = LogFactory.getLog(CertificateHelperNew.class);
+    private final Log log = LogFactory.getLog(CertificateHelperNew.class);
 	private static final int AUTH_VALIDITY = 999;
 
 	public CertificateHelperNew() {
@@ -47,7 +47,7 @@ public class CertificateHelperNew {
 		
 	}
 
-	public CertificateValue createCertificateAuth(String id, char[] charArray) throws OperatorCreationException, CertificateException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+    private CertificateValue createCertificateAuth(String id, char[] charArray) throws OperatorCreationException, CertificateException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
 		
 		int validity = AUTH_VALIDITY;
 		// X500Name owner = new X500Name("CN=" + fqdn);
@@ -79,7 +79,7 @@ public class CertificateHelperNew {
 	 * @param algo
 	 * @param keyLength
 	 */
-	public KeyPair generateKeyPair(String algo, int keyLength) {
+    private KeyPair generateKeyPair(String algo, int keyLength) {
 		KeyPair keypair =null;
 		try {
 			if (log.isDebugEnabled()) {

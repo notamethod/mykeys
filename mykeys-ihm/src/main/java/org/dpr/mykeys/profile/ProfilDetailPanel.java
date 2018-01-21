@@ -3,7 +3,6 @@ package org.dpr.mykeys.profile;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.bouncycastle.asn1.x509.KeyUsage;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
@@ -20,8 +19,8 @@ public class ProfilDetailPanel extends LabelValuePanel {
 		this.info=info;
 		getPanel();
 	}
-  
-	public void getPanel(){
+
+    private void getPanel() {
 		//infosPanel = new LabelValuePanel();
         this.put(Messages.getString("label.name"),
 				JTextField.class, "", info.getName(), false);
