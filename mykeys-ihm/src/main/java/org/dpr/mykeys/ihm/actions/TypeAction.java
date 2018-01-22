@@ -34,8 +34,7 @@ public enum TypeAction {
 	 */
 	public static TypeAction getTypeAction(String value) {
 		TypeAction[] typesAction = TypeAction.values();
-		for (int i = 0; i < typesAction.length; i++) {
-			TypeAction action = typesAction[i];
+		for (TypeAction action : typesAction) {
 			if (StringUtils.equals(action.getValue(), value)) {
 				return action;
 			}

@@ -161,9 +161,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
         final Map<String, String> map = values;
         JComboBox combo = new JComboBox();
         Set<String> keys = values.keySet();
-        Iterator<String> it = keys.iterator();
-        while (it.hasNext()) {
-            String key = it.next();
+        for (String key : keys) {
             combo.addItem(key);
             if (elements.get(globalKey) == null) {
                 elements.put(globalKey, map.get(key));
@@ -194,9 +192,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 
         List<JComponent> radios = new ArrayList<>();
         Set<String> keys = values.keySet();
-        Iterator<String> it = keys.iterator();
-        while (it.hasNext()) {
-            String key = it.next();
+        for (String key : keys) {
             JRadioButton jradio = new JRadioButton(key);
             radios.add(jradio);
             if (elements.get(globalKey) == null) {

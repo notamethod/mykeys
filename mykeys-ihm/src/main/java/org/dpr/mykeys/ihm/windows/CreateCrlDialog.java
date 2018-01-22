@@ -172,9 +172,7 @@ public class CreateCrlDialog extends JDialog {
                 Map<String, Object> elements = infosPanel.getElements();
                 log.trace(elements.get("alias"));
                 Set<String> keys = elements.keySet();
-                Iterator<String> it = keys.iterator();
-                while (it.hasNext()) {
-                    String key = it.next();
+                for (String key : keys) {
                 }
                 if (elements.get("alias") == null) {
                     MykeysFrame.showError(CreateCrlDialog.this,

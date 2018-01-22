@@ -116,7 +116,7 @@ public class SelectTemplateDialog extends MkDialog {
 
     }
 
-    private void update() throws IhmException {
+    private void update() {
         AuthenticationService auth = new AuthenticationService();
 
         List<String> profileList = new ArrayList<>();

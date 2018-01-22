@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 public class PkiTools {
 
     public static TypeObject getTypeObject(File transferFile) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("p12", "p12");
         map.put("pfx", "p12");
         map.put("cer", "cer");

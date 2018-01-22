@@ -37,9 +37,7 @@ public class CertificateDetailPanel extends JPanel {
         LabelValuePanel otherInfosPanel = new LabelValuePanel();
         infosPanel.addTitle(Messages.getString("x509.subject"));
         if (info.getSubjectMap() != null) {
-            Iterator<String> iter = info.getSubjectMap().keySet().iterator();
-            while (iter.hasNext()) {
-                String key = iter.next();
+            for (String key : info.getSubjectMap().keySet()) {
                 String name;
                 try {
                     name = Messages.getString(X509Util.getMapNames().get(key));

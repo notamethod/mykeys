@@ -61,7 +61,7 @@ public class CertificateHelper {
 		super();
 	}
 
-	public CertificateValue createCertificate(CertificateValue issuer) throws CertificateException, KeyToolsException {
+    public CertificateValue createCertificate(CertificateValue issuer) throws CertificateException {
 
 		return createCertificate(false, issuer);
 	}

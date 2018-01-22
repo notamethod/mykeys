@@ -65,7 +65,7 @@ public final class OrderedProperties implements Serializable {
      * the ordering of the keys, this instance behaves like an instance of the {@link Properties} class.
      */
     public OrderedProperties() {
-        this(new LinkedHashMap<String, String>(), false);
+        this(new LinkedHashMap<>(), false);
     }
 
     private OrderedProperties(Map<String, String> properties, boolean suppressDate) {
@@ -134,21 +134,21 @@ public final class OrderedProperties implements Serializable {
      * See {@link Properties#propertyNames()}.
      */
     public Enumeration<String> propertyNames() {
-        return new Vector<String>(properties.keySet()).elements();
+        return new Vector<>(properties.keySet()).elements();
     }
 
     /**
      * See {@link Properties#stringPropertyNames()}.
      */
     public Set<String> stringPropertyNames() {
-        return new LinkedHashSet<String>(properties.keySet());
+        return new LinkedHashSet<>(properties.keySet());
     }
 
     /**
      * See {@link Properties#entrySet()}.
      */
     public Set<Map.Entry<String, String>> entrySet() {
-        return new LinkedHashSet<Map.Entry<String, String>>(properties.entrySet());
+        return new LinkedHashSet<>(properties.entrySet());
     }
 
     /**
@@ -352,8 +352,8 @@ public final class OrderedProperties implements Serializable {
          */
         public OrderedProperties build() {
             Map<String, String> properties = (this.comparator != null) ?
-                    new TreeMap<String, String>(comparator) :
-                    new LinkedHashMap<String, String>();
+                    new TreeMap<>(comparator) :
+                    new LinkedHashMap<>();
             return new OrderedProperties(properties, suppressDate);
         }
 
@@ -394,7 +394,7 @@ public final class OrderedProperties implements Serializable {
         @SuppressWarnings("NullableProblems")
         @Override
         public Set<Object> keySet() {
-            return new LinkedHashSet<Object>(targetProperties.keySet());
+            return new LinkedHashSet<>(targetProperties.keySet());
         }
 
     }

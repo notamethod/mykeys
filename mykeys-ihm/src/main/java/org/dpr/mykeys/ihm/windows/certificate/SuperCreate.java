@@ -383,9 +383,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         void fillCertInfo() {
             Map<String, Object> elements = infosPanel.getElements();
             Set<String> keys = elements.keySet();
-            Iterator<String> it = keys.iterator();
-            while (it.hasNext()) {
-                String key = it.next();
+            for (String key : keys) {
             }
             if (elements.get("alias") == null
                     || (elements.get("pwd1") == null && !ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))) {

@@ -73,7 +73,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     public void changePassword(KeyStoreValue ksInfo, char[] newPwd) throws TamperedWithException, KeyToolsException {
 
-        KeyStore ks = null;
+        KeyStore ks;
         try {
             ks = loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).getKeystore();
         } catch (KeyToolsException e) {
@@ -142,7 +142,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     }
 
     public ActionStatus importCertificates(KeyStoreValue ksin)
-            throws FileNotFoundException, KeyToolsException, GeneralSecurityException {
+            throws KeyToolsException, GeneralSecurityException {
         ksin.setStoreFormat(findTypeKS(ksin.getPath()));
         if (ksin.getPassword() == null && StoreFormat.PKCS12.equals(ksin.getStoreFormat())) {
             return ActionStatus.ASK_PASSWORD;
@@ -249,7 +249,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     @Override
     public List<CertificateValue> getChildList() throws ServiceException {
         // TODO Auto-generated method stub
-        List<CertificateValue> certs = null;
+        List<CertificateValue> certs;
         certs = getCertificates();
         return certs;
     }
@@ -330,7 +330,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
      * @throws ServiceException
      */
     public CertificateValue fillCertInfo(KeyStore ks, String alias) throws ServiceException {
-        CertificateValue certInfo = null;
+        CertificateValue certInfo;
         try {
             Certificate certificate = ks.getCertificate(alias);
             Certificate[] certs = ks.getCertificateChain(alias);
@@ -367,7 +367,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
         try {
             KeyStore ks = getKeystore();
-            PrivateKey privateKey = null;
+            PrivateKey privateKey;
             if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                 privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), ksInfo.getPassword());
             } else {
@@ -390,7 +390,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
         try {
             KeyStore ks = getKeystore();
-            PrivateKey privateKey = null;
+            PrivateKey privateKey;
             if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                 privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), ksInfo.getPassword());
             } else {
@@ -422,8 +422,8 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         }
     }
 
-    public KeyStore importStore(String path, StoreFormat storeFormat, char[] password) throws KeyToolsException,
-            UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, ServiceException {
+    public KeyStore importStore(String path, StoreFormat storeFormat, char[] password) throws
+            ServiceException {
         // TODO Auto-generated method stub
         switch (storeFormat) {
             case JKS:
@@ -479,7 +479,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         if (null == store || null == alias || alias.trim().isEmpty()) {
             throw new IllegalArgumentException();
         }
-        CertificateValue certInfo = null;
+        CertificateValue certInfo;
         try {
             KeyStore ks = load(store);
 
@@ -521,7 +521,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         KeyStoreValue keystoreValue = new KeyStoreValue(new File(ksName), format, pwd);
         String type = StoreFormat.getValue(format);
         keystoreValue.setPassword(pwd);
-        KeyStore ks = null;
+        KeyStore ks;
         try {
             try {
                 ks = KeyStore.getInstance(type, "BC");

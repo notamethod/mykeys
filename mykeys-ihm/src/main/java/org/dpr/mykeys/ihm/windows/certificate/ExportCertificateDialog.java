@@ -293,20 +293,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
          * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
          */
         @Override
-        public boolean accept(File f)
-        {
-            if (f.isDirectory())
-            {
+        public boolean accept(File f) {
+            if (f.isDirectory()) {
                 return true;
             }
 
             String extension = FilenameUtils.getExtension(f.getName());
-            if (extension != null)
-            {
-                return extension.equalsIgnoreCase(filterExtension);
-            }
+            return extension != null && extension.equalsIgnoreCase(filterExtension);
 
-            return false;
         }
 
 

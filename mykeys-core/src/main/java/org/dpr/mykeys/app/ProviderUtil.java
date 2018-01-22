@@ -43,7 +43,7 @@ public class ProviderUtil {
     }
 
     private static void initKeyPairGeneratorList() {
-        KeyPairGeneratorList = new ArrayList<String>();
+        KeyPairGeneratorList = new ArrayList<>();
         for (Object o : provider.keySet()) {
             String entry = (String) o;
             if (entry.startsWith("KeyPairGenerator.")) {
@@ -57,7 +57,7 @@ public class ProviderUtil {
     }
 
     private static void initSignaturesList() {
-        SignatureList = new ArrayList<String>();
+        SignatureList = new ArrayList<>();
         for (Object o : provider.keySet()) {
             String entry = (String) o;
             if (entry.startsWith("Signature.")) {

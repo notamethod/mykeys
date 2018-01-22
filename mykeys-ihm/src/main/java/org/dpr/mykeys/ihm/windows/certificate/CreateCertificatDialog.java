@@ -52,9 +52,7 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
             } else if (command.equals("OK")) {
                 Map<String, Object> elements = infosPanel.getElements();
                 Set<String> keys = elements.keySet();
-                Iterator<String> it = keys.iterator();
-                while (it.hasNext()) {
-                    String key = it.next();
+                for (String key : keys) {
                 }
                 if (elements.get("alias") == null
                         || elements.get("pwd1") == null) {

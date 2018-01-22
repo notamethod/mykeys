@@ -19,8 +19,8 @@ public class AuthenticationService {
 
     public void createUser(String id, char[] pwd) throws ServiceException {
         CertificateHelperNew ch = new CertificateHelperNew();
-        CertificateValue cer = null;
-        KeyStoreValue ki = null;
+        CertificateValue cer;
+        KeyStoreValue ki;
         try {
             cer = ch.createCertificate(CertificateType.AUTH, id, pwd);
             cer.setPassword(pwd);
@@ -54,7 +54,7 @@ public class AuthenticationService {
 
     public CertificateValue AuthenticateUSer(String id, char[] pwd) throws AuthenticationException {
         KeyStoreHelper ch = new KeyStoreHelper();
-        CertificateValue cer = null;
+        CertificateValue cer;
 
         try {
             cer = ch.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
@@ -68,7 +68,7 @@ public class AuthenticationService {
 
     public List<CertificateValue> listUsers() throws ServiceException {
         KeyStoreHelper ch = new KeyStoreHelper();
-        List<CertificateValue> cer = null;
+        List<CertificateValue> cer;
 
         try {
             cer = ch.getCertificates(KSConfig.getInternalKeystores().getUserDB());
@@ -81,9 +81,9 @@ public class AuthenticationService {
 
     public void deleteUser(String id) throws ServiceException {
         KeyStoreHelper kh = new KeyStoreHelper();
-        CertificateValue cer = null;
+        CertificateValue cer;
         char[] pwd = null;
-        KeyStoreValue ki = null;
+        KeyStoreValue ki;
         try {
             cer = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();

@@ -228,9 +228,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
         void fillCertInfo() {
             Map<String, Object> elements = panelInfoVisible.getElements();
             Set<String> keys = elements.keySet();
-            Iterator<String> it = keys.iterator();
-            while (it.hasNext()) {
-                String key = it.next();
+            for (String key : keys) {
             }
 
             // certInfo.setX509PrincipalMap(elements);

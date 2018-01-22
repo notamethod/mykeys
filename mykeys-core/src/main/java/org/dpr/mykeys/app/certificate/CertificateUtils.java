@@ -21,7 +21,7 @@ import org.dpr.mykeys.app.X509Constants;
 
 public class CertificateUtils {
 
-	Map<Integer, String> mapKeyUSage = new HashMap<Integer, String>();
+    Map<Integer, String> mapKeyUSage = new HashMap<>();
 
 	public static String keyUsageToString(boolean[] keyUsage) {
 		String value = "";
@@ -103,14 +103,14 @@ public class CertificateUtils {
 
 		// chargement du certificat
 		Collection<X509Certificate> certs = (Collection<X509Certificate>) cf.generateCertificates(aCertStream);
-		Set<X509Certificate> certificates = new HashSet<X509Certificate>(certs);
+        Set<X509Certificate> certificates = new HashSet<>(certs);
 		return certificates;
 	}
 
     public static List<CertificateValue> loadX509Certs(String fileName) {
 
         // NodeInfo nInfo = new KeyStoreValue(new File(fileName));
-		List<CertificateValue> certsRetour = new ArrayList<CertificateValue>();
+        List<CertificateValue> certsRetour = new ArrayList<>();
 
 		InputStream is = null;
 		try {

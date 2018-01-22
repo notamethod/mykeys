@@ -132,7 +132,7 @@ public class TestKeystore {
         delete(target);
 
         KeyStoreValue ki = null;
-        KeystoreBuilder ksBuilder = null;
+        KeystoreBuilder ksBuilder;
         KeyStoreHelper service = new KeyStoreHelper();
 
         try {

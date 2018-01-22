@@ -43,7 +43,7 @@ public class CRLManager {
 
 	private static final String CRL_EXTENSION = ".crl";
 
-	private String provider = null;
+	private String provider;
 
 	/**
 	 * . <BR>
@@ -86,7 +86,7 @@ public class CRLManager {
 			return;
 		}
 
-		CRLDistPoint distPoints = null;
+		CRLDistPoint distPoints;
         try {
 			distPoints = CRLDistPoint.getInstance(X509ExtensionUtil
 					.fromExtensionValue(extension));
@@ -101,7 +101,7 @@ public class CRLManager {
 			return;
 		}
 
-		DistributionPoint[] pointsDistrib = null;
+		DistributionPoint[] pointsDistrib;
 		try {
 			pointsDistrib = distPoints.getDistributionPoints();
 		} catch (Exception e) {
@@ -157,7 +157,7 @@ public class CRLManager {
 	 */
 	public EtatRevocation validateCertificate(InputStream inStream,
 			X509Certificate cert) throws GeneralSecurityException {
-		X509CRL crl = null;
+		X509CRL crl;
 		crl = getCrl(inStream);
 
 		if (crl.isRevoked(cert)) {
@@ -186,7 +186,7 @@ public class CRLManager {
 			throws GeneralSecurityException, IOException {
 		// EtatCrl etatCrl = EtatCrl.UNKNOWN;
 
-		InputStream inStream = null;
+		InputStream inStream;
 		inStream = new FileInputStream(crlFile);
 		IOUtils.closeQuietly(inStream);
 
@@ -209,8 +209,8 @@ public class CRLManager {
 	 */
     private EtatCrl validateCRL(Date date, InputStream inStream)
 			throws GeneralSecurityException {
-		EtatCrl etatCrl = EtatCrl.UNKNOWN;
-		X509CRL crl = null;
+		EtatCrl etatCrl;
+		X509CRL crl;
 
 		crl = getCrl(inStream);
 		if (date.after(crl.getNextUpdate())) {
@@ -236,7 +236,7 @@ public class CRLManager {
     private X509CRL getCrl(InputStream inStream) throws CRLException,
 			NoSuchProviderException, CertificateException {
 
-		CertificateFactory cf = null;
+		CertificateFactory cf;
 
 		cf = CertificateFactory.getInstance("X.509", provider);
 
@@ -276,7 +276,7 @@ public class CRLManager {
 	public File getCrlFile(String pathName, X509Certificate certificate,
 			boolean isAC) {
 
-		Map<ASN1ObjectIdentifier, String> map = null;
+		Map<ASN1ObjectIdentifier, String> map;
 		// si c'est un certificat d'AC, on récupére les identifiant du sujet,
 		// sinon les identifiants de l'emetteur
 		if (isAC) {
@@ -306,7 +306,7 @@ public class CRLManager {
 	public static String getCrlFileName(X509Certificate certificate,
 			boolean isAC) {
 
-		Map<ASN1ObjectIdentifier, String> map = null;
+		Map<ASN1ObjectIdentifier, String> map;
 		// si c'est un certificat d'AC, on récupére les identifiant du sujet,
 		// sinon les identifiants de l'emetteur
 		if (isAC) {

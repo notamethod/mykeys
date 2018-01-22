@@ -161,14 +161,10 @@ public class MyKeys {
         }
         if (update) {
             Set ks1 = typesKS.keySet();
-            Iterator<String> iter1 = ks1.iterator();
-            while (iter1.hasNext()) {
-                String key1 = iter1.next();
+            for (String key1 : (Iterable<String>) ks1) {
                 KSConfig.getUserCfg().clearProperty(key1);
                 Set ks2 = typesKS.get(key1).keySet();
-                Iterator<String> iter2 = ks2.iterator();
-                while (iter2.hasNext()) {
-                    String key2 = iter2.next();
+                for (String key2 : (Iterable<String>) ks2) {
                     KSConfig.getUserCfg().addProperty(key1, key2);
 
                 }

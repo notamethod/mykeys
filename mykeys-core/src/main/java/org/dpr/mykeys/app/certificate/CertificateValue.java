@@ -29,7 +29,7 @@ import java.util.*;
 
 public class CertificateValue implements ChildInfo, Cloneable {
     private static final Log log = LogFactory.getLog(CertificateValue.class);
-    private final List<GeneralName> subjectNames = new ArrayList<GeneralName>();
+    private final List<GeneralName> subjectNames = new ArrayList<>();
     private Certificate[] certificateChain;
     // private X509PrincipalModel x509PrincipalModel;
     private PublicKey publicKey;
@@ -41,7 +41,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
     private byte[] signature;
     private int keyLength;
     private Hashtable x509PrincipalMap = new Hashtable();
-    private Map<String, String> subjectMap = new LinkedHashMap<String, String>();
+    private Map<String, String> subjectMap = new LinkedHashMap<>();
     private String alias;
     private boolean[] keyUsage = new boolean[9];
     private Date notBefore;
@@ -155,7 +155,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
      **/
     private void init(X509Certificate certX509) {
         this.setCertificate(certX509);
-        Map<ASN1ObjectIdentifier, String> oidMap = new HashMap<ASN1ObjectIdentifier, String>();
+        Map<ASN1ObjectIdentifier, String> oidMap = new HashMap<>();
         this.setAlgoPubKey(certX509.getPublicKey().getAlgorithm());
         this.setAlgoSig(certX509.getSigAlgName());
         this.setSignature(certX509.getSignature());

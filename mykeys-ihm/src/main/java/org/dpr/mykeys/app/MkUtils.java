@@ -15,7 +15,7 @@ class MkUtils {
 		FileOutputStream fos = new FileOutputStream(out);
 		try {
 			byte[] buf = new byte[1024];
-			int i = 0;
+			int i;
 			while ((i = is.read(buf)) != -1) {
 				fos.write(buf, 0, i);
 			}

@@ -276,19 +276,17 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		dirs.addAll(ksList.keySet());
 		addInternalKS();
 
-		Iterator<String> iter = dirs.iterator();
-		while (iter.hasNext()) {
-			String dir = iter.next();
-			KeyStoreValue ksinfo = ksList.get(dir);
-			DefaultMutableTreeNode node = null;
-			if (ksinfo.getStoreModel().equals(StoreModel.CASTORE)) {
-				node = addObject(acNode, ksinfo, true);
-			} else {
-				node = addObject(cliNode, ksinfo, true);
+        for (String dir : dirs) {
+            KeyStoreValue ksinfo = ksList.get(dir);
+            DefaultMutableTreeNode node = null;
+            if (ksinfo.getStoreModel().equals(StoreModel.CASTORE)) {
+                node = addObject(acNode, ksinfo, true);
+            } else {
+                node = addObject(cliNode, ksinfo, true);
 
-			}
-			// addObject(node, "[Vide]", false);
-		}
+            }
+            // addObject(node, "[Vide]", false);
+        }
 		// tree.repaint();
 
 	}

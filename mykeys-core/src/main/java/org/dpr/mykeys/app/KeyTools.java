@@ -180,7 +180,7 @@ public class KeyTools {
     public void exportPem(CertificateValue certInfo, String fName) throws KeyToolsException {
         /* save the public key in a file */
         try {
-            List<String> lines = new ArrayList<String>();
+            List<String> lines = new ArrayList<>();
             lines.add(BEGIN_PEM);
             // FileUtils.writeLines(file, lines)
             File f = new File(fName + ".pem");

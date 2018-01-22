@@ -30,7 +30,7 @@ public class X509Util {
 	 */
 	public static Map<String, String> getMapNames() {
 		if (mapNames == null) {
-            mapNames = new LinkedHashMap<String, String>();
+			mapNames = new LinkedHashMap<>();
             mapNames.put("CN", "x509.subject.name");
 			mapNames.put("O", "x509.subject.organisation");
 			mapNames.put("OU", "x509.subject.organisationUnit");
@@ -96,7 +96,6 @@ public class X509Util {
 			log.debug(obj);
 		}
 		b = certificate.getExtensionValue(X509Extensions.SubjectKeyIdentifier.getId());
-		obj = null;
 
 		// try {
 		// obj = X509ExtensionUtil.fromExtensionValue(b);
@@ -163,7 +162,7 @@ public class X509Util {
 	}
 
 	public static Map<ASN1ObjectIdentifier, String> getInfosMap(X500Principal x500Principal) {
-		Map<ASN1ObjectIdentifier, String> subjectMap = new HashMap<ASN1ObjectIdentifier, String>();
+		Map<ASN1ObjectIdentifier, String> subjectMap = new HashMap<>();
 		if (x500Principal == null) {
 			return subjectMap;
 		}

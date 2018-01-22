@@ -82,7 +82,7 @@ public class InternalKeystores {
 
 		KeyTools kt = new KeyTools();
 		String pwd = password;
-        KeyStoreValue kinfo = null;
+		KeyStoreValue kinfo;
 		File f = new File(pathAC);
 		if (!f.exists()) {
 
@@ -130,7 +130,7 @@ public class InternalKeystores {
 		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 
 		String pwd = password;
-        KeyStoreValue kinfo = null;
+		KeyStoreValue kinfo;
 		File f = new File(pathUDB);
 		if (!existsUserDatabase()) {
 
@@ -148,7 +148,7 @@ public class InternalKeystores {
 		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 		KeyTools kt = new KeyTools();
 		String pwd = password;
-        KeyStoreValue kinfo = null;
+		KeyStoreValue kinfo;
 		File f = new File(pathUDB);
 		if (!existsUserDatabase()) {
 			try {
@@ -169,7 +169,7 @@ public class InternalKeystores {
     public KeyStoreValue getStoreCertificate() throws KeyStoreException {
 		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 		String pwd = password;
-        KeyStoreValue kinfo = null;
+		KeyStoreValue kinfo;
 		File f = new File(pathCert);
 		// create keystore
 		if (!f.exists()) {
@@ -190,7 +190,7 @@ public class InternalKeystores {
 
 	public ProfilStoreInfo getStoreProfils() {
 
-		ProfilStoreInfo kinfo = null;
+		ProfilStoreInfo kinfo;
 		File f = new File(pathProfils);
 		if (!f.exists()) {
 			f.mkdirs();
@@ -208,7 +208,7 @@ public class InternalKeystores {
 				KSConfig.getInternalKeystores().getPassword().toCharArray());
 	}
 
-	public void init() throws NoSuchAlgorithmException {
+	public void init() {
 		if (null == pathAC) {
 			this.pathAC = cfgPath + generateName(StoreModel.CASTORE);
 		}

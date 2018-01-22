@@ -69,7 +69,7 @@ public class ProfileServices
     }
 
     public static List<? extends ChildInfo> getProfils(String cfgPath) {
-        List<CertificateTemplate> profs = new ArrayList<CertificateTemplate>();
+        List<CertificateTemplate> profs = new ArrayList<>();
 
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(cfgPath))) {
             for (Path path : directoryStream) {

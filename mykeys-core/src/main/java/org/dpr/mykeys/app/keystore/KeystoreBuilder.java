@@ -161,7 +161,7 @@ public class KeystoreBuilder extends KeyTools {
     public KeyStore loadKeyStore2(String ksName, String type, char[] pwd) throws KeyToolsException {
         // KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 
-        KeyStore ks = null;
+        KeyStore ks;
         try {
             try {
                 ks = KeyStore.getInstance(type, "BC");
@@ -194,7 +194,7 @@ public class KeystoreBuilder extends KeyTools {
             if (certInfo.getPrivateKey() == null) {
                 kstore.setCertificateEntry(certInfo.getAlias(), cert);
             } else {
-                Certificate[] chaine = null;
+                Certificate[] chaine;
                 if (certInfo.getCertificateChain() != null) {
                     chaine = certInfo.getCertificateChain();
                 } else {

@@ -131,14 +131,12 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 		final Map<String, String> map = values;
 		JComboBox combo = new JComboBox();
 		Set<String> keys = values.keySet();
-		Iterator<String> it = keys.iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			combo.addItem(key);
-			if (elements.get(globalKey) == null) {
-				elements.put(globalKey, map.get(key));
-			}
-		}
+        for (String key : keys) {
+            combo.addItem(key);
+            if (elements.get(globalKey) == null) {
+                elements.put(globalKey, map.get(key));
+            }
+        }
 
 		combo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -161,26 +159,24 @@ public class LabelValuePanel2 extends JPanel implements DocumentListener {
 
 		List<JComponent> radios = new ArrayList<>();
 		Set<String> keys = values.keySet();
-		Iterator<String> it = keys.iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			JRadioButton jradio = new JRadioButton(key);
-			radios.add(jradio);
-			if (elements.get(globalKey) == null) {
-				elements.put(globalKey, map.get(key));
-				jradio.setSelected(true);
-			}
-			jradio.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					JRadioButton radio = (JRadioButton) e.getSource();
-					if (radio.isSelected()) {
-						String key = radio.getText();
-						elements.put(globalKey, map.get(key));
-					}
-				}
-			});
-			bg.add(jradio);
-		}
+        for (String key : keys) {
+            JRadioButton jradio = new JRadioButton(key);
+            radios.add(jradio);
+            if (elements.get(globalKey) == null) {
+                elements.put(globalKey, map.get(key));
+                jradio.setSelected(true);
+            }
+            jradio.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    JRadioButton radio = (JRadioButton) e.getSource();
+                    if (radio.isSelected()) {
+                        String key = radio.getText();
+                        elements.put(globalKey, map.get(key));
+                    }
+                }
+            });
+            bg.add(jradio);
+        }
 
 		// combo.addActionListener(new ActionListener() {
 		// public void actionPerformed(ActionEvent e) {
