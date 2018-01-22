@@ -66,21 +66,21 @@ public class ImportStoreDialog extends JDialog {
 
 		infosPanel.put("Type de magasin", JComboBox.class, "typeKS", mapType);
 		infosPanel.putEmptyLine();
-		infosPanel.put("Mot de passe", JPasswordField.class, "pwd1", "", true);
+        infosPanel.put(Messages.getString("label.password"), JPasswordField.class, "pwd1", "", true);
 
 		infosPanel.putEmptyLine();
 
 		// JLabel jl = new JLabel("Type de magasin");
 		// ksType = new JComboBox(new String[] { "JKS", "PKCS12" });
 		// JFieldsPanel jf0 = new JFieldsPanel(jl, ksType);
-		// JLabel jl1 = new JLabel("Mot de passe");
+        // JLabel jl1 = new JLabel(Messages.getString("label.password"));
 		// pwd1 = new JPasswordField(12);
 		// JFieldsPanel jf1 = new JFieldsPanel(jl1, pwd1);
 		// JLabel jl2 = new JLabel("Confirmer le Mot de passe");
 		// pwd2 = new JPasswordField(12);
 		// JFieldsPanel jf2 = new JFieldsPanel(jl2, pwd2);
 
-		JLabel jl4 = new JLabel("Emplacement");
+        JLabel jl4 = new JLabel(Messages.getString("file.location"));
 		tfDirectory = new JDropText();
 		
 //		jbChoose.addActionListener(dAction);
@@ -98,7 +98,7 @@ public class ImportStoreDialog extends JDialog {
 		jbCancel.setActionCommand("CANCEL");
 		JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
-		infosPanel.put("Emplacement", jpDirectory, true);
+        infosPanel.put(Messages.getString("file.location"), jpDirectory, true);
 		// jp.add(jf0);
 		// jp.add(jf1);
 		// jp.add(jf2);

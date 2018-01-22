@@ -7,13 +7,13 @@ import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.util.Map;
 
-class MkDialog extends JDialog {
+public class MkDialog extends JDialog {
 
-    MkDialog(JFrame owner, boolean modal) {
+    protected MkDialog(JFrame owner, boolean modal) {
         super(owner, modal);
     }
 
-    void initLookAndFeel() {
+    protected void initLookAndFeel() {
 
         setDefaultLookAndFeelDecorated(true);
         try {

@@ -110,12 +110,8 @@ public class SelectUserDialog extends MkDialog {
     private LabelValuePanel getInfoPanel() throws IhmException {
         infosPanel = new LabelValuePanel();
         final Map<String, String> users = new HashMap<>();
-
-
-        //	infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
         PanelBuilder pb = new PanelBuilder();
 
-        //   pb.addComponent(Messages.getString("label.name"), "name", users, ComponentType.COMBOBOX);
         JComboBox cb = new JComboBox();
 
         modelCombo = (DefaultComboBoxModel) cb.getModel();
@@ -221,11 +217,7 @@ public class SelectUserDialog extends MkDialog {
         }
 
         private void loginOK() {
-            try {
-                KSConfig.getInternalKeystores().init();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+            KSConfig.getInternalKeystores().init();
             SwingUtilities.invokeLater(() -> {
                 //MykeysFrame frame = new MykeysFrame();
                 try {

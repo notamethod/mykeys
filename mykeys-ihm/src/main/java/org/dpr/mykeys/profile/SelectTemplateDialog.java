@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.profile;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -8,6 +8,9 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfileServices;
+import org.dpr.mykeys.ihm.windows.IhmException;
+import org.dpr.mykeys.ihm.windows.MkDialog;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -79,16 +82,6 @@ public class SelectTemplateDialog extends MkDialog {
 
         jp.add(jf4);
 
-        this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
-        // add a window listener
-        this.addWindowListener(new WindowAdapter() {
-
-
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
 
     }
 
@@ -168,10 +161,8 @@ public class SelectTemplateDialog extends MkDialog {
 
             } else if (command.equals("CANCEL")) {
                 SelectTemplateDialog.this.setVisible(false);
-                System.exit(0);
-            }
 
-            // System.exit(0);
+            }
 
 
         }

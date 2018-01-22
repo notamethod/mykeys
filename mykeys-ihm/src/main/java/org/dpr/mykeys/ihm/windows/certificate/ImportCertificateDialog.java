@@ -70,16 +70,16 @@ public class ImportCertificateDialog extends JDialog {
 
 		infosPanel = new LabelValuePanel();
 
-		infosPanel.put("Type de Certificat", JComboBox.class, "typeCert",
+		infosPanel.put(Messages.getString("type.certificat"), JComboBox.class, "typeCert",
 				mapType);
 		infosPanel.putEmptyLine();
-		infosPanel.put("Alias  à affecter", "alias", "");
+		infosPanel.put(Messages.getString("alias.to.assign"), "alias", "");
 
-		infosPanel.put("Mot de passe", JPasswordField.class, "pwd1", "", true);
+		infosPanel.put(Messages.getString("label.password"), JPasswordField.class, "pwd1", "", true);
 
 		infosPanel.putEmptyLine();
 
-		JLabel jl4 = new JLabel("Emplacement");
+		JLabel jl4 = new JLabel(Messages.getString("file.location"));
 		tfDirectory = new JDropText();
 
 
@@ -95,7 +95,7 @@ public class ImportCertificateDialog extends JDialog {
 		jbCancel.setActionCommand("CANCEL");
 		JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
-		infosPanel.put("Emplacement", jpDirectory, true);
+		infosPanel.put(Messages.getString("file.location"), jpDirectory, true);
 		// jp.add(jf0);
 		// jp.add(jf1);
 		// jp.add(jf2);

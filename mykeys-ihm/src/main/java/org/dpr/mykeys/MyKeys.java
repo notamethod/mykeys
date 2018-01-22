@@ -67,14 +67,14 @@ public class MyKeys {
             checkConfig();
             if (justCreated) {
                 migrate();
-            }else{
+            } else {
                 login();
             }
 
         } catch (Exception e) {
 
             MykeysFrame.showError(null, Messages.getString("error.config"));
-            throw new RuntimeException("Fatal Error",e);
+            throw new RuntimeException("Fatal Error", e);
         }
 
         // buildComponents();
@@ -111,7 +111,7 @@ public class MyKeys {
     }
 
     private boolean checkUpdate() throws InvocationTargetException, InterruptedException {
-        boolean justCreated=false;
+        boolean justCreated = false;
         if (!KSConfig.getInternalKeystores().existsUserDatabase()) {
 
             boolean retour = MykeysFrame.askConfirmDialog(null, Messages.getString("prompt.createUser"));
@@ -126,7 +126,7 @@ public class MyKeys {
                 //cs.setLocationRelativeTo(MykeysFrame);
                 cs.setVisible(true);
             });
-            justCreated=true;
+            justCreated = true;
 
         }
         if (!KSConfig.getInternalKeystores().existsUserDatabase())
@@ -151,11 +151,9 @@ public class MyKeys {
                 File f = new File(dirName);
                 if (f.exists()) {
                     typesKS.get(key).put(dirName, dirName);
-                    log.info("exist ok: " + dirName);
+                    log.debug(dirName + " exists");
                 } else {
-
                     update = true;
-
                 }
             }
         }

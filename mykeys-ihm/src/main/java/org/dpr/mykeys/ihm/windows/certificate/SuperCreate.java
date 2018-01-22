@@ -160,10 +160,6 @@ public class SuperCreate extends JDialog implements ItemListener {
         jp.add(cp);
         jp.add(checkPanel);
         jp.add(new OkCancelPanel(dAction, FlowLayout.RIGHT));
-        // Show/hide the "Controls"
-        JButton toggle = new JButton(cp.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION));
-        toggle.setText("Show/Hide Search Panel");
-        this.add(toggle);
 
     }
 
@@ -182,8 +178,8 @@ public class SuperCreate extends JDialog implements ItemListener {
 
         LabelValuePanel pubKeyPanel = new LabelValuePanel();
         pubKeyPanel.addTitle(Messages.getString("publickey.info.title"));
-        pubKeyPanel.put("Taille clé publique", JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
-        pubKeyPanel.put("Algorithme clé publique", JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
+        pubKeyPanel.put(Messages.getString("x509.pubkeysize"), JComboBox.class, "keyLength", mapKeyLength, "2048 bits");
+        pubKeyPanel.put(Messages.getString("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey, "RSA");
         pubKeyPanel.putEmptyLine();
         JXCollapsiblePane cp = new JXCollapsiblePane();
 
@@ -263,7 +259,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                 PanelUtils.addSubjectToPanel(CertificateType.AC, infosPanel);
 
                 infosPanel.putEmptyLine();
-                infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib", "");
+                infosPanel.put(Messages.getString("x509.cdp"), "CrlDistrib", "");
                 infosPanel.put("Policy notice", "PolicyNotice", "");
                 infosPanel.put("Policy CPS", "PolicyCPS", "");
                 infosPanel.putEmptyLine();
@@ -283,7 +279,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                 Calendar calendar = Calendar.getInstance();
                 infosPanel.putEmptyLine();
 
-                infosPanel.put("Point de distribution des CRL (url)", "CrlDistrib", "");
+                infosPanel.put(Messages.getString("x509.cdp"), "CrlDistrib", "");
                 infosPanel.put("Policy notice", "PolicyNotice", "");
                 infosPanel.put("Policy CPS", "PolicyCPS", "");
                 infosPanel.putEmptyLine();

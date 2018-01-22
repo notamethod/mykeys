@@ -230,6 +230,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 		detailPanel = new DetailPanel();
 		listePanel.setDetailPanel(detailPanel);
 		JScrollPane scrollDetail = new JScrollPane(detailPanel);
+        scrollDetail.getVerticalScrollBar().setUnitIncrement(16);
 		splitLeftPanel.setBottomComponent(scrollDetail);
 		splitLeftPanel.setTopComponent(listePanel);
 		splitLeftPanel.setDividerLocation(150);

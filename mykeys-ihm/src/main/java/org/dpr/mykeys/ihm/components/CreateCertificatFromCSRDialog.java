@@ -75,7 +75,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 		// infosPanel = new LabelValuePanel();
 
 		createInfoPanel();
-		JLabel jl4 = new JLabel("Emplacement");
+		JLabel jl4 = new JLabel(Messages.getString("file.location"));
 		tfDirectory = new JDropText();
 
 		JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -90,7 +90,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 		jbCancel.setActionCommand("CANCEL");
 		JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
-		infosPanel.put("Emplacement", jpDirectory, true);
+		infosPanel.put(Messages.getString("file.location"), jpDirectory, true);
 		// jp.add(jf0);
 		// jp.add(jf1);
 		// jp.add(jf2);
@@ -128,7 +128,6 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 					MykeysFrame.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
 					return;
 				}
-				// certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 				CertificateHelper cm = new CertificateHelper(certInfo);
                 KeyStoreHelper kserv = new KeyStoreHelper();
 				try (InputStream is = new FileInputStream(tfDirectory.getText())) {
@@ -174,7 +173,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 				mapAC = new HashMap<>();
 			}
 			mapAC.put(" ", " ");
-			infosPanel.put("Emetteur", JComboBox.class, "emetteur", mapAC, "");
+			infosPanel.put(Messages.getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
 
 		}
 		return infosPanel;

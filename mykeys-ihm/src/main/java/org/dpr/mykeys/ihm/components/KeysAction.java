@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
@@ -122,7 +123,7 @@ public class KeysAction implements ActionListener {
 			if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
 					&& this.listPanel.listCerts.getSelectedValue() instanceof CertificateValue) {
 				CertificateValue certInfo = (CertificateValue) this.listPanel.listCerts.getSelectedValue();
-				if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
+				if (MykeysFrame.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
 					try {
 						this.listPanel.deleteCertificate(this.listPanel.ksInfo, certInfo);
 					} catch (ServiceException e1) {

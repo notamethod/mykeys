@@ -55,6 +55,7 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 				setIcon(icon);
 
 			}
+            //TODO: i18n
 			setText(cert.getName());
 			StringBuilder sb = new StringBuilder();
 			sb.append("<html>Certificat ").append(cert.getName());

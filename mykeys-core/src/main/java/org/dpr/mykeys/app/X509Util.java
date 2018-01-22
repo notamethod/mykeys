@@ -80,7 +80,7 @@ public class X509Util {
 		//FIXME
 		byte[] b = certificate.getExtensionValue(X509Extensions.KeyUsage.getId());
 		if (b == null) {
-			log.info("extension unknown: " + X509Extensions.KeyUsage.getId());
+            log.info(certificate.getSubjectX500Principal() + ": extension unknown: " + X509Extensions.KeyUsage.getId());
 			return;
 		}
 		ASN1Primitive obj = null;

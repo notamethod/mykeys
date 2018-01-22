@@ -38,6 +38,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -399,7 +400,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 				if (listCerts != null && listCerts.getSelectedValue() != null
 						&& listCerts.getSelectedValue() instanceof CertificateValue) {
                     CertificateTemplate certInfo = (CertificateTemplate) listCerts.getSelectedValue();
-					if (MykeysFrame.askConfirmDialog(null, "Suppression du certificat " + certInfo.getName())) {
+					if (MykeysFrame.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
 						try {
 							profileService.delete( certInfo);
 						} catch (IOException e1) {
