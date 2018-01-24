@@ -57,7 +57,7 @@ public class ImportCertificateDialog extends JDialog {
 
 	private void init() {
 		DialogAction dAction = new DialogAction();
-		setTitle("Importation de certificat");
+		setTitle(Messages.getString("x509.import.title"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);

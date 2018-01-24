@@ -51,7 +51,7 @@ public class ImportStoreDialog extends JDialog {
 
 	private void init() {
 		DialogAction dAction = new DialogAction();
-		setTitle("Importation de magasin");
+        setTitle(Messages.getString("keystore.import.title"));
 		JPanel jp = new JPanel();
 		BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
 		jp.setLayout(bl);
@@ -64,7 +64,7 @@ public class ImportStoreDialog extends JDialog {
 
 		infosPanel = new LabelValuePanel();
 
-		infosPanel.put("Type de magasin", JComboBox.class, "typeKS", mapType);
+        infosPanel.put(Messages.getString("keystore.type.label"), JComboBox.class, "typeKS", mapType);
 		infosPanel.putEmptyLine();
         infosPanel.put(Messages.getString("label.password"), JPasswordField.class, "pwd1", "", true);
 

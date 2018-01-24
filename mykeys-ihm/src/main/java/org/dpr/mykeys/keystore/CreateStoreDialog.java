@@ -41,7 +41,7 @@ public class CreateStoreDialog extends JDialog {
 
     private void init() {
         DialogAction dAction = new DialogAction();
-        setTitle("Création de magasin");
+        setTitle(Messages.getString("keystore.create.titile"));
         JPanel jp = new JPanel();
         BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
         jp.setLayout(bl);
@@ -53,10 +53,10 @@ public class CreateStoreDialog extends JDialog {
 
         infosPanel = new LabelValuePanel();
 
-        infosPanel.put("Type de magasin", JComboBox.class, "typeKS", mapType);
+        infosPanel.put(Messages.getString("keystore.type.label"), JComboBox.class, "typeKS", mapType);
         infosPanel.putEmptyLine();
         infosPanel.put(Messages.getString("label.password"), JPasswordField.class, "pwd1", "", true);
-        infosPanel.put("Confirmer le Mot de passe", JPasswordField.class, "pwd2", "", true);
+        infosPanel.put(Messages.getString("confirm.password"), JPasswordField.class, "pwd2", "", true);
 
         infosPanel.putEmptyLine();
 

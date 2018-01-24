@@ -121,8 +121,6 @@ public class SelectUserDialog extends MkDialog {
         infosPanel.put(Messages.getString("label.name"), cb, true);
 //
         infosPanel.put(Messages.getString("label.password"), ComponentType.PASSWORD.getValue(), "password", "", true);
-        //pb.addComponent(Messages.getString("label.password"), "password", ComponentType.PASSWORD);
-
 
         pb.addEmptyLine();
         return infosPanel;

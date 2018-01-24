@@ -6,6 +6,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.*;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
 import org.dpr.mykeys.keystore.ImportStoreDialog;
@@ -77,7 +78,23 @@ public class MenuAction extends AbstractAction {
 							cs.setVisible(true);
 						}
 					});
-		           }  else if (action.equals("signFile")) {
+
+				} else if (action.equals("users")) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							ManageUserDialog cs = null;
+							try {
+								cs = new ManageUserDialog();
+							} catch (IhmException e1) {
+								e1.printStackTrace();
+							} catch (ServiceException e1) {
+								e1.printStackTrace();
+							}
+							cs.setLocationRelativeTo(MykeysFrame);
+							cs.setVisible(true);
+						}
+					});
+				} else if (action.equals("signFile")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							VerifSigDialog cs = new VerifSigDialog(MykeysFrame,

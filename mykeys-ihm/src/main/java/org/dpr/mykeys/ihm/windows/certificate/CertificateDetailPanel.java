@@ -106,7 +106,7 @@ public class CertificateDetailPanel extends JPanel {
                 false);
 
 
-        otherInfosPanel.put("Chaine de certificats", JTextArea.class, "xCertChain", info.getChaineStringValue(), false);
+        otherInfosPanel.put(Messages.getString("certificatchain.label"), JTextArea.class, "xCertChain", info.getChaineStringValue(), false);
         otherInfosPanel.putEmptyLine();
         otherInfosPanel.put("Signature", JTextArea.class, "signature", X509Util.toHexString(info.getSignature(), " ", false),
                 false);
