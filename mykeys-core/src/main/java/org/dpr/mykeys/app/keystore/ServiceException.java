@@ -11,4 +11,7 @@ public class ServiceException extends Exception {
 		super(cause);
 	}
 
+	public ServiceException(String s) {
+		super(s);
+	}
 }

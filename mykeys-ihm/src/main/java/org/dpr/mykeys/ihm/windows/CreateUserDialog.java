@@ -123,8 +123,7 @@ public class CreateUserDialog extends MkDialog {
 				try {
 					auth.createUser(nom, pwdChar);
 				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					MykeysFrame.showError(CreateUserDialog.this, e.getLocalizedMessage());
 				}
 				CreateUserDialog.this.setVisible(false);
 

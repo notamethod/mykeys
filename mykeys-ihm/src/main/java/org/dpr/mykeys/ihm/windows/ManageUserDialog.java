@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.AuthenticationService;
+import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.components.ListPanel;
@@ -96,7 +97,8 @@ public class ManageUserDialog extends JFrame {
 
                 int row = table.getSelectedRow();
                 CertificateValue p = modele.getValueAt(row);
-
+                if (MkSession.user == null || MkSession.user.equals(p.getAlias()))
+                    return;
                 try {
                     authService.deleteUser(p.getAlias());
                     modele.setUsers((authService.listUsers()));

@@ -19,9 +19,15 @@ public class AuthenticationService {
 
     public void createUser(String id, char[] pwd) throws ServiceException {
         CertificateHelperNew ch = new CertificateHelperNew();
+        KeyStoreHelper kh = new KeyStoreHelper();
         CertificateValue cer;
         KeyStoreValue ki;
         try {
+            // check if not exists
+            CertificateValue cerCheck = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, null);
+            if (cerCheck != null) {
+                throw new ServiceException(Messages.getString(Messages.getString("certificate.error.create.exists"), id));
+            }
             cer = ch.createCertificate(CertificateType.AUTH, id, pwd);
             cer.setPassword(pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
@@ -29,8 +35,6 @@ public class AuthenticationService {
                 | NoSuchProviderException | SignatureException | OperatorCreationException | KeyStoreException | IOException e) {
             throw new ServiceException(Messages.getString("certificate.error.create") + id, e); //$NON-NLS-1$
         }
-
-        KeyStoreHelper kh = new KeyStoreHelper();
 
         kh.addCertToKeyStore(ki, cer);
         MkSession.password = cer.getPassword();

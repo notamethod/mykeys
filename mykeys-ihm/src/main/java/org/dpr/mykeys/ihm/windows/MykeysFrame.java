@@ -2,12 +2,7 @@ package org.dpr.mykeys.ihm.windows;
 
 import static org.dpr.swingutils.ImageUtils.getImage;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
@@ -114,6 +109,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
 			// UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
 			UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
 			 UIManager.put("ToolTip.foreground", new ColorUIResource(Color.ORANGE));
+//            UIManager.put("InternalFrame.activeTitleBackground", new ColorUIResource(Color.ORANGE ));
+//            UIManager.put("InternalFrame.activeTitleForeground", new ColorUIResource(Color.WHITE));
+//            UIManager.put("InternalFrame.titleFont", new Font("Dialog", Font.PLAIN, 11));
 			return;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
