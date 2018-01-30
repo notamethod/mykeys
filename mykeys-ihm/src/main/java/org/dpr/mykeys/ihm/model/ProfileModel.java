@@ -47,6 +47,9 @@ public class ProfileModel extends AbstractTableModel {
             case 0:
                 // Nom
                 return profiles.get(rowIndex).getName();
+            case 1:
+                // Nom
+                return profiles.get(rowIndex).getDescription();
             default:
                 return null;
         }

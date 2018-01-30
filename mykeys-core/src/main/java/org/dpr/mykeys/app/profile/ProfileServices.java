@@ -83,7 +83,7 @@ public class ProfileServices
 
     }
 
-    public void saveToFile(Map<String, Object> elements, String name, CertificateValue certInfo)
+    public void saveToFile(Map<String, Object> elements, String name, CertificateValue certInfo, boolean isEditing)
             throws ProfilException, IOException {
         if (StringUtils.isBlank(name)) {
             throw new ProfilException("nom obligatoire");
@@ -93,7 +93,7 @@ public class ProfileServices
             profDir.mkdirs();
         }
         File f = new File(profDir, name + PROFIL_EXTENSION);
-        if (f.exists()) {
+        if (f.exists() && !isEditing) {
             throw new ProfilException("Le profil existe d�j�");
         }
         Properties p = new Properties();

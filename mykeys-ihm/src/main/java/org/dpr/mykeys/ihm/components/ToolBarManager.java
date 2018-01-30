@@ -1,76 +1,56 @@
 package org.dpr.mykeys.ihm.components;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateToolBar;
 import org.dpr.mykeys.profile.ProfileToolBar;
 
+import java.awt.*;
+
 class ToolBarManager {
 
-	private CertificateToolBar certToolbar;
-	private ProfileToolBar profToolBar;
+    private CertificateToolBar certToolbar;
+    private ProfileToolBar profToolBar;
 
-	public <T extends ObjToolBar> T getInstance(NodeInfo info) {
+    public <T extends ObjToolBar> T getInstance(NodeInfo info) {
         if (info instanceof KeyStoreValue) {
-			return (T) certToolbar;
+            return (T) certToolbar;
 
-		} else {
-			return (T) profToolBar;
-		}
+        } else {
+            return (T) profToolBar;
+        }
 
-	}
-	
-	public <T extends ObjToolBar> T getInvInstance(NodeInfo info) {
+    }
+
+    public <T extends ObjToolBar> T getInvInstance(NodeInfo info) {
         if (info instanceof KeyStoreValue) {
-			return (T) profToolBar;
+            return (T) profToolBar;
 
-		} else {
-			return (T) certToolbar;
-			
-		}
+        } else {
+            return (T) certToolbar;
 
-	}
+        }
+    }
 
-	public List<ObjToolBar> getToolBars() {
-		List<ObjToolBar> liste = new ArrayList<>();
-		liste.add(certToolbar);
-		liste.add(profToolBar);
-		return liste;
-	}
+    public void init(String string, KeysAction actions, ListPanel listPanel) {
+        System.out.println("cccccccccccccccccccccccccccccccccccccccccc");
+        certToolbar = new CertificateToolBar("", new KeysAction(listPanel, listPanel));
+        profToolBar = new ProfileToolBar("", new KeysProfileAction(listPanel, listPanel));
 
-	public ObjToolBar getInstance2(NodeInfo info) {
-        if (info instanceof KeyStoreValue) {
-			if (certToolbar == null)
-				return certToolbar;
+    }
 
-		} else {
-			return profToolBar;
-		}
-		return null;
-	}
+    public void removeListeners(NodeInfo info) {
+        getInstance(info).removeListeners();
 
-	public void init(String string, KeysAction actions, ListPanel listPanel) {
-		certToolbar = new CertificateToolBar("", new KeysAction(listPanel, listPanel));
-		profToolBar = new ProfileToolBar("", new KeysProfileAction(listPanel, listPanel));
+    }
 
-	}
+    public void enableActions(NodeInfo info) {
+        getInstance(info).enableActions();
 
-	public void removeListeners(NodeInfo info) {
-		getInstance(info).removeListeners();
-
-	}
-
-	public void enableActions(NodeInfo info) {
-		getInstance(info).enableActions();
-
-	}
+    }
 
     public void enableGenericActions(NodeInfo info, boolean b) {
-        getInstance(info).enableGenericActions(b);
+        getInstance(info).enableGenericActions(info, b);
 
     }
 
@@ -79,31 +59,31 @@ class ToolBarManager {
 
     }
 
-	public void enableListeners(NodeInfo info) {
-		getInstance(info).enableListeners();
+    public void enableListeners(NodeInfo info) {
+        getInstance(info).enableListeners();
 
-	}
+    }
 
-	public void disableActions(NodeInfo info) {
-		getInstance(info).disableActions();
+    public void disableActions(NodeInfo info) {
+        getInstance(info).disableActions(info);
 
-	}
+    }
 
-	public void setTitle(String name) {
-		certToolbar.setTitle(name);
-		profToolBar.setTitle(name);
+    public void setTitle(String name) {
+        certToolbar.setTitle(name);
+        profToolBar.setTitle(name);
 
-	}
+    }
 
-	public Component getInstance() {
-		// TODO Auto-generated method stub
-		return certToolbar;
-	}
+    public Component getInstance() {
+        // TODO Auto-generated method stub
+        return certToolbar;
+    }
 
-	public void show(NodeInfo info) {
-		getInstance(info).setVisible(true);
-		getInvInstance(info).setVisible(false);
-		
-	}
+    public void show(NodeInfo info) {
+        getInstance(info).setVisible(true);
+        getInvInstance(info).setVisible(false);
+
+    }
 
 }

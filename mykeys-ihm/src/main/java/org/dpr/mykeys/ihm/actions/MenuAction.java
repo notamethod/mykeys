@@ -73,7 +73,7 @@ public class MenuAction extends AbstractAction {
 				} else if (action.equals("profil")) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-							ProfileDialog cs = new ProfileDialog();
+							ManageTemplateFrame cs = new ManageTemplateFrame();
 							cs.setLocationRelativeTo(MykeysFrame);
 							cs.setVisible(true);
 						}

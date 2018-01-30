@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SubjectUtil {
@@ -19,7 +20,7 @@ public class SubjectUtil {
      */
     public static Map<String, String> getLabels() {
         if (mapSubjectLabels == null) {
-            mapSubjectLabels = new HashMap<>();
+            mapSubjectLabels = new LinkedHashMap<>();
             mapSubjectLabels.put("C", "x509.subject.country");
             mapSubjectLabels.put("O", "x509.subject.organisation");
             mapSubjectLabels.put("OU", "x509.subject.organisationUnit");
@@ -32,11 +33,12 @@ public class SubjectUtil {
     }
 
     /**
+     * pairs of key/label map
      * @return the mapNames
      */
     public static Map<String, String> getCertificateLabels() {
         if (mapCertificateLabels == null) {
-            mapCertificateLabels = new HashMap<>();
+            mapCertificateLabels = new LinkedHashMap<>();
             mapCertificateLabels.put("duration", "certinfo.duration");
             mapCertificateLabels.put("policyCPS", "x509.policycps");
             mapCertificateLabels.put("crlDistrib", "x509.cdp");

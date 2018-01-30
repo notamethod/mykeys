@@ -1,5 +1,7 @@
 package org.dpr.mykeys.ihm.components;
 
+import org.dpr.mykeys.app.NodeInfo;
+
 import javax.swing.JToolBar;
 
 public abstract class ObjToolBar extends JToolBar {
@@ -26,13 +28,13 @@ public abstract class ObjToolBar extends JToolBar {
 
 	public abstract void enableActions();
 
-	public abstract void disableActions();
+    public abstract void disableActions(NodeInfo info);
 
 	public abstract void enableListeners();
 
 	public abstract void removeListeners();
 
-    public abstract void enableGenericActions(boolean b);
+    public abstract void enableGenericActions(NodeInfo info, boolean b);
 
     public abstract void enableElementActions(boolean b);
 

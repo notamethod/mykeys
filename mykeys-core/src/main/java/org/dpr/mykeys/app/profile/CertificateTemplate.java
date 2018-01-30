@@ -14,6 +14,11 @@ import org.dpr.mykeys.utils.OrderedProperties;
 public class CertificateTemplate implements ChildInfo {
 
     private OrderedProperties p;
+
+    public OrderedProperties getProperties() {
+        return p;
+    }
+
     private String name;
     private Path path;
     private String description;
@@ -73,5 +78,9 @@ public class CertificateTemplate implements ChildInfo {
     public Path getPath() {
         // TODO Auto-generated method stub
         return path;
+    }
+
+    public String getDescription() {
+        return p.getProperty("description");
     }
 }

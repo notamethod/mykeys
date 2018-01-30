@@ -10,6 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 
 import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
+import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
@@ -70,7 +73,7 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertFromCSRButton.setActionCommand(TypeAction.ADD_CERT_FROMCSR.getValue());
 		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
 		addCertButton.setToolTipText("create a new certificate");
-		addCertProfButton.setToolTipText("<html>create certificate from a template profile<br>beta feature only </html>");
+        addCertProfButton.setToolTipText("<html>create certificate from a template profile</html>");
 		addCertFromCSRButton.setToolTipText("create certificate from a CSR request");
 		importButton = new JButton(createImageIcon("/images/import.png")); 
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
@@ -82,7 +85,7 @@ public class CertificateToolBar extends ObjToolBar  {
 
 		CrlManagerButton = new JButton(createImageIcon("/images/revok.png"));
         CrlManagerButton.setActionCommand(TypeAction.CREATE_CRL.getValue());
-        CrlManagerButton.setToolTipText(Messages.getString("export_button.tooltip"));
+        CrlManagerButton.setToolTipText(Messages.getString(Messages.getString("crl.create.tooltip")));
         CrlManagerButton.setEnabled(false);
         CrlManagerButton.addActionListener(actions);
 
@@ -133,12 +136,13 @@ public class CertificateToolBar extends ObjToolBar  {
 
 	}
 
-	public void disableActions() {
+    public void disableActions(NodeInfo info) {
 		importButton.setEnabled(false);
 		exportButton.setEnabled(false);
 		deleteButton.setEnabled(false);
 		addCertButton.setEnabled(false);
 		addCertProfButton.setEnabled(false);
+        addCertFromCSRButton.setVisible((info instanceof KeyStoreValue) & ((KeyStoreValue) info).getStoreModel().equals(StoreModel.CASTORE));
 		addCertFromCSRButton.setEnabled(false);
 		unlockButton.setSelected(false);
 		unlockButton.setEnabled(true);
@@ -156,14 +160,16 @@ public class CertificateToolBar extends ObjToolBar  {
 	}
 
     @Override
-    public void enableGenericActions(boolean b) {
+    public void enableGenericActions(NodeInfo info, boolean b) {
         unlockButton.setSelected(false);
         unlockButton.setEnabled(false);
         exportButton.setEnabled(false);
         deleteButton.setEnabled(false);
+        CrlManagerButton.setVisible((info instanceof KeyStoreValue) & ((KeyStoreValue) info).getStoreModel().equals(StoreModel.CASTORE));
         CrlManagerButton.setEnabled(false);
         importButton.setEnabled(true);
         addCertButton.setEnabled(true);
+        addCertFromCSRButton.setVisible((info instanceof KeyStoreValue) & ((KeyStoreValue) info).getStoreModel().equals(StoreModel.CERTSTORE));
         addCertFromCSRButton.setEnabled(true);
         addCertProfButton.setEnabled(true);
 

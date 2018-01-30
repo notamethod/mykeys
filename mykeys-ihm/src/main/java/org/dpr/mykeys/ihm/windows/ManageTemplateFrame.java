@@ -8,31 +8,52 @@ import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.model.ProfileModel;
-import org.dpr.mykeys.profile.CreateProfilDialog;
+import org.dpr.mykeys.profile.CreateTemplateDialog;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 
 import static javax.swing.SwingConstants.CENTER;
 
-public class ProfileDialog extends JFrame {
+public class ManageTemplateFrame extends JFrame {
     public static final Log log = LogFactory.getLog(ListPanel.class);
 
     private JTable table;
     private ProfileModel modele;
 
-    public ProfileDialog() {
+    public ManageTemplateFrame() {
         setTitle(Messages.getString("template.title"));
         setPreferredSize(new Dimension(500, 400));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         modele = new ProfileModel((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath()));
 
         table = new JTable(modele);
+        table.setCellSelectionEnabled(false);
+        table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(true);
+        table.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && row != -1) {
+                    final CertificateTemplate p = modele.getValueAt(row);
 
+                    SwingUtilities.invokeLater(() -> {
+                        CreateTemplateDialog cs = new CreateTemplateDialog(ManageTemplateFrame.this, true, p);
+                        //cs.setLocationRelativeTo(this);
+                        cs.setVisible(true);
+                        modele.setProfiles(((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
+                        modele.fireTableDataChanged();
+                    });
+                }
+            }
+        });
 
         JPanel jp = new JPanel();
         BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
@@ -46,7 +67,7 @@ public class ProfileDialog extends JFrame {
         pack();
     }
 
-    public ProfileDialog(JFrame owner) {
+    public ManageTemplateFrame(JFrame owner) {
 
         super();
 
@@ -55,7 +76,7 @@ public class ProfileDialog extends JFrame {
 
     public static void main(String[] args) {
         KSConfig.init(".myKeys25");
-        ProfileDialog notesJFrame = new ProfileDialog();
+        ManageTemplateFrame notesJFrame = new ManageTemplateFrame();
         notesJFrame.setVisible(true);
     }
 
@@ -89,7 +110,7 @@ public class ProfileDialog extends JFrame {
             String command = event.getActionCommand();
             if (command.equals("add")) {
                 SwingUtilities.invokeLater(() -> {
-                    CreateProfilDialog cs = new CreateProfilDialog(ProfileDialog.this, true);
+                    CreateTemplateDialog cs = new CreateTemplateDialog(ManageTemplateFrame.this, true);
                     //cs.setLocationRelativeTo(this);
                     cs.setVisible(true);
                     modele.setProfiles(((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
@@ -99,14 +120,20 @@ public class ProfileDialog extends JFrame {
             } else if (command.equals("delete")) {
                 ProfileServices ps = new ProfileServices(KSConfig.getProfilsPath());
                 int row = table.getSelectedRow();
-                CertificateTemplate p = modele.getValueAt(row);
-                try {
-                    ps.delete(p);
-                    modele.setProfiles(((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
-                    modele.fireTableDataChanged();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (row != -1) {
+                    CertificateTemplate p = modele.getValueAt(row);
+
+                    if (MykeysFrame.askConfirmDialog(null, Messages.getString("template.delete.ask", p.getName()))) {
+                        try {
+                            ps.delete(p);
+                            modele.setProfiles(((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath())));
+                            modele.fireTableDataChanged();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
+
 
             }
         }

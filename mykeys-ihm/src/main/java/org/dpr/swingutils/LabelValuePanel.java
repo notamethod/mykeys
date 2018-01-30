@@ -10,6 +10,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,12 +26,10 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
      *
      */
     private static final long serialVersionUID = 2550655426888407968L;
+    int tfSize;
     private int nbRows;
     private FrameModel model = null;
-
     private int nbCols;
-
-    int tfSize;
     private String dateFormat = DEFAULT_DATE_FORMAT;
     private Map<String, Object> elements;
     private Map<String, Object> components;
@@ -136,6 +135,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 
         if (component != null) {
             this.add(jl);
+            this.components.put(keyValue, component);
             this.add(component);
             nbRows++;
         } else {
@@ -507,6 +507,7 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
         final String globalKey = keyValue;
 
         JComponent component = (JComponent) components.get(globalKey);
+
         if (component == null)
             return;
 
@@ -514,19 +515,25 @@ public class LabelValuePanel extends JPanel implements DocumentListener {
 
             JLabel field = (JLabel) component;
             field.setText(strValue);
-        } else if (component instanceof JTextField) {
+        } else if (component instanceof JTextComponent) {
 
-            JTextField field = (JTextField) component;
-            field.setText(strValue);
-            // field.setEditable(isEditable);
-            // if (!isEditable) {
-            // field.setBorder(null);
-            // }
+            //JTextField field = (JTextField) component;
+            ((JTextComponent) component).setText(strValue);
+
+
+        } else if (component instanceof JComboBox) {
+
+            JComboBox field = (JComboBox) component;
+            field.setSelectedItem(strValue);
+
 
         }
 
     }
 
+    public JComponent getComponent(String key) {
+        return (JComponent) components.get(key);
+    }
     public void put(String label, JComponent component, boolean isEditable) {
         JLabel jl = new JLabel(label);
         this.add(jl);

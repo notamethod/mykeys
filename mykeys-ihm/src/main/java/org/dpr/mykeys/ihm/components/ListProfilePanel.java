@@ -53,7 +53,7 @@ import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.profile.CreateProfilDialog;
+import org.dpr.mykeys.profile.CreateTemplateDialog;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
@@ -426,7 +426,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
         if (info instanceof KeyStoreValue) {
             cs = new CreateCertificatDialog(frame, (KeyStoreValue) info, true);
 		} else {
-			cs = new CreateProfilDialog(frame, true);
+            cs = new CreateTemplateDialog(frame, true);
 		}
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);

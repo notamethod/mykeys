@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 
+import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysProfileAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
@@ -83,7 +84,7 @@ public class ProfileToolBar extends ObjToolBar {
 
 	}
 
-	public void disableActions() {
+    public void disableActions(NodeInfo info) {
 		importButton.setEnabled(false);
 
 		deleteButton.setEnabled(false);
@@ -106,7 +107,7 @@ public class ProfileToolBar extends ObjToolBar {
 	}
 
     @Override
-    public void enableGenericActions(boolean b) {
+    public void enableGenericActions(NodeInfo info, boolean b) {
 
     }
 

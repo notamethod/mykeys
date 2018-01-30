@@ -85,13 +85,14 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
         FrameModel model = new FrameModel();
         panelInfoVisible = new LabelValuePanel(model);
 
+        //iterate over subject keys
         for (String attribute : SubjectUtil.getStandardList()) {
             String key = SubjectUtil.getLabels().get(attribute);
             panelInfoVisible.put(Messages.getString(key), JTextField.class, attribute, "", true);
         }
 
         panelInfoVisible.putEmptyLine();
-
+        //iterate over other certificate keys
         SubjectUtil.getCertificateLabels().forEach((k, v) ->
                 panelInfoVisible.put(Messages.getString(v), JTextField.class, k, "", true));
 
@@ -153,7 +154,6 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JComboBox) {
-            System.out.println("houlala");
             String strProf = (String) ((JComboBox) e.getSource()).getSelectedItem();
             System.out.println(strProf);
             ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());

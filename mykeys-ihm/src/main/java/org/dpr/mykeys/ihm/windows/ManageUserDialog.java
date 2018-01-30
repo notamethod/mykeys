@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.AuthenticationService;
+import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
@@ -13,6 +14,7 @@ import org.dpr.mykeys.ihm.model.UserModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,14 +99,17 @@ public class ManageUserDialog extends JFrame {
 
                 int row = table.getSelectedRow();
                 CertificateValue p = modele.getValueAt(row);
-                if (MkSession.user == null || MkSession.user.equals(p.getAlias()))
-                    return;
-                try {
-                    authService.deleteUser(p.getAlias());
-                    modele.setUsers((authService.listUsers()));
-                } catch (ServiceException e) {
-                    e.printStackTrace();
+                if (MykeysFrame.askConfirmDialog(null, Messages.getString(Messages.getString("user.delete.ask"), p.getName()))) {
+                    if (MkSession.user == null || MkSession.user.equals(p.getAlias()))
+                        return;
+                    try {
+                        authService.deleteUser(p.getAlias());
+                        modele.setUsers((authService.listUsers()));
+                    } catch (ServiceException e) {
+                        e.printStackTrace();
+                    }
                 }
+
 
                 modele.fireTableDataChanged();
 
