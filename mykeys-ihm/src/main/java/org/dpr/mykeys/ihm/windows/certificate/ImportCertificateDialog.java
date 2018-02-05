@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -129,15 +130,14 @@ public class ImportCertificateDialog extends JDialog {
 						typeCert = null;// findTypeKS(tfDirectory.getText());
 					}
 					String alias = (String) elements.get("alias");
-					if (alias == null) {
-						MykeysFrame.showError(ImportCertificateDialog.this,
-								"Renseignez un alias pour ce certificat");
+                    if (alias == null || alias.isEmpty()) {
+                        BigInteger bi = KeyTools.RandomBI(30);
+                        alias = bi.toString(16);
 					}
 					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
-					//FIXME;CRR 
-					System.out.println(typeCert);
-					kserv.importX509Cert(alias, tfDirectory.getText(),
-							StoreFormat.fromValue(typeCert),
+                    //FIXME;CRR
+                    KeyStoreValue value = kserv.createKeyStoreValue(new File(tfDirectory.getText()));
+                    kserv.importX509Cert(alias, value,
 							((String) elements.get("pwd1")).toCharArray());
 
 					// ((MykeysFrame)ImportCertificateDialog.this.getParent()).updateKeyStoreList();
@@ -184,7 +184,7 @@ public class ImportCertificateDialog extends JDialog {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+         *
 		 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
 		 */
 		@Override
@@ -195,7 +195,7 @@ public class ImportCertificateDialog extends JDialog {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+         *
 		 * @see javax.swing.filechooser.FileFilter#getDescription()
 		 */
 		@Override

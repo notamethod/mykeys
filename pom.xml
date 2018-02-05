@@ -29,6 +29,14 @@
 				<artifactId>bcmail-jdk15on</artifactId>
 				<version>1.58</version>
 			</dependency>
-		</dependencies>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.9.0</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
 	</dependencyManagement>
 </project>

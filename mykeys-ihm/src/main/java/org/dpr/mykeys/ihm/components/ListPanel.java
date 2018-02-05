@@ -467,14 +467,16 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
 		List fileList = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 		File transferFile = (File) fileList.get(0);
-		KeyStoreValue ksin = new KeyStoreValue(transferFile, null, null);
+        KeyStoreHelper kh = new KeyStoreHelper();
+
+        KeyStoreValue ksin = kh.createKeyStoreValue(transferFile);
 		KeyStoreHelper service = new KeyStoreHelper((KeyStoreValue) ksInfo);
-		final String transferURL = transferFile.getAbsolutePath();
+
 
 		ActionStatus act = null;
 		try {
 			act = service.importCertificates(ksin);
-			if (act.equals(ActionStatus.ASK_PASSWORD)) {
+            if (act != null && act.equals(ActionStatus.ASK_PASSWORD)) {
 				char[] password = MykeysFrame.showPasswordDialog(this);
 				ksin.setPassword(password);
 

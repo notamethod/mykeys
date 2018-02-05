@@ -154,6 +154,10 @@ public class CertificateValue implements ChildInfo, Cloneable {
      * Initialize certificate
      **/
     private void init(X509Certificate certX509) {
+        if (certX509 == null) {
+            log.warn("X509 certificate is null");
+            return;
+        }
         this.setCertificate(certX509);
         Map<ASN1ObjectIdentifier, String> oidMap = new HashMap<>();
         this.setAlgoPubKey(certX509.getPublicKey().getAlgorithm());

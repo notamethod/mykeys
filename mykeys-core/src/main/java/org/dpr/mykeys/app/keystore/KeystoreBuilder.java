@@ -93,15 +93,13 @@ public class KeystoreBuilder extends KeyTools {
 
     public KeystoreBuilder addCert(KeyStoreValue ksInfo, CertificateValue certInfo) throws KeyToolsException {
 
-        if (null == certInfo.getPassword() || certInfo.getPassword().length == 0) {
-            throw new IllegalArgumentException("password can't be null empty");
-        }
+
 
         saveCertChain(keystore, certInfo);
         try {
             System.out.println(keystore.size());
-            System.out.println(new String(certInfo.getPassword()));
-            System.out.println(new String(ksInfo.getPassword()));
+//            System.out.println(new String(certInfo.getPassword()));
+//            System.out.println(new String(ksInfo.getPassword()));
 
         } catch (KeyStoreException e) {
             e.printStackTrace();

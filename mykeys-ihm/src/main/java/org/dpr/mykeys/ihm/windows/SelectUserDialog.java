@@ -89,6 +89,7 @@ public class SelectUserDialog extends MkDialog {
         jp.add(jf4);
 
         this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        this.getRootPane().setDefaultButton(jbOK);
 
         // add a window listener
         this.addWindowListener(new WindowAdapter() {

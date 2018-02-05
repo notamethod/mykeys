@@ -102,6 +102,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
         tfDirectory = new JTextField(35);
 
+        File outputFile = getTargetFile(null);
+        tfDirectory.setText(outputFile.getAbsolutePath());
         // FileSystemView fsv = FileSystemView.getFileSystemView();
         // File f = fsv.getDefaultDirectory();
         // tfDirectory.setText(f.getAbsolutePath());
@@ -188,6 +190,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 boolean isExportCle = o==null?false:(Boolean) o;
 
                 KeyTools kt = new KeyTools();
+                System.out.println(MkSession.password);
+                System.out.println(MkSession.user);
                 KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
@@ -332,6 +336,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
             pathSrc = new File(pathSrc.getParent());
         }
         String fileName = null;
+        if (null == format) {
+            return new File(pathSrc, certInfo.getAlias());
+        }
         if (format.equalsIgnoreCase("pkcs12"))
         {
             fileName = certInfo.getAlias() + KeyTools.EXT_P12;
@@ -339,10 +346,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
         else if (format.equalsIgnoreCase("der"))
         {
             fileName = certInfo.getAlias() + KeyTools.EXT_DER;
-        }
-        else
-        {
+        } else if (format.equalsIgnoreCase("pem")) {
             fileName = certInfo.getAlias() + KeyTools.EXT_PEM;
+        } else {
+            fileName = certInfo.getAlias();
         }
         return new File(pathSrc, fileName);
 

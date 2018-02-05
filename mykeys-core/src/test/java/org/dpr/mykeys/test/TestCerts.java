@@ -2,6 +2,7 @@ package org.dpr.mykeys.test;
 
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -43,11 +44,11 @@ public class TestCerts {
 			String pathCert = "c:/dev/cpi.cer";
             KeyStoreValue ksInfo = new KeyStoreValue("aa", path,
 					StoreModel.CERTSTORE, StoreFormat.JKS);
-		
-			
+
+            KeyStoreValue ksIn = new KeyStoreValue(new File(pathCert),
+                    StoreFormat.UNKNOWN, "111".toCharArray());
 			KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
-			kserv.importX509Cert(alias, pathCert, StoreFormat.UNKNOWN,
-					"111".toCharArray());
+            kserv.importX509Cert(alias, ksIn, "111".toCharArray());
 			
 
 		} catch (Exception e) {

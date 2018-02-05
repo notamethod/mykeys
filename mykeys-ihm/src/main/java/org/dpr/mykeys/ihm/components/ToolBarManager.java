@@ -33,7 +33,6 @@ class ToolBarManager {
     }
 
     public void init(String string, KeysAction actions, ListPanel listPanel) {
-        System.out.println("cccccccccccccccccccccccccccccccccccccccccc");
         certToolbar = new CertificateToolBar("", new KeysAction(listPanel, listPanel));
         profToolBar = new ProfileToolBar("", new KeysProfileAction(listPanel, listPanel));
 
