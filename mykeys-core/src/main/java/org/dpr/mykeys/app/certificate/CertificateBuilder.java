@@ -219,6 +219,8 @@ public class CertificateBuilder extends KeyTools {
 		CertificateValue certReturn = new CertificateValue(certChain);
 		certReturn.setPrivateKey(keypair.getPrivate());
 		certReturn.setPublicKey(keypair.getPublic());
+        certReturn.setPassword(certModel.getPassword());
+
 		return certReturn;
 
 	}

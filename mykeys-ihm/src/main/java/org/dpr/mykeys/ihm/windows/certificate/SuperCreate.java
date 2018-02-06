@@ -34,13 +34,12 @@ import java.util.*;
 public class SuperCreate extends JDialog implements ItemListener {
 
     protected static final Log log = LogFactory.getLog(SuperCreate.class);
+    protected KeyStoreValue ksInfo;
+    protected boolean isAC = false;
     LabelValuePanel infosPanel;
-
+    CertificateValue certInfo = new CertificateValue();
     private CertificateType typeCer;
     private LabelValuePanel durationPanel;
-    protected KeyStoreValue ksInfo;
-    CertificateValue certInfo = new CertificateValue();
-    protected boolean isAC = false;
 
     protected SuperCreate() {
         super();
@@ -283,11 +282,12 @@ public class SuperCreate extends JDialog implements ItemListener {
                 infosPanel.put("Policy notice", "PolicyNotice", "");
                 infosPanel.put("Policy CPS", "PolicyCPS", "");
                 infosPanel.putEmptyLine();
+                infosPanel.addTitle("Clé privée rnseigner si différent keystore");
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-                    infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", KSConfig.getInternalKeystores().getPassword(),
+                    infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", "",
                             true);
                     infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
-                            KSConfig.getInternalKeystores().getPassword(), true);
+                            "", true);
                 }
             }
         }
@@ -360,6 +360,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);
+                    if (newCertificate.getPassword() == null || newCertificate.getPassword().length <= 0) {
+                        log.debug("Using keystore password to prtect private key");
+                        newCertificate.setPassword(ksInfo.getPassword());
+                    }
                     kserv.addCertToKeyStore(ksInfo, newCertificate);
                     SuperCreate.this.setVisible(false);
 
