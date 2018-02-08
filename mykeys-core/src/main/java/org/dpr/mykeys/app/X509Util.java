@@ -84,7 +84,7 @@ public class X509Util {
         //check key usage
         byte[] b = certificate.getExtensionValue(X509Extensions.KeyUsage.getId());
         if (b == null) {
-            log.info(certificate.getSubjectX500Principal() + ": has no key usage");
+            log.debug(certificate.getSubjectX500Principal() + ": has no key usage");
             return;
         }
         ASN1Primitive obj = null;

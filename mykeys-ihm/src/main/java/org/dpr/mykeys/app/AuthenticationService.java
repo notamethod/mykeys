@@ -11,8 +11,7 @@ import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
 import org.dpr.mykeys.keystore.CertificateType;
 
 import java.io.IOException;
-import java.security.*;
-import java.security.cert.CertificateException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class AuthenticationService {
@@ -31,8 +30,7 @@ public class AuthenticationService {
             cer = ch.createCertificate(CertificateType.AUTH, id, pwd);
             cer.setPassword(pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
-        } catch (InvalidKeyException | CertificateException | NoSuchAlgorithmException
-                | NoSuchProviderException | SignatureException | OperatorCreationException | KeyStoreException | IOException e) {
+        } catch (GeneralSecurityException | OperatorCreationException | IOException e) {
             throw new ServiceException(Messages.getString("certificate.error.create") + id, e); //$NON-NLS-1$
         }
 

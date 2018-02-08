@@ -1,13 +1,7 @@
 package org.dpr.mykeys.ihm.windows;
 
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-import java.security.SignatureException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
@@ -34,7 +28,8 @@ public class CertificateHelperNew {
 	public CertificateHelperNew() {
 		super();
 	}
-	public CertificateValue createCertificate(CertificateType type, String id, char[] charArray) throws InvalidKeyException, OperatorCreationException, CertificateException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+
+    public CertificateValue createCertificate(CertificateType type, String id, char[] charArray) throws GeneralSecurityException, OperatorCreationException {
 		switch (type) {
 		case AUTH:
 			return  createCertificateAuth(id,  charArray);
@@ -47,7 +42,7 @@ public class CertificateHelperNew {
 		
 	}
 
-    private CertificateValue createCertificateAuth(String id, char[] charArray) throws OperatorCreationException, CertificateException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+    private CertificateValue createCertificateAuth(String id, char[] charArray) throws OperatorCreationException, GeneralSecurityException {
 		
 		int validity = AUTH_VALIDITY;
 		// X500Name owner = new X500Name("CN=" + fqdn);

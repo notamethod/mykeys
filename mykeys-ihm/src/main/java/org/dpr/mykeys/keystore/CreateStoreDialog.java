@@ -41,7 +41,7 @@ public class CreateStoreDialog extends JDialog {
 
     private void init() {
         DialogAction dAction = new DialogAction();
-        setTitle(Messages.getString("keystore.create.titile"));
+        setTitle(Messages.getString("keystore.create.title"));
         JPanel jp = new JPanel();
         BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
         jp.setLayout(bl);

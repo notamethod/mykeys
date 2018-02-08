@@ -282,9 +282,10 @@ public class SuperCreate extends JDialog implements ItemListener {
                 infosPanel.put("Policy notice", "PolicyNotice", "");
                 infosPanel.put("Policy CPS", "PolicyCPS", "");
                 infosPanel.putEmptyLine();
-                infosPanel.addTitle("Clé privée rnseigner si différent keystore");
+
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-                    infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", "",
+                    infosPanel.addTitle(Messages.getString("privatekey.title"));
+                    infosPanel.put(Messages.getString("optional.privatekey.label"), JPasswordField.class, "pwd1", "",
                             true);
                     infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
                             "", true);

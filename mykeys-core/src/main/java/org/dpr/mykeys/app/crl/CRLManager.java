@@ -354,6 +354,7 @@ public class CRLManager {
 	public File getCrlFile(String pathName, X509CRL crl) {
 		Map<ASN1ObjectIdentifier, String> map = X509Util.getInfosMap(crl
 				.getIssuerX500Principal());
+        //TODO (change with BCStyle.CN). With unit test
 		String fname = map.get(X509Name.CN);
 		fname = fname + CRL_EXTENSION;
 		String orga = map.get(X509Name.O);

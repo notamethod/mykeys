@@ -35,7 +35,7 @@ public class Messages {
             for (String whatever : params) {
                 strParams[i++] = Messages.getString(whatever);
             }
-            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), strParams);
+            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), (Object[]) strParams);
         } catch (MissingResourceException e) {
             return '!' + key + '!';
         }

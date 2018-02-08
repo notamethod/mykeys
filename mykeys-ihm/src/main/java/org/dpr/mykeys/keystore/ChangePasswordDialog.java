@@ -66,7 +66,7 @@ public class ChangePasswordDialog extends JDialog {
 
 		infosPanel.put(getMessage("label.old.password"), JPasswordField.class, "pwd_old", "", true);
 		infosPanel.put(getMessage("label.new.password"), JPasswordField.class, "pwd_new", "", true);
-		infosPanel.put(getMessage("label.confirm.password"), JPasswordField.class, "pwd_new2", "", true);
+        infosPanel.put(getMessage("confirm.password"), JPasswordField.class, "pwd_new2", "", true);
 
 		infosPanel.putEmptyLine();
 

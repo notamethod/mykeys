@@ -81,7 +81,6 @@ public class KeystoreBuilder extends KeyTools {
     @Deprecated
     public KeystoreBuilder addCert(X509Certificate[] xCerts, KeyStoreValue ksInfo, CertificateValue certInfo, char[] password)
             throws KeyToolsException {
-        // FIXME
         if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
             certInfo.setPassword(password);
         }

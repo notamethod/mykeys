@@ -17,12 +17,11 @@ import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.X509Util;
 
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
@@ -65,19 +64,19 @@ public class CertificateValue implements ChildInfo, Cloneable {
         this.alias = alias2;
     }
 
-    public CertificateValue(String alias2, X509Certificate cert, char[] charArray) {
+    public CertificateValue(String alias2, X509Certificate cert, char[] charArray) throws GeneralSecurityException {
         this.alias = alias2;
         this.password = charArray;
         init(cert);
     }
 
-    public CertificateValue(String alias2, X509Certificate cert) {
+    public CertificateValue(String alias2, X509Certificate cert) throws GeneralSecurityException {
         this.alias = alias2;
 
         init(cert);
     }
 
-    public CertificateValue(X509Certificate[] certs) {
+    public CertificateValue(X509Certificate[] certs) throws GeneralSecurityException {
 
         init(certs);
     }
@@ -138,7 +137,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
         this.chaineStringValue = chaineStringValue;
     }
 
-    private void init(X509Certificate[] certs) {
+    private void init(X509Certificate[] certs) throws GeneralSecurityException {
         init(certs[0]);
         this.setCertificateChain(certs);
         if (certs != null) {
@@ -152,8 +151,10 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     /**
      * Initialize certificate
-     **/
-    private void init(X509Certificate certX509) {
+     * @param certX509
+     * @throws GeneralSecurityException
+     */
+    private void init(X509Certificate certX509) throws GeneralSecurityException {
         if (certX509 == null) {
             log.warn("X509 certificate is null");
             return;
@@ -176,20 +177,15 @@ public class CertificateValue implements ChildInfo, Cloneable {
         this.setNotBefore(certX509.getNotBefore());
         this.setNotAfter(certX509.getNotAfter());
         X509Util.getExtensions(certX509);
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(certX509.getEncoded());
 
-            this.setDigestSHA1(md.digest());
-            md = MessageDigest.getInstance("SHA-256");
-            md.update(certX509.getEncoded());
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        md.update(certX509.getEncoded());
 
-            this.setDigestSHA256(md.digest());
+        this.setDigestSHA1(md.digest());
+        md = MessageDigest.getInstance("SHA-256");
+        md.update(certX509.getEncoded());
 
-        } catch (NoSuchAlgorithmException | CertificateEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this.setDigestSHA256(md.digest());
     }
 
     public String toString() {
@@ -253,15 +249,15 @@ public class CertificateValue implements ChildInfo, Cloneable {
     /**
      * @param keyLength the keyLength to set
      */
-    public void setKeyLength(int keyLength) {
-        this.keyLength = keyLength;
+    public void setKeyLength(String keyLength) {
+        this.keyLength = Integer.valueOf(keyLength);
     }
 
     /**
      * @param keyLength the keyLength to set
      */
-    public void setKeyLength(String keyLength) {
-        this.keyLength = Integer.valueOf(keyLength);
+    public void setKeyLength(int keyLength) {
+        this.keyLength = keyLength;
     }
 
     /**
@@ -317,8 +313,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
     }
 
     public X500Name subjectMapToX509Name() {
-
-        //TODO
         X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
         Set setKey = subjectMap.keySet();
         for (Object aSetKey : setKey) {
@@ -399,6 +393,15 @@ public class CertificateValue implements ChildInfo, Cloneable {
         return subjectMap;
     }
 
+    public void setSubjectMap(String name) {
+        this.subjectMap.clear();
+        for (String pair : name.split(",")) {
+            String[] value = pair.split("=");
+            subjectMap.put(value[0], value[1]);
+        }
+
+    }
+
     /**
      * @param elementMap the subjectMap to set
      */
@@ -411,15 +414,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
             if (value instanceof String) {
                 this.subjectMap.put(key, (String) value);
             }
-        }
-
-    }
-
-    public void setSubjectMap(String name) {
-        this.subjectMap.clear();
-        for (String pair : name.split(",")) {
-            String[] value = pair.split("=");
-            subjectMap.put(value[0], value[1]);
         }
 
     }
@@ -494,11 +488,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
      */
     public void setNotBefore(Date notBefore) {
         this.notBefore = notBefore;
-    }
-
-    public void setNotBefore(String string) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -699,7 +688,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     @Override
     public ChildType getChildType() {
-        // TODO Auto-generated method stub
         return ChildType.CERTIFICATE;
     }
 

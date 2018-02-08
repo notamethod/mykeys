@@ -146,20 +146,25 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     private void importX509CertFromP12(String alias, KeyStoreValue ksin, char[] pwd)
             throws KeyToolsException, GeneralSecurityException, ServiceException {
         //TODO: use alias to get only one certificate
+        //FIXME: but need to import all certitiftcates
+        //TODO; check if alias exists in output ks
         KeyStore ks = load(ksin);
-        KeystoreBuilder ksBuilder = new KeystoreBuilder(ks);
+
         String aliasOri = null;
         Enumeration<String> enumKs = ks.aliases();
         while (enumKs.hasMoreElements()) {
             aliasOri = enumKs.nextElement();
         }
-
+        if (alias == null) {
+            alias = aliasOri;
+        }
         Certificate cert = ks.getCertificate(aliasOri);
         CertificateValue certInfo = new CertificateValue(alias, (X509Certificate) cert, ksin.getPassword());
 
         certInfo.setCertificateChain(ks.getCertificateChain(aliasOri));
         certInfo.setPrivateKey((PrivateKey) ks.getKey(aliasOri, ksin.getPassword()));
 
+        KeystoreBuilder ksBuilder = new KeystoreBuilder(load(ksInfo));
         ksBuilder.addCertToKeyStoreNew((X509Certificate) cert, ksInfo, certInfo);
     }
 
@@ -298,6 +303,11 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     public void importX509Cert(String alias, KeyStoreValue value, char[] charArray)
             throws ServiceException {
 
+//        System.out.println("importX509Cert "+ alias);
+//        if (StringUtils.isBlank(alias)) {
+//            BigInteger bi = KeyTools.RandomBI(30);
+//            alias = bi.toString(16);
+//        }
         StoreFormat storeFormat = value.getStoreFormat();
 
         if (storeFormat == null || StoreFormat.PKCS12.equals(storeFormat)) {
@@ -317,7 +327,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         } else if (StoreFormat.PEM.equals(storeFormat)) {
             try {
                 importX509CertFromPem(alias, value, charArray);
-            } catch (IOException | CertificateException e) {
+            } catch (IOException | GeneralSecurityException e) {
                 throw new ServiceException(e);
             }
         }
@@ -335,8 +345,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
             ksBuilder.addCert(cert, ksInfo, certInfo);
 
-        } catch (KeyToolsException | CertificateException | IOException e) {
-            // TODO Auto-generated catch block
+        } catch (KeyToolsException | GeneralSecurityException | IOException e) {
             throw new ServiceException(e);
         }
 
@@ -354,7 +363,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     }
 
     public void importX509CertFromPem(String alias, KeyStoreValue ksv, char[] charArray)
-            throws ServiceException, IOException, CertificateException {
+            throws ServiceException, IOException, GeneralSecurityException {
 
         log.info("import x509 from pem file");
         BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(ksv.getPath())));
@@ -423,7 +432,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                 certInfo.setCertificateChain(certs);
             }
 
-        } catch (KeyStoreException e) {
+        } catch (GeneralSecurityException e) {
             throw new ServiceException("filling certificate Info impossible", e);
         }
         return certInfo;
@@ -571,7 +580,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             certInfo.setChaineStringValue(bf.toString());
             certInfo.setCertificateChain(certs);
 
-        } catch (KeyStoreException | KeyToolsException | UnrecoverableKeyException | NoSuchAlgorithmException e) {
+        } catch (KeyToolsException | GeneralSecurityException e) {
             throw new ServiceException(e);
         }
         return certInfo;
