@@ -71,13 +71,7 @@ public class CommonServices {
 		try {
 			ks = ksBuilder.loadKeyStore(kInfo.getPath(), kInfo.getStoreFormat(), kInfo.getPassword()).getKeystore();
 			certInfo.setPrivateKey((PrivateKey) ks.getKey(certInfo.getAlias(), kInfo.getPassword()));
-		} catch (KeyToolsException | UnrecoverableKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
+        } catch (ServiceException | UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

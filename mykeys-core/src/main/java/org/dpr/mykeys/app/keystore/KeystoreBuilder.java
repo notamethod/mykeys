@@ -78,32 +78,8 @@ public class KeystoreBuilder extends KeyTools {
         saveKeyStore(keystore, ksInfo);
     }
 
-    @Deprecated
-    public KeystoreBuilder addCert(X509Certificate[] xCerts, KeyStoreValue ksInfo, CertificateValue certInfo, char[] password)
-            throws KeyToolsException {
-        if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-            certInfo.setPassword(password);
-        }
-
-        saveCertChain(keystore, xCerts[0], certInfo);
-        saveKeyStore(keystore, ksInfo);
-        return this;
-    }
-
     public KeystoreBuilder addCert(KeyStoreValue ksInfo, CertificateValue certInfo) throws KeyToolsException {
-
-
-
         saveCertChain(keystore, certInfo);
-        try {
-            System.out.println(keystore.size());
-//            System.out.println(new String(certInfo.getPassword()));
-//            System.out.println(new String(ksInfo.getPassword()));
-
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }
-
         saveKeyStore(keystore, ksInfo);
         return this;
     }
@@ -155,32 +131,6 @@ public class KeystoreBuilder extends KeyTools {
     }
 
 
-    public KeyStore loadKeyStore2(String ksName, String type, char[] pwd) throws KeyToolsException {
-        // KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-
-        KeyStore ks;
-        try {
-            try {
-                ks = KeyStore.getInstance(type, "BC");
-            } catch (Exception e) {
-                ks = KeyStore.getInstance("JKS");
-            }
-
-            // get user password and file input stream
-
-            java.io.FileInputStream fis = new java.io.FileInputStream(ksName);
-            ks.load(fis, pwd);
-            fis.close();
-        } catch (FileNotFoundException e) {
-            throw new KeyToolsException("Fichier non trouvé:" + ksName, e);
-        } catch (KeyStoreException | CertificateException | IOException e) {
-            throw new KeyToolsException("Echec du chargement de:" + ksName, e);
-
-        } catch (NoSuchAlgorithmException e) {
-            throw new KeyToolsException("Format inconnu:" + ksName, e);
-        }
-        return ks;
-    }
 
     private void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateValue certInfo)
             throws KeyToolsException {

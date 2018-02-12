@@ -123,7 +123,6 @@ public class ImportCertificateDialog extends JDialog {
 					return;
 				}
 
-				KeyTools kt = new KeyTools();
 				try {
 					String typeCert = (String) elements.get("typeCert");
 					if (elements.get("typeCert").equals("auto")) {

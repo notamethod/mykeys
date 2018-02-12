@@ -8,6 +8,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
+import org.dpr.swingutils.ComponentUtils;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.PanelBuilder;
@@ -18,7 +19,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,7 +162,7 @@ public class SelectUserDialog extends MkDialog {
                     MykeysFrame.showError(SelectUserDialog.this, Messages.getFullString("mandatory", "label." + name));
                     return;
                 }
-                if (!checkFields(SelectUserDialog.this, elements, "password")) {
+                if (!ComponentUtils.checkFields(SelectUserDialog.this, elements, "password")) {
                     return;
                 }
 

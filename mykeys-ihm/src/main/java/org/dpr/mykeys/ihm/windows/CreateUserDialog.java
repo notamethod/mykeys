@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.AuthenticationService;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.swingutils.ComponentUtils;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 import org.dpr.swingutils.PanelBuilder;
@@ -113,7 +114,7 @@ public class CreateUserDialog extends MkDialog {
 //					return;
 //				}
 
-                if (!checkFields(CreateUserDialog.this, elements, "name", "password")) {
+                if (!ComponentUtils.checkFields(CreateUserDialog.this, elements, "name", "password")) {
                     return;
                 }
 			

@@ -8,6 +8,7 @@ import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.swingutils.ComponentUtils;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -26,7 +27,7 @@ public class CreateStoreDialog extends JDialog {
 
     private static final Log log = LogFactory.getLog(CreateStoreDialog.class);
     // JComboBox ksType;
-    // JPasswordField pwd1;
+    // JPasswordField password;
     // JPasswordField pwd2;
     private LabelValuePanel infosPanel;
     private JTextField tfDirectory;
@@ -55,7 +56,7 @@ public class CreateStoreDialog extends JDialog {
 
         infosPanel.put(Messages.getString("keystore.type.label"), JComboBox.class, "typeKS", mapType);
         infosPanel.putEmptyLine();
-        infosPanel.put(Messages.getString("label.password"), JPasswordField.class, "pwd1", "", true);
+        infosPanel.put(Messages.getString("label.password"), JPasswordField.class, "password", "", true);
         infosPanel.put(Messages.getString("confirm.password"), JPasswordField.class, "pwd2", "", true);
 
         infosPanel.putEmptyLine();
@@ -130,11 +131,17 @@ public class CreateStoreDialog extends JDialog {
                 }
 
             } else if (command.equals("OK")) {
-                if (tfDirectory.getText().equals("") || elements.get("pwd1") == null) {
+                //FIXME: do not work with empty password
+                if (tfDirectory.getText().equals("")) {
                     MykeysFrame.showError(CreateStoreDialog.this, "Champs invalides");
                     return;
                 }
-                if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
+
+                if (!ComponentUtils.checkFields(CreateStoreDialog.this, elements, "password")) {
+                    return;
+                }
+
+                if (!elements.get("password").equals(elements.get("pwd2"))) {
                     MykeysFrame.showError(CreateStoreDialog.this, "Mot de passe incorrect");
                     return;
                 }
@@ -152,8 +159,8 @@ public class CreateStoreDialog extends JDialog {
                 try {
                     StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
                     KeystoreBuilder ksBuilder = new KeystoreBuilder(format);
-                    createKeyStore(format, dir, ((String) elements.get("pwd1")).toCharArray());
-                    ksBuilder.create(dir, ((String) elements.get("pwd1")).toCharArray());
+                    createKeyStore(format, dir, ((String) elements.get("password")).toCharArray());
+                    ksBuilder.create(dir, ((String) elements.get("password")).toCharArray());
                     KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
                     ((MykeysFrame) CreateStoreDialog.this.getParent()).updateKeyStoreList();
                     CreateStoreDialog.this.setVisible(false);

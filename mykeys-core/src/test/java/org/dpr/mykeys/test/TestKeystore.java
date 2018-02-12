@@ -60,7 +60,7 @@ public class TestKeystore {
         try {
             service.load(ksInfo);
             fail();
-        } catch (KeyToolsException e) {
+        } catch (ServiceException e) {
             //ok;
 
         }
@@ -80,7 +80,7 @@ public class TestKeystore {
         ksInfo.setPassword("111".toCharArray());
         try {
             service.load(ksInfo);
-        } catch (KeyToolsException e) {
+        } catch (ServiceException e) {
             e.printStackTrace();
             fail();
         }
@@ -100,7 +100,7 @@ public class TestKeystore {
         ksInfo.setPassword("111".toCharArray());
         try {
             service.changePassword(ksInfo, "bbb".toCharArray());
-        } catch (TamperedWithException | KeyToolsException e) {
+        } catch (TamperedWithException | KeyToolsException | ServiceException e) {
             e.printStackTrace();
             fail();
         }
@@ -115,7 +115,7 @@ public class TestKeystore {
         try {
             KeyStore ks = service.loadKeyStore(filename, StoreFormat.JKS, "111".toCharArray()).getKeystore();
             service.saveKeyStore(ks, filename, "111".toCharArray());
-        } catch (KeyToolsException e) {
+        } catch (ServiceException | KeyToolsException e) {
             e.printStackTrace();
             fail();
         }

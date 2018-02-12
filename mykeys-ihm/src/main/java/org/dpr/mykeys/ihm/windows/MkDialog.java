@@ -39,15 +39,4 @@ public class MkDialog extends JDialog {
 
     }
 
-    static boolean checkFields(Component c, Map<String, Object> elements, String... fields) {
-        for (String field : fields) {
-            String value = (String) elements.get(field);
-            if (value == null || value.isEmpty()) {
-                MykeysFrame.showError(c, Messages.getFullString("mandatory", "label." + field));
-                return false;
-            }
-        }
-
-        return true;
-    }
 }

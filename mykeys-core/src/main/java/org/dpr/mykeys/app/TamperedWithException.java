@@ -1,6 +1,7 @@
 package org.dpr.mykeys.app;
 
 import org.dpr.mykeys.app.KeyToolsException;
+import org.dpr.mykeys.app.keystore.ServiceException;
 
 public class TamperedWithException extends Exception {
 
@@ -8,4 +9,7 @@ public class TamperedWithException extends Exception {
 		super (e);
 	}
 
+    public TamperedWithException(ServiceException e) {
+        super(e);
+    }
 }

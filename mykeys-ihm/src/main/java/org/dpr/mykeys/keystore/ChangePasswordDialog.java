@@ -25,6 +25,7 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.swingutils.JFieldsPanel;
@@ -106,13 +107,12 @@ public class ChangePasswordDialog extends JDialog {
 					service.changePassword(ksInfo, ((String)elements.get("pwd_new")).toCharArray());
 					ksInfo.setOpen(false);
 					ChangePasswordDialog.this.setVisible(false);
-				} catch (TamperedWithException | KeyToolsException e) {
+                } catch (TamperedWithException | KeyToolsException | ServiceException e) {
 					MykeysFrame.showError(ChangePasswordDialog.this, e.getLocalizedMessage());
 				}
 
-			
 
-			} else if (command.equals("CANCEL")) {
+             } else if (command.equals("CANCEL")) {
 				ChangePasswordDialog.this.setVisible(false);
 			}
 
