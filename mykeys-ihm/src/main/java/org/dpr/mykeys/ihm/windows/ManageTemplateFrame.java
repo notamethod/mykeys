@@ -75,7 +75,7 @@ public class ManageTemplateFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        KSConfig.init(".myKeys25");
+        KSConfig.init(KSConfig.MKPATH);
         ManageTemplateFrame notesJFrame = new ManageTemplateFrame();
         notesJFrame.setVisible(true);
     }

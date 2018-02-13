@@ -11,10 +11,10 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
-import org.dpr.mykeys.app.certificate.CertificateBuilder;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.utils.ActionStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.security.*;
@@ -44,10 +44,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    private static StoreFormat findTypeKStore(String filename) {
+    private static StoreFormat findTypeKStore(@NotNull String filename) {
 
         log.debug("finding type of file...");
-        StoreFormat format = null;
         try {
             String ext = filename.substring(filename.lastIndexOf('.') + 1, filename.length());
             if (ext.equalsIgnoreCase(KSTYPE_EXT_JKS)) {
@@ -73,7 +72,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    private static StoreFormat findTypeKS(String filename) {
+    private static StoreFormat findKeystoreType(String filename) {
 
         StoreFormat format = findTypeKStore(filename);
 
@@ -174,7 +173,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     public ActionStatus importCertificates(KeyStoreValue ksin)
             throws ServiceException, GeneralSecurityException, KeyToolsException {
-        ksin.setStoreFormat(findTypeKS(ksin.getPath()));
+        ksin.setStoreFormat(findKeystoreType(ksin.getPath()));
         if (ksin.getPassword() == null && (StoreFormat.JKS.equals(ksin.getStoreFormat()) || StoreFormat.PKCS12.equals(ksin.getStoreFormat()))) {
             return ActionStatus.ASK_PASSWORD;
         }
@@ -232,7 +231,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         return certs;
     }
 
-    @Deprecated
+
     public List<CertificateValue> getCertificates(KeyStoreValue ki) throws ServiceException {
         List<CertificateValue> certs = new ArrayList<>();
 
@@ -280,11 +279,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     public void importX509Cert(String alias, KeyStoreValue value, char[] charArray)
             throws ServiceException {
 
-//        System.out.println("importX509Cert "+ alias);
-//        if (StringUtils.isBlank(alias)) {
-//            BigInteger bi = KeyTools.RandomBI(30);
-//            alias = bi.toString(16);
-//        }
+
         StoreFormat storeFormat = value.getStoreFormat();
 
         if (storeFormat == null || StoreFormat.PKCS12.equals(storeFormat)) {
@@ -653,7 +648,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
 
     public KeyStoreValue createKeyStoreValue(File ksFile) {
-        StoreFormat format = findTypeKS(ksFile.getAbsolutePath());
+        StoreFormat format = findKeystoreType(ksFile.getAbsolutePath());
         KeyStoreValue ksv = new KeyStoreValue(ksFile, format, null);
         return ksv;
     }

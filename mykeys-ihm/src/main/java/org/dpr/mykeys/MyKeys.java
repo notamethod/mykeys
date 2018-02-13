@@ -53,7 +53,7 @@ public class MyKeys {
 
     private void init() {
 
-        Locale.setDefault(Locale.ENGLISH);
+        //Locale.setDefault(Locale.ENGLISH);
         log.debug("loading configuration...");
 
         KSConfig.initResourceBundle();
@@ -62,11 +62,12 @@ public class MyKeys {
         ProviderUtil.init("BC");
 
         try {
-            KSConfig.init(".myKeys25");
+            KSConfig.init(KSConfig.MKPATH);
             boolean justCreated = checkUpdate();
             checkConfig();
             if (justCreated) {
                 migrate();
+                login();
             } else {
                 login();
             }

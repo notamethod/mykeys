@@ -28,6 +28,8 @@ public class KSConfig {
 
 	public static final String STORE_PREFIX = "store";
 
+    public static final String MKPATH = ".mykeys3";
+
 	private static String path;
 	
 	public static String externalPath;
