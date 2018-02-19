@@ -239,9 +239,9 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
             certInfo.setSubjectMap(elements);
 
-            certInfo.setCrlDistributionURL(((String) elements.get("CrlDistrib")));
-            certInfo.setPolicyNotice(((String) elements.get("PolicyNotice")));
-            certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
+            certInfo.setCrlDistributionURL(((String) elements.get("crlDistrib")));
+            certInfo.setPolicyNotice(((String) elements.get("policyNotice")));
+            certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
             // certInfo.setKeyUsage(keyUsage);
             boolean[] booloKu = new boolean[9];
 

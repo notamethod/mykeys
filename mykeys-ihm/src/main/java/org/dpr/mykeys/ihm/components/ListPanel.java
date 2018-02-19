@@ -17,8 +17,8 @@ import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.profile.CreateTemplateDialog;
-import org.dpr.mykeys.profile.SelectTemplateDialog;
+import org.dpr.mykeys.template.CreateTemplateDialog;
+import org.dpr.mykeys.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
 import org.dpr.swingutils.LabelValuePanel;
 

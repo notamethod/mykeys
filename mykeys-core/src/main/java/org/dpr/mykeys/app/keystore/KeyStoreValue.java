@@ -30,7 +30,7 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
 
     public KeyStoreValue(String name, String path, StoreModel storeModel,
                          StoreFormat storeFormat) {
-        this.name = name;
+        this.name = FilenameUtils.getName(name);
         this.path = path;
         this.storeModel = storeModel;
         this.storeFormat = storeFormat;
@@ -42,7 +42,7 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
      * @param path full keystore's pathname
      */
     private KeyStoreValue(String path) {
-        this.name = path;
+        this.name = FilenameUtils.getName(path);
         this.path = path;
         this.storeModel = StoreModel.CERTSTORE;
         this.storeFormat = StoreFormat.JKS;
@@ -50,7 +50,7 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
 
     public KeyStoreValue(String name, String path, StoreModel storeModel,
                          StoreFormat storeFormat, StoreLocationType storeType) {
-        this.name = name;
+        this.name = FilenameUtils.getName(name);
         this.path = path;
         this.storeModel = storeModel;
         this.storeFormat = storeFormat;

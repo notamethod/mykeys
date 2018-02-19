@@ -1,19 +1,21 @@
 package org.dpr.mykeys.ihm.actions;
 
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
+@NonNls
 public enum TypeAction {
 	ADD_STORE("AddStore"), EXPORT_CERT("ExportCert"), IMPORT_STORE(
 			"ImportStore"), OPEN_STORE("OpenStore"), ADD_CERT("AddCert"), IMPORT_CERT(
 			"ImportCert"), CLOSE_STORE("CloseStore"), REMOVE_STORE(
 			"RemoveStore"), DELETE_STORE("DeleteStore"), ADD_CERT_AC(
-            "AddCertAC"), DELETE_CERT("DeleteCert"), CREATE_CRL("createCrl"), ADD_CERT_PROF("AddCertProf"), CHANGE_PWD("changePWd"), ADD_CERT_FROMCSR("addCertFromCSR");
+			"AddCertAC"), DELETE_CERT("DeleteCert"), CREATE_CRL("createCrl"), ADD_CERT_PROF("AddCertProf"), CHANGE_PWD("changePWd"), ADD_CERT_FROMCSR("addCertFromCSR"), OPEN_EXPLORER("OpenExplorer");
 
 	/** L'attribut qui contient la valeur associé à l'enum */
 	private final String value;
 
 	/** Le constructeur qui associe une valeur à l'enum */
-    TypeAction(String value) {
+	TypeAction(String value) {
 		this.value = value;
 	}
 
@@ -24,12 +26,12 @@ public enum TypeAction {
 
 	/**
 	 * Permet de recuperer un <code>EtatSignature</code> à partir de sa valeur.
-	 * 
+	 *
 	 * <BR>
-	 * 
+	 *
 	 * @param value
 	 *            valeur de l'objet EtatSignature
-	 * 
+	 *
 	 * @return EtatTransaction
 	 */
 	public static TypeAction getTypeAction(String value) {

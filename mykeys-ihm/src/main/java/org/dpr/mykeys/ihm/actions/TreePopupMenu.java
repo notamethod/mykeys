@@ -1,5 +1,7 @@
 package org.dpr.mykeys.ihm.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -13,15 +15,17 @@ import org.dpr.mykeys.keystore.ImportStoreDialog;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class TreePopupMenu extends JPopupMenu {
-
+    public static final Log log = LogFactory.getLog(TreePopupMenu.class);
     private JMenuItem addStore;
 
     private JMenuItem importStore;
@@ -35,6 +39,8 @@ public class TreePopupMenu extends JPopupMenu {
     private JMenuItem closeStore;
 
     private JMenuItem removeStore;
+
+    private JMenuItem openExplorer;
 
     private JMenuItem deleteStore;
 
@@ -99,6 +105,11 @@ public class TreePopupMenu extends JPopupMenu {
         removeStore.setActionCommand(TypeAction.REMOVE_STORE.getValue());
         removeStore.setVisible(false);
 
+        openExplorer = new JMenuItem(Messages.getString("open.explorer"));
+        openExplorer.addActionListener(new TreePopupAction());
+        openExplorer.setActionCommand(TypeAction.OPEN_EXPLORER.getValue());
+        openExplorer.setVisible(false);
+
         deleteStore = new JMenuItem("Suppression physique");
         deleteStore.addActionListener(new TreePopupAction());
         deleteStore.setActionCommand(TypeAction.DELETE_STORE.getValue());
@@ -116,6 +127,7 @@ public class TreePopupMenu extends JPopupMenu {
         add(exportCert);
         // add(openStore);
         // add(closeStore);
+        add(openExplorer);
         add(removeStore);
         add(deleteStore);
         add(menuChangePwd);
@@ -138,6 +150,7 @@ public class TreePopupMenu extends JPopupMenu {
         exportCert.setVisible(false);
         openStore.setVisible(false);
         closeStore.setVisible(false);
+        openExplorer.setVisible(false);
         removeStore.setVisible(false);
         deleteStore.setVisible(false);
         menuChangePwd.setVisible(false);
@@ -160,6 +173,7 @@ public class TreePopupMenu extends JPopupMenu {
                 removeStore.setVisible(true);
                 deleteStore.setVisible(true);
                 menuChangePwd.setVisible(true);
+                openExplorer.setVisible(true);
             } else {
 
             }
@@ -231,6 +245,21 @@ public class TreePopupMenu extends JPopupMenu {
                     ksInfo = (KeyStoreValue) node.getUserObject();
                     MykeysFrame.removeKeyStore(ksInfo.getPath());
                     treeKeyStoreParent.removeNode(node);
+                    break;
+
+                case OPEN_EXPLORER:
+                    ksInfo = (KeyStoreValue) node.getUserObject();
+                    Desktop desktop = Desktop.getDesktop();
+//                   if (desktop.isSupported(Desktop.Action.OPEN))
+//                   {
+                    File dirToOpen = null;
+                    try {
+                        dirToOpen = new File(ksInfo.getPath());
+                        desktop.open(dirToOpen.getParentFile());
+                    } catch (IOException e1) {
+                        log.error(e);
+                    }
+//                   }
                     break;
                 case DELETE_STORE:
                     ksInfo = (KeyStoreValue) node.getUserObject();

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.profile;
+package org.dpr.mykeys.template;
 
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
@@ -207,9 +207,9 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
 
             infosPanel.putEmptyLine();
             //	infosPanel.put(getMessage("x509.cdp"), JCheckBox.class, "CrlDistribObli", false, false);
-            infosPanel.put(getMessage("x509.cdp"), "CrlDistrib", "");
-            infosPanel.put(getMessage("x509.policynotice"), "PolicyNotice", "");
-            infosPanel.put(getMessage("x509.policycps"), "PolicyCPS", "");
+            infosPanel.put(getMessage("x509.cdp"), "crlDistrib", "");
+            infosPanel.put(getMessage("x509.policynotice"), "policyNotice", "");
+            infosPanel.put(getMessage("x509.policycps"), "policyCPS", "");
 
         }
 
@@ -272,9 +272,9 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
 
             certInfo.setSubjectMap(elements);
 
-            certInfo.setCrlDistributionURL(((String) elements.get("CrlDistrib")));
-            certInfo.setPolicyNotice(((String) elements.get("PolicyNotice")));
-            certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
+            certInfo.setCrlDistributionURL(((String) elements.get("crlDistrib")));
+            certInfo.setPolicyNotice(((String) elements.get("policyNotice")));
+            certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
         }
 
     }

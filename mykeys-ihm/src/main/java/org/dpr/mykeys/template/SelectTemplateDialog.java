@@ -1,4 +1,4 @@
-package org.dpr.mykeys.profile;
+package org.dpr.mykeys.template;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,8 +18,6 @@ import org.dpr.swingutils.LabelValuePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

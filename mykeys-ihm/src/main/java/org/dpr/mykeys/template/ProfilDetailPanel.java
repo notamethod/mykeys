@@ -1,4 +1,4 @@
-package org.dpr.mykeys.profile;
+package org.dpr.mykeys.template;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -16,16 +16,16 @@ public class ProfilDetailPanel extends LabelValuePanel {
     private CertificateTemplate info;
 
     public ProfilDetailPanel(CertificateTemplate info) {
-		this.info=info;
-		getPanel();
-	}
+        this.info = info;
+        getPanel();
+    }
 
     private void getPanel() {
-		//infosPanel = new LabelValuePanel();
+        //infosPanel = new LabelValuePanel();
         this.put(Messages.getString("label.name"),
-				JTextField.class, "", info.getName(), false);
-		
-		this.putEmptyLine();
+                JTextField.class, "", info.getName(), false);
+
+        this.putEmptyLine();
 
 
         for (String attribute : SubjectUtil.getStandardList()) {
@@ -37,7 +37,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
 
         for (Enumeration<String> e = info.getValues(); e.hasMoreElements(); ) {
             String attribute = e.nextElement();
-            String key = SubjectUtil.getCertificateLabels().get(attribute);
+            String key = SubjectUtil.getTemplateLabels().get(attribute);
             if (key != null && !key.startsWith("&"))
                 this.put(Messages.getString(key), JTextField.class, attribute, info.getValue((attribute)), false);
         }
@@ -46,5 +46,5 @@ public class ProfilDetailPanel extends LabelValuePanel {
                 JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("&keyUsage")), false);
 
 
-	}
+    }
 }

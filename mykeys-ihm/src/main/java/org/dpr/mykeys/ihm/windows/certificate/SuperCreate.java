@@ -258,9 +258,9 @@ public class SuperCreate extends JDialog implements ItemListener {
                 PanelUtils.addSubjectToPanel(CertificateType.AC, infosPanel);
 
                 infosPanel.putEmptyLine();
-                infosPanel.put(Messages.getString("x509.cdp"), "CrlDistrib", "");
-                infosPanel.put("Policy notice", "PolicyNotice", "");
-                infosPanel.put("Policy CPS", "PolicyCPS", "");
+                infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
+                infosPanel.put("Policy notice", "policyNotice", "");
+                infosPanel.put("Policy CPS", "policyCPS", "");
                 infosPanel.putEmptyLine();
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                     infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", KSConfig.getInternalKeystores().getPassword(),
@@ -278,9 +278,9 @@ public class SuperCreate extends JDialog implements ItemListener {
                 Calendar calendar = Calendar.getInstance();
                 infosPanel.putEmptyLine();
 
-                infosPanel.put(Messages.getString("x509.cdp"), "CrlDistrib", "");
-                infosPanel.put("Policy notice", "PolicyNotice", "");
-                infosPanel.put("Policy CPS", "PolicyCPS", "");
+                infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
+                infosPanel.put("Policy notice", "policyNotice", "");
+                infosPanel.put("Policy CPS", "policyCPS", "");
                 infosPanel.putEmptyLine();
 
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
@@ -404,9 +404,9 @@ public class SuperCreate extends JDialog implements ItemListener {
             }
             certInfo.setSubjectMap(elements);
 
-            certInfo.setCrlDistributionURL(((String) elements.get("CrlDistrib")));
-            certInfo.setPolicyNotice(((String) elements.get("PolicyNotice")));
-            certInfo.setPolicyCPS(((String) elements.get("PolicyCPS")));
+            certInfo.setCrlDistributionURL(((String) elements.get("crlDistrib")));
+            certInfo.setPolicyNotice(((String) elements.get("policyNotice")));
+            certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
 
         }
 

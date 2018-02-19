@@ -53,7 +53,7 @@ import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
-import org.dpr.mykeys.profile.CreateTemplateDialog;
+import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
@@ -172,7 +172,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		unlockButton.setDisabledIcon(createImageIcon("/images/Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
-		addCertProfButton.setToolTipText("create cert from profile");
+        addCertProfButton.setToolTipText("create cert from template");
 		importButton = new JButton("Import");
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
 		exportButton = new JButton("Export");

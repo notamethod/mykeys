@@ -8,7 +8,7 @@ import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.model.ProfileModel;
-import org.dpr.mykeys.profile.CreateTemplateDialog;
+import org.dpr.mykeys.template.CreateTemplateDialog;
 
 import javax.swing.*;
 import java.awt.*;

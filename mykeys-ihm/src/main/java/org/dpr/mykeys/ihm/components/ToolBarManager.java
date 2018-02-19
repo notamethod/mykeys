@@ -3,7 +3,7 @@ package org.dpr.mykeys.ihm.components;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateToolBar;
-import org.dpr.mykeys.profile.ProfileToolBar;
+import org.dpr.mykeys.template.ProfileToolBar;
 
 import java.awt.*;
 

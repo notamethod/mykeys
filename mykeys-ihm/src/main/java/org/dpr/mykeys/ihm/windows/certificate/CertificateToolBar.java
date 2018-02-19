@@ -73,7 +73,7 @@ public class CertificateToolBar extends ObjToolBar  {
 		addCertFromCSRButton.setActionCommand(TypeAction.ADD_CERT_FROMCSR.getValue());
 		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
 		addCertButton.setToolTipText("create a new certificate");
-        addCertProfButton.setToolTipText("<html>create certificate from a template profile</html>");
+        addCertProfButton.setToolTipText("<html>create certificate from a template template</html>");
 		addCertFromCSRButton.setToolTipText("create certificate from a CSR request");
 		importButton = new JButton(createImageIcon("/images/import.png")); 
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());

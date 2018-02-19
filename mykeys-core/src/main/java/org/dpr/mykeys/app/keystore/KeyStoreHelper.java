@@ -652,4 +652,18 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         KeyStoreValue ksv = new KeyStoreValue(ksFile, format, null);
         return ksv;
     }
+
+    /**
+     * check if keystore is protected by password
+     *
+     * @param ksv
+     * @return
+     */
+    public boolean isPasswordProtected(KeyStoreValue ksv) {
+        ksv.setStoreFormat(findKeystoreType(ksv.getPath()));
+        if (StoreFormat.JKS.equals(ksv.getStoreFormat()) || StoreFormat.PKCS12.equals(ksv.getStoreFormat())) {
+            return true;
+        }
+        return false;
+    }
 }

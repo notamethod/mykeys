@@ -3,6 +3,7 @@ package org.dpr.mykeys.utils;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NonNls;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class SubjectUtil {
 
     private static Map<String, String> mapSubjectLabels = null;
     private static Map<String, String> mapCertificateLabels = null;
+    private static Map<String, String> mapTemplateLables = null;
     final static Log log = LogFactory.getLog(SubjectUtil.class);
 
     /**
@@ -48,7 +50,20 @@ public class SubjectUtil {
             mapCertificateLabels.put("algoPubKey", "x509.pubkeyalgo");
             mapCertificateLabels.put("issuer", "x509.issuer");
             mapCertificateLabels.put("keyLength", "x509.pubkeysize");
-            mapCertificateLabels.put("description", "label.description");
+        }
+        return mapCertificateLabels;
+    }
+
+
+    /**
+     * pairs of key/label map
+     *
+     * @return the mapNames
+     */
+    public static Map<String, String> getTemplateLabels() {
+        if (mapTemplateLables == null) {
+            mapTemplateLables = getCertificateLabels();
+            mapTemplateLables.put("description", "label.description");
         }
         return mapCertificateLabels;
     }
@@ -85,7 +100,7 @@ public class SubjectUtil {
         }
     }
 
-
+    @NonNls
     public static String[] getStandardList() {
         return new String[]{"CN", "O", "C", "L"};
     }
