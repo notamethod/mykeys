@@ -7,11 +7,11 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.FillUtils;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.utils.OrderedProperties;
 import org.dpr.mykeys.utils.X509AttributesUtils;
 import org.dpr.swingutils.LabelValuePanel;
@@ -248,7 +248,7 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
 
                 } catch (Exception e) {
 
-                    MykeysFrame.showError(CreateTemplateDialog.this, e.getMessage());
+                    DialogUtil.showError(CreateTemplateDialog.this, e.getMessage());
                     e.printStackTrace();
                 }
 

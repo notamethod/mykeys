@@ -11,6 +11,7 @@ import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
 import org.dpr.mykeys.keystore.ImportStoreDialog;
+import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.KeyStoreException;
 
 public class TreePopupMenu extends JPopupMenu {
     public static final Log log = LogFactory.getLog(TreePopupMenu.class);
@@ -201,9 +203,18 @@ public class TreePopupMenu extends JPopupMenu {
             switch (typeAction) {
                 case ADD_STORE:
                     frame = (JFrame) tree.getTopLevelAncestor();
-                    cs = new CreateStoreDialog(frame, true);
-                    cs.setLocationRelativeTo(frame);
-                    cs.setVisible(true);
+                    CreateStoreDialog csd = new CreateStoreDialog(frame, true);
+                    csd.setLocationRelativeTo(frame);
+                    boolean result = csd.showDialog();
+                    if (result) {
+                        try {
+                            ((MykeysFrame) frame).updateKeyStoreList();
+                        } catch (KeyStoreException e1) {
+                            log.error(e1.getMessage(), e1);
+                            DialogUtil.showError(frame, e1.getMessage());
+
+                        }
+                    }
                     break;
 
                 case IMPORT_STORE:
@@ -269,7 +280,7 @@ public class TreePopupMenu extends JPopupMenu {
                             Path fileToDeletePath = Paths.get(ksInfo.getPath());
                             Files.delete(fileToDeletePath);
                         } catch (IOException e1) {
-                            MykeysFrame.showError(treeKeyStoreParent, e1.getLocalizedMessage());
+                            DialogUtil.showError(treeKeyStoreParent, e1.getLocalizedMessage());
                         }
                         MykeysFrame.removeKeyStore(ksInfo.getPath());
                         treeKeyStoreParent.removeNode(node);

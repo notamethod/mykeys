@@ -15,8 +15,8 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.model.FrameModel;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -127,7 +127,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                 fillCert(profile);
 
             } catch (ProfilException e1) {
-                MykeysFrame.showError(this, e1.getMessage());
+                DialogUtil.showError(this, e1.getMessage());
             }
         }
 
@@ -164,7 +164,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                     fillCert(profile);
 
                 } catch (ProfilException e1) {
-                    MykeysFrame.showError(this, e1.getMessage());
+                    DialogUtil.showError(this, e1.getMessage());
                 }
             }
         }
@@ -215,7 +215,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
                 } catch (Exception e) {
 
-                    MykeysFrame.showError(CreateCertProfilDialog.this, e.getMessage());
+                    DialogUtil.showError(CreateCertProfilDialog.this, e.getMessage());
                     e.printStackTrace();
                 }
 

@@ -28,9 +28,9 @@ import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JDropText;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -125,7 +125,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 			} else if (command.equals("OK")) {
 
 				if (tfDirectory.getText().equals("")) {
-					MykeysFrame.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
+                    DialogUtil.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
 					return;
 				}
 				CertificateHelper cm = new CertificateHelper(certInfo);
@@ -141,7 +141,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 				} catch (Exception e) {
 
 					log.error("error generating certificate", e);
-					MykeysFrame.showError(CreateCertificatFromCSRDialog.this, e.getMessage());
+                    DialogUtil.showError(CreateCertificatFromCSRDialog.this, e.getMessage());
 
 				}
 

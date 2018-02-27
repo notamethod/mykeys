@@ -106,13 +106,11 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 		setDefaultLookAndFeelDecorated(true);
 		try {
-			// UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
-			UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
+
+            UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
 			 UIManager.put("ToolTip.foreground", new ColorUIResource(Color.ORANGE));
-//            UIManager.put("InternalFrame.activeTitleBackground", new ColorUIResource(Color.ORANGE ));
-//            UIManager.put("InternalFrame.activeTitleForeground", new ColorUIResource(Color.WHITE));
-//            UIManager.put("InternalFrame.titleFont", new Font("Dialog", Font.PLAIN, 11));
-			return;
+
+            return;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -226,60 +224,6 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 	}
 
-	/**
-	 * Show dialog error box
-	 * 
-	 * @param c
-	 * @param string
-	 */
-	public static void showError(Component c, String string) {
-
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(c, string, Messages.getString("error.title"), JOptionPane.ERROR_MESSAGE);
-
-        });
-
-
-
-	}
-
-	/**
-	 * Show dialog box with a password field
-	 * 
-	 * @param parent
-	 * @return
-	 */
-	public static char[] showPasswordDialog(Component parent) {
-		return showPasswordDialog(parent, "Mot de passe:");
-
-	}
-
-	public static char[] showPasswordDialog(Component parent, String titre) {
-		final JPasswordField jpf = new JPasswordField();
-		JOptionPane jop = new JOptionPane(jpf, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-		// FIXME: label
-		JDialog dialog = jop.createDialog(parent, titre);
-		dialog.addComponentListener(new ComponentAdapter() {
-
-			public void componentShown(ComponentEvent e) {
-				jpf.requestFocusInWindow();
-			}
-		});
-		dialog.setVisible(true);
-		if (jop.getValue() == null) {
-			return null;
-		}
-		int result = (Integer) jop.getValue();
-		dialog.dispose();
-		char[] password = null;
-		if (result == JOptionPane.OK_OPTION) {
-			password = jpf.getPassword();
-		} else {
-			return null;
-		}
-		return password;
-	}
-
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -359,17 +303,6 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 		}
 		mainPanel.updateKSList(ksList);
-
-	}
-
-	/**
-	 * Show dialog error box
-	 * 
-	 * @param c
-	 * @param string
-	 */
-	public static void showInfo(Component c, String string) {
-		JOptionPane.showMessageDialog(c, string, "Information", JOptionPane.INFORMATION_MESSAGE);
 
 	}
 

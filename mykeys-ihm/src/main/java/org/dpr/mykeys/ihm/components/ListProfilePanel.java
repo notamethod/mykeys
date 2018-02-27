@@ -54,6 +54,7 @@ import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.template.CreateTemplateDialog;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.LabelValuePanel;
 
 @SuppressWarnings("serial")
@@ -470,7 +471,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
             ksv.removeCertificate(kinfo, certificateInfo);
 
 		} catch (Exception e1) {
-			MykeysFrame.showError(this, e1.getMessage());
+            DialogUtil.showError(this, e1.getMessage());
 			e1.printStackTrace();
 		}
 		updateInfo(ksInfo);
@@ -514,7 +515,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 
             KeyStoreValue kstInfo = (KeyStoreValue) ksInfo;
 			if (kstInfo.getPassword() == null) {
-				char[] password = MykeysFrame.showPasswordDialog(this);
+                char[] password = DialogUtil.showPasswordDialog(this);
 
 				if (password == null || password.length == 0) {
 					return false;
@@ -531,7 +532,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 			ksInfo.setOpen(true);
 
 		} catch (Exception e1) {
-			MykeysFrame.showError(this, e1.getMessage());
+            DialogUtil.showError(this, e1.getMessage());
 			e1.printStackTrace();
 			return false;
 		}

@@ -10,8 +10,8 @@ import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.MkDialog;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -144,7 +144,7 @@ public class SelectTemplateDialog extends MkDialog {
                 String profile = (String) modelCombo.getSelectedItem();
 
                 if (profile == null || profile.isEmpty()) {
-                    MykeysFrame.showError(SelectTemplateDialog.this, Messages.getFullString("mandatory", "label." + profile));
+                    DialogUtil.showError(SelectTemplateDialog.this, Messages.getFullString("mandatory", "label." + profile));
                     return;
                 }
 

@@ -8,6 +8,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.ComponentUtils;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -159,7 +160,7 @@ public class SelectUserDialog extends MkDialog {
                 String pwd = (String) elements.get("password");
 
                 if (name == null || name.isEmpty()) {
-                    MykeysFrame.showError(SelectUserDialog.this, Messages.getFullString("mandatory", "label." + name));
+                    DialogUtil.showError(SelectUserDialog.this, Messages.getFullString("mandatory", "label." + name));
                     return;
                 }
                 if (!ComponentUtils.checkFields(SelectUserDialog.this, elements, "password")) {
@@ -178,7 +179,7 @@ public class SelectUserDialog extends MkDialog {
                     //stay alive until cpt max
                 } catch (AuthenticationException e) {
                     log.error("authentication failure", e);
-                    MykeysFrame.showError(SelectUserDialog.this, Messages.getString("error.authentication"));
+                    DialogUtil.showError(SelectUserDialog.this, Messages.getString("error.authentication"));
                     if (cpt++ > CPTMAX)
                         System.exit(1);
                     return;

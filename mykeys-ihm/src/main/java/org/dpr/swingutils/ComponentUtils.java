@@ -2,7 +2,7 @@
 package org.dpr.swingutils;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.utils.DialogUtil;
 
 import java.awt.*;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class ComponentUtils {
         for (String field : fields) {
             String value = (String) elements.get(field);
             if (value == null || value.isEmpty()) {
-                MykeysFrame.showError(c, Messages.getFullString("mandatory", "label." + field));
+                DialogUtil.showError(c, Messages.getFullString("mandatory", "label." + field));
                 return false;
             }
         }

@@ -24,6 +24,7 @@ import org.dpr.mykeys.app.CommonServices;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -159,12 +160,12 @@ class SignDocumentDialog extends JDialog {
 			} else if (command.equals("OK")) {
 				if (tfDirectoryIn.getText().equals("")
 						|| elements.get("pwd1") == null) {
-					MykeysFrame.showError(SignDocumentDialog.this,
+                    DialogUtil.showError(SignDocumentDialog.this,
 							"Champs invalides");
 					return;
 				}
 				if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-					MykeysFrame.showError(SignDocumentDialog.this,
+                    DialogUtil.showError(SignDocumentDialog.this,
 							"Mot de passe incorrect");
 					return;
 				}

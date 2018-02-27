@@ -12,7 +12,6 @@ import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
@@ -20,6 +19,7 @@ import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.LabelValuePanel;
 
 import javax.swing.*;
@@ -234,7 +234,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
             ksv.removeCertificate(kinfo, certificateInfo);
 
         } catch (Exception e1) {
-            MykeysFrame.showError(this, e1.getMessage());
+            DialogUtil.showError(this, e1.getMessage());
             e1.printStackTrace();
         }
         updateInfo(ksInfo);
@@ -271,7 +271,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
             KeyStoreValue kstInfo = (KeyStoreValue) ksInfo;
             if (kstInfo.getPassword() == null) {
-                char[] password = MykeysFrame.showPasswordDialog(this);
+                char[] password = DialogUtil.showPasswordDialog(this);
 
                 if (password == null || password.length == 0) {
                     return false;
@@ -286,7 +286,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
             kserv.open();
             ksInfo.setOpen(true);
         } catch (Exception e1) {
-            MykeysFrame.showError(this, e1.getMessage());
+            DialogUtil.showError(this, e1.getMessage());
             log.error("error opening keystore", e1);
             //reset password to try next time
             if (resetPassword == true)
@@ -359,8 +359,8 @@ public class ListPanel extends JPanel implements DropTargetListener {
                 dtde.dropComplete(result);
 
             } catch (Exception e) {
-                System.out.println("Exception while handling drop " + e);
-                MykeysFrame.showError(this, getMessage("error.dnd"));
+                log.error("Exception while handling drop ", e);
+                DialogUtil.showError(this, getMessage("error.dnd"));
                 dtde.rejectDrop();
             }
         } else {
@@ -397,7 +397,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
         try {
             act = service.importCertificates(ksin);
             if (act != null && act.equals(ActionStatus.ASK_PASSWORD)) {
-                char[] password = MykeysFrame.showPasswordDialog(this);
+                char[] password = DialogUtil.showPasswordDialog(this);
                 ksin.setPassword(password);
 
                 service.importCertificates(ksin);
@@ -405,7 +405,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
             updateInfo(ksInfo);
         } catch (KeyToolsException | GeneralSecurityException e) {
             log.error(e);
-            MykeysFrame.showError(this, e.getLocalizedMessage());
+            DialogUtil.showError(this, e.getLocalizedMessage());
 
         }
 

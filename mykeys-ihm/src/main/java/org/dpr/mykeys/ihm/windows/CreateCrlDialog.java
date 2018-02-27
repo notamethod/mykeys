@@ -11,6 +11,7 @@ import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
@@ -175,7 +176,7 @@ public class CreateCrlDialog extends JDialog {
                 for (String key : keys) {
                 }
                 if (elements.get("alias") == null) {
-                    MykeysFrame.showError(CreateCrlDialog.this,
+                    DialogUtil.showError(CreateCrlDialog.this,
                             "alias obligatoire");
                     return;
                 }
@@ -204,7 +205,7 @@ public class CreateCrlDialog extends JDialog {
                     CreateCrlDialog.this.setVisible(false);
 
                 } catch (Exception e) {
-                    MykeysFrame.showError(CreateCrlDialog.this, e.getMessage());
+                    DialogUtil.showError(CreateCrlDialog.this, e.getMessage());
                     e.printStackTrace();
                 }
             } else if (command.equals("CANCEL")) {

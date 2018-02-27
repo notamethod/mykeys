@@ -13,9 +13,9 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.CertificateType;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
@@ -371,7 +371,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                 } catch (Exception e) {
 
                     log.error("certificate generation error", e);
-                    MykeysFrame.showError(SuperCreate.this, e.getMessage());
+                    DialogUtil.showError(SuperCreate.this, e.getMessage());
 
                 }
 
@@ -388,7 +388,7 @@ public class SuperCreate extends JDialog implements ItemListener {
             }
             if (elements.get("alias") == null
                     || (elements.get("pwd1") == null && !ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))) {
-                MykeysFrame.showError(SuperCreate.this, "Champs obligatoires");
+                DialogUtil.showError(SuperCreate.this, "Champs obligatoires");
                 return;
             }
 

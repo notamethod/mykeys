@@ -25,6 +25,7 @@ import org.dpr.mykeys.ihm.windows.CreateUserDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SelectUserDialog;
+import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
 import java.io.File;
@@ -74,7 +75,7 @@ public class MyKeys {
 
         } catch (Exception e) {
 
-            MykeysFrame.showError(null, Messages.getString("error.config"));
+            DialogUtil.showError(null, Messages.getString("error.config"));
             throw new RuntimeException("Fatal Error", e);
         }
 

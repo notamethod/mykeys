@@ -55,6 +55,12 @@ public class CertificateValue implements ChildInfo, Cloneable {
     private String policyNotice;
     private String policyCPS;
 
+    public Map<String, String> getOtherParams() {
+        return otherParams;
+    }
+
+    private Map<String, String> otherParams;
+
     public CertificateValue() {
         super();
         // x509PrincipalModel = new X509PrincipalModel();
@@ -176,7 +182,8 @@ public class CertificateValue implements ChildInfo, Cloneable {
         this.setKeyUsage(certX509.getKeyUsage());
         this.setNotBefore(certX509.getNotBefore());
         this.setNotAfter(certX509.getNotAfter());
-        X509Util.getExtensions(certX509);
+        this.setOtherParams(X509Util.getExtensions(certX509));
+
 
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         md.update(certX509.getEncoded());
@@ -452,31 +459,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
     }
 
     /**
-     * @return
-     * @deprecated user service method instead
-     */
-    @Deprecated
-    public String keyUsageToString() {
-        String value = "";
-        boolean isKeyUsage = false;
-        if (keyUsage == null) {
-            return "null";
-        }
-        for (int i = 0; i < keyUsage.length; i++) {
-            if (keyUsage[i]) {
-                isKeyUsage = true;
-                value = value + ", " + X509Constants.keyUsageLabel[i];
-            }
-        }
-        if (isKeyUsage) {
-            return value.substring(1, value.length());
-        } else {
-            return null;
-        }
-
-    }
-
-    /**
      * @return the notBefore
      */
     public Date getNotBefore() {
@@ -538,6 +520,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     public String getPolicyID() {
         return "2.16.250.1.114412.1.3.0.27";
+        //2.16.250.113556.1.8000.2554.58763.53606.25287.17664.43781.22216.52932.5775
     }
 
     /**
@@ -706,5 +689,9 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
         // on renvoie le clone
         return certificate;
+    }
+
+    public void setOtherParams(Map<String, String> otherParams) {
+        this.otherParams = otherParams;
     }
 }

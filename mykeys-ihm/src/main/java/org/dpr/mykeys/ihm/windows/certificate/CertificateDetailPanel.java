@@ -13,6 +13,7 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.util.encoders.Hex;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
@@ -91,7 +92,7 @@ public class CertificateDetailPanel extends JPanel {
             }
         }
         infosPanel.putEmptyLine();
-        String keyUsage = info.keyUsageToString();
+        String keyUsage = CertificateUtils.keyUsageToString(info.getKeyUsage());
         if (keyUsage != null) {
             infosPanel.put("Utilisation (key usage)", JLabel.class, "keyUsage", keyUsage, false);
         }
@@ -102,6 +103,10 @@ public class CertificateDetailPanel extends JPanel {
         infosPanel.put("Digest SHA1", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA1(), " ", true),
                 false);
 
+
+        info.getOtherParams().forEach((k, v) -> {
+            otherInfosPanel.put(k, JTextField.class, "", v, false);
+        });
         otherInfosPanel.put("Digest SHA256", JTextArea.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", true),
                 false);
 

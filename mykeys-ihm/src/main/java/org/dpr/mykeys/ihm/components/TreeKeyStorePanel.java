@@ -41,12 +41,12 @@ import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.ChangePasswordDialog;
+import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -361,7 +361,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
         }
         // ask for password
         if (!useInternalPwd) {
-            char[] password = MykeysFrame.showPasswordDialog(this);
+            char[] password = DialogUtil.showPasswordDialog(this);
 
             if (password == null || password.length == 0) {
                 return false;
@@ -377,7 +377,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
                     ksInfo.getPassword());
             ksInfo.setOpen(true);
         } catch (Exception e1) {
-            MykeysFrame.showError(TreeKeyStorePanel.this, e1.getMessage());
+            DialogUtil.showError(TreeKeyStorePanel.this, e1.getMessage());
             e1.printStackTrace();
             return false;
         }

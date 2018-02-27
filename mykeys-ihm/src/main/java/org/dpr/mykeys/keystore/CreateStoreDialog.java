@@ -7,7 +7,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.ComponentUtils;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -31,6 +31,7 @@ public class CreateStoreDialog extends JDialog {
     // JPasswordField pwd2;
     private LabelValuePanel infosPanel;
     private JTextField tfDirectory;
+    private boolean result = false;
 
     // Map<String, String> elements = new HashMap<String, String>();
 
@@ -40,6 +41,10 @@ public class CreateStoreDialog extends JDialog {
         this.pack();
     }
 
+    public boolean showDialog() {
+        this.setVisible(true);
+        return result;
+    }
     private void init() {
         DialogAction dAction = new DialogAction();
         setTitle(Messages.getString("keystore.create.title"));
@@ -133,7 +138,7 @@ public class CreateStoreDialog extends JDialog {
             } else if (command.equals("OK")) {
                 //FIXME: do not work with empty password
                 if (tfDirectory.getText().equals("")) {
-                    MykeysFrame.showError(CreateStoreDialog.this, "Champs invalides");
+                    DialogUtil.showError(CreateStoreDialog.this, "Champs invalides");
                     return;
                 }
 
@@ -142,7 +147,7 @@ public class CreateStoreDialog extends JDialog {
                 }
 
                 if (!elements.get("password").equals(elements.get("pwd2"))) {
-                    MykeysFrame.showError(CreateStoreDialog.this, "Mot de passe incorrect");
+                    DialogUtil.showError(CreateStoreDialog.this, "Mot de passe incorrect");
                     return;
                 }
 
@@ -162,11 +167,12 @@ public class CreateStoreDialog extends JDialog {
                     createKeyStore(format, dir, ((String) elements.get("password")).toCharArray());
                     ksBuilder.create(dir, ((String) elements.get("password")).toCharArray());
                     KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
-                    ((MykeysFrame) CreateStoreDialog.this.getParent()).updateKeyStoreList();
+
+                    result = true;
                     CreateStoreDialog.this.setVisible(false);
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    MykeysFrame.showError(CreateStoreDialog.this, e.getMessage());
+                    DialogUtil.showError(CreateStoreDialog.this, e.getMessage());
                 }
 
             } else if (command.equals("CANCEL")) {

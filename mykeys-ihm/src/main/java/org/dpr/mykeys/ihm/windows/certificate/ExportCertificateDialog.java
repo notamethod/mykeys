@@ -34,7 +34,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -176,7 +176,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
             {
                 if (tfDirectory.getText().equals(""))
                 {
-                    MykeysFrame.showError(ExportCertificateDialog.this,
+                    DialogUtil.showError(ExportCertificateDialog.this,
                             "Champs invalides");
                     return;
                 }
@@ -197,14 +197,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                         "formatCert");
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                     if (isExportCle) {
-                        privKeyPwd = MykeysFrame.showPasswordDialog(null, "mot de passe de la cl� priv�e");
+                        privKeyPwd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
                     }
                 } else
                     privKeyPwd = MkSession.password;
                 certInfo.setPassword(privKeyPwd);
                 if (format.equalsIgnoreCase("pkcs12"))
                 {
-                    password = MykeysFrame.showPasswordDialog(null, "mot de passe d'exportation");
+                    password = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
 
 
                     CommonServices cact = new CommonServices();
@@ -217,7 +217,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                     catch (Exception e)
                     {
                         log.error(e);
-                        MykeysFrame.showError(ExportCertificateDialog.this,
+                        DialogUtil.showError(ExportCertificateDialog.this,
                                 e.getLocalizedMessage());
                     }
                 }
@@ -236,7 +236,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                     catch (Exception e)
                     {
 
-                        MykeysFrame.showError(ExportCertificateDialog.this,
+                        DialogUtil.showError(ExportCertificateDialog.this,
                                 e.getLocalizedMessage());
 
                     }
@@ -257,13 +257,13 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                     catch (Exception e)
                     {
 
-                        MykeysFrame.showError(ExportCertificateDialog.this,
+                        DialogUtil.showError(ExportCertificateDialog.this,
                                 e.getLocalizedMessage());
 
                     }
                 }
                 ExportCertificateDialog.this.setVisible(false);
-                MykeysFrame.showInfo(ExportCertificateDialog.this,
+                DialogUtil.showInfo(ExportCertificateDialog.this,
                         "Exportation terminée");
             }
             else if (command.equals("CANCEL"))

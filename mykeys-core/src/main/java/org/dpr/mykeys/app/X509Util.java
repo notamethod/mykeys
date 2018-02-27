@@ -4,16 +4,11 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.CertificatePolicies;
-import org.bouncycastle.asn1.x509.Extension;
-import org.bouncycastle.asn1.x509.PolicyInformation;
-import org.bouncycastle.asn1.x509.X509Extensions;
+import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 import javax.security.auth.x500.X500Principal;
@@ -79,28 +74,9 @@ public class X509Util {
         }
     }
 
-    public static void getExtensions(X509Certificate certificate) {
+    public static Map<String, String> getExtensions(X509Certificate certificate) {
 
-        //check key usage
-        byte[] b = certificate.getExtensionValue(X509Extensions.KeyUsage.getId());
-        if (b == null) {
-            log.debug(certificate.getSubjectX500Principal() + ": has no key usage");
-            return;
-        }
-        ASN1Primitive obj = null;
-        try {
-            obj = X509ExtensionUtil.fromExtensionValue(b);
-        } catch (Exception e) {
-            if (log.isErrorEnabled()) {
-                log.error(e);
-            }
-        }
-
-        if (log.isDebugEnabled()) {
-            log.debug(obj);
-        }
-        b = certificate.getExtensionValue(X509Extensions.SubjectKeyIdentifier.getId());
-
+        Map<String, String> returnPolicies = new LinkedHashMap<>();
         //Policies
         byte[] policyBytes = certificate.getExtensionValue(Extension.certificatePolicies.toString());
         if (policyBytes != null) {
@@ -111,15 +87,30 @@ public class X509Util {
                 e.printStackTrace();
             }
             PolicyInformation[] policyInformation = policies.getPolicyInformation();
+            int k = 1;
             for (PolicyInformation pInfo : policyInformation) {
                 //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
                 ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers();
                 if (policyQualifiers != null) {
                     policyQualifiers.forEach(name -> log.info("policyQualifier: " + name));
+                    System.out.println(policyQualifiers.size());
+                    for (int i = 0; i < policyQualifiers.size(); i++) {
+                        ASN1Sequence pol = (ASN1Sequence) policyQualifiers.getObjectAt(i);
+                        //System.out.println(pol.getObjectAt(0));
+                        for (int j = 0; j < pol.size(); j++) {
+                            returnPolicies.put(pol.toString(), pol.getObjectAt(j).toString());
+                            System.out.println(pol);
+                            //     ASN1Sequence polx = (ASN1Sequence) pol.getObjectAt(i);
+                            System.out.println(pol.getObjectAt(j));
+                        }
+                    }
                 }
 
                 ASN1ObjectIdentifier policyId = pInfo.getPolicyIdentifier();
+                returnPolicies.put("policyid" + k, policyId.toString());
+                k++;
                 log.info("Polycy ID: " + policyId.toString());
+                return returnPolicies;
             }
         }
         // try {
@@ -167,7 +158,9 @@ public class X509Util {
         // SubjectInfoAccess
         // SubjectKeyIdentifier
         // TargetInformation
+        return returnPolicies;
     }
+
 
     // public static String BiToHex(BigInteger bi) {
     //
@@ -215,3 +208,5 @@ public class X509Util {
     }
 
 }
+//1.3.6.1.5.5.7.2.1 - id-qt-cps: OID for CPS qualifier
+//1.3.6.1.5.5.7.2.2 - id-qt-unotice: OID for user notice qualifier

@@ -24,8 +24,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JDropText;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
@@ -118,7 +117,7 @@ public class ImportCertificateDialog extends JDialog {
 			} else if (command.equals("OK")) {
 				if (tfDirectory.getText().equals("")
 						|| elements.get("pwd1") == null) {
-					MykeysFrame.showError(ImportCertificateDialog.this,
+                    DialogUtil.showError(ImportCertificateDialog.this,
 							"Champs invalides");
 					return;
 				}
@@ -143,7 +142,7 @@ public class ImportCertificateDialog extends JDialog {
 					ImportCertificateDialog.this.setVisible(false);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					MykeysFrame.showError(ImportCertificateDialog.this,
+                    DialogUtil.showError(ImportCertificateDialog.this,
 							e.getLocalizedMessage());
 					// e.printStackTrace();
 

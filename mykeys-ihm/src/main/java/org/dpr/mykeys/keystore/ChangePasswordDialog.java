@@ -27,7 +27,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingutils.JFieldsPanel;
 import org.dpr.swingutils.LabelValuePanel;
 
@@ -94,11 +94,11 @@ public class ChangePasswordDialog extends JDialog {
 			String command = event.getActionCommand();
 			 if (command.equals("OK")) {
 				if (StringUtils.isBlank((String) elements.get("pwd_old")) || StringUtils.isBlank((String) elements.get("pwd_new")) || StringUtils.isBlank((String) elements.get("pwd_new2") )) {
-					MykeysFrame.showError(ChangePasswordDialog.this, "Champs invalides");
+                    DialogUtil.showError(ChangePasswordDialog.this, "Champs invalides");
 					return;
 				}
 				if (!elements.get("pwd_new").equals(elements.get("pwd_new2"))) {
-					MykeysFrame.showError(ChangePasswordDialog.this, getMessage("error.match.password"));
+                    DialogUtil.showError(ChangePasswordDialog.this, getMessage("error.match.password"));
 					return;
 				}
 				ksInfo.setPassword(((String)elements.get("pwd_old")).toCharArray());
@@ -108,7 +108,7 @@ public class ChangePasswordDialog extends JDialog {
 					ksInfo.setOpen(false);
 					ChangePasswordDialog.this.setVisible(false);
                 } catch (TamperedWithException | KeyToolsException | ServiceException e) {
-					MykeysFrame.showError(ChangePasswordDialog.this, e.getLocalizedMessage());
+                    DialogUtil.showError(ChangePasswordDialog.this, e.getLocalizedMessage());
 				}
 
 
