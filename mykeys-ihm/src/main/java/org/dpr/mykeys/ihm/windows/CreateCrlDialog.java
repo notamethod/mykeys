@@ -23,6 +23,9 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.security.cert.X509CRL;
 import java.util.*;
+import java.util.List;
+
+import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
 public class CreateCrlDialog extends JDialog {
     private static final Log log = LogFactory.getLog(ListPanel.class);
@@ -33,12 +36,11 @@ public class CreateCrlDialog extends JDialog {
     // JTextField x509PrincipalE;
     // JTextField x509PrincipalCN;
     public JFileChooser jfc;
+    boolean isAC = false;
     private JTextField tfDirectoryOut;
     private LabelValuePanel infosPanel;
-
     // CertificateInfo certInfo = new CertificateInfo();
     private CertificateValue certificateValue;
-    boolean isAC = false;
 
     public CreateCrlDialog(JFrame owner, boolean modal) {
 
@@ -86,7 +88,7 @@ public class CreateCrlDialog extends JDialog {
         FileSystemView fsv = FileSystemView.getFileSystemView();
         File f = fsv.getDefaultDirectory();
 
-        JLabel jl5 = new JLabel("Fichier en sortie");
+        JLabel jl5 = new JLabel(Messages.getString("file.output"));
 
         tfDirectoryOut = new JTextField(40);
         tfDirectoryOut.setText(f.getAbsolutePath());
@@ -155,7 +157,8 @@ public class CreateCrlDialog extends JDialog {
         infosPanel.put(Messages.getString("x509.enddate"),
                 JSpinnerDate.class, "notAfter", calendar.getTime(), true);
         infosPanel.putEmptyLine();
-
+        infosPanel.put(getMessage("crl.serials"), JTextArea.class, "serials", "", true);
+        infosPanel.putEmptyLine();
         infosPanel.putEmptyLine();
 
     }
@@ -181,7 +184,10 @@ public class CreateCrlDialog extends JDialog {
                     return;
                 }
                 CrlValue crlValue = new CrlValue();
-
+                String serials = (String) elements.get("serials");
+                List<String> list = new ArrayList<>();
+                if (serials != null && !serials.isEmpty())
+                    list = new ArrayList<String>(Arrays.asList(serials.split(",")));
                 // certInfo.setX509PrincipalMap(elements);
                 HashMap<String, String> subjectMap = new HashMap<>();
                 crlValue.setName((String) elements.get("alias"));
@@ -198,7 +204,7 @@ public class CreateCrlDialog extends JDialog {
                         certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasIssuer);
                     } else if (certSign.getPrivateKey() == null)
                         certSign = ktools.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certSign.getAlias());
-                    X509CRL xCRL = CrlTools.generateCrl(certSign, crlValue);
+                    X509CRL xCRL = CrlTools.generateCrl(certSign, crlValue, list);
                     CrlTools.saveCRL(xCRL, crlValue.getPath());
                     // FIXME: add crl to tree
                     // ktools.generateCrl(certSign, crlValue, privateKey);

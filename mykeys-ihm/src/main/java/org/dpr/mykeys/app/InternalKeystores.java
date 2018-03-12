@@ -22,18 +22,13 @@ public class InternalKeystores {
 
 	private static final Log log = LogFactory.getLog(InternalKeystores.class);
 	private static String password = "mKeys983178";
+    private static String MK1_PASSWORD = "mKeys983178";
 	private static String USERDB = "userDB.jks";
 	private static String cfgPath;
 
 	public InternalKeystores(String cfgPath, String profilsPath)  {
-//        try {
-//          //  this.pathAC = cfgPath +generateName(StoreModel.CASTORE);
-//            this.pathCert = cfgPath + generateName(StoreModel.CERTSTORE);
-//
-//        } catch (NoSuchAlgorithmException e) {
-//           throw new RuntimeException(e);
-//        }
-		InternalKeystores.cfgPath = cfgPath;
+
+        InternalKeystores.cfgPath = cfgPath;
 		this.pathProfils = profilsPath;
 		this.pathUDB = cfgPath + USERDB;
 	}

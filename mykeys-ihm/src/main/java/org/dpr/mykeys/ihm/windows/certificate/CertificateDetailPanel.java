@@ -1,12 +1,5 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import java.awt.*;
-import java.security.cert.CertificateExpiredException;
-import java.security.cert.CertificateNotYetValidException;
-import java.util.Iterator;
-
-import javax.swing.*;
-
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -19,6 +12,12 @@ import org.dpr.swingutils.JSpinnerDate;
 import org.dpr.swingutils.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
+import java.util.List;
 
 public class CertificateDetailPanel extends JPanel {
 
@@ -92,9 +91,10 @@ public class CertificateDetailPanel extends JPanel {
             }
         }
         infosPanel.putEmptyLine();
-        String keyUsage = CertificateUtils.keyUsageToString(info.getKeyUsage());
-        if (keyUsage != null) {
-            infosPanel.put("Utilisation (key usage)", JLabel.class, "keyUsage", keyUsage, false);
+        List<String> keyUsageList = CertificateUtils.keyUsageToList(info.getKeyUsage());
+        if (keyUsageList != null) {
+            for (String keyUsage : keyUsageList)
+                infosPanel.put(Messages.getString("usage.title"), JLabel.class, "keyUsage", keyUsage, false);
         }
         infosPanel.putEmptyLine();
         infosPanel.put(Messages.getString("x509.alias"), JTextField.class, "", info.getAlias(), false);

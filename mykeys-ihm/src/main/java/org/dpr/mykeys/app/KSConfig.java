@@ -28,7 +28,8 @@ public class KSConfig {
 
 	public static final String STORE_PREFIX = "store";
 
-    public static final String MKPATH = ".mykeys3";
+    public static final String MKPATH = ".mykeys2";
+    public static final String MK1PATH = ".mykeys";
 
 	private static String path;
 	
@@ -38,6 +39,9 @@ public class KSConfig {
 	
 	private static ResourceBundle messages;
 
+    public static void init() {
+        init(MKPATH);
+    }
 	public static void init(String cfgPathName) {
 
 		if (externalPath==null)
@@ -50,7 +54,8 @@ public class KSConfig {
 
 		} catch (ConfigurationException e) {
 			// create files
-			userConfig = new PropertiesConfiguration();
+
+            userConfig = new PropertiesConfiguration();
 			userConfig.setFile(new File(path, usrFileName));
 
 		}

@@ -23,7 +23,6 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.ihm.windows.CreateUserDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.SelectUserDialog;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -63,13 +62,14 @@ public class MyKeys {
         ProviderUtil.init("BC");
 
         try {
-            KSConfig.init(KSConfig.MKPATH);
+            KSConfig.init();
             boolean justCreated = checkUpdate();
             checkConfig();
             if (justCreated) {
-                migrate();
+                // migrate();
                 login();
             } else {
+                // migrate();
                 login();
             }
 
@@ -83,20 +83,7 @@ public class MyKeys {
         // updateKeyStoreList();
     }
 
-    /**
-     * not sure to continue on this...
-     */
-    private void migrate() {
-        log.info("migration not implemented");
-//        char[] password = null;
-//        if (KSConfig.getInternalKeystores().existsACDatabase()){
-//
-//            KeyStoreValue ki = KSConfig.getInternalKeystores().getStoreAC();
-//            KeyStoreHelper kh = new KeyStoreHelper();
-//             password = MykeysFrame.showPasswordDialog(null, "Veuillez renseigner votre mot de passe pour upgrader les magasins");
-//
-//        }
-    }
+
 
     private void login() {
         SwingUtilities.invokeLater(() -> {
@@ -116,7 +103,7 @@ public class MyKeys {
         boolean justCreated = false;
         if (!KSConfig.getInternalKeystores().existsUserDatabase()) {
 
-            boolean retour = MykeysFrame.askConfirmDialog(null, Messages.getString("prompt.createUser"));
+            boolean retour = DialogUtil.askConfirmDialog(null, Messages.getString("prompt.createUser"));
             if (!retour) {
                 System.exit(0);
             }
@@ -174,5 +161,6 @@ public class MyKeys {
         }
 
     }
+
 
 }

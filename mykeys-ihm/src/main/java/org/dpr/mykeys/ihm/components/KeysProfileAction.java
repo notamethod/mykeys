@@ -13,8 +13,8 @@ import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
- 
+import org.dpr.mykeys.utils.DialogUtil;
+
 public class KeysProfileAction implements ActionListener {
 
 	/**
@@ -81,7 +81,7 @@ public class KeysProfileAction implements ActionListener {
 			if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
                     && this.listPanel.listCerts.getSelectedValue() instanceof CertificateTemplate) {
                 CertificateTemplate info = (CertificateTemplate) this.listPanel.listCerts.getSelectedValue();
-				if (MykeysFrame.askConfirmDialog(null, "Suppression du profil " + info.getName())) {
+                if (DialogUtil.askConfirmDialog(null, "Suppression du profil " + info.getName())) {
 					try {
 						profileService.delete( info);
 						this.listPanel.updateInfo(this.listPanel.ksInfo);

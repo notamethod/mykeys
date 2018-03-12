@@ -7,6 +7,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.security.KeyStoreException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,11 +34,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.MenuAction;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.utils.DialogUtil;
 
 /**
  * 
@@ -76,6 +79,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
 		// setNbCols(4);
 		init();
+        checkUpgrade();
 
 	}
 
@@ -315,23 +319,18 @@ public class MykeysFrame extends JFrame implements WindowListener {
 			return null;
 		}
 	}
-
 	/**
-	 * Show dialog box with a password field
-	 * 
-	 * @param parent
-	 * @return
+     * not sure to continue on this...
 	 */
-	public static boolean askConfirmDialog(Component parent, String message) {
-
-		boolean retour = false;
-        int result = JOptionPane.showConfirmDialog(parent, message, Messages.getString("title.action.confirm"),
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-		if (result == JOptionPane.OK_OPTION) {
-			retour = true;
-		}
-		return retour;
+    private void checkUpgrade() {
+        String path = System.getProperty("user.home") + File.separator + KSConfig.MK1PATH;
+        boolean migrate = false;
+        if (new File(path).exists()) {
+            migrate = DialogUtil.askConfirmDialog(this, Messages.getString("Mise à jour"));
+        }
+        if (migrate) {
+            KeyStoreHelper kh = new KeyStoreHelper();
+            //kh.loadKeyStore()
+        }
 	}
-
 }

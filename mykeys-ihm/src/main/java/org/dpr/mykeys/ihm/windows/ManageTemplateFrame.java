@@ -9,6 +9,7 @@ import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.model.ProfileModel;
 import org.dpr.mykeys.template.CreateTemplateDialog;
+import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -123,7 +124,7 @@ public class ManageTemplateFrame extends JFrame {
                 if (row != -1) {
                     CertificateTemplate p = modele.getValueAt(row);
 
-                    if (MykeysFrame.askConfirmDialog(null, Messages.getString("template.delete.ask", p.getName()))) {
+                    if (DialogUtil.askConfirmDialog(null, Messages.getString("template.delete.ask", p.getName()))) {
                         try {
                             ps.delete(p);
                             modele.setProfiles(((List<CertificateTemplate>) ProfileServices.getProfils(KSConfig.getProfilsPath())));

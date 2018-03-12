@@ -12,8 +12,8 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.IhmException;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
- 
+import org.dpr.mykeys.utils.DialogUtil;
+
 public class KeysAction implements ActionListener {
 
 	/**
@@ -123,7 +123,7 @@ public class KeysAction implements ActionListener {
 			if (this.listPanel.listCerts != null && this.listPanel.listCerts.getSelectedValue() != null
 					&& this.listPanel.listCerts.getSelectedValue() instanceof CertificateValue) {
 				CertificateValue certInfo = (CertificateValue) this.listPanel.listCerts.getSelectedValue();
-				if (MykeysFrame.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
+                if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
 					try {
 						this.listPanel.deleteCertificate(this.listPanel.ksInfo, certInfo);
 					} catch (ServiceException e1) {

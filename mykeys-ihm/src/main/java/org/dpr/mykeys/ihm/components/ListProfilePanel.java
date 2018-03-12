@@ -47,7 +47,6 @@ import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
@@ -271,9 +270,8 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * .
 	 * 
 	 * <BR>
-	 * 
-	 * 
-	 * @param ksInfo2
+	 *
+	 *
 	 * @return
 	 * @throws KeyToolsException
 	 */
@@ -401,7 +399,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 				if (listCerts != null && listCerts.getSelectedValue() != null
 						&& listCerts.getSelectedValue() instanceof CertificateValue) {
                     CertificateTemplate certInfo = (CertificateTemplate) listCerts.getSelectedValue();
-					if (MykeysFrame.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
+					if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
 						try {
 							profileService.delete( certInfo);
 						} catch (IOException e1) {
@@ -459,8 +457,8 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * 
 	 * <BR>
 	 * 
-	 * 
-	 * @param ksInfo2
+	 *
+	 * @param info
 	 * @param certificateInfo
 	 */
 	public void deleteCertificate(NodeInfo info, CertificateValue certificateInfo) {

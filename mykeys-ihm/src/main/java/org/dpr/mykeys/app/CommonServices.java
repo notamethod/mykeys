@@ -1,5 +1,5 @@
-/**
- * 
+/*
+
  */
 package org.dpr.mykeys.app;
 
@@ -77,19 +77,7 @@ public class CommonServices {
 		}
 
 		SignTools sTools = new SignTools();
-		sTools.SignData(null, certInfo, "c:/dev/_test.sql", isInclude);
-
-	}
-
-
-    public void generateCrl(String aliasEmetteur, CrlValue crlValue) throws Exception {
-
-		KeyStoreHelper ktools = new KeyStoreHelper();
-		CertificateValue certSign;
-		//FIXME
-		certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasEmetteur);
-		X509CRL xCRL = CrlTools.generateCrl(certSign, crlValue);
-		CrlTools.saveCRL(xCRL, crlValue.getPath());
+        sTools.SignData(null, certInfo, "tmp/notimplemented", isInclude);
 
 	}
 

@@ -274,7 +274,7 @@ public class TreePopupMenu extends JPopupMenu {
                     break;
                 case DELETE_STORE:
                     ksInfo = (KeyStoreValue) node.getUserObject();
-                    if (MykeysFrame.askConfirmDialog(treeKeyStoreParent, Messages.getString("delete.certificat.confirm", ksInfo.getName()))) {
+                    if (DialogUtil.askConfirmDialog(treeKeyStoreParent, Messages.getString("delete.certificat.confirm", ksInfo.getName()))) {
                         try {
 
                             Path fileToDeletePath = Paths.get(ksInfo.getPath());

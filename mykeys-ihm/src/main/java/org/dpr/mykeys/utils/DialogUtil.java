@@ -73,4 +73,22 @@ public class DialogUtil {
         JOptionPane.showMessageDialog(c, string, "Information", JOptionPane.INFORMATION_MESSAGE);
 
     }
+
+    /**
+     * Show dialog box with a password field
+     *
+     * @param parent
+     * @return
+     */
+    public static boolean askConfirmDialog(Component parent, String message) {
+
+        boolean retour = false;
+        int result = JOptionPane.showConfirmDialog(parent, message, Messages.getString("title.action.confirm"),
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            retour = true;
+        }
+        return retour;
+    }
 }
