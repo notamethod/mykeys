@@ -2,9 +2,8 @@
 
 A simple X509 certificate manager
 
-## next release
-Next Mykeys release planned to february (2018) with new features.
-More information coming soon.
+## current release
+Beta release 0.8.0 with new features.
 
 ### Features
 - Keystore management:
