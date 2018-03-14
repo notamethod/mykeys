@@ -326,11 +326,8 @@ public class MykeysFrame extends JFrame implements WindowListener {
         String path = System.getProperty("user.home") + File.separator + KSConfig.MK1PATH;
         boolean migrate = false;
         if (new File(path).exists()) {
-            migrate = DialogUtil.askConfirmDialog(this, Messages.getString("Mise à jour"));
+			DialogUtil.showInfo(this, Messages.getString("update.info", path));
         }
-        if (migrate) {
-            KeyStoreHelper kh = new KeyStoreHelper();
-            //kh.loadKeyStore()
-        }
+
 	}
 }

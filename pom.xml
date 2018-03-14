@@ -9,6 +9,7 @@
 	<modules>
 		<module>mykeys-core</module>
 		<module>mykeys-ihm</module>
+        <module>mykeys-ihm-final</module>
 	</modules>
 
 	<dependencyManagement>

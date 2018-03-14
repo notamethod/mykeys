@@ -30,7 +30,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
     private static final Log log = LogFactory.getLog(CertificateValue.class);
     private final List<GeneralName> subjectNames = new ArrayList<>();
     private Certificate[] certificateChain;
-    // private X509PrincipalModel x509PrincipalModel;
     private PublicKey publicKey;
     private PrivateKey privateKey;
     private String algoPubKey;
