@@ -206,7 +206,11 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                     KeyTools ktools = new KeyTools();
                     KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
                     //FIXME
-                    CertificateValue newCertificate = cm.createCertificate(null);
+                    CertificateValue issuer = null;
+                    if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
+                        issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
+
+                    CertificateValue newCertificate = cm.createCertificate(isAC, issuer);
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);
 
@@ -242,6 +246,8 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
             certInfo.setCrlDistributionURL(((String) elements.get("crlDistrib")));
             certInfo.setPolicyNotice(((String) elements.get("policyNotice")));
             certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
+            certInfo.setIssuer(((String) elements.get("issuer")));
+
             // certInfo.setKeyUsage(keyUsage);
             boolean[] booloKu = new boolean[9];
 

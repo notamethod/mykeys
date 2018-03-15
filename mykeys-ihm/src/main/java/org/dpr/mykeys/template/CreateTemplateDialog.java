@@ -185,7 +185,7 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
 
             infosPanel.put(getMessage("label.description"), JTextArea.class, "description", "", true);
             infosPanel.putEmptyLine();
-            infosPanel.put(getMessage("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
+            infosPanel.put(getMessage("x509.issuer"), JComboBox.class, "issuer", mapAC, "");
             infosPanel.put(getMessage("x509.pubkeysize"), JComboBox.class, "keyLength", mapKeyLength,
                     "2048 bits");
             infosPanel.put(getMessage("x509.pubkeyalgo"), JComboBox.class, "algoPubKey", mapAlgoKey,
