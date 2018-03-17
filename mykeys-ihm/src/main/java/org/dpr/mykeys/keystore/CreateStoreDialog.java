@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -21,6 +22,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.dpr.mykeys.app.keystore.KeyStoreHelper.KSTYPE_EXT_JKS;
+import static org.dpr.mykeys.app.keystore.KeyStoreHelper.KSTYPE_EXT_P12;
 
 public class CreateStoreDialog extends JDialog {
 
@@ -45,6 +49,7 @@ public class CreateStoreDialog extends JDialog {
         this.setVisible(true);
         return result;
     }
+
     private void init() {
         DialogAction dAction = new DialogAction();
         setTitle(Messages.getString("keystore.create.title"));
@@ -101,11 +106,11 @@ public class CreateStoreDialog extends JDialog {
     }
 
     private String correctExtension(String name, String typeKS) {
-        if (!name.toUpperCase().endsWith("JKS") && typeKS.equals("JKS")) {
-            name = name + ".jks";
+        if (!name.toLowerCase().endsWith(KSTYPE_EXT_JKS) && typeKS.equals("JKS")) {
+            name = name + "." + KSTYPE_EXT_JKS;
         }
-        if (!name.toUpperCase().endsWith("p12") && typeKS.equals("PKCS12")) {
-            name = name + ".p12";
+        if (!name.toLowerCase().endsWith(KSTYPE_EXT_P12) && typeKS.equals("PKCS12")) {
+            name = name + "." + KSTYPE_EXT_P12;
         }
         return name;
     }

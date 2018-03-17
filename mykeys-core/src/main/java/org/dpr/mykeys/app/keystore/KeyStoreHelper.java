@@ -29,10 +29,11 @@ import java.util.List;
 public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     private static final Log log = LogFactory.getLog(KeyStoreHelper.class);
 
-    private static final String[] KSTYPE_EXT_PKCS12 = {"p12", "pfx", "pkcs12"};
-    private static final String[] KSTYPE_EXT_DER = {"der", "cer"};
+    private static final String[] KSTYPE_EXTS_PKCS12 = {"p12", "pfx", "pkcs12"};
+    private static final String[] KSTYPE_EXTS_DER = {"der", "cer"};
     private static final String KSTYPE_EXT_PEM = "pem";
-    private static final String KSTYPE_EXT_JKS = "jks";
+    public static final String KSTYPE_EXT_JKS = "jks";
+    public static final String KSTYPE_EXT_P12 = "p12";
     private KeyStoreValue ksInfo;
 
     public KeyStoreHelper(KeyStoreValue ksInfo) {
@@ -52,12 +53,12 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             if (ext.equalsIgnoreCase(KSTYPE_EXT_JKS)) {
                 return StoreFormat.JKS;
             }
-            for (String aliasType : KSTYPE_EXT_PKCS12) {
+            for (String aliasType : KSTYPE_EXTS_PKCS12) {
                 if (ext.equalsIgnoreCase(aliasType)) {
                     return StoreFormat.PKCS12;
                 }
             }
-            for (String aliasType : KSTYPE_EXT_DER) {
+            for (String aliasType : KSTYPE_EXTS_DER) {
                 if (ext.equalsIgnoreCase(aliasType)) {
                     return StoreFormat.DER;
                 }

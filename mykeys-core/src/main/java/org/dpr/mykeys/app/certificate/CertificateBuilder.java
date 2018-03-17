@@ -345,7 +345,7 @@ public class CertificateBuilder extends KeyTools {
 	 */
 	CertificateBuilder addCrlDistributionPoint(CertificateValue certModel, CertificateValue certIssuer
 			) { // point
-		// CRL
+        log.info("adding crl distribution point");
 		if (certModel.getCrlDistributionURL() != null) {
 			DistributionPoint[] dp = new DistributionPoint[1];
 			DEROctetString oct = new DEROctetString(certModel.getCrlDistributionURL().getBytes());
