@@ -16,8 +16,9 @@ import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.JSpinnerDate;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.JSpinnerDate;
+import org.dpr.swingtools.components.JStringList;
+import org.dpr.swingtools.components.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -156,6 +157,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         infosPanel.addChild(subjectPanel);
 
 
+
         jp.add(cp);
         jp.add(checkPanel);
         jp.add(new OkCancelPanel(dAction, FlowLayout.RIGHT));
@@ -261,6 +263,8 @@ public class SuperCreate extends JDialog implements ItemListener {
                 infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
                 infosPanel.put("Policy notice", "policyNotice", "");
                 infosPanel.put("Policy CPS", "policyCPS", "");
+
+
                 infosPanel.putEmptyLine();
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                     infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", KSConfig.getInternalKeystores().getPassword(),
@@ -275,12 +279,13 @@ public class SuperCreate extends JDialog implements ItemListener {
 
                 // subject
                 infosPanel.putEmptyLine();
-                Calendar calendar = Calendar.getInstance();
                 infosPanel.putEmptyLine();
 
                 infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
                 infosPanel.put("Policy notice", "policyNotice", "");
                 infosPanel.put("Policy CPS", "policyCPS", "");
+                infosPanel.put(Messages.getString("x509.policyid"), "policyID", "");
+                // infosPanel.putList(Messages.getString("x509.policyid"), JStringList.class, "policyID", JStringList.Position.RIGHT);
                 infosPanel.putEmptyLine();
 
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
@@ -406,6 +411,8 @@ public class SuperCreate extends JDialog implements ItemListener {
 
             certInfo.setCrlDistributionURL(((String) elements.get("crlDistrib")));
             certInfo.setPolicyNotice(((String) elements.get("policyNotice")));
+            certInfo.setPolicyID(((String) elements.get("policyID")));
+            // certInfo.setPolicyID(infosPanel.getElements().getList("policyID").get(0));
             certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
 
         }

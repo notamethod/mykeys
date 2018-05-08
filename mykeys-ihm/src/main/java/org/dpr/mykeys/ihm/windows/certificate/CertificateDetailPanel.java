@@ -8,8 +8,8 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.swingutils.JSpinnerDate;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.JSpinnerDate;
+import org.dpr.swingtools.components.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
 

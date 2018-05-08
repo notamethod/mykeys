@@ -53,11 +53,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
     private X509Certificate certificate;
     private String policyNotice;
     private String policyCPS;
-
-    public Map<String, String> getOtherParams() {
-        return otherParams;
-    }
-
+    private String policyID;
     private Map<String, String> otherParams;
 
     public CertificateValue() {
@@ -84,6 +80,14 @@ public class CertificateValue implements ChildInfo, Cloneable {
     public CertificateValue(X509Certificate[] certs) throws GeneralSecurityException {
 
         init(certs);
+    }
+
+    public Map<String, String> getOtherParams() {
+        return otherParams;
+    }
+
+    public void setOtherParams(Map<String, String> otherParams) {
+        this.otherParams = otherParams;
     }
 
     public int getDuration() {
@@ -156,6 +160,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     /**
      * Initialize certificate
+     *
      * @param certX509
      * @throws GeneralSecurityException
      */
@@ -255,15 +260,15 @@ public class CertificateValue implements ChildInfo, Cloneable {
     /**
      * @param keyLength the keyLength to set
      */
-    public void setKeyLength(String keyLength) {
-        this.keyLength = Integer.valueOf(keyLength);
+    public void setKeyLength(int keyLength) {
+        this.keyLength = keyLength;
     }
 
     /**
      * @param keyLength the keyLength to set
      */
-    public void setKeyLength(int keyLength) {
-        this.keyLength = keyLength;
+    public void setKeyLength(String keyLength) {
+        this.keyLength = Integer.valueOf(keyLength);
     }
 
     /**
@@ -399,15 +404,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
         return subjectMap;
     }
 
-    public void setSubjectMap(String name) {
-        this.subjectMap.clear();
-        for (String pair : name.split(",")) {
-            String[] value = pair.split("=");
-            subjectMap.put(value[0], value[1]);
-        }
-
-    }
-
     /**
      * @param elementMap the subjectMap to set
      */
@@ -420,6 +416,15 @@ public class CertificateValue implements ChildInfo, Cloneable {
             if (value instanceof String) {
                 this.subjectMap.put(key, (String) value);
             }
+        }
+
+    }
+
+    public void setSubjectMap(String name) {
+        this.subjectMap.clear();
+        for (String pair : name.split(",")) {
+            String[] value = pair.split("=");
+            subjectMap.put(value[0], value[1]);
         }
 
     }
@@ -499,16 +504,16 @@ public class CertificateValue implements ChildInfo, Cloneable {
         this.digestSHA1 = digestSHA1;
     }
 
+    // public String getCrlDistributionURL() {
+    // return el "http://xxx.crl";
+    // }
+
     /**
      * @return the digestSHA256
      */
     public byte[] getDigestSHA256() {
         return digestSHA256;
     }
-
-    // public String getCrlDistributionURL() {
-    // return el "http://xxx.crl";
-    // }
 
     /**
      * @param digestSHA256 the digestSHA256 to set
@@ -518,13 +523,20 @@ public class CertificateValue implements ChildInfo, Cloneable {
     }
 
     public String getPolicyID() {
-        return "2.16.250.1.114412.1.3.0.27";
+        if (policyID == null)
+            return "2.16.250.1.114412.1.3.0.27";
+        return policyID;
+
         //2.16.250.113556.1.8000.2554.58763.53606.25287.17664.43781.22216.52932.5775
+    }
+
+    public void setPolicyID(String policyID) {
+        this.policyID = policyID;
     }
 
     /**
      * .
-     * <p>
+     *
      * <BR>
      *
      * @return
@@ -536,7 +548,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     /**
      * .
-     * <p>
+     *
      * <BR>
      *
      * @param certificateChain2
@@ -622,7 +634,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     /**
      * .
-     * <p>
+     *
      * <BR>
      *
      * @return
@@ -688,9 +700,5 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
         // on renvoie le clone
         return certificate;
-    }
-
-    public void setOtherParams(Map<String, String> otherParams) {
-        this.otherParams = otherParams;
     }
 }

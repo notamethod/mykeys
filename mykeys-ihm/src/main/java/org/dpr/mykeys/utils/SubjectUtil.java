@@ -44,6 +44,7 @@ public class SubjectUtil {
             mapCertificateLabels.put("duration", "certinfo.duration");
             mapCertificateLabels.put("policyCPS", "x509.policycps");
             mapCertificateLabels.put("policyNotice", "x509.policynotice");
+            mapCertificateLabels.put("policyID", "x509.policyid");
             mapCertificateLabels.put("crlDistrib", "x509.cdp");
             //  mapCertificateLabels.put("keyUSage2", "certinfo.keyUsage");
             mapCertificateLabels.put("keyUsage", "certinfo.keyUsage");

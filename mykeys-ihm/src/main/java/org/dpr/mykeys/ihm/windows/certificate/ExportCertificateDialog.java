@@ -35,8 +35,8 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.JFieldsPanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 public class ExportCertificateDialog extends JDialog implements ItemListener
 {
@@ -123,13 +123,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
         jbCancel.setActionCommand("CANCEL");
         JFieldsPanel jf4 = new JFieldsPanel(jbOK, jbCancel, FlowLayout.RIGHT);
 
-        infosPanel.put(LabelValuePanel.getString("dialog.generic.fileout"),
+        infosPanel.put(Messages.getString("dialog.generic.fileout"),
                 jpDirectory, true);
-        // jp.add(jf0);
-        // jp.add(jf1);
-        // jp.add(jf2);
         jp.add(infosPanel);
-        // jp.add(jpDirectory);
         jp.add(jf4);
 
     }

@@ -26,6 +26,7 @@
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-plaf:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-painters:1.6.5-1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.0" level="project" />
     <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.10" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />

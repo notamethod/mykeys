@@ -25,9 +25,9 @@ import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.JDropText;
-import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.JDropText;
+import org.dpr.swingtools.components.JFieldsPanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 public class ImportCertificateDialog extends JDialog {
 

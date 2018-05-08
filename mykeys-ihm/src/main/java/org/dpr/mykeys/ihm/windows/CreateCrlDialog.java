@@ -12,9 +12,9 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.JSpinnerDate;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.JFieldsPanel;
+import org.dpr.swingtools.components.JSpinnerDate;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;

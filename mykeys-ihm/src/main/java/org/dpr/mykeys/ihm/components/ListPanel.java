@@ -20,7 +20,7 @@ import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -37,7 +37,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 import static org.dpr.mykeys.utils.MessageUtils.getMessage;
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 @SuppressWarnings("serial")
 public class ListPanel extends JPanel implements DropTargetListener {

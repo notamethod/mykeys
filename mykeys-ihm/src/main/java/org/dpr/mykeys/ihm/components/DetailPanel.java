@@ -19,7 +19,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateDetailPanel;
 import org.dpr.mykeys.template.ProfilDetailPanel;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 public class DetailPanel extends JPanel {
 

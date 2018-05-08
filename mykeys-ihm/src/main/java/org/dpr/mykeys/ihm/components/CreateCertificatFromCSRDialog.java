@@ -31,9 +31,9 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.JDropText;
-import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.JDropText;
+import org.dpr.swingtools.components.JFieldsPanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemListener, ActionListener {
 

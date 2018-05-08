@@ -3,7 +3,7 @@
  */
 package org.dpr.mykeys.ihm.windows;
 
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 import java.awt.Component;
 

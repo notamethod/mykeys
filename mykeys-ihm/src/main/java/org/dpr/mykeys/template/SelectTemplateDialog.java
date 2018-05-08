@@ -12,8 +12,8 @@ import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.MkDialog;
 import org.dpr.mykeys.ihm.windows.certificate.CreateCertProfilDialog;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.JFieldsPanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +52,7 @@ public class SelectTemplateDialog extends MkDialog {
     private void init() throws IhmException {
 
         DialogAction dAction = new DialogAction();
-        // FIXME:
+
 
         setTitle(Messages.getString("title.template.select"));
 
@@ -63,7 +63,7 @@ public class SelectTemplateDialog extends MkDialog {
 
         JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
-        setPreferredSize(new Dimension(200, 110));
+        setPreferredSize(new Dimension(280, 110));
         infosPanel = getInfoPanel();
         panelInfo.add(infosPanel);
 
@@ -96,6 +96,7 @@ public class SelectTemplateDialog extends MkDialog {
 
         //   pb.addComponent(Messages.getString("label.name"), "name", users, ComponentType.COMBOBOX);
         JComboBox cb = new JComboBox();
+        cb.setPrototypeDisplayValue("name of a template");
 
         modelCombo = (DefaultComboBoxModel) cb.getModel();
 

@@ -112,7 +112,11 @@
             <artifactId>swingx-core</artifactId>
             <version>1.6.5-1</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.so-kes</groupId>
+            <artifactId>swingtools</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>

@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 
 class GradientTreeRenderer extends DefaultTreeCellRenderer implements

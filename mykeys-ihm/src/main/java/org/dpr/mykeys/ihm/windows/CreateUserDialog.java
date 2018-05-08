@@ -11,11 +11,12 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.AuthenticationService;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.utils.ComponentUtils;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.ComponentUtils;
-import org.dpr.swingutils.JFieldsPanel;
-import org.dpr.swingutils.LabelValuePanel;
-import org.dpr.swingutils.PanelBuilder;
+import org.dpr.swingtools.*;
+import org.dpr.swingtools.components.JFieldsPanel;
+import org.dpr.swingtools.components.LabelValuePanel;
+import org.dpr.swingtools.PanelBuilder;
 
 public class CreateUserDialog extends MkDialog {
 	private static final Log log = LogFactory.getLog(CreateUserDialog.class);

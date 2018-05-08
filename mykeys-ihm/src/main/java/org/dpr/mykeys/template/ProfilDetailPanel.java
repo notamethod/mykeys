@@ -7,7 +7,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.utils.SubjectUtil;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 import java.util.Enumeration;
 

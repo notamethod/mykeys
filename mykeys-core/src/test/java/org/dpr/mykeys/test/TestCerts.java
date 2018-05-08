@@ -18,12 +18,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.tsp.TimeStampToken;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.TimeStampManager;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.app.keystore.*;
 import org.junit.Test;
 
 
@@ -78,12 +75,6 @@ public class TestCerts {
 			fail();
 		}
 
-		// log.trace(String. Test.class.getPackage().getName());
-		// String name = Test.class.getPackage().getName().replace('.',
-		// File.separatorChar);
-		// File f = new File(path, name+File.separator+"data");
-		// f = new File(f.getAbsolutePath(), "test01.jks");
-		// log.trace(f.getAbsolutePath());
 		KeyTools kt = new KeyTools();
 		KeyStore ks = null;
 	
@@ -122,7 +113,7 @@ public class TestCerts {
 			while (enumKs.hasMoreElements()) {
 				String alias = enumKs.nextElement();
 				if (log.isDebugEnabled()) {
-					log.debug(alias);
+                    log.debug("alias " + alias);
 				}
 				//
 				CertificateValue certInfo = fillCertInfo(ksInfo, ks, alias);
@@ -131,6 +122,7 @@ public class TestCerts {
 		}
 
 	}
+
 
     private static CertificateValue fillCertInfo(KeyStoreValue ksInfo, KeyStore ks, String alias) throws ServiceException {
 		KeyStoreHelper ksv = new KeyStoreHelper(ksInfo);

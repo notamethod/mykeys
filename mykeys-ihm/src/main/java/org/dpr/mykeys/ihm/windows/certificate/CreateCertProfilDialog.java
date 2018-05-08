@@ -14,11 +14,11 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
 import org.dpr.mykeys.app.profile.ProfileServices;
-import org.dpr.mykeys.ihm.model.FrameModel;
+import org.dpr.swingtools.FrameModel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.utils.SubjectUtil;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -246,6 +246,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
             certInfo.setCrlDistributionURL(((String) elements.get("crlDistrib")));
             certInfo.setPolicyNotice(((String) elements.get("policyNotice")));
             certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
+            certInfo.setPolicyID(((String) elements.get("policyID")));
             certInfo.setIssuer(((String) elements.get("issuer")));
 
             // certInfo.setKeyUsage(keyUsage);

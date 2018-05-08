@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;

@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.components;
 
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 import java.awt.BorderLayout;
 import java.awt.datatransfer.DataFlavor;
@@ -54,7 +54,7 @@ import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 @SuppressWarnings("serial")
 public class ListProfilePanel extends ListPanel implements DropTargetListener {

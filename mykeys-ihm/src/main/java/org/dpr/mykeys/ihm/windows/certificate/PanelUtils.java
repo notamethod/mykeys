@@ -4,9 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.utils.SubjectUtil;
-import org.dpr.swingutils.LabelValuePanel;
-
-import java.util.Locale;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 class PanelUtils {
 

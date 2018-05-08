@@ -18,6 +18,7 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 
 import java.io.*;
@@ -54,6 +55,12 @@ public class CertificateHelper {
         return createCertificate(false, issuer);
     }
 
+    /**
+     * @param isAC   true is is an CA
+     * @param issuer certificate issuer
+     * @return
+     * @throws CertificateException
+     */
     public CertificateValue createCertificate(boolean isAC, CertificateValue issuer) throws CertificateException {
 
         CertificateBuilder builder = new CertificateBuilder();
@@ -248,8 +255,5 @@ public class CertificateHelper {
 
     }
 
-    public void namebuilder() {
 
-
-    }
 }

@@ -14,7 +14,7 @@ import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.utils.OrderedProperties;
 import org.dpr.mykeys.utils.X509AttributesUtils;
-import org.dpr.swingutils.LabelValuePanel;
+import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -210,7 +210,7 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
             infosPanel.put(getMessage("x509.cdp"), "crlDistrib", "");
             infosPanel.put(getMessage("x509.policynotice"), "policyNotice", "");
             infosPanel.put(getMessage("x509.policycps"), "policyCPS", "");
-
+            infosPanel.put(getMessage("x509.policyid"), "policyID", "");
         }
 
         return infosPanel;
@@ -275,6 +275,7 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
             certInfo.setCrlDistributionURL(((String) elements.get("crlDistrib")));
             certInfo.setPolicyNotice(((String) elements.get("policyNotice")));
             certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
+            certInfo.setPolicyID(((String) elements.get("policyID")));
         }
 
     }

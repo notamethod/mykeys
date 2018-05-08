@@ -1,5 +1,5 @@
 
-package org.dpr.swingutils;
+package org.dpr.mykeys.utils;
 
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.utils.DialogUtil;
@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class ComponentUtils {
 
-	public static void checkNotNull(String string) {
-		// TODO Auto-generated method stub
-		
-	}
+    public static void checkNotNull(String string) {
+        // TODO Auto-generated method stub
+
+    }
 
 
     public static boolean checkFields(Component c, Map<String, Object> elements, String... fields) {

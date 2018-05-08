@@ -34,6 +34,7 @@
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-plaf:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-painters:1.6.5-1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.java.net.substance:substance:6.0" level="project" />
     <orderEntry type="library" name="Maven: org.pushing-pixels:trident:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.swt.win32.win32:x86:3.3.0-v3346" level="project" />

@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.components;
 
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

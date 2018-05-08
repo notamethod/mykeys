@@ -1,6 +1,6 @@
 package org.dpr.mykeys.template;
 
-import static org.dpr.swingutils.ImageUtils.createImageIcon;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
