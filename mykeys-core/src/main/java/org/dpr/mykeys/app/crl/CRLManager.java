@@ -1,19 +1,14 @@
 package org.dpr.mykeys.app.crl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.math.BigInteger;
 import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CRLException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
+import java.security.*;
+import java.security.cert.*;
+import java.security.cert.CRLReason;
+import java.security.cert.Extension;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,16 +16,18 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.x509.CRLDistPoint;
-import org.bouncycastle.asn1.x509.DistributionPoint;
-import org.bouncycastle.asn1.x509.DistributionPointName;
-import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x509.GeneralNames;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.asn1.x509.X509Name;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.*;
+import org.bouncycastle.cert.X509CRLHolder;
+import org.bouncycastle.cert.X509v2CRLBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.jce.provider.X509CertificateObject;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 
 /**
@@ -41,7 +38,7 @@ public class CRLManager {
 
 	private static final Log log = LogFactory.getLog(CRLManager.class);
 
-	private static final String CRL_EXTENSION = ".crl";
+    public static final String CRL_EXTENSION = ".crl";
 
 	private String provider;
 
@@ -54,6 +51,10 @@ public class CRLManager {
     private CRLManager(String securityProvider) {
 		provider = securityProvider;
 	}
+
+    public CRLManager() {
+        provider = "BC";
+    }
 
 	/**
 	 * Récupération des points de distribution des CRL.
@@ -233,7 +234,7 @@ public class CRLManager {
 	 * @throws CRLException
 	 * @throws CertificateException
 	 */
-    private X509CRL getCrl(InputStream inStream) throws CRLException,
+    public X509CRL getCrl(InputStream inStream) throws CRLException,
 			NoSuchProviderException, CertificateException {
 
 		CertificateFactory cf;
@@ -362,4 +363,77 @@ public class CRLManager {
 		File crlFile = new File(fpath, fname);
 		return crlFile;
 	}
+
+    /**
+     * .
+     *
+     * <BR>
+     *
+     * @param certSign
+     * @param crlValue
+     * @return
+     * @throws IllegalStateException
+     * @throws CRLException
+     */
+    public X509CRL generateCrl(CertificateValue certSign, CrlValue crlValue, List<String> serialList)
+            throws
+            CRLException, IllegalStateException,
+            OperatorCreationException, IOException {
+
+
+        X509Certificate certificate = certSign.getCertificate();
+        PrivateKey privateKey = (certSign.getPrivateKey());
+
+        X500Name crlIssuer = X500Name.getInstance(certificate.getSubjectX500Principal().getEncoded());
+        X500Name caName = X500Name.getInstance(certificate.getIssuerX500Principal().getEncoded());
+        X509v2CRLBuilder builder = new X509v2CRLBuilder(crlIssuer,
+                crlValue.getThisUpdate()
+        );
+
+        builder.setNextUpdate(crlValue.getNextUpdate());
+
+        for (String serial : serialList) {
+            BigInteger bigInt = new BigInteger(serial, 16);
+            builder.addCRLEntry(bigInt, new Date(), org.bouncycastle.asn1.x509.CRLReason.privilegeWithdrawn);
+        }
+//		builder.addExtension(org.bouncycastle.asn1.x509.Extension.issuingDistributionPoint, true, new IssuingDistributionPoint(null, true, false));
+
+//		ExtensionsGenerator extGen = new ExtensionsGenerator();
+//
+//		extGen.addExtension(org.bouncycastle.asn1.x509.Extension.reasonCode, false, org.bouncycastle.asn1.x509.CRLReason.lookup(org.bouncycastle.asn1.x509.CRLReason.cACompromise));
+//		extGen.addExtension(org.bouncycastle.asn1.x509.Extension.certificateIssuer, true, new GeneralNames(new GeneralName(caName)));
+
+        JcaContentSignerBuilder contentSignerBuilder =
+                new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+
+        contentSignerBuilder.setProvider(provider);
+
+        X509CRLHolder crlHolder = builder.build(contentSignerBuilder.build(privateKey));
+
+        JcaX509CRLConverter converter = new JcaX509CRLConverter();
+
+        converter.setProvider(provider);
+
+        return converter.getCRL(crlHolder);
+
+
+    }
+
+    /**
+     * .
+     *
+     * <BR>
+     *
+     * @param crl
+     * @param crlFile
+     * @throws IOException
+     * @throws CRLException
+     */
+    public void saveCRL(X509CRL crl, String crlFile)
+            throws CRLException, IOException {
+
+        OutputStream output = new FileOutputStream(crlFile);
+        IOUtils.write(crl.getEncoded(), output);
+
+    }
 }
