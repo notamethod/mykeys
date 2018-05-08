@@ -25,6 +25,9 @@ public class InternalKeystores {
     private static String MK1_PASSWORD = "mKeys983178";
 	private static String USERDB = "userDB.jks";
 	private static String cfgPath;
+    public static String MK1_STORE_AC = "mykeysAc.jks";
+    public static String MK1_STORE_CERT = "mykeysCert.jks";
+
 
 	public InternalKeystores(String cfgPath, String profilsPath)  {
 
