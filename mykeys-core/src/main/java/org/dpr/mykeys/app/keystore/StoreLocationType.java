@@ -6,7 +6,7 @@ package org.dpr.mykeys.app.keystore;
  *
  */
 public enum StoreLocationType {
-	INTERNAL, EXTERNAL;
+    INTERNAL, EXTERNAL, INTERNAL_TEMP;
 	public static StoreLocationType fromValue(String v) {
 		return valueOf(v);
 	}

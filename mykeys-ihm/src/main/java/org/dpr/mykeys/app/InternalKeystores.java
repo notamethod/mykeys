@@ -1,6 +1,4 @@
-/**
- *
- */
+
 package org.dpr.mykeys.app;
 
 import java.io.File;
@@ -18,20 +16,25 @@ import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 
+/**
+ * Helpers for internal keystores.
+ * Since this version, keystores are "protected" by the same password as previous version
+ * but private keys are protected by user password.
+ */
 public class InternalKeystores {
 
 	private static final Log log = LogFactory.getLog(InternalKeystores.class);
-	private static String password = "mKeys983178";
-    private static String MK1_PASSWORD = "mKeys983178";
+	private static final String password = "mKeys983178";
+	public static String MK1_PASSWORD = "mKeys983178";
 	private static String USERDB = "userDB.jks";
 	private static String cfgPath;
-    public static String MK1_STORE_AC = "mykeysAc.jks";
-    public static String MK1_STORE_CERT = "mykeysCert.jks";
+	public static String MK1_STORE_AC = "mykeysAc.jks";
+	public static String MK1_STORE_CERT = "mykeysCert.jks";
 
 
 	public InternalKeystores(String cfgPath, String profilsPath)  {
 
-        InternalKeystores.cfgPath = cfgPath;
+		InternalKeystores.cfgPath = cfgPath;
 		this.pathProfils = profilsPath;
 		this.pathUDB = cfgPath + USERDB;
 	}
@@ -76,7 +79,7 @@ public class InternalKeystores {
 		return pathProfils;
 	}
 
-    public KeyStoreValue getStoreAC() {
+	public KeyStoreValue getStoreAC() {
 
 		KeyTools kt = new KeyTools();
 		String pwd = password;
@@ -95,7 +98,7 @@ public class InternalKeystores {
 			}
 
 		}
-        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathAC, StoreModel.CASTORE,
+		kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathAC, StoreModel.CASTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
@@ -107,23 +110,26 @@ public class InternalKeystores {
 		File f = new File(pathUDB);
 		return f.exists();
 	}
+
 	public boolean existsCertDatabase() {
 
 		File f = new File(pathCert);
 		return f.exists();
 	}
+
 	public boolean existsACDatabase() {
 
 		File f = new File(pathAC);
 		return f.exists();
 	}
+
 	public boolean existsProfilDatabase() {
 
 		File f = new File(pathProfils);
 		return f.exists();
 	}
 
-    public KeyStoreValue getUserDB() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+	public KeyStoreValue getUserDB() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 
 		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 
@@ -135,7 +141,7 @@ public class InternalKeystores {
 			ksBuilder.create(pathUDB, pwd.toCharArray());
 
 		}
-        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
+		kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
@@ -157,14 +163,14 @@ public class InternalKeystores {
 				e.printStackTrace();
 			}
 		}
-        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
+		kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
 
 	}
 
-    public KeyStoreValue getStoreCertificate() throws KeyStoreException {
+	public KeyStoreValue getStoreCertificate() throws KeyStoreException {
 		KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 		String pwd = password;
 		KeyStoreValue kinfo;
@@ -179,7 +185,7 @@ public class InternalKeystores {
 				e.printStackTrace();
 			}
 		}
-        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathCert, StoreModel.CERTSTORE,
+		kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathCert, StoreModel.CERTSTORE,
 				StoreFormat.JKS, StoreLocationType.INTERNAL);
 		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
 		kinfo.setOpen(true);
@@ -201,8 +207,8 @@ public class InternalKeystores {
 		return kinfo;
 	}
 
-    public KeyStoreValue getKeystoreInfo() {
-        return new KeyStoreValue(new File(pathAC), StoreFormat.JKS,
+	public KeyStoreValue getKeystoreInfo() {
+		return new KeyStoreValue(new File(pathAC), StoreFormat.JKS,
 				KSConfig.getInternalKeystores().getPassword().toCharArray());
 	}
 

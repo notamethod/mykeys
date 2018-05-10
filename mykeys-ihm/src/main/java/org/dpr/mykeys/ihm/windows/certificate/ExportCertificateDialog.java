@@ -25,10 +25,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.CommonServices;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.MkSession;
+import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -195,8 +192,12 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                     if (isExportCle) {
                         privKeyPwd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
                     }
-                } else
+                } else if (!ksInfo.getName().startsWith("previous")) {
                     privKeyPwd = MkSession.password;
+                } else {
+                    privKeyPwd = InternalKeystores.MK1_PASSWORD.toCharArray();
+                }
+
                 certInfo.setPassword(privKeyPwd);
                 if (format.equalsIgnoreCase("pkcs12"))
                 {
