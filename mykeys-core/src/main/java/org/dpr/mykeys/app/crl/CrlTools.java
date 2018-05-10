@@ -3,9 +3,17 @@ package org.dpr.mykeys.app.crl;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.asn1.x509.CRLNumber;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.asn1.x509.CRLReason;
-import org.bouncycastle.asn1.x509.X509Extensions;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.cert.CertIOException;
+import org.bouncycastle.cert.X509CRLHolder;
+import org.bouncycastle.cert.X509v2CRLBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.x509.X509V2CRLGenerator;
 import org.bouncycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -90,27 +98,55 @@ public class CrlTools {
     public static X509CRL generateCrl(CertificateValue certSign, CrlValue crlValue, List<String> serialList)
             throws CertificateParsingException, InvalidKeyException,
             CRLException, IllegalStateException, NoSuchProviderException,
-            NoSuchAlgorithmException, SignatureException {
+            NoSuchAlgorithmException, SignatureException, OperatorCreationException, IOException {
 
-        X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
-        // crlGen.setIssuerDN((X500Principal) certSign.getIssuerDN());
-        crlGen.setIssuerDN(certSign.getCertificate().getSubjectX500Principal());
-        String signAlgo = "SHA1WITHRSAENCRYPTION";
-        crlGen.setThisUpdate(crlValue.getThisUpdate());
-        crlGen.setNextUpdate(crlValue.getNextUpdate());
-        crlGen.setSignatureAlgorithm(signAlgo);
-        for (String serial : serialList) {
-            BigInteger bigInt = new BigInteger(serial, 16);
-            crlGen.addCRLEntry(bigInt, new Date(), CRLReason.privilegeWithdrawn);
-        }
-        crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false,
-                new AuthorityKeyIdentifierStructure(certSign.getCertificate()));
-        crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
-                crlValue.getNumber()));
+        JcaX509ExtensionUtils extensionUtils = new JcaX509ExtensionUtils();
 
-        X509CRL crl = crlGen.generate(certSign.getPrivateKey(),
-                "BC");
-        return crl;
+        X509Certificate certificate = certSign.getCertificate();
+        PrivateKey privateKey = (certSign.getPrivateKey());
+
+        X500Name crlIssuer = X500Name.getInstance(certificate.getSubjectX500Principal().getEncoded());
+        X500Name caName = X500Name.getInstance(certificate.getIssuerX500Principal().getEncoded());
+        X509v2CRLBuilder builder = new X509v2CRLBuilder(crlIssuer,
+                crlValue.getThisUpdate()
+        );
+
+        builder.setNextUpdate(crlValue.getNextUpdate());
+//        for (X509Certificate certificate : revoked) {
+//            builder.addCRLEntry(certificate.getSerialNumber(), new Date(), CRLReason.privilegeWithdrawn);
+//        }
+
+//        for (String serial : serialList) {
+//            BigInteger bigInt = new BigInteger(serial, 16);
+//            builder.addCRLEntry(bigInt, new Date(), CRLReason.privilegeWithdrawn);
+//        }
+        builder.addExtension(Extension.issuingDistributionPoint, true, new IssuingDistributionPoint(null, true, false));
+
+        builder.addCRLEntry(BigInteger.valueOf(100), new Date(), CRLReason.cACompromise);
+        builder.addCRLEntry(BigInteger.valueOf(120), new Date(), CRLReason.cACompromise);
+
+        ExtensionsGenerator extGen = new ExtensionsGenerator();
+
+        extGen.addExtension(Extension.reasonCode, false, CRLReason.lookup(CRLReason.cACompromise));
+        extGen.addExtension(Extension.certificateIssuer, true, new GeneralNames(new GeneralName(caName)));
+
+        builder.addCRLEntry(certificate.getSerialNumber(), new Date(), extGen.generate());
+
+        builder.addCRLEntry(BigInteger.valueOf(130), new Date(), CRLReason.cACompromise);
+        JcaContentSignerBuilder contentSignerBuilder =
+                new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+
+        contentSignerBuilder.setProvider("BC");
+
+        X509CRLHolder crlHolder = builder.build(contentSignerBuilder.build(certSign.getPrivateKey()));
+
+        JcaX509CRLConverter converter = new JcaX509CRLConverter();
+
+        converter.setProvider("BC");
+
+        return converter.getCRL(crlHolder);
+
+
     }
 
     /**
@@ -180,6 +216,88 @@ public class CrlTools {
 
     }
 
+    public void gen2() {
+//        KeyStore keyStore =null;
+//
+//        ByteArrayInputStream input = new ByteArrayInputStream(testCAp12);
+//
+//        keyStore.load(input, "test".toCharArray());
+//
+//        X509Certificate certificate = (X509Certificate)keyStore.getCertificate("ca");
+//        PrivateKey privateKey = (PrivateKey)keyStore.getKey("ca", null);
+//
+//        X500Name crlIssuer = X500Name.getInstance(certificate.getSubjectX500Principal().getEncoded());
+//        X500Name caName = X500Name.getInstance(certificate.getIssuerX500Principal().getEncoded());
+//
+//        X509v2CRLBuilder builder = new X509v2CRLBuilder(crlIssuer, new Date());
+//
+//        builder.addExtension(Extension.issuingDistributionPoint, true, new IssuingDistributionPoint(null, true, false));
+//
+//        builder.addCRLEntry(BigInteger.valueOf(100), new Date(), CRLReason.cACompromise);
+//        builder.addCRLEntry(BigInteger.valueOf(120), new Date(), CRLReason.cACompromise);
+//
+//        ExtensionsGenerator extGen = new ExtensionsGenerator();
+//
+//        extGen.addExtension(Extension.reasonCode, false, CRLReason.lookup(CRLReason.cACompromise));
+//        extGen.addExtension(Extension.certificateIssuer, true, new GeneralNames(new GeneralName(caName)));
+//
+//        builder.addCRLEntry(certificate.getSerialNumber(), new Date(), extGen.generate());
+//
+//        builder.addCRLEntry(BigInteger.valueOf(130), new Date(), CRLReason.cACompromise);
+//
+//        JcaContentSignerBuilder contentSignerBuilder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+//
+//        contentSignerBuilder.setProvider("BC");
+//
+//        X509CRLHolder cRLHolder = builder.build(contentSignerBuilder.build(privateKey));
+//
+//        if (!cRLHolder.isSignatureValid(new JcaContentVerifierProviderBuilder().setProvider("BC").build(certificate)))
+//        {
+//            fail("CRL signature not valid");
+//        }
+//
+//        X509CRLEntryHolder cRLEntryHolder = cRLHolder.getRevokedCertificate(certificate.getSerialNumber());
+//
+//        if (!cRLEntryHolder.getCertificateIssuer().equals(new GeneralNames(new GeneralName(caName))))
+//        {
+//            fail("certificate issuer incorrect");
+//        }
+//
+//        cRLEntryHolder = cRLHolder.getRevokedCertificate(BigInteger.valueOf(130));
+//
+//        if (!cRLEntryHolder.getCertificateIssuer().equals(new GeneralNames(new GeneralName(caName))))
+//        {
+//            fail("certificate issuer incorrect");
+//        }
+//
+//        cRLEntryHolder = cRLHolder.getRevokedCertificate(BigInteger.valueOf(100));
+//
+//        if (!cRLEntryHolder.getCertificateIssuer().equals(new GeneralNames(new GeneralName(cRLHolder.getIssuer()))))
+//        {
+//            fail("certificate issuer incorrect");
+//        }
+//
+//        JcaX509CRLConverter converter = new JcaX509CRLConverter();
+//
+//        converter.setProvider("BC");
+//
+//        X509CRL crl = converter.getCRL(cRLHolder);
+//
+//        crl.verify(certificate.getPublicKey());
+//
+//        X509CRLEntry crlEntry = crl.getRevokedCertificate(BigInteger.valueOf(100));
+//
+//        if (crlEntry.getCertificateIssuer() != null)
+//        {
+//            fail("JCA 1 certificate issuer incorrect");
+//        }
+//
+//        crlEntry = crl.getRevokedCertificate(BigInteger.valueOf(130));
+//        if (!(new X500Principal(caName.getEncoded())).equals(crlEntry.getCertificateIssuer()))
+//        {
+//            fail("JCA 2 certificate issuer incorrect");
+//        }
+    }
 
 }
 

@@ -6,6 +6,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlTools;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -22,6 +23,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.security.cert.X509CRL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -90,8 +93,11 @@ public class CreateCrlDialog extends JDialog {
 
         JLabel jl5 = new JLabel(Messages.getString("file.output"));
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime dateTime = LocalDateTime.now();
+        String formattedDateTime = dateTime.format(formatter);
         tfDirectoryOut = new JTextField(40);
-        tfDirectoryOut.setText(f.getAbsolutePath());
+        tfDirectoryOut.setText(f.getAbsolutePath() + File.separator + certificateValue.getName() + "." + formattedDateTime + CRLManager.CRL_EXTENSION);
         JButton jbChoose2 = new JButton("...");
         jbChoose2.addActionListener(dAction);
         jbChoose2.setActionCommand("CHOOSE_OUT");
@@ -144,9 +150,9 @@ public class CreateCrlDialog extends JDialog {
 
             infosPanel.putEmptyLine();
         }
-        infosPanel.put("Alias (nom du certificat)", "alias", "");
-        infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig",
-                mapAlgoSig, "SHA256WithRSAEncryption");
+        //   infosPanel.put("Alias (nom du certificat)", "alias", "");
+//        infosPanel.put("Algorithme de signature", JComboBox.class, "algoSig",
+//                mapAlgoSig, "SHA256WithRSAEncryption");
         // subject
         infosPanel.putEmptyLine();
         Calendar calendar = Calendar.getInstance();
@@ -168,21 +174,11 @@ public class CreateCrlDialog extends JDialog {
         @Override
         public void actionPerformed(ActionEvent event) {
             String command = event.getActionCommand();
-            if (command.equals("CHOOSE_OUT")) {
-                infosPanel.set("alias", "totototo");
-
-            } else if (command.equals("OK")) {
+            if (command.equals("OK")) {
 
                 Map<String, Object> elements = infosPanel.getElements();
                 log.trace(elements.get("alias"));
-                Set<String> keys = elements.keySet();
-                for (String key : keys) {
-                }
-                if (elements.get("alias") == null) {
-                    DialogUtil.showError(CreateCrlDialog.this,
-                            "alias obligatoire");
-                    return;
-                }
+
                 CrlValue crlValue = new CrlValue();
                 String serials = (String) elements.get("serials");
                 List<String> list = new ArrayList<>();
@@ -190,13 +186,14 @@ public class CreateCrlDialog extends JDialog {
                     list = new ArrayList<String>(Arrays.asList(serials.split(",")));
                 // certInfo.setX509PrincipalMap(elements);
                 HashMap<String, String> subjectMap = new HashMap<>();
-                crlValue.setName((String) elements.get("alias"));
+                crlValue.setName("name");
                 crlValue.setThisUpdate((Date) elements.get("notBefore"));
                 crlValue.setNextUpdate((Date) elements.get("notAfter"));
                 crlValue.setPath(tfDirectoryOut.getText());
 
 
                 try {
+                    CRLManager crlMan = new CRLManager();
                     KeyStoreHelper ktools = new KeyStoreHelper();
                     String aliasIssuer = (String) elements.get("emetteur");
                     CertificateValue certSign = certificateValue;
@@ -204,8 +201,8 @@ public class CreateCrlDialog extends JDialog {
                         certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasIssuer);
                     } else if (certSign.getPrivateKey() == null)
                         certSign = ktools.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certSign.getAlias());
-                    X509CRL xCRL = CrlTools.generateCrl(certSign, crlValue, list);
-                    CrlTools.saveCRL(xCRL, crlValue.getPath());
+                    X509CRL xCRL = crlMan.generateCrl(certSign, crlValue, list);
+                    crlMan.saveCRL(xCRL, crlValue.getPath());
                     // FIXME: add crl to tree
                     // ktools.generateCrl(certSign, crlValue, privateKey);
                     CreateCrlDialog.this.setVisible(false);
