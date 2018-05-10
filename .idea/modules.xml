@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/mykeys.iml" filepath="$PROJECT_DIR$/mykeys.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mykeys-core/mykeys-core.iml" filepath="$PROJECT_DIR$/mykeys-core/mykeys-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mykeys-ihm/mykeys-ihm.iml" filepath="$PROJECT_DIR$/mykeys-ihm/mykeys-ihm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mykeys-ihm-final/mykeys-ihm-final.iml" filepath="$PROJECT_DIR$/mykeys-ihm-final/mykeys-ihm-final.iml" />
+    </modules>
+  </component>
+</project>
