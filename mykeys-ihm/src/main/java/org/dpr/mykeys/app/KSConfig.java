@@ -29,7 +29,7 @@ public class KSConfig {
 	public static final String STORE_PREFIX = "store";
 
     public static final String MKPATH = ".mykeys2";
-    public static final String MK1PATH = ".mykeys";
+	public static final String MK1PATH = ".myKeys";
 
 	private static String path;
 	
@@ -184,6 +184,7 @@ public class KSConfig {
 	 *
 	 * @return directorny name
 	 */
+	//TODO rename to getDefaultCertificatePath
 	public static String getDataDir() {
 
 		String dir = getUserCfg().getString("data.dir");

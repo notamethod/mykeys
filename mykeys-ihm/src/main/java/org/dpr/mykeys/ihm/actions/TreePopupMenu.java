@@ -176,10 +176,14 @@ public class TreePopupMenu extends JPopupMenu {
                 deleteStore.setVisible(true);
                 menuChangePwd.setVisible(true);
                 openExplorer.setVisible(true);
-            } else {
-
             }
-
+            // stores imported from previous mk version
+            if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL) && ksInfo.getName().startsWith("previous")) {
+                removeStore.setVisible(true);
+                deleteStore.setVisible(true);
+                addCertMenu.setVisible(false);
+                importCert.setVisible(false);
+            }
         } else if (node.getUserObject() instanceof CertificateValue) {
             CertificateValue certInfo = (CertificateValue) node.getUserObject();
 
