@@ -3,9 +3,15 @@
 A simple X509 certificate manager
 
 ## current release
-Beta release 0.8.0 with new features.
+release 0.8.2.
+### Features and fixes
+- PKI management
+  -  Fix on CRL creation from CA
 
-### Features
+## previous releases
+Beta release 0.8.0 introducing new features.
+
+### Features overview
 - Keystore management:
   - Creation and edition of PKCS12 or JKS Keystores
 - Certificate Management
