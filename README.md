@@ -2,6 +2,9 @@
 
 A simple X509 certificate manager
 
+Last packaged version of the app (executable jar) available on https://sourceforge.net/projects/jmykeys/
+
+
 ## current release
 release 0.8.2.
 ### Features and fixes
