@@ -51,7 +51,6 @@ public class KeystoreBuilder extends KeyTools {
         if (Files.exists(path)) {
             throw new IOException("File already exists " + path.toString());
         }
-
         keystore.load(null, password);
         OutputStream fos = new FileOutputStream(new File(name));
         keystore.store(fos, password);

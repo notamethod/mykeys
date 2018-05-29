@@ -49,7 +49,7 @@ public class CommonServices {
 			}
 
 			certInfo.setPrivateKey(ksBuilder.getPrivateKey(ksInfoIn, certInfoEx.getAlias(), privKeyPwd));
-
+            certInfo.setPassword(passwordExport);
 			//certInfo = certInfoEx;
 		}
 		try {

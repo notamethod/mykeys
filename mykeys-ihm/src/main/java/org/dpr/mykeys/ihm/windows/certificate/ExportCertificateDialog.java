@@ -198,7 +198,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                     privKeyPwd = InternalKeystores.MK1_PASSWORD.toCharArray();
                 }
 
-                certInfo.setPassword(privKeyPwd);
+                certInfo.setPassword(password);
                 if (format.equalsIgnoreCase("pkcs12"))
                 {
                     password = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
