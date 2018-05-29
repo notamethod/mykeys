@@ -378,7 +378,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
             ksInfo.setOpen(true);
         } catch (Exception e1) {
             DialogUtil.showError(TreeKeyStorePanel.this, e1.getMessage());
-            e1.printStackTrace();
+            log.error("load keystore failed", e1);
             return false;
         }
         // try {

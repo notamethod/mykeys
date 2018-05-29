@@ -92,7 +92,7 @@ public class MyKeys {
                 cs = new SelectUserDialog(
                         null, true);
             } catch (IhmException e) {
-                e.printStackTrace();
+                log.error("login error", e);
             }
 
             cs.setVisible(true);

@@ -51,7 +51,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
      *
      * @throws KeyStoreException
      */
-    public MykeysFrame() throws KeyStoreException {
+    public MykeysFrame() throws KeyStoreException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         super("mykeys");
         // Get toolkit
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -127,9 +127,8 @@ public class MykeysFrame extends JFrame implements WindowListener {
             public void run() {
                 try {
                     new MykeysFrame();
-                } catch (KeyStoreException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    log.error("init error", e);
                 }
 
             }
@@ -147,7 +146,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
         }
     }
 
-    private void init() throws KeyStoreException {
+    private void init() throws KeyStoreException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         initLookAndFeel();
         this.addWindowListener(this);
         buildComponents();
@@ -160,7 +159,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
     }
 
-    private void initLookAndFeel() {
+    private void initLookAndFeel() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
 
         setDefaultLookAndFeelDecorated(true);
         try {
@@ -170,20 +169,15 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
             return;
         } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            log.error("error setting look and feel", e1);
         }
 
-        try {
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (Exception e) {
-            // handle exception
-        }
 
     }
 
@@ -340,7 +334,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
                 Files.copy(certFile.toPath(), fileDest.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 Files.delete(certFile.toPath());
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("keystore copy error", e);
             }
 
             KSConfig.getUserCfg().addProperty(

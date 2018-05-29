@@ -7,6 +7,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
@@ -220,7 +221,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
     /**
      * .
-     * <p>
+     *
      * <BR>
      *
      * @param info
@@ -235,7 +236,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
         } catch (Exception e1) {
             DialogUtil.showError(this, e1.getMessage());
-            e1.printStackTrace();
+            log.error("error deleting cetificate", e1);
         }
         updateInfo(ksInfo);
 
@@ -392,15 +393,19 @@ public class ListPanel extends JPanel implements DropTargetListener {
         KeyStoreValue ksin = kh.createKeyStoreValue(transferFile);
         KeyStoreHelper service = new KeyStoreHelper((KeyStoreValue) ksInfo);
 
+        char[] newPwd = new char[0];
 
+        if (((KeyStoreValue) ksInfo).getStoreType().equals(StoreLocationType.INTERNAL))
+            newPwd = MkSession.password;
+     
         ActionStatus act = null;
         try {
-            act = service.importCertificates(ksin);
+            act = service.importCertificates(ksin, newPwd);
             if (act != null && act.equals(ActionStatus.ASK_PASSWORD)) {
                 char[] password = DialogUtil.showPasswordDialog(this);
                 ksin.setPassword(password);
 
-                service.importCertificates(ksin);
+                service.importCertificates(ksin, newPwd);
             }
             updateInfo(ksInfo);
         } catch (KeyToolsException | GeneralSecurityException e) {

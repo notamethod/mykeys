@@ -223,9 +223,8 @@ public class SelectUserDialog extends MkDialog {
                 //MykeysFrame frame = new MykeysFrame();
                 try {
                     new MykeysFrame();
-                } catch (KeyStoreException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    log.error("init error", e);
                 }
                 // frame.addComponents();
 

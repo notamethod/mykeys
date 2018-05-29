@@ -172,14 +172,22 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    public ActionStatus importCertificates(KeyStoreValue ksin)
+    public ActionStatus importCertificates(KeyStoreValue ksin, char[] newPwd)
             throws ServiceException, GeneralSecurityException, KeyToolsException {
         ksin.setStoreFormat(findKeystoreType(ksin.getPath()));
         if (ksin.getPassword() == null && (StoreFormat.JKS.equals(ksin.getStoreFormat()) || StoreFormat.PKCS12.equals(ksin.getStoreFormat()))) {
             return ActionStatus.ASK_PASSWORD;
         }
-        importX509Cert(null, ksin);
+        importX509Cert(null, ksin, newPwd);
         return null;
+
+    }
+
+    public ActionStatus importCertificates(KeyStoreValue ksin)
+            throws ServiceException, GeneralSecurityException, KeyToolsException {
+        ksin.setStoreFormat(findKeystoreType(ksin.getPath()));
+
+        return importCertificates(ksin, null);
 
     }
 
@@ -331,6 +339,8 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
                     certInfo.setCertificateChain(ks.getCertificateChain(alias));
                     certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, value.getPassword()));
+                    if (charArray != null)
+                        certInfo.setPassword(charArray);
 
                     KeystoreBuilder ksBuilder = new KeystoreBuilder(load(ksInfo));
                     ksBuilder.addCert(ksInfo, certInfo);
