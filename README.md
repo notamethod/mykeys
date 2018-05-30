@@ -6,12 +6,16 @@ Last packaged version of the app (executable jar) available on https://sourcefor
 
 
 ## current release
-release 0.8.2.
+release 0.8.3
+### Features and fixes
+- Fix #6
+
+## previous releases
+release 0.8.2
 ### Features and fixes
 - PKI management
   -  Fix on CRL creation from CA
 
-## previous releases
 Beta release 0.8.0 introducing new features.
 
 ### Features overview
