@@ -11,6 +11,7 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
+import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.utils.ActionStatus;
@@ -34,6 +35,8 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     private static final String KSTYPE_EXT_PEM = "pem";
     public static final String KSTYPE_EXT_JKS = "jks";
     public static final String KSTYPE_EXT_P12 = "p12";
+
+    public static final String MK3_SN = "D4 A0 81";
     private KeyStoreValue ksInfo;
 
     public KeyStoreHelper(KeyStoreValue ksInfo) {
@@ -567,6 +570,14 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             KeyStore ks = load(store);
 
             Certificate certificate = ks.getCertificate(alias);
+            //mk3 is a special CA: let it different for now
+            if (certificate != null && certificate instanceof X509Certificate) {
+                String sn0 = X509Util.toHexString(((X509Certificate) certificate).getSerialNumber(), " ", true);
+                if (MK3_SN.equals(sn0.trim())) {
+                    password = store.getPassword();
+                }
+
+            }
             Certificate[] certs = ks.getCertificateChain(alias);
             certInfo = new CertificateValue(alias, (X509Certificate) certificate);
             if (ks.isKeyEntry(alias)) {

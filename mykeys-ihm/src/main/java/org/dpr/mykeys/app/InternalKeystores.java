@@ -105,6 +105,32 @@ public class InternalKeystores {
 		return kinfo;
 	}
 
+	public char[] getPwdAC() {
+
+		KeyTools kt = new KeyTools();
+		String pwd = password;
+		KeyStoreValue kinfo;
+		File f = new File(pathAC);
+		if (!f.exists()) {
+
+			try {
+
+				InputStream is = (InternalKeystores.class.getResourceAsStream("/install/mykeysAc.jks"));
+				MkUtils.copyFile(is, f);
+				// InternalKeystores.class.getResource("/org.dpr.mykeys/config/myKeysAc.jks").getFile()getChannel();
+
+			} catch (Exception e) {
+				log.error(e);
+			}
+
+		}
+		kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathAC, StoreModel.CASTORE,
+				StoreFormat.JKS, StoreLocationType.INTERNAL);
+		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
+		kinfo.setOpen(true);
+		return null;
+	}
+
 	public boolean existsUserDatabase() {
 
 		File f = new File(pathUDB);

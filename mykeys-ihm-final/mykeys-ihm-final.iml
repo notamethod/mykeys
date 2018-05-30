@@ -24,7 +24,7 @@
     <orderEntry type="library" name="Maven: org.bouncycastle:bcmail-jdk15on:1.58" level="project" />
     <orderEntry type="library" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.58" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.2" level="project" />
     <orderEntry type="module" module-name="mykeys-ihm" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-core:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-autocomplete:1.6.5-1" level="project" />

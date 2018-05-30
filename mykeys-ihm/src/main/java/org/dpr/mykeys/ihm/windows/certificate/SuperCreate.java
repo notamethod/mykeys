@@ -107,15 +107,18 @@ public class SuperCreate extends JDialog implements ItemListener {
 //Server Authentication (1.3.6.1.5.5.7.3.1).
 //
 //        Other "common" types of X.509 certs are Client Authentication (1.3.6.1.5.5.7.3.2), Code Signing (1.3.6.1.5.5.7.3.3), and a handful of others are used for various encryption and authentication schemes.
-        JOptionPane.showMessageDialog(this.getParent(), panel, Messages.getString("type.certificat"), 1, null);
         DialogAction dAction = new DialogAction();
 
-        System.out.println(typeCer);
+
         if (isAC) {
+            typeCer = CertificateType.STANDARD;
             setTitle(Messages.getString("ac.creation.title"));
         } else {
+            JOptionPane.showMessageDialog(this.getParent(), panel, Messages.getString("type.certificat"), 1, null);
+
             setTitle(Messages.getString("certificat.creation.title"));
         }
+        System.out.println(typeCer);
         JPanel jp = new JPanel();
         //BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
         jp.setLayout(new VerticalLayout());
@@ -247,17 +250,6 @@ public class SuperCreate extends JDialog implements ItemListener {
 
                 // subject
                 infosPanel.putEmptyLine();
-                Calendar calendar = Calendar.getInstance();
-
-                infosPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore",
-                        calendar.getTime(), true);
-                calendar.add(Calendar.YEAR, 5);
-                infosPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter",
-                        calendar.getTime(), true);
-                //infosPanel.put("aaa", JTextField.class, "notAfter", calendar.getTime(), true);
-                infosPanel.put(Messages.getString("certinfo.duration"), "duration", "3");
-                infosPanel.putEmptyLine();
-                PanelUtils.addSubjectToPanel(CertificateType.AC, infosPanel);
 
                 infosPanel.putEmptyLine();
                 infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
@@ -360,7 +352,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
                     CertificateValue issuer = null;
                     if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
-                        issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
+                        issuer = kserv.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer(), MkSession.password);
 
                     CertificateValue newCertificate = certServ.createCertificate(isAC, issuer);
 
