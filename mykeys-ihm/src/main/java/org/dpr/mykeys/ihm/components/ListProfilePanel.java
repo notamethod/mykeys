@@ -155,7 +155,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		listCerts.addListSelectionListener(listListener);
 		ListCertRenderer renderer = new ListCertRenderer();
 		listCerts.setCellRenderer(renderer);
-		listCerts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listCerts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		listCerts.setVisibleRowCount(-1);
 		listCerts.setDragEnabled(true);
@@ -472,11 +472,11 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 
 	}
 
-	public void exporterCertificate(NodeInfo info, CertificateValue certificateInfo, boolean b) {
+	public void exporterCertificate(NodeInfo info, List<CertificateValue> certificates, boolean b) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 
-		ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificateInfo, true);
+		ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
 		cs.setLocationRelativeTo(frame);
 		cs.setResizable(false);
 		cs.setVisible(true);

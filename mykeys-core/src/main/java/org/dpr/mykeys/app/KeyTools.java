@@ -163,6 +163,7 @@ public class KeyTools {
         }
     }
 
+    @Deprecated
     public void exportDer(CertificateValue certInfo, String fName) throws KeyToolsException {
         /* save the public key in a file */
         try {
@@ -249,4 +250,6 @@ public class KeyTools {
     }
 
 
+    public void exportDers(List<CertificateValue> certInfos, String path) {
+    }
 }

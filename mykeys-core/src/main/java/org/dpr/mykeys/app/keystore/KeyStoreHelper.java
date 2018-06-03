@@ -690,4 +690,18 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         }
         return false;
     }
+
+    public void exportDers(List<CertificateValue> certInfos, String fName) throws KeyToolsException {
+        try {
+            try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".der"))) {
+                for (CertificateValue certInfo : certInfos) {
+                    keyfos.write(certInfo.getCertificate().getEncoded());
+                }
+            }
+        } catch (Exception e) {
+            throw new KeyToolsException("Export de la clé publique impossible:", e);
+        }
+    }
+
+
 }
