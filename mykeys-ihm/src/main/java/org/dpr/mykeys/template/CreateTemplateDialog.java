@@ -52,19 +52,6 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
 
     }
 
-    public CreateTemplateDialog() {
-        super();
-    }
-
-    public CreateTemplateDialog(Frame owner) {
-        super(owner);
-    }
-
-    public static void main(String[] args) {
-        JFrame f = null;
-        CreateCertificatDialog cr = new CreateCertificatDialog(f, null, false);
-    }
-
     protected void init(CertificateTemplate template) {
         init();
         fillInfos(template);
@@ -162,11 +149,10 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
      * @param mapKeyLength
      * @param mapAlgoKey
      * @param mapAlgoSig
-     * @param isAC2
      * @return
      */
-    private LabelValuePanel createInfoPanel(Map<String, String> mapKeyLength, Map<String, String> mapAlgoKey,
-                                            Map<String, String> mapAlgoSig) {
+    protected LabelValuePanel createInfoPanel(Map<String, String> mapKeyLength, Map<String, String> mapAlgoKey,
+                                              Map<String, String> mapAlgoSig) {
         if (infosPanel == null) {
             infosPanel = new LabelValuePanel();
             Map<String, String> mapAC = null;

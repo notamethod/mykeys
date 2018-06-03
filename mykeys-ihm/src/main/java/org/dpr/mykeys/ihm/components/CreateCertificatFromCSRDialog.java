@@ -59,11 +59,6 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 
 	}
 
-	public static void main(String[] args) {
-		JFrame f = null;
-		CreateCertificatDialog cr = new CreateCertificatDialog(f, null, false);
-	}
-
 	protected void init() {
 
 		DialogAction dAction = new DialogAction();

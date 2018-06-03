@@ -17,7 +17,6 @@ import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JSpinnerDate;
-import org.dpr.swingtools.components.JStringList;
 import org.dpr.swingtools.components.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
@@ -31,6 +30,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.*;
+import java.util.List;
 
 public class SuperCreate extends JDialog implements ItemListener {
 
@@ -41,6 +41,7 @@ public class SuperCreate extends JDialog implements ItemListener {
     CertificateValue certInfo = new CertificateValue();
     private CertificateType typeCer;
     private LabelValuePanel durationPanel;
+    protected List<JCheckBox> keyUsageCheckBoxes = new ArrayList<>();
 
     protected SuperCreate() {
         super();
@@ -70,21 +71,18 @@ public class SuperCreate extends JDialog implements ItemListener {
         return "3";
     }
 
-    protected void init() {
-
-        String a = null;
-        final JPanel panel = new JPanel();
+    protected CertificateType getCertificateType() {
         ChangeListener changeListener = new ChangeListener() {
             public void stateChanged(ChangeEvent changEvent) {
                 JRadioButton aButton = (JRadioButton) changEvent.getSource();
 
                 if (aButton.isSelected()) {
                     typeCer = CertificateType.valueOf(aButton.getName());
-
                 }
-
             }
         };
+        final JPanel panel = new JPanel();
+
 
         BoxLayout bls = new BoxLayout(panel, BoxLayout.Y_AXIS);
         panel.setLayout(bls);
@@ -103,22 +101,27 @@ public class SuperCreate extends JDialog implements ItemListener {
         vanillaOrMod.add(button2);
         vanillaOrMod.add(button3);
         panel.add(button1);
+        JOptionPane.showMessageDialog(this.getParent(), panel, Messages.getString("type.certificat"), 1, null);
+        return CertificateType.STANDARD;
+    }
+
+    protected void init() {
+
+
+        String a = null;
+
 
 //Server Authentication (1.3.6.1.5.5.7.3.1).
 //
 //        Other "common" types of X.509 certs are Client Authentication (1.3.6.1.5.5.7.3.2), Code Signing (1.3.6.1.5.5.7.3.3), and a handful of others are used for various encryption and authentication schemes.
         DialogAction dAction = new DialogAction();
 
+        typeCer = getCertificateType();
 
-        if (isAC) {
-            typeCer = CertificateType.STANDARD;
-            setTitle(Messages.getString("ac.creation.title"));
-        } else {
-            JOptionPane.showMessageDialog(this.getParent(), panel, Messages.getString("type.certificat"), 1, null);
 
-            setTitle(Messages.getString("certificat.creation.title"));
-        }
-        System.out.println(typeCer);
+        setTitle(Messages.getString("certificat.creation.title"));
+
+
         JPanel jp = new JPanel();
         //BoxLayout bl = new BoxLayout(jp, BoxLayout.Y_AXIS);
         jp.setLayout(new VerticalLayout());
@@ -127,24 +130,19 @@ public class SuperCreate extends JDialog implements ItemListener {
 
 
         LabelValuePanel subjectPanel = new LabelValuePanel();
-        if (isAC)
-            PanelUtils.addSubjectToPanel(CertificateType.AC, subjectPanel);
-        else
-            PanelUtils.addSubjectToPanel(CertificateType.STANDARD, subjectPanel);
-        createInfoPanel(isAC, null, null, null);
-        //panelInfo.add(infosPanel);
 
-        // JPanel panelInfo2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        PanelUtils.addSubjectToPanel(typeCer, subjectPanel);
+        createInfoPanel(null, null, null);
+
         JPanel checkPanel = new JPanel(new GridLayout(0, 3));
 
         Border border = BorderFactory.createTitledBorder("Key usage");
         checkPanel.setBorder(border);
         for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
             JCheckBox item = new JCheckBox(X509Constants.keyUsageLabel[i]);
+            keyUsageCheckBoxes.add(item);
             item.addItemListener(this);
-            if ((isAC && i == 5) || (isAC && i == 6)) {
-                item.setSelected(true);
-            }
+
             checkPanel.add(item);
         }
         JXCollapsiblePane cp = new JXCollapsiblePane();
@@ -160,10 +158,11 @@ public class SuperCreate extends JDialog implements ItemListener {
         infosPanel.addChild(subjectPanel);
 
 
-
         jp.add(cp);
         jp.add(checkPanel);
         jp.add(new OkCancelPanel(dAction, FlowLayout.RIGHT));
+
+        predefineKeyUsage();
 
     }
 
@@ -194,6 +193,9 @@ public class SuperCreate extends JDialog implements ItemListener {
         return cp;
     }
 
+    protected void predefineKeyUsage() {
+
+    }
     private Component getSignaturePanel() {
         Map<String, String> mapAC = null;
         try {
@@ -236,58 +238,37 @@ public class SuperCreate extends JDialog implements ItemListener {
      * @param mapKeyLength
      * @param mapAlgoKey
      * @param mapAlgoSig
-     * @param isAC
      * @return
      */
-    private LabelValuePanel createInfoPanel(boolean isAC, Map<String, String> mapKeyLength,
-                                            Map<String, String> mapAlgoKey, Map<String, String> mapAlgoSig) {
+    protected LabelValuePanel createInfoPanel(Map<String, String> mapKeyLength,
+                                              Map<String, String> mapAlgoKey, Map<String, String> mapAlgoSig) {
 
         if (infosPanel == null) {
             infosPanel = new LabelValuePanel();
             infosPanel.put(Messages.getString("x509.alias"), "alias", "");
-            if (isAC) {
-                infosPanel.putEmptyLine();
-
-                // subject
-                infosPanel.putEmptyLine();
-
-                infosPanel.putEmptyLine();
-                infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
-                infosPanel.put("Policy notice", "policyNotice", "");
-                infosPanel.put("Policy CPS", "policyCPS", "");
 
 
-                infosPanel.putEmptyLine();
-                if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-                    infosPanel.put("Mot de passe clé privée", JPasswordField.class, "pwd1", KSConfig.getInternalKeystores().getPassword(),
-                            false);
-                    infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
-                            KSConfig.getInternalKeystores().getPassword(), false);
-                }
+            infosPanel.putEmptyLine();
 
-            } else {
+            // subject
+            infosPanel.putEmptyLine();
+            infosPanel.putEmptyLine();
 
-                infosPanel.putEmptyLine();
+            infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
+            infosPanel.put("Policy notice", "policyNotice", "");
+            infosPanel.put("Policy CPS", "policyCPS", "");
+            infosPanel.put(Messages.getString("x509.policyid"), "policyID", "");
+            // infosPanel.putList(Messages.getString("x509.policyid"), JStringList.class, "policyID", JStringList.Position.RIGHT);
+            infosPanel.putEmptyLine();
 
-                // subject
-                infosPanel.putEmptyLine();
-                infosPanel.putEmptyLine();
-
-                infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
-                infosPanel.put("Policy notice", "policyNotice", "");
-                infosPanel.put("Policy CPS", "policyCPS", "");
-                infosPanel.put(Messages.getString("x509.policyid"), "policyID", "");
-                // infosPanel.putList(Messages.getString("x509.policyid"), JStringList.class, "policyID", JStringList.Position.RIGHT);
-                infosPanel.putEmptyLine();
-
-                if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-                    infosPanel.addTitle(Messages.getString("privatekey.title"));
-                    infosPanel.put(Messages.getString("optional.privatekey.label"), JPasswordField.class, "pwd1", "",
-                            true);
-                    infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
-                            "", true);
-                }
+            if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
+                infosPanel.addTitle(Messages.getString("privatekey.title"));
+                infosPanel.put(Messages.getString("optional.privatekey.label"), JPasswordField.class, "pwd1", "",
+                        true);
+                infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
+                        "", true);
             }
+
         }
         return infosPanel;
 

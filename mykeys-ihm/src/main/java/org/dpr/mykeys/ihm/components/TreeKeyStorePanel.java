@@ -41,10 +41,7 @@ import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
-import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
-import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
+import org.dpr.mykeys.ihm.windows.certificate.*;
 import org.dpr.mykeys.keystore.ChangePasswordDialog;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -585,7 +582,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
         if (object instanceof KeyStoreValue) {
             ksInfo = ((KeyStoreValue) object);
         }
-        SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
+        SuperCreate cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
                 true);
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
@@ -672,7 +669,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
         if (object instanceof KeyStoreValue) {
             ksInfo = ((KeyStoreValue) object);
         }
-        SuperCreate cs = new CreateCertificatDialog(frame, ksInfo,
+        SuperCreate cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
                 true);
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);

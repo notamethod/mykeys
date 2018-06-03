@@ -13,10 +13,7 @@ import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
-import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
-import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
+import org.dpr.mykeys.ihm.windows.certificate.*;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
@@ -182,7 +179,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         SuperCreate cs = null;
         if (info instanceof KeyStoreValue) {
-            cs = new CreateCertificatDialog(frame, (KeyStoreValue) info, true);
+            cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, true);
         } else {
             cs = new CreateTemplateDialog(frame, true);
         }

@@ -20,16 +20,12 @@ import java.util.*;
 
 public class CreateCertificatDialog extends SuperCreate implements ItemListener {
 
-    public CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo,
-                                  boolean modal) {
+    protected CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo,
+                                     boolean modal) {
 
         super(owner, modal);
         this.ksInfo = ksInfo;
-        if (ksInfo == null) {
-            isAC = false;
-        } else if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
-            isAC = true;
-        }
+
         init();
         this.pack();
         //this.setVisible(true);
