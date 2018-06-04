@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class KeyTools {
-    private static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
-    private static final String END_PEM = "-----END CERTIFICATE-----";
+    public static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
+    public static final String END_PEM = "-----END CERTIFICATE-----";
     public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
     public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
     private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
@@ -178,6 +178,7 @@ public class KeyTools {
         }
     }
 
+    @Deprecated
     public void exportPem(CertificateValue certInfo, String fName) throws KeyToolsException {
         /* save the public key in a file */
         try {

@@ -704,4 +704,28 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     }
 
 
+    public void exportPems(List<CertificateValue> certInfos, String fName) throws KeyToolsException {
+        /* save the public key in a file */
+        try {
+            List<String> lines = new ArrayList<>();
+            for (CertificateValue certInfo : certInfos) {
+                lines.add(KeyTools.BEGIN_PEM);
+                // FileUtils.writeLines(file, lines)
+                File f = new File(fName + ".pem");
+                // FileOutputStream keyfos = new FileOutputStream(new File(fName
+                // + ".pem"));
+                byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
+                String tmpString = new String(b);
+                String[] datas = tmpString.split("(?<=\\G.{64})");
+                Collections.addAll(lines, datas);
+
+                lines.add(KeyTools.END_PEM);
+                FileUtils.writeLines(f, lines);
+            }
+
+        } catch (Exception e) {
+
+            throw new KeyToolsException("Export de la clé publique impossible:", e);
+        }
+    }
 }

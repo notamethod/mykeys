@@ -100,7 +100,6 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 		Object source = e.getItemSelectable();
 		JCheckBox jc = (JCheckBox) source;
 		String val = jc.getText();
-		System.out.println("changed 1!");
 		for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
 			if (val.equals(X509Constants.keyUsageLabel[i])) {
 				certInfo.getKeyUsage()[i] = jc.isSelected();

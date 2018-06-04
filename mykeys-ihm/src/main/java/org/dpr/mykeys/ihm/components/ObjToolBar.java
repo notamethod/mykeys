@@ -24,8 +24,6 @@ public abstract class ObjToolBar extends JToolBar {
 		this.title = title;
 	}
 
-	KeysAction actions;
-
 	public abstract void enableActions();
 
     public abstract void disableActions(NodeInfo info);

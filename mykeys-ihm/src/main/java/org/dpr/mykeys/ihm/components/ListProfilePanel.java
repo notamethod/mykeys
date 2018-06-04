@@ -596,11 +596,11 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 				dtde.dropComplete(result);
 
 			} catch (Exception e) {
-				System.out.println("Exception while handling drop " + e);
+				log.error("Exception while handling drop ", e);
 				dtde.rejectDrop();
 			}
 		} else {
-			System.out.println("Drop target rejected drop");
+			log.info("Drop target rejected drop");
 			dtde.dropComplete(false);
 		}
 	}
