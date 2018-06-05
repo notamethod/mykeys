@@ -36,7 +36,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     private JTextField tfDirectory;
     private LabelValuePanel infosPanel;
 
+    @NotNull
     private List<CertificateValue> certInfos;
+
+    private boolean isMultiple;
 
     private KeyStoreValue ksInfo;
 
@@ -44,34 +47,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
     // Map<String, String> elements = new HashMap<String, String>();
 
-    public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo,
-                                   List<CertificateValue> certInfos, boolean modal) {
+    public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
+            List<CertificateValue> certInfos, boolean modal) {
         super(owner, modal);
         this.certInfos = certInfos;
+        isMultiple = certInfos.size() > 1;
         this.ksInfo = ksInfo;
         init();
         this.pack();
-    }
-
-    /**
-     * Works around a JFileChooser limitation, that the selected file when saving
-     * is returned exactly as typed and doesn't take into account the selected
-     * file filter.
-     */
-    public static File getSelectedFileWithExtension(JFileChooser c) {
-        File file = c.getSelectedFile();
-        if (c.getFileFilter() instanceof FileNameExtensionFilter) {
-            String[] exts = ((FileNameExtensionFilter) c.getFileFilter()).getExtensions();
-            String nameLower = file.getName().toLowerCase();
-            for (String ext : exts) { // check if it already has a valid extension
-                if (nameLower.endsWith('.' + ext.toLowerCase())) {
-                    return file; // if yes, return as-is
-                }
-            }
-            // if not, append the first one from the selected filter
-            file = new File(file.toString() + '.' + exts[0]);
-        }
-        return file;
     }
 
     private void init() {
@@ -83,9 +66,12 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         setContentPane(jp);
 
         Map<String, String> mapType = new LinkedHashMap<>();
-        mapType.put("der", "der");
+
         mapType.put("pem", "pem");
-        mapType.put("pkcs12", "pkcs12");
+        if (!isMultiple) {
+            mapType.put("der", "der");
+            mapType.put("pkcs12", "pkcs12");
+        }
 
         // mapType.put("der", "der");
 
@@ -96,8 +82,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         // infosPanel.put("Export de la clé privée", JCheckBox, "");
         if (isContainsPrivateKey(certInfos)) {
 
-            infosPanel.put("Exporter la clé privée", JCheckBox.class,
-                    "isExportKey", "true", true);
+            infosPanel.put(Messages.getString("export.private.key"), JCheckBox.class,
+                    "isExportKey", String.valueOf(!isMultiple), !isMultiple);
 
         }
 
@@ -107,9 +93,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
         File outputFile = getTargetFile(null);
         tfDirectory.setText(outputFile.getAbsolutePath());
-        // FileSystemView fsv = FileSystemView.getFileSystemView();
-        // File f = fsv.getDefaultDirectory();
-        // tfDirectory.setText(f.getAbsolutePath());
+
         JButton jbChoose = new JButton("...");
         jbChoose.addActionListener(dAction);
         jbChoose.setActionCommand("CHOOSE_IN");
@@ -154,7 +138,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         String alias = getAlias();
         String fileName = null;
         if (null == format) {
-            return new File(pathSrc, getAlias());
+            return new File(pathSrc, alias);
         }
         if (format.equalsIgnoreCase("pkcs12")) {
             fileName = alias + KeyTools.EXT_P12;
@@ -171,7 +155,11 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     }
 
     private String getAlias() {
-        return certInfos.get(0).getAlias();
+
+        String retAlias = certInfos.get(0).getAlias();
+        if (certInfos.size() > 1)
+            retAlias += "_multi";
+        return retAlias;
     }
 
     @Override
@@ -179,12 +167,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         Object source = e.getItemSelectable();
         JCheckBox jc = (JCheckBox) source;
         isExportCle = jc.isSelected();
-        // for (int i=0; i<X509Constants.keyUsageLabel.length; i++){
-        // if (val.equals(X509Constants.keyUsageLabel[i])){
-        // certInfo.getKeyUsage()[i]=jc.isSelected();
-        // return;
-        // }
-        // }
+
 
     }
 
