@@ -21,6 +21,7 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -324,11 +325,21 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
     private void copyOldKeystores(boolean ask, String path, String mk1StoreCert) {
         File certFile = new File(path, mk1StoreCert);
+        File touFile = new File(path, "passed.mk");
+        if (!touFile.exists()) {
 
-        if (certFile.exists()) {
+        }
+
+        if (certFile.exists() && !touFile.exists()) {
             if (ask)
-                if (!DialogUtil.askConfirmDialog(null, Messages.getString("migrate.keystore", path)))
+                if (!DialogUtil.askConfirmDialog(null, Messages.getString("migrate.keystore", path))) {
+                    try {
+                        new FileOutputStream(touFile).close();
+                    } catch (IOException e) {
+                        log.error("keystore copy error", e);
+                    }
                     return;
+                }
             File fileDest = new File(KSConfig.getDataDir(), "previous_" + mk1StoreCert);
             try {
                 Files.copy(certFile.toPath(), fileDest.toPath(), StandardCopyOption.REPLACE_EXISTING);
