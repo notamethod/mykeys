@@ -36,7 +36,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     private JTextField tfDirectory;
     private LabelValuePanel infosPanel;
 
+    @NotNull
     private List<CertificateValue> certInfos;
+
+    private boolean isMultiple;
 
     private KeyStoreValue ksInfo;
 
@@ -44,10 +47,11 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
     // Map<String, String> elements = new HashMap<String, String>();
 
-    public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo,
-                                   List<CertificateValue> certInfos, boolean modal) {
+    public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
+            List<CertificateValue> certInfos, boolean modal) {
         super(owner, modal);
         this.certInfos = certInfos;
+        isMultiple = certInfos.size() > 1;
         this.ksInfo = ksInfo;
         init();
         this.pack();
@@ -85,7 +89,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         Map<String, String> mapType = new LinkedHashMap<>();
         mapType.put("der", "der");
         mapType.put("pem", "pem");
-        mapType.put("pkcs12", "pkcs12");
+        if (!isMultiple)
+            mapType.put("pkcs12", "pkcs12");
 
         // mapType.put("der", "der");
 
@@ -97,7 +102,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         if (isContainsPrivateKey(certInfos)) {
 
             infosPanel.put("Exporter la clé privée", JCheckBox.class,
-                    "isExportKey", "true", true);
+                    "isExportKey", String.valueOf(!isMultiple), !isMultiple);
 
         }
 
@@ -107,9 +112,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
         File outputFile = getTargetFile(null);
         tfDirectory.setText(outputFile.getAbsolutePath());
-        // FileSystemView fsv = FileSystemView.getFileSystemView();
-        // File f = fsv.getDefaultDirectory();
-        // tfDirectory.setText(f.getAbsolutePath());
+
         JButton jbChoose = new JButton("...");
         jbChoose.addActionListener(dAction);
         jbChoose.setActionCommand("CHOOSE_IN");
@@ -179,12 +182,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         Object source = e.getItemSelectable();
         JCheckBox jc = (JCheckBox) source;
         isExportCle = jc.isSelected();
-        // for (int i=0; i<X509Constants.keyUsageLabel.length; i++){
-        // if (val.equals(X509Constants.keyUsageLabel[i])){
-        // certInfo.getKeyUsage()[i]=jc.isSelected();
-        // return;
-        // }
-        // }
+
 
     }
 

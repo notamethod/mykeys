@@ -246,16 +246,15 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
     }
 
-    public void exporterCertificate(NodeInfo info, CertificateValue certificateInfo, boolean b) {
+    public void exportCertificates(NodeInfo info, List selectedValuesList) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         List<CertificateValue> certificates = new ArrayList<>();
-        certificates.add(certificateInfo);
+        certificates.addAll(selectedValuesList);
         ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
         cs.setVisible(true);
-
     }
 
     public void importCertificate(NodeInfo info, boolean b) throws ServiceException {
@@ -581,7 +580,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
                 case EXPORT_CERT:
                     if (listCerts != null && listCerts.getSelectedValue() != null
                             && listCerts.getSelectedValue() instanceof CertificateValue) {
-                        exporterCertificate(ksInfo, (CertificateValue) listCerts.getSelectedValue(), false);
+                        exportCertificates(ksInfo, listCerts.getSelectedValuesList());
                     }
                     break;
                 case DELETE_CERT:
@@ -613,6 +612,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
                     break;
             }
         }
+
 
     }
 }

@@ -388,7 +388,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 			case EXPORT_CERT:
 				if (listCerts != null && listCerts.getSelectedValue() != null
 						&& listCerts.getSelectedValue() instanceof CertificateValue) {
-					exporterCertificate(ksInfo, (CertificateValue) listCerts.getSelectedValue(), false);
+					exportCertificates(ksInfo, listCerts.getSelectedValuesList());
 				}
 				break;
 			case DELETE_CERT:
