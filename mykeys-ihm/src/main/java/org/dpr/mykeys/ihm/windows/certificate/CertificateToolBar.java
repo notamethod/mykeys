@@ -14,7 +14,8 @@ import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.TypeAction;
-import org.dpr.mykeys.ihm.components.KeysAction;
+
+import org.dpr.mykeys.ihm.components.ListPanel;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
 
 public class CertificateToolBar extends ObjToolBar  {
@@ -39,9 +40,9 @@ public class CertificateToolBar extends ObjToolBar  {
 		this.title = title;
 	}
 
-	KeysAction actions;
-	
-	public CertificateToolBar(String name, KeysAction actions) {
+	ListPanel.KeysAction actions;
+
+	public CertificateToolBar(String name, ListPanel.KeysAction actions) {
 		super(name);
 		setFloatable(false);
 		this.actions=actions;

@@ -1,54 +1,45 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.swing.AbstractAction;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
+import org.jetbrains.annotations.NotNull;
 
-public class ExportCertificateDialog extends JDialog implements ItemListener
-{
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+public class ExportCertificateDialog extends JDialog implements ItemListener {
+
+    public static final String PEM_KEY_EXT = ".key";
+    public static final String PEM_CERT_EXT = ".cer";
     private static final Log log = LogFactory
             .getLog(ExportCertificateDialog.class);
     private JTextField tfDirectory;
-
-    public static final String PEM_KEY_EXT = ".key";
-
-    public static final String PEM_CERT_EXT = ".cer";
-
     private LabelValuePanel infosPanel;
 
-    private CertificateValue certInfo;
+    @NotNull
+    private List<CertificateValue> certInfos;
+
+    private boolean isMultiple;
 
     private KeyStoreValue ksInfo;
 
@@ -56,18 +47,17 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
     // Map<String, String> elements = new HashMap<String, String>();
 
-    public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo,
-                                   CertificateValue certInfo, boolean modal)
-    {
+    public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
+            List<CertificateValue> certInfos, boolean modal) {
         super(owner, modal);
-        this.certInfo = certInfo;
+        this.certInfos = certInfos;
+        isMultiple = certInfos.size() > 1;
         this.ksInfo = ksInfo;
         init();
         this.pack();
     }
 
-    private void init()
-    {
+    private void init() {
         DialogAction dAction = new DialogAction();
         setTitle(Messages.getString("dialog.export.title"));
         JPanel jp = new JPanel();
@@ -76,9 +66,12 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
         setContentPane(jp);
 
         Map<String, String> mapType = new LinkedHashMap<>();
-        mapType.put("der", "der");
+
         mapType.put("pem", "pem");
-        mapType.put("pkcs12", "pkcs12");
+        if (!isMultiple) {
+            mapType.put("der", "der");
+            mapType.put("pkcs12", "pkcs12");
+        }
 
         // mapType.put("der", "der");
 
@@ -87,11 +80,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
         // infosPanel.put("Format", JComboBox.class, "formatCert", mapType);
         infosPanel.put("Format", ButtonGroup.class, "formatCert", mapType, "");
         // infosPanel.put("Export de la clé privée", JCheckBox, "");
-        if (certInfo.isContainsPrivateKey())
-        {
+        if (isContainsPrivateKey(certInfos)) {
 
-            infosPanel.put("Exporter la clé privée", JCheckBox.class,
-                    "isExportKey", "true", true);
+            infosPanel.put(Messages.getString("export.private.key"), JCheckBox.class,
+                    "isExportKey", String.valueOf(!isMultiple), !isMultiple);
 
         }
 
@@ -101,9 +93,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
         File outputFile = getTargetFile(null);
         tfDirectory.setText(outputFile.getAbsolutePath());
-        // FileSystemView fsv = FileSystemView.getFileSystemView();
-        // File f = fsv.getDefaultDirectory();
-        // tfDirectory.setText(f.getAbsolutePath());
+
         JButton jbChoose = new JButton("...");
         jbChoose.addActionListener(dAction);
         jbChoose.setActionCommand("CHOOSE_IN");
@@ -127,16 +117,67 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
     }
 
-    class DialogAction extends AbstractAction
-    {
+    private boolean isContainsPrivateKey(@NotNull List<CertificateValue> certInfos) {
+        for (CertificateValue cert : certInfos) {
+            if (cert.isContainsPrivateKey())
+                return true;
+        }
+        return false;
+    }
+
+    public void updateKeyStoreList() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private File getTargetFile(String format) {
+        File pathSrc = new File(KSConfig.getDataDir());
+        if (pathSrc != null && !pathSrc.isDirectory()) {
+            pathSrc = new File(pathSrc.getParent());
+        }
+        String alias = getAlias();
+        String fileName = null;
+        if (null == format) {
+            return new File(pathSrc, alias);
+        }
+        if (format.equalsIgnoreCase("pkcs12")) {
+            fileName = alias + KeyTools.EXT_P12;
+        } else if (format.equalsIgnoreCase("der")) {
+            fileName = alias + KeyTools.EXT_DER;
+        } else if (format.equalsIgnoreCase("pem")) {
+            fileName = alias + KeyTools.EXT_PEM;
+        } else {
+            fileName = alias;
+        }
+        return new File(pathSrc, fileName);
+
+
+    }
+
+    private String getAlias() {
+
+        String retAlias = certInfos.get(0).getAlias();
+        if (certInfos.size() > 1)
+            retAlias += "_multi";
+        return retAlias;
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        Object source = e.getItemSelectable();
+        JCheckBox jc = (JCheckBox) source;
+        isExportCle = jc.isSelected();
+
+
+    }
+
+    class DialogAction extends AbstractAction {
 
         @Override
-        public void actionPerformed(ActionEvent event)
-        {
+        public void actionPerformed(ActionEvent event) {
             Map<String, Object> elements = infosPanel.getElements();
             String command = event.getActionCommand();
-            if (command.equals("CHOOSE_IN"))
-            {
+            if (command.equals("CHOOSE_IN")) {
                 // if (StringUtils.isEmpty(tfDirectory.getText()){
                 //
                 // }
@@ -153,8 +194,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers pem (*.pem)"));
                 jfc.setSelectedFile(outputFile);
                 // jPanel1.add(jfc);
-                if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
-                {
+                if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 
                     //TODO: remove or not ?
                     KSConfig.getUserCfg().setProperty("output.path",
@@ -164,11 +204,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
                 }
 
-            }
-            else if (command.equals("OK"))
-            {
-                if (tfDirectory.getText().equals(""))
-                {
+            } else if (command.equals("OK")) {
+                if (tfDirectory.getText().equals("")) {
                     DialogUtil.showError(ExportCertificateDialog.this,
                             "Champs invalides");
                     return;
@@ -180,11 +217,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 char[] privKeyPwd = null;
                 Object o = infosPanel.getElements().get(
                         "isExportKey");
-                boolean isExportCle = o==null?false:(Boolean) o;
+                boolean isExportCle = o == null ? false : (Boolean) o;
 
                 KeyTools kt = new KeyTools();
-                System.out.println(MkSession.password);
-                System.out.println(MkSession.user);
                 KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
@@ -197,62 +232,46 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 } else {
                     privKeyPwd = InternalKeystores.MK1_PASSWORD.toCharArray();
                 }
-
-                certInfo.setPassword(password);
-                if (format.equalsIgnoreCase("pkcs12"))
-                {
+                // TODO check it
+                setPassword(password, certInfos);
+                if (format.equalsIgnoreCase("pkcs12")) {
                     password = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
 
 
                     CommonServices cact = new CommonServices();
 
-                    try
-                    {
+                    try {
                         cact.exportCert(ksInfo, StoreFormat.PKCS12, path,
-                                password, certInfo, isExportCle, privKeyPwd);
-                    }
-                    catch (Exception e)
-                    {
+                                password, certInfos.get(0), isExportCle, privKeyPwd);
+                    } catch (Exception e) {
                         log.error(e);
                         DialogUtil.showError(ExportCertificateDialog.this,
                                 e.getLocalizedMessage());
                     }
-                }
-                else if (format.equals("der"))
-                {
-                    try
-                    {
-                        kt.exportDer(certInfo, path);
-                        if (isExportCle)
-                        {
-                        	kServ.exportPrivateKey(certInfo, privKeyPwd,
+                } else if (format.equals("der")) {
+                    try {
+                        kServ.exportDers(certInfos, path);
+                        if (isExportCle) {
+                            kServ.exportPrivateKey(certInfos.get(0), privKeyPwd,
                                     tfDirectory.getText());
                         }
 
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
 
                         DialogUtil.showError(ExportCertificateDialog.this,
                                 e.getLocalizedMessage());
 
                     }
 
-                }
-                else
-                {
-                    try
-                    {
-                        kt.exportPem(certInfo, path);
-                        if (isExportCle)
-                        {
-                        	kServ.exportPrivateKeyPEM(certInfo, ksInfo, privKeyPwd,
+                } else {
+                    try {
+                        kServ.exportPems(certInfos, path);
+                        if (isExportCle) {
+                            kServ.exportPrivateKeyPEM(certInfos.get(0), ksInfo, privKeyPwd,
                                     tfDirectory.getText());
                         }
 
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
 
                         DialogUtil.showError(ExportCertificateDialog.this,
                                 e.getLocalizedMessage());
@@ -262,12 +281,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
                 ExportCertificateDialog.this.setVisible(false);
                 DialogUtil.showInfo(ExportCertificateDialog.this,
                         "Exportation terminée");
-            }
-            else if (command.equals("CANCEL"))
-            {
+            } else if (command.equals("CANCEL")) {
                 ExportCertificateDialog.this.setVisible(false);
             }
 
+        }
+
+        private void setPassword(char[] password, List<CertificateValue> certInfos) {
+            certInfos.forEach(cert -> cert.setPassword(password));
         }
 
     }
@@ -276,21 +297,19 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
      * @author Christophe Roger
      * @date 8 mai 2009
      */
-    class KeyStoreFileFilter extends FileFilter
-    {
+    class KeyStoreFileFilter extends FileFilter {
 
         private String filterExtension;
         private String filterDescription;
 
-        private KeyStoreFileFilter(String extension, String descrip)
-        {
+        private KeyStoreFileFilter(String extension, String descrip) {
             this.filterExtension = extension;
             this.filterDescription = descrip;
         }
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
          */
         @Override
@@ -307,89 +326,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see javax.swing.filechooser.FileFilter#getDescription()
          */
         @Override
-        public String getDescription()
-        {
+        public String getDescription() {
             // TODO Auto-generated method stub
             return filterDescription;
         }
 
-    }
-
-    public void updateKeyStoreList()
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    private File getTargetFile(String format)
-    {
-        File pathSrc = new File(KSConfig.getDataDir());
-        if (pathSrc != null && !pathSrc.isDirectory())
-        {
-            pathSrc = new File(pathSrc.getParent());
-        }
-        String fileName = null;
-        if (null == format) {
-            return new File(pathSrc, certInfo.getAlias());
-        }
-        if (format.equalsIgnoreCase("pkcs12"))
-        {
-            fileName = certInfo.getAlias() + KeyTools.EXT_P12;
-        }
-        else if (format.equalsIgnoreCase("der"))
-        {
-            fileName = certInfo.getAlias() + KeyTools.EXT_DER;
-        } else if (format.equalsIgnoreCase("pem")) {
-            fileName = certInfo.getAlias() + KeyTools.EXT_PEM;
-        } else {
-            fileName = certInfo.getAlias();
-        }
-        return new File(pathSrc, fileName);
-
-
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e)
-    {
-        Object source = e.getItemSelectable();
-        JCheckBox jc = (JCheckBox) source;
-        isExportCle = jc.isSelected();
-        // for (int i=0; i<X509Constants.keyUsageLabel.length; i++){
-        // if (val.equals(X509Constants.keyUsageLabel[i])){
-        // certInfo.getKeyUsage()[i]=jc.isSelected();
-        // return;
-        // }
-        // }
-
-    }
-
-    /**
-     * Works around a JFileChooser limitation, that the selected file when saving
-     * is returned exactly as typed and doesn't take into account the selected
-     * file filter.
-     */
-    public static File getSelectedFileWithExtension(JFileChooser c)
-    {
-        File file = c.getSelectedFile();
-        if (c.getFileFilter() instanceof FileNameExtensionFilter)
-        {
-            String[] exts = ((FileNameExtensionFilter) c.getFileFilter()).getExtensions();
-            String nameLower = file.getName().toLowerCase();
-            for (String ext : exts)
-            { // check if it already has a valid extension
-                if (nameLower.endsWith('.' + ext.toLowerCase()))
-                {
-                    return file; // if yes, return as-is
-                }
-            }
-            // if not, append the first one from the selected filter
-            file = new File(file.toString() + '.' + exts[0]);
-        }
-        return file;
     }
 }

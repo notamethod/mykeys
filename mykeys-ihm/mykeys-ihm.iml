@@ -12,8 +12,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:3.9.0" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.11" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.58" level="project" />
@@ -28,7 +27,7 @@
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-plaf:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-painters:1.6.5-1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.10" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />

@@ -633,24 +633,25 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
      * @param b
      */
     public void exporterCertificate(DefaultMutableTreeNode node, boolean b) {
-        JFrame frame = (JFrame) tree.getTopLevelAncestor();
-        // KeyStoreValue ksInfo = null;
-        CertificateValue certInfo = null;
-        Object object = node.getUserObject();
-        if (object instanceof CertificateValue) {
-            certInfo = ((CertificateValue) object);
-        }
-        KeyStoreValue ksInfo = null;
-        DefaultMutableTreeNode objectKs = (DefaultMutableTreeNode) node
-                .getParent();// .getUserObject();
-        if (objectKs.getUserObject() instanceof KeyStoreValue) {
-            ksInfo = ((KeyStoreValue) objectKs.getUserObject());
-        }
-        ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
-                certInfo, true);
-        cs.setLocationRelativeTo(frame);
-        cs.setResizable(false);
-        cs.setVisible(true);
+        log.error("Method removed !");
+//        JFrame frame = (JFrame) tree.getTopLevelAncestor();
+//        // KeyStoreValue ksInfo = null;
+//        CertificateValue certInfo = null;
+//        Object object = node.getUserObject();
+//        if (object instanceof CertificateValue) {
+//            certInfo = ((CertificateValue) object);
+//        }
+//        KeyStoreValue ksInfo = null;
+//        DefaultMutableTreeNode objectKs = (DefaultMutableTreeNode) node
+//                .getParent();// .getUserObject();
+//        if (objectKs.getUserObject() instanceof KeyStoreValue) {
+//            ksInfo = ((KeyStoreValue) objectKs.getUserObject());
+//        }
+//        ExportCertificateDialog cs = new ExportCertificateDialog(frame, ksInfo,
+//                certInfo, true);
+//        cs.setLocationRelativeTo(frame);
+//        cs.setResizable(false);
+//        cs.setVisible(true);
 
     }
 
@@ -693,8 +694,6 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
     @Override
     public void dragOver(DropTargetDragEvent dtde) {
-        // TODO Auto-generated method stub
-        System.out.println("dragover");
 
     }
 
@@ -726,14 +725,13 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
                 dtde.dropComplete(result);
 
             } catch (Exception e) {
-                System.out.println("Exception while handling drop " + e);
+                log.error("Exception while handling drop ", e);
                 dtde.rejectDrop();
             }
         } else {
-            System.out.println("Drop target rejected drop");
+            log.info("Drop target rejected drop");
             dtde.dropComplete(false);
         }
-
     }
 
     private boolean dropFile(Transferable transferable, boolean isActionCopy) {
