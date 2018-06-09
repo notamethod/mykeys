@@ -124,10 +124,7 @@ public class CreateCrlDialog extends JDialog {
     /**
      * .
      *
-     * @param mapKeyLength
-     * @param mapAlgoKey
      * @param mapAlgoSig
-     * @param isAC2
      * @return
      */
     private void getInfoPanel(Map<String, String> mapAlgoSig) {
@@ -177,8 +174,6 @@ public class CreateCrlDialog extends JDialog {
             if (command.equals("OK")) {
 
                 Map<String, Object> elements = infosPanel.getElements();
-                log.trace(elements.get("alias"));
-
                 CrlValue crlValue = new CrlValue();
                 String serials = (String) elements.get("serials");
                 List<String> list = new ArrayList<>();

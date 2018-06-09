@@ -13,6 +13,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:3.9.0" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.11" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.58" level="project" />
