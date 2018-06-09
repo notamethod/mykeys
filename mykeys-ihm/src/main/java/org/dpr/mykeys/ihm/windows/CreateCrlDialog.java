@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
@@ -194,8 +195,9 @@ public class CreateCrlDialog extends JDialog {
                     CertificateValue certSign = certificateValue;
                     if (certSign == null) {
                         certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasIssuer);
-                    } else if (certSign.getPrivateKey() == null)
-                        certSign = ktools.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certSign.getAlias());
+                    } else if (certSign.getPrivateKey() == null) {
+                        certSign = ktools.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certSign.getAlias(), MkSession.password);
+                    }
                     X509CRL xCRL = crlMan.generateCrl(certSign, crlValue, list);
                     crlMan.saveCRL(xCRL, crlValue.getPath());
                     // FIXME: add crl to tree

@@ -600,7 +600,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
                             && listCerts.getSelectedValue() instanceof CertificateValue) {
                         CertificateValue certInfo = (CertificateValue) listCerts.getSelectedValue();
                         try {
-                            createCrl(ksInfo, (CertificateValue) listCerts.getSelectedValue(), false);
+                            createCrl(ksInfo, (CertificateValue) certInfo, false);
                         } catch (ServiceException e1) {
                             e1.printStackTrace();
                         }
