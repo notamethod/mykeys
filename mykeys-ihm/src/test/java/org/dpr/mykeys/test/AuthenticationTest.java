@@ -53,7 +53,6 @@ public class AuthenticationTest {
     @Test
     public void list_users() {
         AuthenticationService service = new AuthenticationService();
-        System.out.println(KSConfig.getInternalKeystores().existsUserDatabase());
         try {
             List<CertificateValue> users = service.listUsers();
             assertThat(users).hasSize(2);
@@ -90,7 +89,6 @@ public class AuthenticationTest {
     @Test
     public void load_users() {
         AuthenticationService service = new AuthenticationService();
-        System.out.println(KSConfig.getInternalKeystores().existsUserDatabase());
         try {
             CertificateValue val = service.loadUser("user1", "pwd".toCharArray());
 

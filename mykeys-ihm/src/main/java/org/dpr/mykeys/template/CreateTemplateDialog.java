@@ -61,10 +61,8 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
     private void fillInfos(CertificateTemplate template) {
         OrderedProperties myProfile = template.getProperties();
         Enumeration<?> e = myProfile.propertyNames();
-        System.out.println(e);
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
-            System.out.println(key + " -- " + myProfile.getProperty(key));
             infosPanel.set(key, myProfile.getProperty(key));
             // infosPanel.set( key, myProfile.getProperty(key));
         }

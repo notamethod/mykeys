@@ -625,7 +625,6 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 		File transferFile = (File) fileList.get(0);
 
 		final String transferURL = transferFile.getAbsolutePath();
-		// System.out.println("File URL is " + transferURL);
 
 		return true;
 	}

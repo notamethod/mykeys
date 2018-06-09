@@ -61,7 +61,6 @@ public class TestCerts {
                     StoreModel.CERTSTORE, StoreFormat.JKS);
             ksInfo.setPassword("111".toCharArray());
             File f = new File(pathCert);
-            System.out.println(f.exists());
             KeyStoreValue ksIn = new KeyStoreValue(new File(pathCert),
                     StoreFormat.PKCS12, "aaa".toCharArray());
             KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);

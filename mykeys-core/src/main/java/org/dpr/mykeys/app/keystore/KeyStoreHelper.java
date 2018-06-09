@@ -348,9 +348,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                     KeystoreBuilder ksBuilder = new KeystoreBuilder(load(ksInfo));
                     ksBuilder.addCert(ksInfo, certInfo);
                     certs.add(certInfo);
-                    //addCertToKeyStore(ksInfo, certInfo);
                 }
-                System.out.println(certs.size());
             }
         } catch (KeyStoreException | KeyToolsException e) {
             // TODO Auto-generated catch block

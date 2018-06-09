@@ -418,8 +418,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
         }
 
-        // System.out.println("File URL is " + transferURL);
-
         return true;
     }
 

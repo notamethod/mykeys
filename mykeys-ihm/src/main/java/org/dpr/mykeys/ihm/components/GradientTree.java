@@ -36,7 +36,6 @@ class GradientTree extends JTree implements DropTargetListener {
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		System.out.println("drop tree");
 		
 	}
 
