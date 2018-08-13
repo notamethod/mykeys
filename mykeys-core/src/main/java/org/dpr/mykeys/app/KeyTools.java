@@ -240,7 +240,8 @@ public class KeyTools {
      * <p>
      * <BR>
      *
-     * @param xCerts
+     * @param crl
+     * @param crlFile
      * @throws IOException
      * @throws CRLException
      */
