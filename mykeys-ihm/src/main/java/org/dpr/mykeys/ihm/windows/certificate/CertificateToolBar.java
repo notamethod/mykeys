@@ -2,8 +2,11 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -15,10 +18,12 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 
-import org.dpr.mykeys.ihm.components.ListPanel;
+import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
+import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
+import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
 
-public class CertificateToolBar extends ObjToolBar  {
+public class CertificateToolBar extends ObjToolBar implements CertificateActionPublisher {
 
 	private JButton addCertButton;
 	private JButton addCertProfButton;
@@ -30,7 +35,7 @@ public class CertificateToolBar extends ObjToolBar  {
 	private JToggleButton unlockButton;
 
 	private String title;
-
+    private List<CertificateActionListener> listeners = new ArrayList<>();
 	
 	public String getTitle() {
 		return title;
@@ -40,9 +45,9 @@ public class CertificateToolBar extends ObjToolBar  {
 		this.title = title;
 	}
 
-	ListPanel.KeysAction actions;
+    CertificateListPanel.KeysAction actions;
 
-	public CertificateToolBar(String name, ListPanel.KeysAction actions) {
+    public CertificateToolBar(String name, CertificateListPanel.KeysAction actions) {
 		super(name);
 		setFloatable(false);
 		this.actions=actions;
@@ -86,11 +91,11 @@ public class CertificateToolBar extends ObjToolBar  {
         CrlManagerButton.setActionCommand(TypeAction.CREATE_CRL.getValue());
         CrlManagerButton.setToolTipText(Messages.getString(Messages.getString("crl.create.tooltip")));
         CrlManagerButton.setEnabled(false);
-        CrlManagerButton.addActionListener(actions);
+        CrlManagerButton.addActionListener(e -> notifyCreateCrl("what ?"));
 
 		// FIXME libelles
 		deleteButton = new JButton(createImageIcon("/images/trash_can.png"));
-		deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
+        //deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
         deleteButton.setToolTipText(Messages.getString("delete_certificate.tooltip"));
 
 		deleteButton.setEnabled(false);
@@ -98,12 +103,14 @@ public class CertificateToolBar extends ObjToolBar  {
 		importButton.setEnabled(false);
 
 
-        exportButton.addActionListener(actions);
-		importButton.addActionListener(actions);
-		unlockButton.addActionListener(actions);
-		deleteButton.addActionListener(actions);
-		addCertProfButton.addActionListener(actions);
-		addCertFromCSRButton.addActionListener(actions);
+        exportButton.addActionListener(e -> notifyExportCertificate("what ?"));
+        importButton.addActionListener(e -> notifyImportCertificate("what ?"));
+        unlockButton.addActionListener(e -> notifyopenStore("what ?"));
+        deleteButton.addActionListener(e -> notifyCertificateDeletion("what ?"));
+
+
+        addCertProfButton.addActionListener(e -> notifyInsertCertificateFromProfile("what ?"));
+        addCertFromCSRButton.addActionListener(e -> notifyInsertCertificateFromCSR("what ?"));
 		titre.setText(title);
 		add(titre);
 		add(unlockButton);
@@ -148,14 +155,17 @@ public class CertificateToolBar extends ObjToolBar  {
 		
 	}
 
+
 	public void enableListeners() {
-		addCertButton.addActionListener(actions);
+        addCertButton.addActionListener(e -> notifyInsertCertificate("what ?"));
 		
 	}
 
 	public void removeListeners() {
-		addCertButton.removeActionListener(actions);
-		
+        for (ActionListener al : addCertButton.getActionListeners()) {
+            addCertButton.removeActionListener(al);
+        }
+
 	}
 
     @Override
@@ -182,4 +192,70 @@ public class CertificateToolBar extends ObjToolBar  {
         CrlManagerButton.setEnabled(b);
     }
 
+    @Override
+    public void notifyopenStore(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.openStoreRequested("what !");
+        }
+
+    }
+
+    @Override
+    public void notifyInsertCertificate(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.insertCertificateRequested("what !");
+        }
+
+    }
+
+    @Override
+    public void notifyInsertCertificateFromProfile(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.insertCertificateFromProfileRequested("what !");
+        }
+
+    }
+
+    @Override
+    public void notifyInsertCertificateFromCSR(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.insertCertificateFromCSRRequested("what !");
+        }
+    }
+
+    @Override
+    public void notifyImportCertificate(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.importCertificateRequested("what !");
+        }
+    }
+
+    @Override
+    public void notifyExportCertificate(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.exportCertificateRequested("what !");
+        }
+
+    }
+
+    @Override
+    public void notifyCertificateDeletion(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.deleteCertificateRequested("what !");
+        }
+    }
+
+    @Override
+    public void notifyCreateCrl(String what) {
+        for (CertificateActionListener listener : listeners) {
+            listener.createCrlRequested("what !");
+        }
+
+    }
+
+    @Override
+    public void registerListener(CertificateActionListener listener) {
+        listeners.add(listener);
+
+    }
 }

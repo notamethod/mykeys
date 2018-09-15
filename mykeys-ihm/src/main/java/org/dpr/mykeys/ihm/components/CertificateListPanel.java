@@ -12,18 +12,15 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
+import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
+import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
-import org.dpr.mykeys.ihm.windows.ListCertRenderer;
-import org.dpr.mykeys.ihm.windows.certificate.CertificateCreateFactory;
-import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
-import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
+import org.dpr.mykeys.ihm.windows.certificate.*;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -45,25 +42,22 @@ import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 @SuppressWarnings("serial")
-public class ListPanel extends JPanel implements DropTargetListener {
-    private static final Log log = LogFactory.getLog(ListPanel.class);
-    // Map<String, String> elements = new HashMap<String, String>();
-    LabelValuePanel infosPanel;
+public class CertificateListPanel extends JPanel implements DropTargetListener, CertificateActionListener {
+    private static final Log log = LogFactory.getLog(CertificateListPanel.class);
     NodeInfo ksInfo;
-    JImgList listCerts;
+    CertificatesView listCerts;
+    private List<EventCompListener> listeners = new ArrayList<>();
     private ToolBarManager toolBarManager = new ToolBarManager();
-    private DetailPanel detailPanel;
     private KeysAction actions;
     private ActionPanel dAction;
     private JPanel jp;
-    private DefaultListModel listModel;
+    //private DefaultListModel listModel;
     private DropTarget dropTarget;
 
-    public ListPanel() {
+    public CertificateListPanel() {
         super(new BorderLayout());
 
         init();
-
     }
 
     private void init() {
@@ -75,24 +69,25 @@ public class ListPanel extends JPanel implements DropTargetListener {
         jp = new JPanel(new BorderLayout());
         final ImageIcon icon = createImageIcon("/images/Locked.png");
 
-        actions = new KeysAction(this);
-
+        actions = new KeysAction();
+        //  NewTreeKeyStorePanel ntp = new NewTreeKeyStorePanel(null);
         toolBarManager.init("", actions, this);
-        listModel = new DefaultListModel();
+        //for some times...
+
+        if (toolBarManager.getInstance() instanceof CertificateToolBar) {
+            ((CertificateToolBar) toolBarManager.getInstance()).registerListener(this);
+        }
+        // listModel = new DefaultListModel();
         ListSelectionListener listListener = new CertListListener();
 
-        listCerts = new JImgList(listModel);
+        listCerts = new ListImgCertificatesView();
+        // listCerts = new TreeCertificatesView();
 
-        listCerts.addListSelectionListener(listListener);
-        ListCertRenderer renderer = new ListCertRenderer();
-        listCerts.setCellRenderer(renderer);
-        listCerts.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        listCerts.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        listCerts.setVisibleRowCount(-1);
-        listCerts.setDragEnabled(true);
+        listCerts.addListener(listListener);
+
         // listCerts.setTransferHandler(new ListTransferHandler());
 
-        JScrollPane listScroller = new JScrollPane(listCerts);
+        JScrollPane listScroller = new JScrollPane(listCerts.getListCerts());
         // listScroller.setPreferredSize(new Dimension(450, 80));
         listScroller.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -102,6 +97,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
         jp.setVisible(false);
     }
+
 
     public void updateInfo(NodeInfo info) throws ServiceException {
         jp.setVisible(false);
@@ -113,21 +109,20 @@ public class ListPanel extends JPanel implements DropTargetListener {
             return;
         }
         ksInfo = info;
-        listCerts.clearSelection();
-        listModel.removeAllElements();
-        // FIXME
-
+        listCerts.clear();
 
         if (ksInfo instanceof ProfilStoreInfo) {
 
             for (ChildInfo ci : ProfileServices.getProfils(KSConfig.getProfilsPath())) {
-                listModel.addElement(ci);
+                listCerts.getModel().addElement(ci);
             }
         } else {
             KeyStoreHelper ks = new KeyStoreHelper((KeyStoreValue) ksInfo);
             for (ChildInfo ci : ks.getChildList()) {
-                listModel.addElement(ci);
+                listCerts.getModel().addElement(ci);
             }
+            //TODO add parameter to refresh method (type ks: storemodel an dstortype)
+            listCerts.getModel().refresh();
         }
         toolBarManager.removeListeners(info);
         // addCertProfButton.removeActionListener(actions);
@@ -137,12 +132,12 @@ public class ListPanel extends JPanel implements DropTargetListener {
             toolBarManager.enableListeners(info);
 
             // addCertProfButton.addActionListener(actions);
-            listCerts.setShowImage(false);
+            listCerts.makeVisible(false);
 
         } else {
 
             toolBarManager.disableActions(info);
-            listCerts.setShowImage(true);
+            listCerts.makeVisible(true);
         }
         toolBarManager.setTitle(ksInfo.getName());
         // toolBarManager.show(info);
@@ -152,13 +147,23 @@ public class ListPanel extends JPanel implements DropTargetListener {
     }
 
     private void displayDetail(ChildInfo info) {
-        detailPanel.updateInfo(info);
+        notifyCertDetailToUpdate(info);
+
 
     }
 
-    public void setDetailPanel(DetailPanel detailPanel) {
-        this.detailPanel = detailPanel;
+    private void notifyCertDetailToUpdate(ChildInfo info) {
+        for (EventCompListener listener : listeners) {
+            listener.showingCertDetailRequested(info);
+        }
     }
+
+
+    public void registerListener(EventCompListener listener) {
+        listeners.add(listener);
+
+    }
+
 
     /**
      * @return the ksInfo
@@ -174,12 +179,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
         this.ksInfo = ksInfo;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dpr.mykeys.ihm.components.IListPanel#setDetailPanel(org.dpr.mykeys.
-     * ihm.components.DetailPanel)
-     */
 
     public void addElement(NodeInfo info, boolean b) throws ServiceException {
 
@@ -210,7 +209,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
         return;
     }
 
-    public void createCrl(NodeInfo info, CertificateValue certificateInfo, boolean b) throws ServiceException {
+    public void showCreateCrlFrame(NodeInfo info, CertificateValue certificateInfo, boolean b) throws ServiceException {
 
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         CreateCrlDialog cs = new CreateCrlDialog(frame, certificateInfo);
@@ -232,7 +231,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
      * @param certificateInfo
      * @throws ServiceException
      */
-    public void deleteCertificate(NodeInfo info, CertificateValue certificateInfo) throws ServiceException {
+    public void showDeleteCertificateFrame(NodeInfo info, CertificateValue certificateInfo) throws ServiceException {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
         try {
@@ -246,7 +245,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
     }
 
-    public void exportCertificates(NodeInfo info, List selectedValuesList) {
+    public void showExportCertificatesFrame(NodeInfo info, List selectedValuesList) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         List<CertificateValue> certificates = new ArrayList<>();
@@ -436,6 +435,98 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
     }
 
+    @Override
+    public void openStoreRequested(String what) {
+        if (openStore(false, true)) {
+
+            try {
+                updateInfo(ksInfo);
+            } catch (ServiceException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void insertCertificateRequested(String what) {
+        try {
+            addElement(ksInfo, false);
+        } catch (ServiceException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    @Override
+    public void insertCertificateFromProfileRequested(String what) {
+        try {
+            addCertFromPRofile(ksInfo, false);
+        } catch (ServiceException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (IhmException e1) {
+            e1.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void insertCertificateFromCSRRequested(String what) {
+        try {
+            addCertFromCSR(ksInfo, false);
+        } catch (ServiceException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void importCertificateRequested(String what) {
+        try {
+            importCertificate(ksInfo, false);
+        } catch (ServiceException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    @Override
+    public void exportCertificateRequested(String what) {
+        if (listCerts != null && listCerts.getSelected() != null) {
+            showExportCertificatesFrame(ksInfo, listCerts.getSelectedList());
+        }
+    }
+
+    @Override
+    public void deleteCertificateRequested(String what) {
+        if (listCerts != null && listCerts.getSelected() != null) {
+            CertificateValue certInfo = (CertificateValue) listCerts.getSelected();
+            if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
+                try {
+                    showDeleteCertificateFrame(ksInfo, certInfo);
+                } catch (ServiceException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void createCrlRequested(String what) {
+        if (listCerts != null && listCerts.getSelected() != null) {
+            CertificateValue certInfo = (CertificateValue) listCerts.getSelected();
+            try {
+                showCreateCrlFrame(ksInfo, (CertificateValue) certInfo, false);
+            } catch (ServiceException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
     class ListTransferHandler extends TransferHandler {
         DataFlavor certFlavor;
 
@@ -453,7 +544,7 @@ public class ListPanel extends JPanel implements DropTargetListener {
     /**
      * @author Buck
      */
-    class CertListListener implements ListSelectionListener {
+    class CertListListener implements ListSelectionListener, EventCompListener {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -471,9 +562,21 @@ public class ListPanel extends JPanel implements DropTargetListener {
 
                 }
             }
+        }
+
+        @Override
+        public void showingCertListRequested(NodeInfo info) {
 
         }
 
+        @Override
+        public void showingCertDetailRequested(ChildInfo info) {
+            displayDetail(info);
+            if (ksInfo.isOpen()) {
+                toolBarManager.enableElementActions(ksInfo, true);
+
+            }
+        }
     }
 
     class ActionPanel extends AbstractAction {
@@ -499,18 +602,6 @@ public class ListPanel extends JPanel implements DropTargetListener {
     public class KeysAction implements ActionListener {
 //TODO: kill this class !
 
-
-        private JComponent frameSource;
-
-        public KeysAction(JComponent frameSource) {
-            super();
-
-            this.frameSource = frameSource;
-            // this.ksInfo = ksInfo;
-        }
-
-        // private KeyStoreValue ksInfo;
-
         @Override
         public void actionPerformed(ActionEvent e) {
             final String action = e.getActionCommand();
@@ -522,90 +613,14 @@ public class ListPanel extends JPanel implements DropTargetListener {
             switch (typeAction) {
 
                 case OPEN_STORE:
-                    if (openStore(false, true)) {
 
-                        try {
-                            updateInfo(ksInfo);
-                        } catch (ServiceException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
-                    }
                     break;
                 //
                 // case CLOSE_STORE:
                 // treeKeyStoreParent.closeStore(node, true);
                 // break;
 
-                case ADD_CERT:
-                    try {
-                        addElement(ksInfo, false);
-                    } catch (ServiceException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    // addCertificate(ksInfo, false);
-                    break;
-                case ADD_CERT_PROF:
-                    try {
-                        addCertFromPRofile(ksInfo, false);
-                    } catch (ServiceException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    } catch (IhmException e1) {
-                        e1.printStackTrace();
-                    }
-                    // addCertificate(ksInfo, false);
-                    break;
-                case ADD_CERT_FROMCSR:
-                    try {
-                        addCertFromCSR(ksInfo, false);
-                    } catch (ServiceException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    // addCertificate(ksInfo, false);
-                    break;
-                case IMPORT_CERT:
-                    try {
-                        importCertificate(ksInfo, false);
-                    } catch (ServiceException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    break;
 
-                case EXPORT_CERT:
-                    if (listCerts != null && listCerts.getSelectedValue() != null
-                            && listCerts.getSelectedValue() instanceof CertificateValue) {
-                        exportCertificates(ksInfo, listCerts.getSelectedValuesList());
-                    }
-                    break;
-                case DELETE_CERT:
-                    if (listCerts != null && listCerts.getSelectedValue() != null
-                            && listCerts.getSelectedValue() instanceof CertificateValue) {
-                        CertificateValue certInfo = (CertificateValue) listCerts.getSelectedValue();
-                        if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
-                            try {
-                                deleteCertificate(ksInfo, certInfo);
-                            } catch (ServiceException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            }
-                        }
-                    }
-                    break;
-                case CREATE_CRL:
-                    if (listCerts != null && listCerts.getSelectedValue() != null
-                            && listCerts.getSelectedValue() instanceof CertificateValue) {
-                        CertificateValue certInfo = (CertificateValue) listCerts.getSelectedValue();
-                        try {
-                            createCrl(ksInfo, (CertificateValue) certInfo, false);
-                        } catch (ServiceException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                    break;
                 default:
                     break;
             }

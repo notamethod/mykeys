@@ -208,13 +208,7 @@ public class SelectUserDialog extends MkDialog {
                         e.printStackTrace();
                     }
                 });
-
-
             }
-
-            // System.exit(0);
-
-
         }
 
         private void loginOK() {

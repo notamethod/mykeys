@@ -8,11 +8,10 @@ import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
-import org.dpr.mykeys.app.crl.CrlTools;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.ihm.components.ListPanel;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.components.CertificateListPanel;
+import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.JSpinnerDate;
@@ -32,7 +31,7 @@ import java.util.List;
 import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
 public class CreateCrlDialog extends JDialog {
-    private static final Log log = LogFactory.getLog(ListPanel.class);
+    private static final Log log = LogFactory.getLog(CertificateListPanel.class);
     // JTextField x509PrincipalC;
     // JTextField x509PrincipalO;
     // JTextField x509PrincipalL;

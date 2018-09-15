@@ -9,7 +9,7 @@ public enum TypeAction {
 			"ImportStore"), OPEN_STORE("OpenStore"), ADD_CERT("AddCert"), IMPORT_CERT(
 			"ImportCert"), CLOSE_STORE("CloseStore"), REMOVE_STORE(
 			"RemoveStore"), DELETE_STORE("DeleteStore"), ADD_CERT_AC(
-			"AddCertAC"), DELETE_CERT("DeleteCert"), CREATE_CRL("createCrl"), ADD_CERT_PROF("AddCertProf"), CHANGE_PWD("changePWd"), ADD_CERT_FROMCSR("addCertFromCSR"), OPEN_EXPLORER("OpenExplorer");
+            "AddCertAC"), DELETE_CERT("DeleteCert"), CREATE_CRL("showCreateCrlFrame"), ADD_CERT_PROF("AddCertProf"), CHANGE_PWD("changePWd"), ADD_CERT_FROMCSR("addCertFromCSR"), OPEN_EXPLORER("OpenExplorer");
 
 	/** L'attribut qui contient la valeur associé à l'enum */
 	private final String value;

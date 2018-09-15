@@ -5,12 +5,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.dpr.mykeys.ihm.components.DetailPanel;
-import org.dpr.mykeys.ihm.components.ListPanel;
+import org.dpr.mykeys.ihm.components.CertificateListPanel;
 
 public class ListFrame extends JFrame {
 
 	private DetailPanel detailPanel;
-	private ListPanel listePanel;
+	private CertificateListPanel listePanel;
 
 	public static void main(String[] args) {
 		// Schedule a job for the event-dispatching thread:
@@ -25,11 +25,11 @@ public class ListFrame extends JFrame {
 
     private void init() {
 		JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		listePanel = new ListPanel();
+		listePanel = new CertificateListPanel();
 		
 		// Create the viewing pane.
 		detailPanel = new DetailPanel();
-		listePanel.setDetailPanel(detailPanel);	
+
 		JScrollPane scrollDetail = new JScrollPane(detailPanel);
         scrollDetail.getVerticalScrollBar().setUnitIncrement(16);
 		splitLeftPanel.setBottomComponent(scrollDetail);

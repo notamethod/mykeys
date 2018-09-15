@@ -23,7 +23,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.CommonServices;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;

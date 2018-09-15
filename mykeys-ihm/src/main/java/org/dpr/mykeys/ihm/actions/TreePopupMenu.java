@@ -7,7 +7,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStoreActions;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
 import org.dpr.mykeys.keystore.ImportStoreDialog;
@@ -50,13 +50,13 @@ public class TreePopupMenu extends JPopupMenu {
 
     private JMenuItem menuChangePwd;
 
-    private TreeKeyStorePanel treeKeyStoreParent;
+    private TreeKeyStoreActions treeKeyStoreParent;
 
     private TreePath path;
 
     private DefaultMutableTreeNode node;
 
-    public TreePopupMenu(String string, TreeKeyStorePanel treeKeyStore) {
+    public TreePopupMenu(String string, TreeKeyStoreActions treeKeyStore) {
         super(string);
         this.treeKeyStoreParent = treeKeyStore;
         init();
@@ -278,13 +278,13 @@ public class TreePopupMenu extends JPopupMenu {
                     break;
                 case DELETE_STORE:
                     ksInfo = (KeyStoreValue) node.getUserObject();
-                    if (DialogUtil.askConfirmDialog(treeKeyStoreParent, Messages.getString("delete.certificat.confirm", ksInfo.getName()))) {
+                    if (DialogUtil.askConfirmDialog(treeKeyStoreParent.getComponent(), Messages.getString("delete.certificat.confirm", ksInfo.getName()))) {
                         try {
 
                             Path fileToDeletePath = Paths.get(ksInfo.getPath());
                             Files.delete(fileToDeletePath);
                         } catch (IOException e1) {
-                            DialogUtil.showError(treeKeyStoreParent, e1.getLocalizedMessage());
+                            DialogUtil.showError(treeKeyStoreParent.getComponent(), e1.getLocalizedMessage());
                         }
                         MykeysFrame.removeKeyStore(ksInfo.getPath());
                         treeKeyStoreParent.removeNode(node);

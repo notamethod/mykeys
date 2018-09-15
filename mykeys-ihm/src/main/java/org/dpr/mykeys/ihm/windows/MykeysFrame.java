@@ -11,7 +11,8 @@ import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.MenuAction;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.components.MainPanel;
+import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
@@ -45,7 +46,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
     // messages
     private HashMap<String, KeyStoreValue> ksList = new HashMap<>();
 
-    private TreeKeyStorePanel mainPanel;
+    private MainPanel mainPanel;
 
     /**
      * Constructeur
@@ -232,7 +233,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
         buildMenu();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainPanel = new TreeKeyStorePanel(this.getPreferredSize());
+        mainPanel = new MainPanel(this.getPreferredSize());
         this.getContentPane().add(p);
         this.getContentPane().getMaximumSize();
         p.add(mainPanel);

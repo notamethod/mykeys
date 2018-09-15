@@ -12,7 +12,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
-import org.dpr.mykeys.ihm.components.TreeKeyStorePanel;
+import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.utils.DialogUtil;

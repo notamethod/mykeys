@@ -53,7 +53,7 @@ import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.LabelValuePanel;
 
 @SuppressWarnings("serial")
-public class ListProfilePanel extends ListPanel implements DropTargetListener {
+public class ListProfilePanel extends CertificateListPanel implements DropTargetListener {
     private static final Log log = LogFactory.getLog(ListProfilePanel.class);
 
     private ProfileServices profileService = new ProfileServices(KSConfig.getProfilsPath());
@@ -388,7 +388,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 			case EXPORT_CERT:
 				if (listCerts != null && listCerts.getSelectedValue() != null
 						&& listCerts.getSelectedValue() instanceof CertificateValue) {
-					exportCertificates(ksInfo, listCerts.getSelectedValuesList());
+                    showExportCertificatesFrame(ksInfo, listCerts.getSelectedValuesList());
 				}
 				break;
 			case DELETE_CERT:
@@ -457,7 +457,7 @@ public class ListProfilePanel extends ListPanel implements DropTargetListener {
 	 * @param info
 	 * @param certificateInfo
 	 */
-	public void deleteCertificate(NodeInfo info, CertificateValue certificateInfo) {
+    public void showDeleteCertificateFrame(NodeInfo info, CertificateValue certificateInfo) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
 	
 		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);

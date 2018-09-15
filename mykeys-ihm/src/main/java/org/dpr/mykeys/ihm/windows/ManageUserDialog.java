@@ -7,7 +7,7 @@ import org.dpr.mykeys.app.AuthenticationService;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.ihm.components.ListPanel;
+import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.model.UserModel;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -20,7 +20,7 @@ import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 
 public class ManageUserDialog extends JFrame {
-    public static final Log log = LogFactory.getLog(ListPanel.class);
+    public static final Log log = LogFactory.getLog(CertificateListPanel.class);
     AuthenticationService authService;
     private JTable table;
     private UserModel modele;

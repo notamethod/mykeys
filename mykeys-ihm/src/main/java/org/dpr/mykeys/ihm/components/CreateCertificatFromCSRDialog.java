@@ -16,7 +16,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -28,7 +27,7 @@ import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.ihm.windows.certificate.CreateCertificatDialog;
+import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JDropText;

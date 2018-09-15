@@ -6,7 +6,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
-import org.dpr.mykeys.ihm.components.ListPanel;
+import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.model.ProfileModel;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.utils.DialogUtil;
@@ -22,7 +22,7 @@ import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 
 public class ManageTemplateFrame extends JFrame {
-    public static final Log log = LogFactory.getLog(ListPanel.class);
+    public static final Log log = LogFactory.getLog(CertificateListPanel.class);
 
     private JTable table;
     private ProfileModel modele;
