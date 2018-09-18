@@ -732,7 +732,7 @@ public class TreeKsManager implements MouseListener,
 
     }
 
-    public Component getTree() {
+    public JTree getTree() {
         return tree;
     }
 

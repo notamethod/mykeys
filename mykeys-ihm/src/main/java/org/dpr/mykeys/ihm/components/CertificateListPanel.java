@@ -12,6 +12,7 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
+import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
@@ -70,18 +71,18 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         final ImageIcon icon = createImageIcon("/images/Locked.png");
 
         actions = new KeysAction();
-        //  NewTreeKeyStorePanel ntp = new NewTreeKeyStorePanel(null);
+
         toolBarManager.init("", actions, this);
         //for some times...
 
         if (toolBarManager.getInstance() instanceof CertificateToolBar) {
             ((CertificateToolBar) toolBarManager.getInstance()).registerListener(this);
         }
-        // listModel = new DefaultListModel();
+
         ListSelectionListener listListener = new CertListListener();
 
         listCerts = new ListImgCertificatesView();
-        // listCerts = new TreeCertificatesView();
+        //listCerts = new TreeCertificatesView();
 
         listCerts.addListener(listListener);
 

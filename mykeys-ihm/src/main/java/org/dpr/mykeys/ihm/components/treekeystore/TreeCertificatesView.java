@@ -9,6 +9,7 @@ import org.dpr.mykeys.ihm.components.IModelFactory;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
 
@@ -76,11 +77,27 @@ public class TreeCertificatesView implements CertificatesView {
 
     @Override
     public CertificateValue getSelected() {
+        DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) treeks.getTree().getLastSelectedPathComponent();
+        if (tNode != null) {
+            Object object = tNode.getUserObject();
+            if (object != null)
+                return (CertificateValue) object;
+        }
         return null;
+
     }
 
     @Override
     public List getSelectedList() {
-        return null;
+        List ar = new ArrayList<CertificateValue>();
+        DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) treeks.getTree().getLastSelectedPathComponent();
+        if (tNode != null) {
+            Object object = tNode.getUserObject();
+            if (object != null) {
+                ar.add(object);
+
+            }
+        }
+        return ar;
     }
 }
