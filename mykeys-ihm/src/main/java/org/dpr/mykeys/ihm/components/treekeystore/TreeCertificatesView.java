@@ -5,6 +5,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.ihm.components.CertificatesView;
 import org.dpr.mykeys.ihm.components.IModelFactory;
+import org.dpr.mykeys.ihm.components.TreeCertManager;
 
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -16,11 +17,11 @@ import java.util.List;
 public class TreeCertificatesView implements CertificatesView {
 
     final String KS_AC_NAME = "store.ac.name";
-    private TreeKsManager treeks;
+    private TreeCertManager treeks;
     private IModelFactory model;
 
     public TreeCertificatesView() {
-        this.treeks = new TreeKsManager();
+        this.treeks = new TreeCertManager();
 
         model = new IModelFactory() {
             @Override

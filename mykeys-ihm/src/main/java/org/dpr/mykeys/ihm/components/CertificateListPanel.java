@@ -79,10 +79,11 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             ((CertificateToolBar) toolBarManager.getInstance()).registerListener(this);
         }
 
+
         ListSelectionListener listListener = new CertListListener();
 
-        listCerts = new ListImgCertificatesView();
-        //listCerts = new TreeCertificatesView();
+        //listCerts = new ListImgCertificatesView();
+        listCerts = new TreeCertificatesView();
 
         listCerts.addListener(listListener);
 

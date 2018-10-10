@@ -38,7 +38,7 @@ import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
-import org.dpr.mykeys.ihm.actions.TreePopupMenu;
+import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
 import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.components.DetailPanel;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
@@ -83,7 +83,7 @@ public class NewTreeKeyStorePanel extends JPanel implements MouseListener,
     // DefaultMutableTreeNode crlNode;
     //
     // DefaultMutableTreeNode sandBoxNode;
-    private TreePopupMenu popup;
+    private TreePopupMenuKS popup;
 
     public NewTreeKeyStorePanel(Dimension dim) {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -108,7 +108,7 @@ public class NewTreeKeyStorePanel extends JPanel implements MouseListener,
         tree.getSelectionModel().setSelectionMode(
                 TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        popup = new TreePopupMenu("Popup name", this);
+        popup = new TreePopupMenuKS("Popup name", this);
 
         treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
 

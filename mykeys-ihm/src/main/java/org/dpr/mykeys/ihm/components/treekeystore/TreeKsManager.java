@@ -38,6 +38,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
+import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
@@ -81,12 +82,12 @@ public class TreeKsManager implements MouseListener,
     private DefaultMutableTreeNode rootNode;
     final String KS_AC_NAME = "store.ac.name";
 
+    public TreePopupMenu getPopup() {
+        return new TreePopupMenuKS("Popup name", this);
+    }
+
     private TreeModel treeModel;
 
-    //
-    // DefaultMutableTreeNode crlNode;
-    //
-    // DefaultMutableTreeNode sandBoxNode;
     private TreePopupMenu popup;
 
     public TreeKsManager() {
@@ -111,7 +112,7 @@ public class TreeKsManager implements MouseListener,
         tree.getSelectionModel().setSelectionMode(
                 TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        popup = new TreePopupMenu("Popup name", this);
+        popup = getPopup();
 
         tree.setRootVisible(false);
 
@@ -610,7 +611,7 @@ public class TreeKsManager implements MouseListener,
         listeners.add((EventCompListener) listener);
 
     }
-
+//xxx
     /**
      * .
      * <p>
