@@ -22,7 +22,7 @@ import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 
 public class ManageTemplateFrame extends JFrame {
-    public static final Log log = LogFactory.getLog(CertificateListPanel.class);
+    public static final Log log = LogFactory.getLog(ManageTemplateFrame.class);
 
     private JTable table;
     private ProfileModel modele;

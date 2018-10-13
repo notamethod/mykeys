@@ -31,7 +31,7 @@ import java.util.List;
 import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
 public class CreateCrlDialog extends JDialog {
-    private static final Log log = LogFactory.getLog(CertificateListPanel.class);
+    private static final Log log = LogFactory.getLog(CreateCrlDialog.class);
     // JTextField x509PrincipalC;
     // JTextField x509PrincipalO;
     // JTextField x509PrincipalL;
