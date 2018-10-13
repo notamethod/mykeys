@@ -5,7 +5,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.ihm.components.CertificatesView;
 import org.dpr.mykeys.ihm.components.IModelFactory;
-import org.dpr.mykeys.ihm.components.TreeCertManager;
+
 
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;

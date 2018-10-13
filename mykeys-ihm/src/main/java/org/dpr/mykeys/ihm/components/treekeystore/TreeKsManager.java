@@ -75,8 +75,8 @@ public class TreeKsManager implements MouseListener,
 
     private final static Log log = LogFactory.getLog(TreeKsManager.class);
 
-    private List<EventCompListener> listeners = new ArrayList<>();
-    private GradientTree tree;
+    protected List<EventCompListener> listeners = new ArrayList<>();
+    protected GradientTree tree;
     private Map<String, DefaultMutableTreeNode> nodes;
     private Map<String, DefaultMutableTreeNode> fixedNodes;
     private DefaultMutableTreeNode rootNode;
@@ -150,12 +150,12 @@ public class TreeKsManager implements MouseListener,
 
     }
 
-    private void displayCertDetail(CertificateValue info) {
+    protected void displayCertDetail(CertificateValue info) {
         notifyCertDetailToUpdate(info);
 
     }
 
-    private void notifyCertDetailToUpdate(CertificateValue info) {
+    protected void notifyCertDetailToUpdate(CertificateValue info) {
         for (EventCompListener listener : listeners) {
             listener.showingCertDetailRequested(info);
         }
@@ -376,7 +376,7 @@ public class TreeKsManager implements MouseListener,
 
     }
 
-    private void showPopupMenu(MouseEvent e) {
+    protected void showPopupMenu(MouseEvent e) {
         DefaultMutableTreeNode tNode = null;
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
         TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());

@@ -103,6 +103,7 @@ public class DetailPanel extends JPanel {
 	}
 
 	public void updateInfo(ChildInfo info) {
+        System.out.println("UPDATE");
 		// FIXME: repaint component ?
 		if (info == null) {
 			jtab.setVisible(false);
