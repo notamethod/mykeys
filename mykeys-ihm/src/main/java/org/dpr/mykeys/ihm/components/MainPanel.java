@@ -42,7 +42,8 @@ import org.dpr.mykeys.ihm.components.treekeystore.TreeKsManager;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 
 import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -254,7 +255,7 @@ public class MainPanel extends JPanel implements
     @Override
     public void drop(DropTargetDropEvent dtde) {
         boolean isActionCopy = false;
-        System.out.println("drop");
+        log.debug("drop");
         if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
             if ((dtde.getDropAction() & DnDConstants.ACTION_COPY) != 0) {
                 isActionCopy = true;
@@ -295,7 +296,7 @@ public class MainPanel extends JPanel implements
 
     @Override
     public void dropActionChanged(DropTargetDragEvent dtde) {
-        System.out.println("dropevent");
+        log.debug("dropevent");
 
     }
 

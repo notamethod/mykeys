@@ -62,7 +62,8 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
     @Override
     public void addListener(EventListener listListener) {
         // this.listListener = listListener;
-        listCerts.addListSelectionListener((ListSelectionListener) listListener);
+        if (listListener instanceof ListSelectionListener)
+            listCerts.addListSelectionListener((ListSelectionListener) listListener);
     }
 
     @Override

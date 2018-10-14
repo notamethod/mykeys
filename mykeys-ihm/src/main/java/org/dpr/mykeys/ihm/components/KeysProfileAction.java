@@ -1,16 +1,13 @@
 package org.dpr.mykeys.ihm.components;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class KeysProfileAction implements ActionListener {
 
@@ -56,7 +53,7 @@ public class KeysProfileAction implements ActionListener {
 
 		case ADD_CERT:
 			try {
-				this.listPanel.addElement(this.listPanel.ksInfo, false);
+				this.listPanel.addElement(this.listPanel.ksInfo, false, null);
 			} catch (ServiceException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();

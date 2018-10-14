@@ -1,30 +1,30 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
-import static org.dpr.swingtools.ImageUtils.createImageIcon;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
+import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.ihm.actions.TypeAction;
+import org.dpr.mykeys.ihm.components.CertificateListPanel;
+import org.dpr.mykeys.ihm.components.ObjToolBar;
+import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
+import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
-
-import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.ihm.actions.TypeAction;
-
-import org.dpr.mykeys.ihm.components.CertificateListPanel;
-import org.dpr.mykeys.ihm.components.ObjToolBar;
-import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
-import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 public class CertificateToolBar extends ObjToolBar implements CertificateActionPublisher {
 
+    private static final Log log = LogFactory.getLog(CertificateToolBar.class);
 	private JButton addCertButton;
 	private JButton addCertProfButton;
 	private JButton addCertFromCSRButton;
@@ -69,7 +69,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 			   }
 			});
 
-		unlockButton.addActionListener(e -> System.out.println("Handled by Lambda listener"));
+        unlockButton.addActionListener(e -> log.debug("Handled by Lambda listener"));
 		// unlockButton.setIcon(createImageIcon("/images/Locked.png"));
 
 		unlockButton.setDisabledIcon(createImageIcon("/images/Unlocked.png"));
@@ -157,7 +157,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 
 
 	public void enableListeners() {
-        addCertButton.addActionListener(e -> notifyInsertCertificate("what ?"));
+        addCertButton.addActionListener(e -> notifyInsertCertificate(null));
 		
 	}
 
@@ -201,9 +201,9 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
     }
 
     @Override
-    public void notifyInsertCertificate(String what) {
+    public void notifyInsertCertificate(CertificateValue what) {
         for (CertificateActionListener listener : listeners) {
-            listener.insertCertificateRequested("what !");
+            listener.insertCertificateRequested(null);
         }
 
     }

@@ -428,7 +428,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                 if (certInfo.isContainsPrivateKey())
                     log.error(message);
                 else
-                    log.info(message);
+                    log.debug(message);
                 // return null;
             } else {
                 for (Certificate chainCert : certs) {

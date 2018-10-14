@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 
@@ -22,5 +23,10 @@ public class CertificateCreateFactory {
                     modal);
         }
         //return null;
+    }
+
+    public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, CertificateValue issuer, boolean modal) {
+        return new CreateCertificatDialog(owner, info, issuer,
+                modal);
     }
 }

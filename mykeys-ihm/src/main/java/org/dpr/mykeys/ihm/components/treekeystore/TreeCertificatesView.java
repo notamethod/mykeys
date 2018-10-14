@@ -3,11 +3,11 @@ package org.dpr.mykeys.ihm.components.treekeystore;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.ihm.actions.TreePopupMenuCertificate;
 import org.dpr.mykeys.ihm.components.CertificatesView;
 import org.dpr.mykeys.ihm.components.IModelFactory;
+import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 
-
-import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,6 +19,11 @@ public class TreeCertificatesView implements CertificatesView {
     final String KS_AC_NAME = "store.ac.name";
     private TreeCertManager treeks;
     private IModelFactory model;
+
+
+    public TreeCertManager getTreeManager() {
+        return treeks;
+    }
 
     public TreeCertificatesView() {
         this.treeks = new TreeCertManager();
@@ -39,6 +44,7 @@ public class TreeCertificatesView implements CertificatesView {
 
             @Override
             public void refresh() {
+
                 treeks.organize();
             }
         };
@@ -57,9 +63,18 @@ public class TreeCertificatesView implements CertificatesView {
     public void addListener(EventListener listListener) {
         //    this.listListener = listListener;
         treeks.registerListener(listListener);
+        //  this.getTreeManager().getPopup().registerListener(listListener);
+
 
     }
 
+    public void addCertListener(CertificateActionListener listener) {
+        //    this.listListener = listListener;
+        TreePopupMenuCertificate popup = (TreePopupMenuCertificate) this.getTreeManager().getPopup();
+        popup.registerListener(listener);
+
+
+    }
     @Override
     public void clear() {
         treeks.clear();
@@ -101,4 +116,6 @@ public class TreeCertificatesView implements CertificatesView {
         }
         return ar;
     }
+
+
 }

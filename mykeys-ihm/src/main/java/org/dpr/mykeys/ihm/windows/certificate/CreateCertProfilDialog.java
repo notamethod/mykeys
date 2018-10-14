@@ -14,10 +14,10 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
 import org.dpr.mykeys.app.profile.ProfileServices;
-import org.dpr.swingtools.FrameModel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.utils.SubjectUtil;
+import org.dpr.swingtools.FrameModel;
 import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
@@ -141,7 +141,6 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
         Object source = e.getItemSelectable();
         JCheckBox jc = (JCheckBox) source;
         String val = jc.getText();
-        System.out.println("changed 1!");
         for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
             if (val.equals(X509Constants.keyUsageLabel[i])) {
                 certInfo.getKeyUsage()[i] = jc.isSelected();
@@ -155,7 +154,6 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JComboBox) {
             String strProf = (String) ((JComboBox) e.getSource()).getSelectedItem();
-            System.out.println(strProf);
             ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
 
             if (strProf != null && profile == null) {
@@ -173,12 +171,11 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
 
     private void fillCert(Properties myProfile) {
         Enumeration<?> e = myProfile.propertyNames();
-        System.out.println(e);
+        log.debug(e);
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
-            System.out.println(key + " -- " + myProfile.getProperty(key));
+            log.debug(key + " -- " + myProfile.getProperty(key));
             panelInfoVisible.set(key, myProfile.getProperty(key));
-            // infosPanel.set( key, myProfile.getProperty(key));
         }
         String keyUsage = myProfile.getProperty("&keyUsage");
         if (keyUsage != null) {
@@ -187,7 +184,6 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
             certInfo.setKeyUsage(CertificateUtils.keyUsageFromInt(Integer.valueOf(keyUsage)));
         }
 
-        // System.out.println(CertificateUtils.keyUsageToString(certInfo.getKeyUsage()));
     }
 
     class DialogAction extends AbstractAction {

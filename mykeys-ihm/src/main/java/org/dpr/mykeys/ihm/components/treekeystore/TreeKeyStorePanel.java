@@ -43,7 +43,9 @@ import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.components.DetailPanel;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
-import org.dpr.mykeys.ihm.windows.certificate.*;
+import org.dpr.mykeys.ihm.windows.certificate.CertificateCreateFactory;
+import org.dpr.mykeys.ihm.windows.certificate.ImportCertificateDialog;
+import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.keystore.ChangePasswordDialog;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -63,7 +65,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
-import java.security.cert.Certificate;
 import java.util.*;
 import java.util.List;
 
@@ -200,12 +201,12 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
         Enumeration<String> enumKs = ks.aliases();
         while (enumKs.hasMoreElements()) {
             String alias = enumKs.nextElement();
-            Certificate cert = ks.getCertificate(alias);
+            //  X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
 
 
             CertificateValue certInfo = ksv.fillCertInfo(ks, alias);
 
-            certsAC.put(alias, alias);
+            certsAC.put(certInfo.getName(), alias);
 
         }
 
@@ -712,7 +713,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
     @Override
     public void drop(DropTargetDropEvent dtde) {
         boolean isActionCopy = false;
-        System.out.println("drop");
+        log.debug("drop");
         if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
             if ((dtde.getDropAction() & DnDConstants.ACTION_COPY) != 0) {
                 isActionCopy = true;
@@ -753,7 +754,7 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
 
     @Override
     public void dropActionChanged(DropTargetDragEvent dtde) {
-        System.out.println("dropevent");
+        log.debug("dropevent");
 
     }
 

@@ -82,10 +82,17 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         ListSelectionListener listListener = new CertListListener();
 
-        //listCerts = new ListImgCertificatesView();
-        listCerts = new TreeCertificatesView();
+        String viewType = KSConfig.getUserCfg().getString("certificate.list.style", "flat");
+        if (viewType.equalsIgnoreCase("tree")) {
+            listCerts = new TreeCertificatesView();
+            ((TreeCertificatesView) listCerts).addCertListener(this);
+        } else
+            listCerts = new ListImgCertificatesView();
 
+
+        ((CertificateToolBar) toolBarManager.getInstance()).registerListener(this);
         listCerts.addListener(listListener);
+        // listCerts.addListener(this);
 
         // listCerts.setTransferHandler(new ListTransferHandler());
 
@@ -120,6 +127,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             }
         } else {
             KeyStoreHelper ks = new KeyStoreHelper((KeyStoreValue) ksInfo);
+            System.out.println("childlist:" + ks.getChildList().size());
             for (ChildInfo ci : ks.getChildList()) {
                 listCerts.getModel().addElement(ci);
             }
@@ -182,12 +190,12 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     }
 
 
-    public void addElement(NodeInfo info, boolean b) throws ServiceException {
+    public void addElement(NodeInfo info, boolean b, CertificateValue issuer) throws ServiceException {
 
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         SuperCreate cs = null;
         if (info instanceof KeyStoreValue) {
-            cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, true);
+            cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, issuer, true);
         } else {
             cs = new CreateTemplateDialog(frame, true);
         }
@@ -451,9 +459,9 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     }
 
     @Override
-    public void insertCertificateRequested(String what) {
+    public void insertCertificateRequested(CertificateValue what) {
         try {
-            addElement(ksInfo, false);
+            addElement(ksInfo, false, what);
         } catch (ServiceException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -526,6 +534,11 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
                 e1.printStackTrace();
             }
         }
+
+    }
+
+    @Override
+    public void insertCertificateACRequested(String s) {
 
     }
 

@@ -83,6 +83,14 @@ public class CertificateUtils {
 
     }
 
+    public static boolean isKeyUsage(boolean[] keyUsage, int i) {
+        if (i < keyUsage.length && keyUsage[i])
+            return true;
+
+        return false;
+
+    }
+
     /**
      * Chargement certificat X509 à partir d'un flux.
      * <p>

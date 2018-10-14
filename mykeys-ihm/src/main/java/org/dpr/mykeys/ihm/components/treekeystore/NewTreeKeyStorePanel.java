@@ -627,7 +627,7 @@ public class NewTreeKeyStorePanel extends JPanel implements MouseListener,
     @Override
     public void drop(DropTargetDropEvent dtde) {
         boolean isActionCopy = false;
-        System.out.println("drop");
+        log.debug("drop");
         if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
             if ((dtde.getDropAction() & DnDConstants.ACTION_COPY) != 0) {
                 isActionCopy = true;
@@ -668,7 +668,7 @@ public class NewTreeKeyStorePanel extends JPanel implements MouseListener,
 
     @Override
     public void dropActionChanged(DropTargetDragEvent dtde) {
-        System.out.println("dropevent");
+        log.debug("dropevent");
 
     }
 

@@ -1,15 +1,5 @@
 package org.dpr.mykeys.ihm.components;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
@@ -20,6 +10,10 @@ import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateDetailPanel;
 import org.dpr.mykeys.template.ProfilDetailPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class DetailPanel extends JPanel {
 
@@ -103,7 +97,6 @@ public class DetailPanel extends JPanel {
 	}
 
 	public void updateInfo(ChildInfo info) {
-        System.out.println("UPDATE");
 		// FIXME: repaint component ?
 		if (info == null) {
 			jtab.setVisible(false);

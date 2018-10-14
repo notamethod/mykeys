@@ -66,7 +66,7 @@ public class AuthenticationTest {
     @Test
     public void add_users() {
         AuthenticationService service = new AuthenticationService();
-        System.out.println(KSConfig.getInternalKeystores().existsUserDatabase());
+        log.debug(KSConfig.getInternalKeystores().existsUserDatabase());
         try {
             service.createUser("user3", "pwd".toCharArray());
 
@@ -104,7 +104,7 @@ public class AuthenticationTest {
     @Test
     public void delete_users() {
         AuthenticationService service = new AuthenticationService();
-        System.out.println(KSConfig.getInternalKeystores().existsUserDatabase());
+        log.debug(KSConfig.getInternalKeystores().existsUserDatabase());
         try {
             List<CertificateValue> lst = service.listUsers();
             assertEquals("", lst.size(), 2);

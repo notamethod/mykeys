@@ -1,6 +1,5 @@
 package org.dpr.mykeys.ihm.actions;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
@@ -10,4 +9,5 @@ public interface TreePopupMenu {
     void setNode(DefaultMutableTreeNode node);
 
     void show(Component invoker, int x, int y);
+
 }

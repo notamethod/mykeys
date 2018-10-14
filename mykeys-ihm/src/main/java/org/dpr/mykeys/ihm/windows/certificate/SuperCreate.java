@@ -41,6 +41,7 @@ public class SuperCreate extends JDialog implements ItemListener {
     CertificateValue certInfo = new CertificateValue();
     private CertificateType typeCer;
     private LabelValuePanel durationPanel;
+    private CertificateValue issuer;
     protected List<JCheckBox> keyUsageCheckBoxes = new ArrayList<>();
 
     protected SuperCreate() {
@@ -105,6 +106,10 @@ public class SuperCreate extends JDialog implements ItemListener {
         return CertificateType.STANDARD;
     }
 
+    protected void init(CertificateValue issuer) {
+        this.issuer = issuer;
+        init();
+    }
     protected void init() {
 
 
@@ -196,6 +201,7 @@ public class SuperCreate extends JDialog implements ItemListener {
     protected void predefineKeyUsage() {
 
     }
+
     private Component getSignaturePanel() {
         Map<String, String> mapAC = null;
         try {
@@ -218,10 +224,13 @@ public class SuperCreate extends JDialog implements ItemListener {
 
         LabelValuePanel sigPanel = new LabelValuePanel();
         sigPanel.addTitle(Messages.getString("signature.info.title"));
+
         sigPanel.put(Messages.getString("x509.sigalgo"), JComboBox.class, "algoSig", mapAlgoSig,
                 "SHA256WITHRSA");
-
-        sigPanel.put(Messages.getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
+        if (issuer != null) {
+            sigPanel.putDisabled(Messages.getString("x509.issuer"), "emetteur", issuer.getName());
+        } else
+            sigPanel.put(Messages.getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
         sigPanel.putEmptyLine();
         JXCollapsiblePane cp = new JXCollapsiblePane();
 
@@ -331,11 +340,16 @@ public class SuperCreate extends JDialog implements ItemListener {
                     certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
                     CertificateHelper certServ = new CertificateHelper(certInfo);
 
-                    CertificateValue issuer = null;
-                    if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
-                        issuer = kserv.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer(), MkSession.password);
+                    CertificateValue inIssuer = SuperCreate.this.issuer;
+                    if (inIssuer != null) {
+                        certInfo.setIssuer(inIssuer.getAlias());
+                        inIssuer = kserv.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer(), MkSession.password);
 
-                    CertificateValue newCertificate = certServ.createCertificate(isAC, issuer);
+                    } else {
+                        if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
+                            inIssuer = kserv.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer(), MkSession.password);
+                    }
+                    CertificateValue newCertificate = certServ.createCertificate(isAC, inIssuer);
 
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);

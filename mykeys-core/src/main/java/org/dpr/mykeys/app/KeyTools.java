@@ -135,7 +135,7 @@ public class KeyTools {
     }
 
     protected void saveKeyStore(KeyStore ks, KeyStoreValue ksInfo) throws KeyToolsException {
-        System.out.println("saveKeyStore ");
+        log.debug("saveKeyStore ");
         try {
             OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
             ks.store(fos, ksInfo.getPassword());

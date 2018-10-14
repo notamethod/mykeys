@@ -78,7 +78,7 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
             }
         }
 
-        // System.out.println(CertificateUtils.keyUsageToString(certInfo.getKeyUsage()));
+        // log.debug(CertificateUtils.keyUsageToString(certInfo.getKeyUsage()));
     }
 
     protected void init() {

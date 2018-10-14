@@ -1,12 +1,12 @@
 package org.dpr.mykeys.ihm.listeners;
 
-import java.util.EventListener;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 public interface CertificateActionPublisher {
 
     void notifyopenStore(String what);
 
-    void notifyInsertCertificate(String what);
+    void notifyInsertCertificate(CertificateValue what);
 
     void notifyInsertCertificateFromProfile(String what);
 

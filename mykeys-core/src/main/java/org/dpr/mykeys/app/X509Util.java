@@ -92,16 +92,12 @@ public class X509Util {
                 //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
                 ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers();
                 if (policyQualifiers != null) {
-                    policyQualifiers.forEach(name -> log.info("policyQualifier: " + name));
-                    System.out.println(policyQualifiers.size());
+                    policyQualifiers.forEach(name -> log.debug("policyQualifier: " + name));
                     for (int i = 0; i < policyQualifiers.size(); i++) {
                         ASN1Sequence pol = (ASN1Sequence) policyQualifiers.getObjectAt(i);
-                        //System.out.println(pol.getObjectAt(0));
                         for (int j = 0; j < pol.size(); j++) {
                             returnPolicies.put(pol.toString(), pol.getObjectAt(j).toString());
-                            System.out.println(pol);
-                            //     ASN1Sequence polx = (ASN1Sequence) pol.getObjectAt(i);
-                            System.out.println(pol.getObjectAt(j));
+                            log.debug("pol: " + pol + " " + pol.getObjectAt(j));
                         }
                     }
                 }
@@ -109,7 +105,7 @@ public class X509Util {
                 ASN1ObjectIdentifier policyId = pInfo.getPolicyIdentifier();
                 returnPolicies.put("policyid" + k, policyId.toString());
                 k++;
-                log.info("Polycy ID: " + policyId.toString());
+                log.debug("Polycy ID: " + policyId.toString());
                 return returnPolicies;
             }
         }

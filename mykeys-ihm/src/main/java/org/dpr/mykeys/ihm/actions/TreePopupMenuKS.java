@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyStoreException;
+import java.util.EventListener;
 
 public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
     public static final Log log = LogFactory.getLog(TreePopupMenuKS.class);
@@ -64,7 +65,7 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
     }
 
     private void init() {
-        System.out.println("xxxxxxxxrr");
+        log.debug("xxxxxxxxrr");
         addStore = new JMenuItem(Messages.getString("magasin.new"));
         addStore.addActionListener(new TreePopupAction());
         addStore.setActionCommand(TypeAction.ADD_STORE.getValue());
@@ -194,6 +195,11 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
             exportCert.setVisible(true);
 
         }
+    }
+
+    //    @Override
+    public void registerListener(EventListener listener) {
+
     }
 
     class TreePopupAction implements ActionListener {

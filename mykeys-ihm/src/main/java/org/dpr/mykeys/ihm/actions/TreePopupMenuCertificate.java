@@ -3,36 +3,24 @@ package org.dpr.mykeys.ihm.actions;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStoreActions;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.keystore.CreateStoreDialog;
-import org.dpr.mykeys.keystore.ImportStoreDialog;
-import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.KeyStoreException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TreePopupMenuCertificate extends JPopupMenu implements CertificateActionPublisher, TreePopupMenu {
     public static final Log log = LogFactory.getLog(TreePopupMenuCertificate.class);
     private JMenuItem add;
+
+    private JMenuItem addAC;
 
     private JMenuItem delete;
 
@@ -46,15 +34,18 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
 
     private List<CertificateActionListener> listeners = new ArrayList<>();
 
+    private CertificateValue certificate;
+
     public TreePopupMenuCertificate(String string, TreeKeyStoreActions treeKeyStore) {
         super(string);
         init();
     }
 
     private void init() {
-        System.out.println("xxxxxxxxrr");
-        add = new JMenuItem(Messages.getString("magasin.new"));
-        add.addActionListener(e -> notifyInsertCertificate("what ?"));
+        log.debug("init TreePopupMenuCertificate" + this.getClass() + "  " + this);
+        add = new JMenuItem(Messages.getString("certificate.new"));
+        add.addActionListener(e -> notifyInsertCertificate(certificate));
+//        addAC.addActionListener(e -> notifyInsertCertificateAC(certificate));
         add.setVisible(false);
         this.show();
 
@@ -82,6 +73,7 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
         // add(menuChangePwd);
     }
 
+
     /**
      * @return the node
      */
@@ -105,13 +97,11 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
             delete.setVisible(false);
             exportCert.setVisible(false);
 
-        } else if (node.getUserObject() instanceof KeyStoreValue) {
-            KeyStoreValue ksInfo = (KeyStoreValue) node.getUserObject();
-
-
         } else if (node.getUserObject() instanceof CertificateValue) {
             CertificateValue certInfo = (CertificateValue) node.getUserObject();
-            add.setVisible(true);
+            certificate = certInfo;
+            add.setVisible(certInfo.isContainsPrivateKey() && (CertificateUtils.isKeyUsage(certInfo.getKeyUsage(), X509Constants.USAGE_CERTSIGN)));
+//            addAC.setVisible(certInfo.isContainsPrivateKey() && (CertificateUtils.isKeyUsage(certInfo.getKeyUsage(),X509Constants.USAGE_CERTSIGN)));
             delete.setVisible(true);
             exportCert.setVisible(true);
 
@@ -124,12 +114,18 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
     }
 
     @Override
-    public void notifyInsertCertificate(String what) {
+    public void notifyInsertCertificate(CertificateValue what) {
+        log.debug("notify " + what.getName() + " " + this.getClass());
         for (CertificateActionListener listener : listeners) {
-            listener.insertCertificateRequested("what !");
+            listener.insertCertificateRequested(what);
         }
     }
 
+    private void notifyInsertCertificateAC(CertificateValue certificate) {
+        for (CertificateActionListener listener : listeners) {
+            ((CertificateActionListener) listener).insertCertificateACRequested("what !");
+        }
+    }
     @Override
     public void notifyInsertCertificateFromProfile(String what) {
 
@@ -148,14 +144,14 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
     @Override
     public void notifyExportCertificate(String what) {
         for (CertificateActionListener listener : listeners) {
-            listener.exportCertificateRequested("what !");
+            ((CertificateActionListener) listener).exportCertificateRequested("what !");
         }
     }
 
     @Override
     public void notifyCertificateDeletion(String what) {
         for (CertificateActionListener listener : listeners) {
-            listener.deleteCertificateRequested("what !");
+            ((CertificateActionListener) listener).deleteCertificateRequested("what !");
         }
     }
 
@@ -166,10 +162,10 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
 
     @Override
     public void registerListener(CertificateActionListener listener) {
-
+        log.debug(this + " tcer registerListener " + listener);
         listeners.add(listener);
 
-
     }
+
 
 }

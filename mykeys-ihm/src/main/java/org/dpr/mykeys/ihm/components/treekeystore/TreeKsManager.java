@@ -77,16 +77,19 @@ public class TreeKsManager implements MouseListener,
 
     protected List<EventCompListener> listeners = new ArrayList<>();
     protected GradientTree tree;
-    private Map<String, DefaultMutableTreeNode> nodes;
-    private Map<String, DefaultMutableTreeNode> fixedNodes;
-    private DefaultMutableTreeNode rootNode;
-    final String KS_AC_NAME = "store.ac.name";
+    protected Map<String, DefaultMutableTreeNode> nodes;
+    protected Map<String, DefaultMutableTreeNode> fixedNodes;
+    protected DefaultMutableTreeNode rootNode;
+    protected TreePopupMenu popupMenu;
+    protected final String KS_AC_NAME = "store.ac.name";
 
     public TreePopupMenu getPopup() {
-        return new TreePopupMenuKS("Popup name", this);
+        if (popupMenu == null)
+            popupMenu = new TreePopupMenuKS("Popup name", this);
+        return popupMenu;
     }
 
-    private TreeModel treeModel;
+    protected TreeModel treeModel;
 
     private TreePopupMenu popup;
 
@@ -266,8 +269,8 @@ public class TreeKsManager implements MouseListener,
      * @param child
      * @return
      */
-    private DefaultMutableTreeNode reorganizeNode(Map<String, DefaultMutableTreeNode> tmpMap,
-                                                  Object child) {
+    protected DefaultMutableTreeNode reorganizeNode(Map<String, DefaultMutableTreeNode> tmpMap,
+                                                    Object child) {
         //empty tree modele ?
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) child;
         // DefaultMutableTreeNode parent = rootNode;
@@ -466,7 +469,7 @@ public class TreeKsManager implements MouseListener,
 
         }
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
-        System.out.println(selRow);
+        log.debug(selRow);
         TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
         if (selRow != -1) {
             if (e.getClickCount() == 1) {
@@ -612,6 +615,7 @@ public class TreeKsManager implements MouseListener,
 
     }
 //xxx
+
     /**
      * .
      * <p>
@@ -688,7 +692,7 @@ public class TreeKsManager implements MouseListener,
     @Override
     public void drop(DropTargetDropEvent dtde) {
         boolean isActionCopy = false;
-        System.out.println("drop");
+        log.debug("drop");
         if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
             if ((dtde.getDropAction() & DnDConstants.ACTION_COPY) != 0) {
                 isActionCopy = true;
@@ -729,7 +733,7 @@ public class TreeKsManager implements MouseListener,
 
     @Override
     public void dropActionChanged(DropTargetDragEvent dtde) {
-        System.out.println("dropevent");
+        log.debug("dropevent");
 
     }
 
@@ -747,19 +751,21 @@ public class TreeKsManager implements MouseListener,
     }
 
     public void refresh() {
-        System.out.println("NNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONNNNNNNNNNN");
+        log.debug("NNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONNNNNNNNNNN");
     }
 
     public void fillNodes(String ks_ac_name, ChildInfo ci) {
+        System.out.println("nodes " + nodes.size());
         if (ci instanceof CertificateValue) {
             CertificateValue value = (CertificateValue) ci;
-            System.out.println(value.getCertificateChain());
+            log.debug(value.getCertificateChain());
             String key = X509Util.toHexString(value.getDigestSHA256(), "", false);
             nodes.put(key, new DefaultMutableTreeNode(value));
         }
     }
 
     public void organize() {
+        log.info("Organize");
         DefaultMutableTreeNode node = null;
         Map<String, DefaultMutableTreeNode> tmpMap = new HashMap<>();
         for (Map.Entry<String, DefaultMutableTreeNode> entry : nodes.entrySet()) {
@@ -768,6 +774,7 @@ public class TreeKsManager implements MouseListener,
                     entry.getValue());
         }
         treeModel.reload();
+
         if (node != null)
             tree.scrollPathToVisible(new TreePath(node.getPath()));
     }

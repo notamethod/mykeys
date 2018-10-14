@@ -1,7 +1,6 @@
 package org.dpr.mykeys.ihm.listeners;
 
-import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 import java.util.EventListener;
 
@@ -9,7 +8,7 @@ public interface CertificateActionListener extends EventListener {
 
     void openStoreRequested(String what);
 
-    void insertCertificateRequested(String what);
+    void insertCertificateRequested(CertificateValue what);
 
     void insertCertificateFromProfileRequested(String what);
 
@@ -23,5 +22,5 @@ public interface CertificateActionListener extends EventListener {
 
     void createCrlRequested(String what);
 
-
+    void insertCertificateACRequested(String s);
 }

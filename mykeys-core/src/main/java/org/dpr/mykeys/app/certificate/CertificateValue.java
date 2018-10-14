@@ -454,9 +454,11 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     public int getIntKeyUsage() {
         int iku = 0;
-        for (int i = 0; i < keyUsage.length; i++) {
-            if (keyUsage[i]) {
-                iku = iku | X509Constants.keyUsageInt[i];
+        if (keyUsage != null) {
+            for (int i = 0; i < keyUsage.length; i++) {
+                if (keyUsage[i]) {
+                    iku = iku | X509Constants.keyUsageInt[i];
+                }
             }
         }
         return iku;

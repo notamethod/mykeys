@@ -97,7 +97,7 @@ public class ProfileServices
         }
         Properties p = new Properties();
         for (Map.Entry<String, Object> entry : elements.entrySet()) {
-            //System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+            //log.debug("Key : " + entry.getKey() + " Value : " + entry.getValue());
             p.setProperty(entry.getKey(), (String) entry.getValue());
         }
 
