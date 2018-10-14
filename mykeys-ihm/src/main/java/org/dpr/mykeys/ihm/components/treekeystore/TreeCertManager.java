@@ -119,21 +119,16 @@ public class TreeCertManager extends TreeKsManager {
     }
 
     /**
-     * Remove all nodes except the root node.
+     * Clear all
      */
     @Override
     public void clear() {
         treeModel.setRoot(null);
-        // ((DefaultTreeModel)getModel()).setRoot(null);
-        //super.clear();
         fixedNodes.clear();
         nodes.clear();
         rootNode = new DefaultMutableTreeNode("Magasins");
-
         treeModel.setRoot(rootNode);
         System.out.println("CLEAR");
-        //  DefaultMutableTreeNode root2 = (DefaultMutableTreeNode) rootNode;
-        //root2.removeAllChildren();
         DefaultMutableTreeNode acNode = new DefaultMutableTreeNode(Messages.getString(KS_AC_NAME));
 
         addNode(KS_AC_NAME, acNode, true);

@@ -45,6 +45,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
+import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.certificate.*;
@@ -419,7 +420,12 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
 		JFrame frame = (JFrame) this.getTopLevelAncestor();
 		SuperCreate cs = null;
         if (info instanceof KeyStoreValue) {
-			cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, true);
+			try {
+				cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, true);
+			} catch (CancelCreationException e) {
+				//creation cancelled
+				return;
+			}
 		} else {
             cs = new CreateTemplateDialog(frame, true);
 		}

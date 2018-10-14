@@ -37,6 +37,7 @@ import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
+import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
@@ -560,8 +561,14 @@ public class TreeKsManager implements MouseListener,
         if (object instanceof KeyStoreValue) {
             ksInfo = ((KeyStoreValue) object);
         }
-        SuperCreate cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
-                true);
+        SuperCreate cs = null;
+        try {
+            cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
+                    true);
+        } catch (CancelCreationException e) {
+            //creation cancelled
+            return;
+        }
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
         cs.setVisible(true);
@@ -662,8 +669,14 @@ public class TreeKsManager implements MouseListener,
         if (object instanceof KeyStoreValue) {
             ksInfo = ((KeyStoreValue) object);
         }
-        SuperCreate cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
-                true);
+        SuperCreate cs = null;
+        try {
+            cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
+                    true);
+        } catch (CancelCreationException e) {
+            //creation cancelled
+            return;
+        }
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
         cs.setVisible(true);

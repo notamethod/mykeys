@@ -4,6 +4,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.swingtools.components.LabelValuePanel;
 
@@ -19,7 +20,7 @@ public class CACreate extends SuperCreate implements ItemListener {
     }
 
     public CACreate(JFrame owner, KeyStoreValue ksInfo,
-                    boolean modal) {
+                    boolean modal) throws CancelCreationException {
         super(owner, modal);
         this.ksInfo = ksInfo;
         init();

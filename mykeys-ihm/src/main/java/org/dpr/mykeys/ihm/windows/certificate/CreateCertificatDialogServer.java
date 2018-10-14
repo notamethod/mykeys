@@ -6,9 +6,10 @@ import javax.swing.JFrame;
 
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.ihm.CancelCreationException;
 
 class CreateCertificatDialogServer extends CreateCertificatDialog implements ItemListener {
-    public CreateCertificatDialogServer(JFrame owner, KeyStoreValue ksInfo) {
+	public CreateCertificatDialogServer(JFrame owner, KeyStoreValue ksInfo) throws CancelCreationException {
 
 		super(owner, ksInfo, true);
 		this.ksInfo = ksInfo;

@@ -255,6 +255,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 
     @Override
     public void registerListener(CertificateActionListener listener) {
+        System.out.println("register " + listener);
         listeners.add(listener);
 
     }

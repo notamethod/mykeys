@@ -38,6 +38,7 @@ import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
+import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
 import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.components.DetailPanel;
@@ -585,8 +586,14 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
         if (object instanceof KeyStoreValue) {
             ksInfo = ((KeyStoreValue) object);
         }
-        SuperCreate cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
-                true);
+        SuperCreate cs = null;
+        try {
+            cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
+                    true);
+        } catch (CancelCreationException e) {
+//creation cancelled
+            return;
+        }
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
         cs.setVisible(true);
@@ -683,8 +690,14 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
         if (object instanceof KeyStoreValue) {
             ksInfo = ((KeyStoreValue) object);
         }
-        SuperCreate cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
-                true);
+        SuperCreate cs = null;
+        try {
+            cs = CertificateCreateFactory.getCreateDialog(frame, ksInfo,
+                    true);
+        } catch (CancelCreationException e) {
+            //creation cancelled
+            return;
+        }
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
         cs.setVisible(true);

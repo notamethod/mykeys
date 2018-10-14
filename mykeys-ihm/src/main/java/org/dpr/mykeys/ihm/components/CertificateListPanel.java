@@ -11,6 +11,7 @@ import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
+import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
@@ -90,7 +91,6 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             listCerts = new ListImgCertificatesView();
 
 
-        ((CertificateToolBar) toolBarManager.getInstance()).registerListener(this);
         listCerts.addListener(listListener);
         // listCerts.addListener(this);
 
@@ -195,7 +195,12 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         SuperCreate cs = null;
         if (info instanceof KeyStoreValue) {
-            cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, issuer, true);
+            try {
+                cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, issuer, true);
+            } catch (CancelCreationException e) {
+                //creation cancelled
+                return;
+            }
         } else {
             cs = new CreateTemplateDialog(frame, true);
         }
@@ -461,6 +466,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     @Override
     public void insertCertificateRequested(CertificateValue what) {
         try {
+            System.out.println("ADD EL");
             addElement(ksInfo, false, what);
         } catch (ServiceException e1) {
             // TODO Auto-generated catch block

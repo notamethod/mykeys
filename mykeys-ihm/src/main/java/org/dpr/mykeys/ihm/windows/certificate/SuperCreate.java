@@ -12,6 +12,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.keystore.CertificateType;
@@ -73,44 +74,33 @@ public class SuperCreate extends JDialog implements ItemListener {
     }
 
     protected CertificateType getCertificateType() {
-        ChangeListener changeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent changEvent) {
-                JRadioButton aButton = (JRadioButton) changEvent.getSource();
 
-                if (aButton.isSelected()) {
-                    typeCer = CertificateType.valueOf(aButton.getName());
-                }
-            }
-        };
-        final JPanel panel = new JPanel();
+        Object[] options = {"Client", "Cancel"};
+        int n = JOptionPane.showOptionDialog(this.getParent(),
+                Messages.getString("type.certificat"),
+                Messages.getString("type.certificat"),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if (n == JOptionPane.YES_OPTION) {
+            return CertificateType.STANDARD;
+        } else if (n == JOptionPane.NO_OPTION) {
 
+        } else {
 
-        BoxLayout bls = new BoxLayout(panel, BoxLayout.Y_AXIS);
-        panel.setLayout(bls);
-        final JRadioButton button1 = new JRadioButton("Client");
-        button1.setSelected(true);
-        button1.setName(CertificateType.STANDARD.toString());
-        button1.addChangeListener(changeListener);
-        final JRadioButton button2 = new JRadioButton("Serveur");
-        button2.setName(CertificateType.SERVER.toString());
-        final JRadioButton button3 = new JRadioButton("Signature de code");
-        button3.setName(CertificateType.CODE_SIGNING.toString());
-        button2.addChangeListener(changeListener);
-        button3.addChangeListener(changeListener);
-        ButtonGroup vanillaOrMod = new ButtonGroup();
-        vanillaOrMod.add(button1);
-        vanillaOrMod.add(button2);
-        vanillaOrMod.add(button3);
-        panel.add(button1);
-        JOptionPane.showMessageDialog(this.getParent(), panel, Messages.getString("type.certificat"), 1, null);
-        return CertificateType.STANDARD;
+        }
+
+        return null;
     }
 
-    protected void init(CertificateValue issuer) {
+    protected void init(CertificateValue issuer) throws CancelCreationException {
         this.issuer = issuer;
         init();
     }
-    protected void init() {
+
+    protected void init() throws CancelCreationException {
 
 
         String a = null;
@@ -123,6 +113,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 
         typeCer = getCertificateType();
 
+        System.out.println("coucou");
+
+        if (null == typeCer)
+            throw new CancelCreationException();
 
         setTitle(Messages.getString("certificat.creation.title"));
 
@@ -230,7 +224,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         if (issuer != null) {
             sigPanel.putDisabled(Messages.getString("x509.issuer"), "emetteur", issuer.getName());
         } else
-            sigPanel.put(Messages.getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, "");
+            sigPanel.put(Messages.getString("x509.issuer"), JComboBox.class, "emetteur", mapAC, " ");
         sigPanel.putEmptyLine();
         JXCollapsiblePane cp = new JXCollapsiblePane();
 
