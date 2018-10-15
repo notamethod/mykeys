@@ -210,7 +210,6 @@ public class TreeKsManager implements MouseListener,
                 return;
             }
         }
-
     }
 
     public void removeNode(DefaultMutableTreeNode node) {
@@ -220,7 +219,6 @@ public class TreeKsManager implements MouseListener,
             treeModel.removeNodeFromParent(node);
             return;
         }
-
     }
 
     private DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,

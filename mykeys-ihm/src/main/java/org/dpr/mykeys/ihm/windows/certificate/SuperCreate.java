@@ -75,7 +75,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
     protected CertificateType getCertificateType() {
 
-        Object[] options = {"Client", "Cancel"};
+        Object[] options = {"Client", "AC", "Cancel"};
         int n = JOptionPane.showOptionDialog(this.getParent(),
                 Messages.getString("type.certificat"),
                 Messages.getString("type.certificat"),
@@ -84,12 +84,12 @@ public class SuperCreate extends JDialog implements ItemListener {
                 null,
                 options,
                 options[0]);
-        if (n == JOptionPane.YES_OPTION) {
+        if (n == 0) {
             return CertificateType.STANDARD;
-        } else if (n == JOptionPane.NO_OPTION) {
-
-        } else {
-
+        } else if (n == 1) {
+            return CertificateType.AC;
+        } else if (n >= options.length - 1 || n == -1) {
+            System.out.println("pororor");
         }
 
         return null;
@@ -112,8 +112,6 @@ public class SuperCreate extends JDialog implements ItemListener {
         DialogAction dAction = new DialogAction();
 
         typeCer = getCertificateType();
-
-        System.out.println("coucou");
 
         if (null == typeCer)
             throw new CancelCreationException();

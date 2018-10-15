@@ -39,10 +39,10 @@ public class InternalKeystores {
 		this.pathUDB = cfgPath + USERDB;
 	}
 
-	private String generateName(StoreModel castore) {
+    private String generateName(StoreModel storeModel) {
 		if (MkSession.user==null)
 			throw new IllegalArgumentException("session is empty");
-		String hdigest = new DigestUtils(SHA_256).digestAsHex((MkSession.user+castore.toString()).getBytes());
+        String hdigest = new DigestUtils(SHA_256).digestAsHex((MkSession.user + storeModel.toString()).getBytes());
 
 		return hdigest+".jks";
 
@@ -56,13 +56,9 @@ public class InternalKeystores {
 	private String pathCert;
 	private String pathProfils;
 	private String pathUDB;
+    private String pathPKI;
 
-	public InternalKeystores(String pathUDB, String pathAC, String pathCert, String pathProfils) {
-		this.pathAC = pathAC;
-		this.pathCert = pathCert;
-		this.pathProfils = pathProfils;
-		this.pathUDB = pathUDB;
-	}
+
 
 	public String getACPath() {
 
@@ -73,6 +69,11 @@ public class InternalKeystores {
 
 		return pathCert;
 	}
+
+    public String getPKIPath() {
+
+        return pathPKI;
+    }
 
 	public String getProfilsPath() {
 
@@ -105,32 +106,30 @@ public class InternalKeystores {
 		return kinfo;
 	}
 
-	public char[] getPwdAC() {
+    public KeyStoreValue getStorePKI() {
 
-		KeyTools kt = new KeyTools();
-		String pwd = password;
-		KeyStoreValue kinfo;
-		File f = new File(pathAC);
-		if (!f.exists()) {
+        KeyTools kt = new KeyTools();
+        String pwd = password;
+        KeyStoreValue kinfo;
+        File f = new File(pathPKI);
+        if (!f.exists()) {
 
-			try {
+            try {
 
-				InputStream is = (InternalKeystores.class.getResourceAsStream("/install/mykeysAc.jks"));
-				MkUtils.copyFile(is, f);
-				// InternalKeystores.class.getResource("/org.dpr.mykeys/config/myKeysAc.jks").getFile()getChannel();
+                InputStream is = (InternalKeystores.class.getResourceAsStream("/install/mykeysAc.jks"));
+                MkUtils.copyFile(is, f);
+                // InternalKeystores.class.getResource("/org.dpr.mykeys/config/myKeysAc.jks").getFile()getChannel();
 
-			} catch (Exception e) {
-				log.error(e);
-			}
-
-		}
-		kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathAC, StoreModel.CASTORE,
-				StoreFormat.JKS, StoreLocationType.INTERNAL);
-		kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
-		kinfo.setOpen(true);
-		return null;
-	}
-
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathPKI, StoreModel.PKISTORE,
+                StoreFormat.JKS, StoreLocationType.INTERNAL);
+        kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
+        kinfo.setOpen(true);
+        return kinfo;
+    }
 	public boolean existsUserDatabase() {
 
 		File f = new File(pathUDB);
@@ -148,6 +147,12 @@ public class InternalKeystores {
 		File f = new File(pathAC);
 		return f.exists();
 	}
+
+    public boolean existsPKIDatabase() {
+
+        File f = new File(pathPKI);
+        return f.exists();
+    }
 
 	public boolean existsProfilDatabase() {
 
@@ -245,6 +250,9 @@ public class InternalKeystores {
 		if (null == pathCert) {
 			this.pathCert = cfgPath + generateName(StoreModel.CERTSTORE);
 		}
+        if (null == pathPKI) {
+            this.pathPKI = cfgPath + generateName(StoreModel.PKISTORE);
+        }
 
 	}
 }

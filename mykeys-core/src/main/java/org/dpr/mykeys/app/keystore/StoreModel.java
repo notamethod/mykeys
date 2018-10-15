@@ -1,7 +1,7 @@
 package org.dpr.mykeys.app.keystore;
 
 public enum StoreModel {
-	CASTORE, CERTSTORE, KEYSTORE, P12STORE, PROFILSTORE;
+	CASTORE, CERTSTORE, KEYSTORE, P12STORE, PROFILSTORE, PKISTORE;
 
 	public static StoreModel fromValue(String v) {
 		return valueOf(v);
