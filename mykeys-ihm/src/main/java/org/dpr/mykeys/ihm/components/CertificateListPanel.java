@@ -19,6 +19,7 @@ import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.certificate.*;
+import org.dpr.mykeys.keystore.CertificateType;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
@@ -194,16 +195,23 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         SuperCreate cs = null;
+
         if (info instanceof KeyStoreValue) {
-            try {
-                cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, issuer, true);
-            } catch (CancelCreationException e) {
-                //creation cancelled
-                return;
+            CertificateTypeSelectDialog dl = new CertificateTypeSelectDialog(true);
+            CertificateType certType = dl.showDialog();
+            if (certType != null) {
+                try {
+                    cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, issuer, certType);
+                } catch (CancelCreationException e) {
+                    //creation cancelled
+                    return;
+                }
             }
         } else {
             cs = new CreateTemplateDialog(frame, true);
         }
+        if (cs == null)
+            return;
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
         cs.setVisible(true);

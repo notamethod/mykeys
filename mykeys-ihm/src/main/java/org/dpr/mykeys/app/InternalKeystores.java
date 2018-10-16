@@ -31,6 +31,8 @@ public class InternalKeystores {
 	public static String MK1_STORE_AC = "mykeysAc.jks";
 	public static String MK1_STORE_CERT = "mykeysCert.jks";
 
+    private KeyStoreValue storeAC;
+
 
 	public InternalKeystores(String cfgPath, String profilsPath)  {
 

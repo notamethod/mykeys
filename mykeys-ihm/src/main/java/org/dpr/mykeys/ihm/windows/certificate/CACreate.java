@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.CancelCreationException;
@@ -16,7 +17,7 @@ public class CACreate extends SuperCreate implements ItemListener {
 
     @Override
     protected CertificateType getCertificateType() {
-        return CertificateType.STANDARD;
+        return CertificateType.AC;
     }
 
     public CACreate(JFrame owner, KeyStoreValue ksInfo,
@@ -24,6 +25,15 @@ public class CACreate extends SuperCreate implements ItemListener {
         super(owner, modal);
         this.ksInfo = ksInfo;
         init();
+        initSpec();
+        this.pack();
+    }
+
+    public CACreate(JFrame owner, KeyStoreValue ksInfo, CertificateValue issuer,
+                    boolean modal) throws CancelCreationException {
+        super(owner, modal);
+        this.ksInfo = ksInfo;
+        init(issuer);
         initSpec();
         this.pack();
     }

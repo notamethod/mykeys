@@ -703,4 +703,9 @@ public class CertificateValue implements ChildInfo, Cloneable {
         // on renvoie le clone
         return certificate;
     }
+
+    public boolean isAcceptChildAC() {
+        boolean checkAccept = isContainsPrivateKey() && (CertificateUtils.isKeyUsage(getKeyUsage(), X509Constants.USAGE_CERTSIGN));
+        return checkAccept;
+    }
 }

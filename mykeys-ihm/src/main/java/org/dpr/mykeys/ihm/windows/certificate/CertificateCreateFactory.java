@@ -4,6 +4,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
+import org.dpr.mykeys.keystore.CertificateType;
 
 import javax.swing.*;
 
@@ -26,8 +27,29 @@ public class CertificateCreateFactory {
         //return null;
     }
 
-    public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, CertificateValue issuer, boolean modal) throws CancelCreationException {
+    public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, CertificateValue issuer, boolean acceptAC) throws CancelCreationException {
         return new CreateCertificatDialog(owner, info, issuer,
-                modal);
+                true);
+    }
+
+    public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, CertificateValue issuer, CertificateType certificateType) throws CancelCreationException {
+        switch (certificateType) {
+            case STANDARD:
+                return new CreateCertificatDialog(owner, info, issuer,
+                        true);
+
+            case AC:
+                return new CACreate(owner, info, issuer,
+                        true);
+
+            case SERVER:
+                break;
+            case CODE_SIGNING:
+                break;
+            case AUTH:
+                break;
+        }
+        return new CreateCertificatDialog(owner, info, issuer,
+                true);
     }
 }

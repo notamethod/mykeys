@@ -12,6 +12,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
@@ -74,25 +75,7 @@ public class SuperCreate extends JDialog implements ItemListener {
     }
 
     protected CertificateType getCertificateType() {
-
-        Object[] options = {"Client", "AC", "Cancel"};
-        int n = JOptionPane.showOptionDialog(this.getParent(),
-                Messages.getString("type.certificat"),
-                Messages.getString("type.certificat"),
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
-        if (n == 0) {
-            return CertificateType.STANDARD;
-        } else if (n == 1) {
-            return CertificateType.AC;
-        } else if (n >= options.length - 1 || n == -1) {
-            System.out.println("pororor");
-        }
-
-        return null;
+        return CertificateType.STANDARD;
     }
 
     protected void init(CertificateValue issuer) throws CancelCreationException {
@@ -329,17 +312,21 @@ public class SuperCreate extends JDialog implements ItemListener {
 
                     KeyStoreHelper kserv = new KeyStoreHelper();
 
+                    KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
                     certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
                     CertificateHelper certServ = new CertificateHelper(certInfo);
 
+                    if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
+                        ksAC = ksInfo;
+                    }
                     CertificateValue inIssuer = SuperCreate.this.issuer;
                     if (inIssuer != null) {
                         certInfo.setIssuer(inIssuer.getAlias());
-                        inIssuer = kserv.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer(), MkSession.password);
+                        inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
 
                     } else {
                         if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
-                            inIssuer = kserv.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer(), MkSession.password);
+                            inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
                     }
                     CertificateValue newCertificate = certServ.createCertificate(isAC, inIssuer);
 

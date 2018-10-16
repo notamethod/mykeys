@@ -203,7 +203,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
     @Override
     public void notifyInsertCertificate(CertificateValue what) {
         for (CertificateActionListener listener : listeners) {
-            listener.insertCertificateRequested(null);
+            listener.insertCertificateRequested(what);
         }
 
     }
