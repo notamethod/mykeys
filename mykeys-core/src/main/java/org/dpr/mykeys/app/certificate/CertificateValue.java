@@ -708,4 +708,6 @@ public class CertificateValue implements ChildInfo, Cloneable {
         boolean checkAccept = isContainsPrivateKey() && (CertificateUtils.isKeyUsage(getKeyUsage(), X509Constants.USAGE_CERTSIGN));
         return checkAccept;
     }
+
+
 }

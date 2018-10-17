@@ -130,6 +130,19 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
     }
 
     /**
+     * @return the isOpen
+     */
+    public boolean isCAStore() {
+        return (this.storeModel.equals(StoreModel.PKISTORE) || this.storeModel.equals(StoreModel.CASTORE));
+    }
+
+    /**
+     * @return the isOpen
+     */
+    public boolean isCertStore() {
+        return (this.storeModel.equals(StoreModel.PKISTORE) || this.storeModel.equals(StoreModel.CERTSTORE));
+    }
+    /**
      * @param isOpen the isOpen to set
      */
     public void setOpen(boolean isOpen) {

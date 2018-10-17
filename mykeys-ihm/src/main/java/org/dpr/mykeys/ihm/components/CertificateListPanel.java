@@ -582,9 +582,10 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
                 log.trace(e.getSource().getClass());
                 if (e.getSource() instanceof JList) {
                     if (((JList) e.getSource()).getSelectedValue() instanceof ChildInfo) {
-                        displayDetail((ChildInfo) ((JList) e.getSource()).getSelectedValue());
+                        ChildInfo ci = (ChildInfo) ((JList) e.getSource()).getSelectedValue();
+                        displayDetail(ci);
                         if (ksInfo.isOpen()) {
-                            toolBarManager.enableElementActions(ksInfo, true);
+                            toolBarManager.enableElementActions(ksInfo, ci, true);
 
                         }
                     }
@@ -602,7 +603,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         public void showingCertDetailRequested(ChildInfo info) {
             displayDetail(info);
             if (ksInfo.isOpen()) {
-                toolBarManager.enableElementActions(ksInfo, true);
+                toolBarManager.enableElementActions(ksInfo, info, true);
 
             }
         }
@@ -623,7 +624,6 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             } else if (command.equals("CANCEL")) {
                 // ExportCertificateDialog.this.setVisible(false);
             }
-
         }
 
     }

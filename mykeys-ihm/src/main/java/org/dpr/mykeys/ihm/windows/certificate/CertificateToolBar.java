@@ -3,6 +3,7 @@ package org.dpr.mykeys.ihm.windows.certificate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -174,22 +175,26 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
         unlockButton.setEnabled(false);
         exportButton.setEnabled(false);
         deleteButton.setEnabled(false);
-        CrlManagerButton.setVisible((info instanceof KeyStoreValue) & ((KeyStoreValue) info).getStoreModel().equals(StoreModel.CASTORE));
+        CrlManagerButton.setVisible((info instanceof KeyStoreValue) & (((KeyStoreValue) info).isCAStore()));
         CrlManagerButton.setEnabled(false);
         importButton.setEnabled(true);
         addCertButton.setEnabled(true);
-        addCertFromCSRButton.setVisible((info instanceof KeyStoreValue) & ((KeyStoreValue) info).getStoreModel().equals(StoreModel.CERTSTORE));
+        addCertFromCSRButton.setVisible(isCertStore(info));
         addCertFromCSRButton.setEnabled(true);
         addCertProfButton.setEnabled(true);
 
     }
 
+    private boolean isCertStore(NodeInfo info) {
+        return (info instanceof KeyStoreValue) & ((KeyStoreValue) info).isCertStore();
+    }
     @Override
-    public void enableElementActions(boolean b) {
+    public void enableElementActions(NodeInfo info, ChildInfo ci, boolean b) {
 
         exportButton.setEnabled(b);
         deleteButton.setEnabled(b);
-        CrlManagerButton.setEnabled(b);
+        CrlManagerButton.setEnabled(b ? (ci instanceof CertificateValue) && (((CertificateValue) ci).isAcceptChildAC()) : false);
+
     }
 
     @Override

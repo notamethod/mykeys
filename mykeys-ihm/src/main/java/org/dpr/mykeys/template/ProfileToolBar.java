@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 
+import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.KeysProfileAction;
@@ -112,7 +113,7 @@ public class ProfileToolBar extends ObjToolBar {
     }
 
     @Override
-    public void enableElementActions(boolean b) {
+    public void enableElementActions(NodeInfo info, ChildInfo ci, boolean b) {
 
     }
 
