@@ -4,7 +4,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
-import org.dpr.mykeys.keystore.CertificateType;
+import org.dpr.mykeys.app.CertificateType;
 
 import javax.swing.*;
 

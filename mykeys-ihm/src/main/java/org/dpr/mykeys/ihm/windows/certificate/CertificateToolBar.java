@@ -140,7 +140,6 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 		
 		exportButton.setEnabled(true);
 		deleteButton.setEnabled(true);
-
 	}
 
     public void disableActions(NodeInfo info) {
@@ -153,7 +152,6 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 		addCertFromCSRButton.setEnabled(false);
 		unlockButton.setSelected(false);
 		unlockButton.setEnabled(true);
-		
 	}
 
 
@@ -166,7 +164,6 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
         for (ActionListener al : addCertButton.getActionListeners()) {
             addCertButton.removeActionListener(al);
         }
-
 	}
 
     @Override
@@ -182,7 +179,6 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
         addCertFromCSRButton.setVisible(isCertStore(info));
         addCertFromCSRButton.setEnabled(true);
         addCertProfButton.setEnabled(true);
-
     }
 
     private boolean isCertStore(NodeInfo info) {

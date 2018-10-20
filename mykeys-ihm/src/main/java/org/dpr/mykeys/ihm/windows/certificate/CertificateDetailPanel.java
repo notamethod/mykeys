@@ -22,44 +22,27 @@ import java.util.List;
 public class CertificateDetailPanel extends JPanel {
 
     // LabelValuePanel infosPanel;
-    private CertificateValue info;
+    protected CertificateValue info;
 
     public CertificateDetailPanel(CertificateValue info) {
         this.info = info;
         setLayout(new VerticalLayout());
-        getPanel();
-
+        init();
     }
 
-    private void getPanel() {
+    private void init() {
 
         LabelValuePanel infosPanel = new LabelValuePanel();
         LabelValuePanel otherInfosPanel = new LabelValuePanel();
-        infosPanel.addTitle(Messages.getString("x509.subject"));
-        if (info.getSubjectMap() != null) {
-            for (String key : info.getSubjectMap().keySet()) {
-                String name;
-                try {
-                    name = Messages.getString(X509Util.getMapNames().get(key));
-                } catch (Exception e) {
-                    name = key;
-                }
-                String value = info.getSubjectMap().get(key);
-                if (value.startsWith("#")) {
-                    value = new String(Hex.decode(value.substring(1, value.length())));
-                }
-                infosPanel.put(name, JTextField.class, "", value, false);
-            }
-        }
+        addSubjectPanel(infosPanel);
+        //for later use
+//        LabelValuePanel subjectPanel = new LabelValuePanel();
+//        PanelUtils.addSubjectToPanel(CertificateType.STANDARD, subjectPanel);
+//        this.add(subjectPanel);
+        //duration
 
-        infosPanel.putEmptyLine();
-        infosPanel.addTitle(Messages.getString("x509.validity"), getValidityColor(info));
-        infosPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore", info.getNotBefore(),
-                false);
-        infosPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter", info.getNotAfter(),
-                false);
+        addDurationPanel(infosPanel);
 
-        infosPanel.putEmptyLine();
         infosPanel.put(Messages.getString("x509.pubkeysize"), JTextField.class, "keyLength",
                 String.valueOf(info.getKeyLength()), false);
         infosPanel.put(Messages.getString("x509.pubkeyalgo"), JTextField.class, "algoPubKey", info.getAlgoPubKey(),
@@ -75,28 +58,9 @@ public class CertificateDetailPanel extends JPanel {
         infosPanel.putEmptyLine();
 
         infosPanel.addTitle(Messages.getString("x509.issuer"));
-        //TODO; sort elements !
-        final X500Name name2 = X500Name.getInstance(info.getCertificate().getIssuerX500Principal().getEncoded());
-        for (org.bouncycastle.asn1.x500.RDN rdn : name2.getRDNs()) {
-
-            for (AttributeTypeAndValue tv : rdn.getTypesAndValues()) {
-                String oidName;
-                String type = BCStyle.INSTANCE.oidToDisplayName(tv.getType());
-                try {
-                    oidName = Messages.getString(X509Util.getMapNames().get(type));
-                } catch (Exception e) {
-                    oidName = type;
-                }
-                infosPanel.put(oidName, JTextField.class, "", tv.getValue(), false);
-            }
-        }
-        infosPanel.putEmptyLine();
-        List<String> keyUsageList = CertificateUtils.keyUsageToList(info.getKeyUsage());
-        if (keyUsageList != null) {
-            for (String keyUsage : keyUsageList)
-                infosPanel.put(Messages.getString("usage.title"), JLabel.class, "keyUsage", keyUsage, false);
-        }
-        infosPanel.putEmptyLine();
+        addIssuerPanel(infosPanel);
+        addCrlPanel(infosPanel);
+        addUsagePanel(infosPanel);
         infosPanel.put(Messages.getString("x509.alias"), JTextField.class, "", info.getAlias(), false);
         infosPanel.putEmptyLine();
 
@@ -128,8 +92,68 @@ public class CertificateDetailPanel extends JPanel {
         this.add(infosPanel);
         this.add(toggle);
         this.add(cp);
+    }
 
+    protected void addCrlPanel(LabelValuePanel infosPanel) {
+    }
 
+    private void addUsagePanel(LabelValuePanel infosPanel) {
+        infosPanel.addTitle(Messages.getString("usage.title"));
+        List<String> keyUsageList = CertificateUtils.keyUsageToList(info.getKeyUsage());
+        if (keyUsageList != null) {
+            for (String keyUsage : keyUsageList)
+                infosPanel.put("", JLabel.class, "keyUsage", keyUsage, false);
+        }
+        infosPanel.putEmptyLine();
+    }
+
+    private void addIssuerPanel(LabelValuePanel infosPanel) {
+        //TODO; sort elements !
+        final X500Name name2 = X500Name.getInstance(info.getCertificate().getIssuerX500Principal().getEncoded());
+        for (org.bouncycastle.asn1.x500.RDN rdn : name2.getRDNs()) {
+
+            for (AttributeTypeAndValue tv : rdn.getTypesAndValues()) {
+                String oidName;
+                String type = BCStyle.INSTANCE.oidToDisplayName(tv.getType());
+                try {
+                    oidName = Messages.getString(X509Util.getMapNames().get(type));
+                } catch (Exception e) {
+                    oidName = type;
+                }
+                infosPanel.put(oidName, JTextField.class, "", tv.getValue(), false);
+            }
+        }
+        infosPanel.putEmptyLine();
+    }
+
+    private void addDurationPanel(LabelValuePanel infosPanel) {
+        infosPanel.addTitle(Messages.getString("x509.validity"), getValidityColor(info));
+        infosPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore", info.getNotBefore(),
+                false);
+        infosPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter", info.getNotAfter(),
+                false);
+
+        infosPanel.putEmptyLine();
+    }
+
+    private void addSubjectPanel(LabelValuePanel infosPanel) {
+        infosPanel.addTitle(Messages.getString("x509.subject"));
+        if (info.getSubjectMap() != null) {
+            for (String key : info.getSubjectMap().keySet()) {
+                String name;
+                try {
+                    name = Messages.getString(X509Util.getMapNames().get(key));
+                } catch (Exception e) {
+                    name = key;
+                }
+                String value = info.getSubjectMap().get(key);
+                if (value.startsWith("#")) {
+                    value = new String(Hex.decode(value.substring(1, value.length())));
+                }
+                infosPanel.put(name, JTextField.class, "", value, false);
+            }
+        }
+        infosPanel.putEmptyLine();
     }
 
     private Color getValidityColor(CertificateValue info) {

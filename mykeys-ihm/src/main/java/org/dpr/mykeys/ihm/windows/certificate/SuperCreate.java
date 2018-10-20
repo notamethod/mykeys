@@ -16,17 +16,14 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
-import org.dpr.mykeys.keystore.CertificateType;
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingtools.components.JSpinnerDate;
 import org.dpr.swingtools.components.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -131,7 +128,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         cp.setLayout(new BorderLayout());
 
         jp.add(subjectPanel);
-        jp.add(getDurationPanel(3));
+        jp.add(PanelUtils.getDurationPanel(3, infosPanel, true));
         jp.add(getPubKeyPanel());
         jp.add(getSignaturePanel());
         jp.add(infosPanel);
@@ -278,26 +275,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
     }
 
-    private LabelValuePanel getDurationPanel(int duration) {
 
-        Calendar calendar = Calendar.getInstance();
-        if (durationPanel == null) {
-            durationPanel = new LabelValuePanel();
-
-            durationPanel.addTitle(Messages.getString("valid.period.title"));
-            durationPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore",
-                    calendar.getTime(), true);
-            calendar.add(Calendar.YEAR, duration);
-            durationPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter",
-                    calendar.getTime(), true);
-            // durationPanel.setVisible(false);
-            durationPanel.putEmptyLine();
-            infosPanel.addChild(durationPanel);
-
-        }
-        return durationPanel;
-
-    }
 
     class DialogAction extends AbstractAction {
 

@@ -2,9 +2,13 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.keystore.CertificateType;
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.utils.SubjectUtil;
+import org.dpr.swingtools.components.JSpinnerDate;
 import org.dpr.swingtools.components.LabelValuePanel;
+
+import java.util.Calendar;
+import java.util.Date;
 
 class PanelUtils {
 
@@ -48,6 +52,31 @@ class PanelUtils {
 
         infosPanel.putEmptyLine();
 
+    }
+
+    public static LabelValuePanel getDurationPanel(int duration, LabelValuePanel parent, boolean editable) {
+
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.add(Calendar.YEAR, duration);
+        return getDurationPanel(calendar.getTime(), calendar2.getTime(), parent, editable);
+    }
+
+    public static LabelValuePanel getDurationPanel(Date NotBefore, Date notAfter, LabelValuePanel parent, boolean editable) {
+
+        Calendar calendar = Calendar.getInstance();
+        LabelValuePanel durationPanel = new LabelValuePanel();
+
+        durationPanel.addTitle(Messages.getString("valid.period.title"));
+        durationPanel.put(Messages.getString("x509.startdate"), JSpinnerDate.class, "notBefore",
+                NotBefore, editable);
+
+        durationPanel.put(Messages.getString("x509.enddate"), JSpinnerDate.class, "notAfter",
+                notAfter, editable);
+        // durationPanel.setVisible(false);
+        durationPanel.putEmptyLine();
+        parent.addChild(durationPanel);
+        return durationPanel;
     }
 
 }

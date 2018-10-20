@@ -10,6 +10,8 @@ import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
+
+import org.dpr.mykeys.app.CertificateType;
 import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.operator.DefaultAlgorithmNameFinder;
 import org.dpr.mykeys.app.ChildInfo;
@@ -707,6 +709,15 @@ public class CertificateValue implements ChildInfo, Cloneable {
     public boolean isAcceptChildAC() {
         boolean checkAccept = isContainsPrivateKey() && (CertificateUtils.isKeyUsage(getKeyUsage(), X509Constants.USAGE_CERTSIGN));
         return checkAccept;
+    }
+
+    public CertificateType getType() {
+        if (isContainsPrivateKey()) {
+            if (CertificateUtils.isKeyUsage(getKeyUsage(), X509Constants.USAGE_CERTSIGN))
+                return CertificateType.AC;
+            return CertificateType.STANDARD;
+        }
+        return null;
     }
 
 

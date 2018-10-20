@@ -1,4 +1,4 @@
-package org.dpr.mykeys.keystore;
+package org.dpr.mykeys.app;
 
 public enum CertificateType {
 	STANDARD, AC, SERVER, CODE_SIGNING, AUTH;

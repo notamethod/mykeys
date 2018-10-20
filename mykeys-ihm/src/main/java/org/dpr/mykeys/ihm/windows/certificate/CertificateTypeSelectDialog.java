@@ -1,12 +1,11 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.keystore.CertificateType;
+import org.dpr.mykeys.app.CertificateType;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
 import java.awt.event.*;
 
 public class CertificateTypeSelectDialog extends JDialog {
