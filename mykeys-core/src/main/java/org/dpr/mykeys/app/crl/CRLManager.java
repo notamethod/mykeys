@@ -63,7 +63,7 @@ public class CRLManager {
 	 * 
 	 * 
 	 * @param certX509
-	 * @param uriMap
+     * @param distPointSet
 	 * @throws CRLException
 	 * @throws IOException
 	 * @throws URISyntaxException
@@ -274,8 +274,9 @@ public class CRLManager {
 	 * @param certificate
 	 * @return
 	 */
-	public File getCrlFile(String pathName, X509Certificate certificate,
-			boolean isAC) {
+    @Deprecated
+    public File getCrlFile(String pathName, X509Certificate certificate,
+                           boolean isAC) {
 
 		Map<ASN1ObjectIdentifier, String> map;
 		// si c'est un certificat d'AC, on récupére les identifiant du sujet,
@@ -352,7 +353,8 @@ public class CRLManager {
 	 * @param certificate
 	 * @return
 	 */
-	public File getCrlFile(String pathName, X509CRL crl) {
+    @Deprecated
+    public File getCrlFile(String pathName, X509CRL crl) {
 		Map<ASN1ObjectIdentifier, String> map = X509Util.getInfosMap(crl
 				.getIssuerX500Principal());
         //TODO (change with BCStyle.CN). With unit test
@@ -431,9 +433,13 @@ public class CRLManager {
      */
     public void saveCRL(X509CRL crl, String crlFile)
             throws CRLException, IOException {
-
+        File f = new File(crlFile);
+        if (f.getParentFile() != null && !f.getParentFile().exists())
+            f.getParentFile().mkdirs();
         OutputStream output = new FileOutputStream(crlFile);
         IOUtils.write(crl.getEncoded(), output);
 
     }
+
+
 }

@@ -6,6 +6,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
@@ -97,7 +98,8 @@ public class CreateCrlDialog extends JDialog {
         LocalDateTime dateTime = LocalDateTime.now();
         String formattedDateTime = dateTime.format(formatter);
         tfDirectoryOut = new JTextField(40);
-        tfDirectoryOut.setText(f.getAbsolutePath() + File.separator + certificateValue.getName() + "." + formattedDateTime + CRLManager.CRL_EXTENSION);
+        ;
+        tfDirectoryOut.setText(KSConfig.getCrlPath() + X509Util.toHexString(certificateValue.getDigestSHA256(), "", false) + CRLManager.CRL_EXTENSION);
         JButton jbChoose2 = new JButton("...");
         jbChoose2.addActionListener(dAction);
         jbChoose2.setActionCommand("CHOOSE_OUT");

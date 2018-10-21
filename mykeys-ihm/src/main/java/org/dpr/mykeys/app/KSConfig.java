@@ -12,6 +12,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.crl.CRLManager;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -19,6 +21,8 @@ public class KSConfig {
 
 	private static final Log log = LogFactory.getLog(KSConfig.class);
 	private static PropertiesConfiguration userConfig;
+
+	private static String crlPathName = "crls";
 
 	private static PropertiesConfiguration defaultConfig;
 
@@ -78,7 +82,7 @@ public class KSConfig {
 	}
 
 
-	private static String getCfgPath() {
+	public static String getCfgPath() {
 		return path;
 	}
 	
@@ -173,7 +177,9 @@ public class KSConfig {
 		
 	}
 
-
+	public static String getDefaultCrlPath(CertificateValue certificateValue) {
+		return getCrlPath() + X509Util.toHexString(certificateValue.getDigestSHA256(), "", false) + CRLManager.CRL_EXTENSION;
+	}
 	/**
 	 * Return  directory used for certificates storage.
 	 *
@@ -190,5 +196,9 @@ public class KSConfig {
 			dir = data.getAbsolutePath();
 		}
 		return dir;
+	}
+
+	public static String getCrlPath() {
+		return path + crlPathName + File.separator;
 	}
 }

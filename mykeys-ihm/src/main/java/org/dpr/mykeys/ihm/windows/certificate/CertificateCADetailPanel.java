@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.ihm.windows.CRLEditorDialog;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
@@ -26,10 +27,9 @@ public class CertificateCADetailPanel extends CertificateDetailPanel {
         jbCreate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                CreateCrlDialog cs = new CreateCrlDialog(null, info);
+                CRLEditorDialog cs = new CRLEditorDialog(info);
 
-                cs.setLocationRelativeTo(null);
-                cs.setResizable(false);
+                cs.pack();
                 cs.setVisible(true);
 
             }
