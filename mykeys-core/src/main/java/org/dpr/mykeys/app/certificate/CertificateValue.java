@@ -57,6 +57,7 @@ public class CertificateValue implements ChildInfo, Cloneable {
     private String policyCPS;
     private String policyID;
     private Map<String, String> otherParams;
+    private List<CertificateValue> children;
 
     public CertificateValue() {
         super();
@@ -721,4 +722,11 @@ public class CertificateValue implements ChildInfo, Cloneable {
     }
 
 
+    public void setChildren(List<CertificateValue> children) {
+        this.children = children;
+    }
+
+    public List<CertificateValue> getChildren() {
+        return children;
+    }
 }

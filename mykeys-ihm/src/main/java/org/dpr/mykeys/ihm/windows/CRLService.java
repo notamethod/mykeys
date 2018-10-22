@@ -8,7 +8,9 @@ import java.security.NoSuchProviderException;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.List;
 
 public class CRLService {
     CRLManager manager;
@@ -18,7 +20,7 @@ public class CRLService {
         manager = new CRLManager();
     }
 
-    public void loadCRL(File f) {
+    public X509CRL loadCRL(File f) {
 
         try (InputStream is = new FileInputStream(f)) {
             crl = manager.getCrl(is);
@@ -28,6 +30,7 @@ public class CRLService {
         } catch (IOException | CRLException | NoSuchProviderException | CertificateException e) {
             e.printStackTrace();
         }
+        return crl;
 
     }
 
@@ -40,5 +43,9 @@ public class CRLService {
             etatCrl = CRLManager.EtatCrl.UP_TO_DATE;
         }
         return etatCrl;
+    }
+
+    public List<X509Certificate> getChildren(CertificateValue certificate) {
+        return null;
     }
 }

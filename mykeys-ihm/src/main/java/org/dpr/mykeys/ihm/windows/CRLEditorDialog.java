@@ -8,6 +8,7 @@ import org.dpr.mykeys.app.crl.CRLManager;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import java.security.cert.X509CRL;
 
 public class CRLEditorDialog extends JDialog {
     private JPanel contentPane;
@@ -18,6 +19,7 @@ public class CRLEditorDialog extends JDialog {
     private JButton ajouterButton;
     private JButton buttonModifyMessagesButton;
     private JLabel subTitle;
+    private JLabel validityPeriodLabel;
     private CertificateValue certificate;
     private CRLService service;
     CRLState state;
@@ -58,6 +60,19 @@ public class CRLEditorDialog extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         init();
 
+        ajouterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addCertificate();
+            }
+        });
+    }
+
+    private void addCertificate() {
+        ;
+        CertificateSelectDialog dialog = new CertificateSelectDialog(certificate.getChildren());
+        dialog.pack();
+        dialog.showDialog();
     }
 
     private void onOK() {
@@ -86,12 +101,13 @@ public class CRLEditorDialog extends JDialog {
             subTitle.setText("");
         } else {
             setTitle(Messages.getString("crl.edit.subtitle"));
-            service.loadCRL(f);
+            X509CRL crl = service.loadCRL(f);
             if (CRLManager.EtatCrl.UP_TO_DATE.equals(service.getValidity())) {
                 subTitle.setText("CRL OK");
             } else {
                 subTitle.setText("CRL TOO OLD");
             }
+            validityPeriodLabel.setText(Messages.getString("crl.validity.period", crl.getThisUpdate(), crl.getNextUpdate()));
 
         }
 

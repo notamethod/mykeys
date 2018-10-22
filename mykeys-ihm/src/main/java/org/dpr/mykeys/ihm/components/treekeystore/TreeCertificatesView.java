@@ -9,8 +9,10 @@ import org.dpr.mykeys.ihm.components.IModelFactory;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class TreeCertificatesView implements CertificatesView {
     final String KS_AC_NAME = "store.ac.name";
     private TreeCertManager treeks;
     private IModelFactory model;
+    private Enumeration<TreeNode> children;
 
 
     public TreeCertManager getTreeManager() {
@@ -96,8 +99,22 @@ public class TreeCertificatesView implements CertificatesView {
         DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) treeks.getTree().getLastSelectedPathComponent();
         if (tNode != null) {
             Object object = tNode.getUserObject();
-            if (object != null)
+            List<CertificateValue> certs = new ArrayList<>();
+
+            children = tNode.children();
+            if (children != null) {
+                while (children.hasMoreElements()) {
+                    DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+                    Object childObj = child.getUserObject();
+                    if (childObj instanceof CertificateValue)
+                        certs.add((CertificateValue) childObj);
+                }
+            }
+            if (object != null && object instanceof CertificateValue) {
+                ((CertificateValue) object).setChildren(certs);
+
                 return (CertificateValue) object;
+            }
         }
         return null;
 

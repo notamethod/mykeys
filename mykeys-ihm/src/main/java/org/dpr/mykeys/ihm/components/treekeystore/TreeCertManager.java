@@ -9,11 +9,10 @@ import org.dpr.mykeys.ihm.actions.TreePopupMenuCertificate;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseEvent;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TreeCertManager extends TreeKsManager {
 
@@ -54,6 +53,18 @@ public class TreeCertManager extends TreeKsManager {
                 Object object = tNode.getUserObject();
                 if (object instanceof CertificateValue) {
                     CertificateValue certInfo = ((CertificateValue) object);
+                    List<CertificateValue> certs = new ArrayList<>();
+
+                    Enumeration<TreeNode> children = tNode.children();
+                    if (children != null) {
+                        while (children.hasMoreElements()) {
+                            DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+                            Object childObj = child.getUserObject();
+                            if (childObj instanceof CertificateValue)
+                                certs.add((CertificateValue) childObj);
+                        }
+                    }
+                    certInfo.setChildren(certs);
                     displayCertDetail(certInfo);
 
                 } else {

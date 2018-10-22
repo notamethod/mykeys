@@ -8,11 +8,8 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
-import java.security.cert.X509CRL;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.crl.CrlValue;
-import org.dpr.mykeys.app.crl.CrlTools;
 import org.dpr.mykeys.app.keystore.*;
 
 /**
