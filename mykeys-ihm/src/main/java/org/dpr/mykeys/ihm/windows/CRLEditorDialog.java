@@ -4,6 +4,8 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
+import org.dpr.mykeys.ihm.model.CRLEntry;
+import org.dpr.mykeys.ihm.model.CRLEntryModel;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -66,13 +68,17 @@ public class CRLEditorDialog extends JDialog {
                 addCertificate();
             }
         });
+        table1.setModel(new CRLEntryModel());
     }
 
     private void addCertificate() {
         ;
         CertificateSelectDialog dialog = new CertificateSelectDialog(certificate.getChildren());
         dialog.pack();
-        dialog.showDialog();
+        CertificateValue value = dialog.showDialog();
+        CRLEntry entry = new CRLEntry(value);
+        ((CRLEntryModel) table1.getModel()).addRow(entry);
+        System.out.println(value.getSubjectString());
     }
 
     private void onOK() {

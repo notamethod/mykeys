@@ -147,8 +147,8 @@ public class CRLManager {
 	 * 
 	 * <BR>
 	 * 
-	 * 
-	 * @param crlFile
+	 *
+	 * @param inStream
 	 *            : fichier de CRL
 	 * @param cert
 	 * @return
@@ -305,8 +305,9 @@ public class CRLManager {
 	 * @param certificate
 	 * @return
 	 */
+	@Deprecated
 	public static String getCrlFileName(X509Certificate certificate,
-			boolean isAC) {
+										boolean isAC) {
 
 		Map<ASN1ObjectIdentifier, String> map;
 		// si c'est un certificat d'AC, on récupére les identifiant du sujet,
@@ -333,6 +334,7 @@ public class CRLManager {
 	 * @param certificate
 	 * @return
 	 */
+	@Deprecated
 	public static String getCrlFileName(String pathName, X509CRL crl) {
 		Map<ASN1ObjectIdentifier, String> map = X509Util.getInfosMap(crl
 				.getIssuerX500Principal());
@@ -438,7 +440,6 @@ public class CRLManager {
             f.getParentFile().mkdirs();
         OutputStream output = new FileOutputStream(crlFile);
         IOUtils.write(crl.getEncoded(), output);
-
     }
 
 

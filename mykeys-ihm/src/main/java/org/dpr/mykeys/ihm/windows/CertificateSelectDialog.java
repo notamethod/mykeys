@@ -1,19 +1,25 @@
 package org.dpr.mykeys.ihm.windows;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.ihm.components.CertificateComboxModel;
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CertificateSelectDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JComboBox comboBox1;
+    private JTextField textField1;
+    private JPanel reasonPanel;
     private CertificateValue result;
     private CertificateValue selectedCertificate;
+    Map<String, CertificateValue> certificateMap = new HashMap<>();
 
     public CertificateSelectDialog(List<CertificateValue> children) {
         setContentPane(contentPane);
@@ -46,14 +52,19 @@ public class CertificateSelectDialog extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        List<String> lists = new ArrayList<>();
+        CertificateValue[] lists = new CertificateValue[children.size()];
+
+        int i = 0;
         for (CertificateValue value : children) {
-            lists.add(value.getName());
+            certificateMap.put(value.getSubjectString(), value);
+            comboBox1.addItem(value.getSubjectString());
         }
-        comboBox1.setModel(new DefaultComboBoxModel(lists.toArray()));
+
     }
 
     private void onOK() {
+        if (comboBox1.getSelectedItem() != null && certificateMap.get(comboBox1.getSelectedItem()) != null)
+            selectedCertificate = certificateMap.get(comboBox1.getSelectedItem());
         result = selectedCertificate;
         dispose();
     }
@@ -76,4 +87,7 @@ public class CertificateSelectDialog extends JDialog {
         return result;
     }
 
+    private void createUIComponents() {
+        reasonPanel = new JPanel();
+    }
 }

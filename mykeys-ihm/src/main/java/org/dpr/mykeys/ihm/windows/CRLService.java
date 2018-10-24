@@ -5,12 +5,10 @@ import org.dpr.mykeys.app.crl.CRLManager;
 
 import java.io.*;
 import java.security.NoSuchProviderException;
-import java.security.cert.CRLException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
+import java.security.cert.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class CRLService {
     CRLManager manager;
@@ -47,5 +45,14 @@ public class CRLService {
 
     public List<X509Certificate> getChildren(CertificateValue certificate) {
         return null;
+    }
+
+    public Set<? extends X509CRLEntry> getRevoked()
+            throws CRLException, IOException {
+        Set<? extends X509CRLEntry> entries = crl.getRevokedCertificates();
+        for (X509CRLEntry entry : entries) {
+
+        }
+        return entries;
     }
 }
