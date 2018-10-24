@@ -5,12 +5,7 @@ import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.security.*;
 import java.security.cert.*;
-import java.security.cert.CRLReason;
-import java.security.cert.Extension;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -21,7 +16,6 @@ import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
-import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.jce.provider.X509CertificateObject;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -147,8 +141,8 @@ public class CRLManager {
 	 * 
 	 * <BR>
 	 * 
-	 * 
-	 * @param crlFile
+	 *
+	 * @param inStream
 	 *            : fichier de CRL
 	 * @param cert
 	 * @return
@@ -227,8 +221,8 @@ public class CRLManager {
 	 * Retourne un objet X509CRL à partir d'un fichier.
 	 * 
 	 * <BR>
-	 * 
-	 * @param x509Certificate
+	 *
+	 * @param inStream
 	 * @throws FileNotFoundException
 	 * @throws NoSuchProviderException
 	 * @throws CRLException
@@ -248,6 +242,45 @@ public class CRLManager {
 					+ "Next update    -->" + crl.getNextUpdate());
 		}
 		return crl;
+	}
+
+	public X509CRL generateCrl(CertificateValue certSign, Date thisDate, Date nextDate, Collection filter) throws CRLException, OperatorCreationException {
+		X509Certificate certificate = certSign.getCertificate();
+		PrivateKey privateKey = (certSign.getPrivateKey());
+
+		X500Name crlIssuer = X500Name.getInstance(certificate.getSubjectX500Principal().getEncoded());
+		X500Name caName = X500Name.getInstance(certificate.getIssuerX500Principal().getEncoded());
+		X509v2CRLBuilder builder = new X509v2CRLBuilder(crlIssuer,
+				thisDate
+		);
+
+		builder.setNextUpdate(nextDate);
+
+		for (Object value : filter) {
+			CRLEntry entry = (CRLEntry) value;
+
+			builder.addCRLEntry(entry.getSerialNumber(), new Date(), entry.getReason());
+		}
+//		builder.addExtension(org.bouncycastle.asn1.x509.Extension.issuingDistributionPoint, true, new IssuingDistributionPoint(null, true, false));
+
+//		ExtensionsGenerator extGen = new ExtensionsGenerator();
+//
+//		extGen.addExtension(org.bouncycastle.asn1.x509.Extension.reasonCode, false, org.bouncycastle.asn1.x509.CRLReason.lookup(org.bouncycastle.asn1.x509.CRLReason.cACompromise));
+//		extGen.addExtension(org.bouncycastle.asn1.x509.Extension.certificateIssuer, true, new GeneralNames(new GeneralName(caName)));
+
+		JcaContentSignerBuilder contentSignerBuilder =
+				new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+
+		contentSignerBuilder.setProvider(provider);
+
+		X509CRLHolder crlHolder = builder.build(contentSignerBuilder.build(privateKey));
+
+		JcaX509CRLConverter converter = new JcaX509CRLConverter();
+
+		converter.setProvider(provider);
+
+		return converter.getCRL(crlHolder);
+
 	}
 
 	public enum EtatCrl {
@@ -305,8 +338,9 @@ public class CRLManager {
 	 * @param certificate
 	 * @return
 	 */
+	@Deprecated
 	public static String getCrlFileName(X509Certificate certificate,
-			boolean isAC) {
+										boolean isAC) {
 
 		Map<ASN1ObjectIdentifier, String> map;
 		// si c'est un certificat d'AC, on récupére les identifiant du sujet,
@@ -333,6 +367,7 @@ public class CRLManager {
 	 * @param certificate
 	 * @return
 	 */
+	@Deprecated
 	public static String getCrlFileName(String pathName, X509CRL crl) {
 		Map<ASN1ObjectIdentifier, String> map = X509Util.getInfosMap(crl
 				.getIssuerX500Principal());
@@ -438,7 +473,6 @@ public class CRLManager {
             f.getParentFile().mkdirs();
         OutputStream output = new FileOutputStream(crlFile);
         IOUtils.write(crl.getEncoded(), output);
-
     }
 
 

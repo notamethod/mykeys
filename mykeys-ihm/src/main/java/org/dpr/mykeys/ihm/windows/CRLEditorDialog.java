@@ -3,14 +3,23 @@ package org.dpr.mykeys.ihm.windows;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
+import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.ihm.model.CRLEntryModel;
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
+import java.security.cert.X509CRLEntry;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CRLEditorDialog extends JDialog {
+    private final CRLEntryModel model;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -58,6 +67,8 @@ public class CRLEditorDialog extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        model = new CRLEntryModel();
+        table1.setModel(model);
         init();
 
         ajouterButton.addActionListener(new ActionListener() {
@@ -66,17 +77,37 @@ public class CRLEditorDialog extends JDialog {
                 addCertificate();
             }
         });
+
     }
 
     private void addCertificate() {
         ;
         CertificateSelectDialog dialog = new CertificateSelectDialog(certificate.getChildren());
         dialog.pack();
-        dialog.showDialog();
+        CertificateValue value = dialog.showDialog();
+        CRLEntry entry = new CRLEntry(value);
+        ((CRLEntryModel) table1.getModel()).addRow(entry);
+        System.out.println(value.getSubjectString());
     }
 
     private void onOK() {
-        // add your code here
+        Date nextUpdate;
+        if (service.getCRL() != null && service.getCRL().getNextUpdate() != null)
+            nextUpdate = service.getCRL().getNextUpdate();
+        else
+            nextUpdate = new Date();
+        //TODO: manage next update
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 7);
+        nextUpdate = cal.getTime();
+        try {
+            service.saveCRL(nextUpdate, ((CRLEntryModel) table1.getModel()).getValues());
+        } catch (CRLException | ServiceException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         dispose();
     }
 
@@ -107,6 +138,10 @@ public class CRLEditorDialog extends JDialog {
             } else {
                 subTitle.setText("CRL TOO OLD");
             }
+            for (X509CRLEntry entry : crl.getRevokedCertificates()) {
+                model.addRow(new CRLEntry(entry, ""));
+            }
+
             validityPeriodLabel.setText(Messages.getString("crl.validity.period", crl.getThisUpdate(), crl.getNextUpdate()));
 
         }
