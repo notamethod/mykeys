@@ -17,6 +17,7 @@
 package org.dpr.mykeys.ihm.model;
 
 
+import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.crl.CRLEntry;
 
 import javax.swing.*;
@@ -87,7 +88,7 @@ public class CRLEntryModel extends AbstractTableModel {
         switch (column) {
 
             case 0:
-                return entry.getSerialNumber();
+                return X509Util.toHexString(entry.getSerialNumber(), " ", true);
             case 1:
                 return entry.getSubject();
             case 2:

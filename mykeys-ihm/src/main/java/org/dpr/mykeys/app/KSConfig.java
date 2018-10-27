@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
+import org.dpr.mykeys.app.keystore.StoreModel;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -178,7 +179,8 @@ public class KSConfig {
 	}
 
 	public static String getDefaultCrlPath(CertificateValue certificateValue) {
-		return getCrlPath() + X509Util.toHexString(certificateValue.getDigestSHA256(), "", false) + CRLManager.CRL_EXTENSION;
+
+		return getCrlPath() + internalKeystores.generateName(StoreModel.PKISTORE, false) + File.separator + X509Util.toHexString(certificateValue.getDigestSHA256(), "", false) + CRLManager.CRL_EXTENSION;
 	}
 	/**
 	 * Return  directory used for certificates storage.

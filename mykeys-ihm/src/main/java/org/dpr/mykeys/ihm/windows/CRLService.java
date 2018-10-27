@@ -27,13 +27,13 @@ public class CRLService {
         signer = certificate;
     }
 
-    public X509CRL loadCRL(File f) {
+    public X509CRL loadCRL(File f) throws FileNotFoundException {
 
         CRLFile = f;
         try (InputStream is = new FileInputStream(f)) {
             crl = manager.getCrl(is);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw e;
         } catch (IOException | CRLException | NoSuchProviderException | CertificateException e) {
             e.printStackTrace();
         }
@@ -43,20 +43,25 @@ public class CRLService {
     public void saveCRL(Date nexUpdate, List<CRLEntry> newEntries)
             throws CRLException, IOException, ServiceException {
         KeyStoreHelper ktools = new KeyStoreHelper();
-        Set<? extends X509CRLEntry> entries = getRevoked();
-        X509CRL newCRL;
-        Map filter = new HashMap<BigInteger, CRLEntry>();
-        for (X509CRLEntry x509Entry : entries) {
-            CRLEntry entry = new CRLEntry(x509Entry, "");
-            filter.put(entry.getSerialNumber(), entry);
-        }
-        for (CRLEntry newEntry : newEntries) {
-            if (filter.get(newEntry.getSerialNumber()) == null)
-                filter.put(newEntry.getSerialNumber(), newEntry);
-        }
         Date thisDate = new Date();
         if (signer.getPrivateKey() == null) {
-            signer = ktools.findCertificateByAlias(KSConfig.getInternalKeystores().getStoreAC(), signer.getAlias(), MkSession.password);
+            signer = ktools.findCertificateByAlias(KSConfig.getInternalKeystores().getStorePKI(), signer.getAlias(), MkSession.password);
+        }
+
+        X509CRL newCRL;
+        Map filter = new HashMap<BigInteger, CRLEntry>();
+        if (crl != null) {
+            Set<? extends X509CRLEntry> entries = getRevoked();
+            if (entries != null) {
+                for (X509CRLEntry x509Entry : entries) {
+                    CRLEntry entry = new CRLEntry(x509Entry, "");
+                    filter.put(entry.getSerialNumber(), entry);
+                }
+            }
+            for (CRLEntry newEntry : newEntries) {
+                if (filter.get(newEntry.getSerialNumber()) == null)
+                    filter.put(newEntry.getSerialNumber(), newEntry);
+            }
         }
         try {
             newCRL = manager.generateCrl(signer, thisDate, nexUpdate, filter.values());
@@ -86,10 +91,10 @@ public class CRLService {
 
     public Set<? extends X509CRLEntry> getRevoked()
             throws CRLException, IOException {
+        if (crl == null)
+            return null;
         Set<? extends X509CRLEntry> entries = crl.getRevokedCertificates();
-        for (X509CRLEntry entry : entries) {
 
-        }
         return entries;
     }
 

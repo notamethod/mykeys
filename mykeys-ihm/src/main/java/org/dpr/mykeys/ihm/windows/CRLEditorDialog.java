@@ -11,6 +11,7 @@ import org.dpr.mykeys.ihm.model.CRLEntryModel;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
@@ -126,25 +127,32 @@ public class CRLEditorDialog extends JDialog {
     private void init() {
 
         File f = new File(KSConfig.getDefaultCrlPath(certificate));
-        if (!f.exists()) {
-            state = CRLState.NEW;
-            setTitle(Messages.getString("crl.create.subtitle"));
-            subTitle.setText("");
-        } else {
-            setTitle(Messages.getString("crl.edit.subtitle"));
+        if (!f.getParentFile().exists())
+            f.getParentFile().mkdirs();
+        try {
             X509CRL crl = service.loadCRL(f);
+            setTitle(Messages.getString("crl.edit.subtitle"));
             if (CRLManager.EtatCrl.UP_TO_DATE.equals(service.getValidity())) {
                 subTitle.setText("CRL OK");
             } else {
                 subTitle.setText("CRL TOO OLD");
             }
-            for (X509CRLEntry entry : crl.getRevokedCertificates()) {
-                model.addRow(new CRLEntry(entry, ""));
+            if (crl.getRevokedCertificates() != null) {
+                for (X509CRLEntry entry : crl.getRevokedCertificates()) {
+                    String subject = "";
+                    for (CertificateValue child : certificate.getChildren()) {
+                        if (child.getCertificate().getSerialNumber().equals(entry.getSerialNumber()))
+                            subject = child.getSubjectString();
+                    }
+                    model.addRow(new CRLEntry(entry, subject));
+                }
             }
-
             validityPeriodLabel.setText(Messages.getString("crl.validity.period", crl.getThisUpdate(), crl.getNextUpdate()));
-
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            state = CRLState.NEW;
+            setTitle(Messages.getString("crl.create.subtitle"));
+            subTitle.setText("");
         }
-
     }
 }
