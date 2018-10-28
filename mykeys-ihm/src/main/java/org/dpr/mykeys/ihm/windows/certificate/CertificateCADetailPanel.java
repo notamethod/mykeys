@@ -3,8 +3,6 @@ package org.dpr.mykeys.ihm.windows.certificate;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.ihm.windows.CRLEditorDialog;
-import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
-import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
@@ -21,7 +19,7 @@ public class CertificateCADetailPanel extends CertificateDetailPanel {
     protected void addCrlPanel(LabelValuePanel infosPanel) {
         System.out.println("CRL");
 
-        JButton jbCreate = new JButton("...");
+        JButton jbCreate = new JButton(Messages.getString("edit"));
         JButton jbChoose2 = new JButton("...");
         //jbChoose.addActionListener(dAction);
         jbCreate.addActionListener(new ActionListener() {
@@ -34,13 +32,14 @@ public class CertificateCADetailPanel extends CertificateDetailPanel {
 
             }
         });
+
         JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
         // jpDirectory.add(jl4);
-        jpDirectory.add(new JLabel("xxxxxxxx"));
+//        jpDirectory.add(new JLabel("xxxxxxxx"));
         jpDirectory.add(jbCreate);
 
 
-        infosPanel.put(Messages.getString("dialog.generic.fileout"),
+        infosPanel.put(Messages.getString("store.crl.name"),
                 jpDirectory, true);
     }
 }
