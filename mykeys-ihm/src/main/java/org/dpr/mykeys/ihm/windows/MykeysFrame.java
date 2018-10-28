@@ -11,6 +11,7 @@ import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.MenuAction;
+import org.dpr.mykeys.ihm.components.MainPKIPanel;
 import org.dpr.mykeys.ihm.components.MainPanel;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.utils.DialogUtil;
@@ -45,8 +46,12 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
     // messages
     private HashMap<String, KeyStoreValue> ksList = new HashMap<>();
+    //keystores
+    private MainPanel mainStandardPanel;
+    //pki
+    private MainPKIPanel mainPKIPanel;
 
-    private MainPanel mainPanel;
+    private JPanel pnlCards;
 
     /**
      * Constructeur
@@ -219,10 +224,21 @@ public class MykeysFrame extends JFrame implements WindowListener {
         // Create a toolbar and give it an etched border.
         menuOptions.add(menu3);
         menuOptions.add(menu4);
+        JButton menuStd = new JButton("std");
+        menuStd.addActionListener(e -> switchCard("STD"));
+        JButton menuPKI = new JButton("pki");
+        menuPKI.addActionListener(e -> switchCard("PKI"));
+        menuBar.add(menuStd);
+        menuBar.add(menuPKI);
         this.setJMenuBar(menuBar);
         // JToolBar toolBar = new JToolBar();
         // this.getContentPane().add(toolBar, BorderLayout.NORTH);
 
+    }
+
+    private void switchCard(String cardName) {
+        CardLayout cl = (CardLayout) (pnlCards.getLayout());
+        cl.show(pnlCards, cardName);
     }
 
     private void buildComponents() {
@@ -231,12 +247,17 @@ public class MykeysFrame extends JFrame implements WindowListener {
         this.setLayout(new GridLayout(1, 0));
         // menu
         buildMenu();
-
+        CardLayout cards = new CardLayout();
+        pnlCards = new JPanel(cards);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainPanel = new MainPanel(this.getPreferredSize());
+        mainStandardPanel = new MainPanel(this.getPreferredSize());
+        mainPKIPanel = new MainPKIPanel(this.getPreferredSize());
+        pnlCards.add(mainStandardPanel, "STD");
+        pnlCards.add(mainPKIPanel, "PKI");
+
         this.getContentPane().add(p);
         this.getContentPane().getMaximumSize();
-        p.add(mainPanel);
+        p.add(pnlCards);
         log.trace(this.getMaximizedBounds());
 
     }
@@ -310,7 +331,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
                 }
             }
         }
-        mainPanel.updateKSList(ksList);
+        mainStandardPanel.updateKSList(ksList);
     }
 
     private void checkUpgrade() {
