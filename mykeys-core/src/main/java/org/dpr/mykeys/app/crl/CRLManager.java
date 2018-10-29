@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.*;
+import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
@@ -34,6 +35,7 @@ public class CRLManager {
 
     public static final String CRL_EXTENSION = ".crl";
 
+	public static final String[] REASONSTRING = new String[]{"unspecified", "keyCompromise", "cACompromise", "affiliationChanged", "superseded", "cessationOfOperation", "certificateHold", "unknown", "removeFromCRL", "privilegeWithdrawn", "aACompromise"};
 	private String provider;
 
 	/**
@@ -261,6 +263,7 @@ public class CRLManager {
 
 			builder.addCRLEntry(entry.getSerialNumber(), new Date(), entry.getReason());
 		}
+
 //		builder.addExtension(org.bouncycastle.asn1.x509.Extension.issuingDistributionPoint, true, new IssuingDistributionPoint(null, true, false));
 
 //		ExtensionsGenerator extGen = new ExtensionsGenerator();

@@ -63,7 +63,7 @@ public class MainPKIPanel extends JPanel implements
     private final static Log log = LogFactory.getLog(MainPKIPanel.class);
     private DetailPanel detailPanel;
     private CertificateListPanel listePanel;
-    private TreeKsManager treeksKeystoreMngr;
+
 
     final String KS_AC_NAME = "store.ac.name";
     final String KS_CLI_NAME = "store.cert.name";
@@ -79,27 +79,7 @@ public class MainPKIPanel extends JPanel implements
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 
-        treeksKeystoreMngr = new TreeKsManager();
 
-        treeksKeystoreMngr.registerListener(this);
-        boolean isOnlyPKI = true;
-        try {
-            isOnlyPKI = KSConfig.getUserCfg().getBoolean("isOnlyPKI, true");
-        } catch (Exception e) {
-            //not found
-        }
-        if (!isOnlyPKI) {
-            treeksKeystoreMngr.addNode(KS_AC_NAME, new DefaultMutableTreeNode(Messages.getString(
-                    KS_AC_NAME)), true);
-            treeksKeystoreMngr.addNode(KS_CLI_NAME, new DefaultMutableTreeNode(Messages.getString(
-                    KS_CLI_NAME)), true);
-        }
-        treeksKeystoreMngr.addNode(KS_PKI_NAME, new DefaultMutableTreeNode(Messages.getString(
-                KS_PKI_NAME)), true);
-        treeksKeystoreMngr.addNode(KS_MRU_NAME, new DefaultMutableTreeNode(Messages.getString(
-                KS_MRU_NAME)), true);
-        // Create the scroll pane and add the tree to it.
-        JScrollPane treeView = new JScrollPane(treeksKeystoreMngr.getTree());
         JPanel leftPanel = new JPanel();
         listePanel = new CertificateListPanel();
         listePanel.registerListener(this);
@@ -110,7 +90,7 @@ public class MainPKIPanel extends JPanel implements
         scrollDetail.getVerticalScrollBar().setUnitIncrement(16);
         splitLeftPanel.setBottomComponent(scrollDetail);
         splitLeftPanel.setTopComponent(listePanel);
-        splitLeftPanel.setDividerLocation(150);
+        splitLeftPanel.setDividerLocation(260);
 
 
         // Add the split pane to this panel.
@@ -147,58 +127,6 @@ public class MainPKIPanel extends JPanel implements
                 createAndShowGUI();
             }
         });
-    }
-
-    public static Map<String, String> getListCerts(String path, String type,
-                                                   String password) throws KeyToolsException, KeyStoreException, ServiceException {
-        KeyTools kt = new KeyTools();
-        KeyStore ks = null;
-        KeyStoreHelper ksv = new KeyStoreHelper(null);
-        ks = ksv.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray()).getKeystore();
-        Map<String, String> certsAC = new HashMap<>();
-        Enumeration<String> enumKs = ks.aliases();
-        while (enumKs.hasMoreElements()) {
-            String alias = enumKs.nextElement();
-            Certificate cert = ks.getCertificate(alias);
-            CertificateValue certInfo = ksv.fillCertInfo(ks, alias);
-            certsAC.put(alias, alias);
-
-        }
-
-        return certsAC;
-
-    }
-
-
-    private void addInternalKS() throws KeyStoreException {
-        boolean isOnlyPKI = true;
-        try {
-            isOnlyPKI = KSConfig.getUserCfg().getBoolean("isOnlyPKI, true");
-        } catch (Exception e) {
-            //not found
-        }
-        if (!isOnlyPKI) {
-            treeksKeystoreMngr.addObject(KS_AC_NAME,
-                    KSConfig.getInternalKeystores().getStoreAC(), true);
-
-            treeksKeystoreMngr.addObject(KS_CLI_NAME, KSConfig.getInternalKeystores().getStoreCertificate(), true);
-        }
-        //nodei = addObject(adminNode, KSConfig.getInternalKeystores().getStoreProfils(), true);
-        treeksKeystoreMngr.addObject(KS_PKI_NAME,
-                KSConfig.getInternalKeystores().getStorePKI(), true);
-    }
-
-    public void addCertificate(DefaultMutableTreeNode node, boolean b) throws ServiceException {
-        treeksKeystoreMngr.addCertificate(node, b);
-
-    }
-
-    public void importCertificate(DefaultMutableTreeNode node, boolean b) {
-        treeksKeystoreMngr.importCertificate(node, b);
-    }
-
-    public void changePassword(DefaultMutableTreeNode node, boolean b) {
-        treeksKeystoreMngr.changePassword(node, b);
     }
 
 

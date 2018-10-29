@@ -1,7 +1,8 @@
 package org.dpr.mykeys.ihm.windows;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.ihm.components.CertificateComboxModel;
+import org.dpr.mykeys.app.crl.CRLEntry;
+import org.dpr.mykeys.app.crl.CRLManager;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -16,8 +17,9 @@ public class CertificateSelectDialog extends JDialog {
     private JButton buttonCancel;
     private JComboBox comboBox1;
     private JTextField textField1;
+    private JComboBox comboReason;
     private JPanel reasonPanel;
-    private CertificateValue result;
+    private CRLEntry result;
     private CertificateValue selectedCertificate;
     Map<String, CertificateValue> certificateMap = new HashMap<>();
 
@@ -59,13 +61,16 @@ public class CertificateSelectDialog extends JDialog {
             certificateMap.put(value.getSubjectString(), value);
             comboBox1.addItem(value.getSubjectString());
         }
+        List<String> ls = new ArrayList<String>();
+        comboReason.setModel(new DefaultComboBoxModel(CRLManager.REASONSTRING));
+
 
     }
 
     private void onOK() {
         if (comboBox1.getSelectedItem() != null && certificateMap.get(comboBox1.getSelectedItem()) != null)
             selectedCertificate = certificateMap.get(comboBox1.getSelectedItem());
-        result = selectedCertificate;
+        result = new CRLEntry(selectedCertificate, comboReason.getSelectedIndex());
         dispose();
     }
 
@@ -81,7 +86,7 @@ public class CertificateSelectDialog extends JDialog {
         System.exit(0);
     }
 
-    public CertificateValue showDialog() {
+    public CRLEntry showDialog() {
 
         setVisible(true);
         return result;

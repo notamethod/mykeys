@@ -14,11 +14,11 @@ public class CRLEntry {
     private int revocationReason;
     private CRLReason reason;
 
-    public CRLEntry(CertificateValue value) {
+    public CRLEntry(CertificateValue value, int revocationReason) {
         serialNumber = value.getCertificate().getSerialNumber();
         subject = value.getSubjectString();
         revocationDate = new Date();
-        revocationReason = 1;
+        this.revocationReason = revocationReason;
     }
 
     public CRLEntry(X509CRLEntry value, String subject) {

@@ -82,20 +82,12 @@ public class MainPanel extends JPanel implements
         treeksKeystoreMngr = new TreeKsManager();
 
         treeksKeystoreMngr.registerListener(this);
-        boolean isOnlyPKI = true;
-        try {
-            isOnlyPKI = KSConfig.getUserCfg().getBoolean("isOnlyPKI, true");
-        } catch (Exception e) {
-            //not found
-        }
-        if (!isOnlyPKI) {
-            treeksKeystoreMngr.addNode(KS_AC_NAME, new DefaultMutableTreeNode(Messages.getString(
-                    KS_AC_NAME)), true);
-            treeksKeystoreMngr.addNode(KS_CLI_NAME, new DefaultMutableTreeNode(Messages.getString(
-                    KS_CLI_NAME)), true);
-        }
-        treeksKeystoreMngr.addNode(KS_PKI_NAME, new DefaultMutableTreeNode(Messages.getString(
-                KS_PKI_NAME)), true);
+
+        treeksKeystoreMngr.addNode(KS_AC_NAME, new DefaultMutableTreeNode(Messages.getString(
+                KS_AC_NAME)), true);
+        treeksKeystoreMngr.addNode(KS_CLI_NAME, new DefaultMutableTreeNode(Messages.getString(
+                KS_CLI_NAME)), true);
+
         treeksKeystoreMngr.addNode(KS_MRU_NAME, new DefaultMutableTreeNode(Messages.getString(
                 KS_MRU_NAME)), true);
         // Create the scroll pane and add the tree to it.
@@ -208,21 +200,13 @@ public class MainPanel extends JPanel implements
     }
 
     private void addInternalKS() throws KeyStoreException {
-        boolean isOnlyPKI = true;
-        try {
-            isOnlyPKI = KSConfig.getUserCfg().getBoolean("isOnlyPKI, true");
-        } catch (Exception e) {
-            //not found
-        }
-        if (!isOnlyPKI) {
-            treeksKeystoreMngr.addObject(KS_AC_NAME,
-                    KSConfig.getInternalKeystores().getStoreAC(), true);
 
-            treeksKeystoreMngr.addObject(KS_CLI_NAME, KSConfig.getInternalKeystores().getStoreCertificate(), true);
-        }
-        //nodei = addObject(adminNode, KSConfig.getInternalKeystores().getStoreProfils(), true);
-        treeksKeystoreMngr.addObject(KS_PKI_NAME,
-                KSConfig.getInternalKeystores().getStorePKI(), true);
+
+        treeksKeystoreMngr.addObject(KS_AC_NAME,
+                KSConfig.getInternalKeystores().getStoreAC(), true);
+
+        treeksKeystoreMngr.addObject(KS_CLI_NAME, KSConfig.getInternalKeystores().getStoreCertificate(), true);
+
     }
 
     public void addCertificate(DefaultMutableTreeNode node, boolean b) throws ServiceException {

@@ -19,6 +19,7 @@ package org.dpr.mykeys.ihm.model;
 
 import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.crl.CRLEntry;
+import org.dpr.mykeys.app.crl.CRLManager;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -94,7 +95,7 @@ public class CRLEntryModel extends AbstractTableModel {
             case 2:
                 return entry.getRevocationDate();
             case 3:
-                return entry.getReason();
+                return CRLManager.REASONSTRING[entry.getReason()];
 
             default:
 

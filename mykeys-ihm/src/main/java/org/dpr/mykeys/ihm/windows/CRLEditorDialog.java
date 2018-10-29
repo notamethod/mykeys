@@ -1,5 +1,7 @@
 package org.dpr.mykeys.ihm.windows;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -20,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CRLEditorDialog extends JDialog {
+    private final static Log log = LogFactory.getLog(CRLEditorDialog.class);
     private final CRLEntryModel model;
     private JPanel contentPane;
     private JButton buttonOK;
@@ -85,10 +88,10 @@ public class CRLEditorDialog extends JDialog {
         ;
         CertificateSelectDialog dialog = new CertificateSelectDialog(certificate.getChildren());
         dialog.pack();
-        CertificateValue value = dialog.showDialog();
-        CRLEntry entry = new CRLEntry(value);
-        ((CRLEntryModel) table1.getModel()).addRow(entry);
-        System.out.println(value.getSubjectString());
+        CRLEntry value = dialog.showDialog();
+        if (value != null) {
+            ((CRLEntryModel) table1.getModel()).addRow(value);
+        }
     }
 
     private void onOK() {
@@ -149,7 +152,7 @@ public class CRLEditorDialog extends JDialog {
             }
             validityPeriodLabel.setText(Messages.getString("crl.validity.period", crl.getThisUpdate(), crl.getNextUpdate()));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.info("crl does not exist yet !");
             state = CRLState.NEW;
             setTitle(Messages.getString("crl.create.subtitle"));
             subTitle.setText("");
