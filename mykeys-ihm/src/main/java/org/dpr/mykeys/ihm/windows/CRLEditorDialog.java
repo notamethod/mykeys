@@ -7,6 +7,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
+import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.model.CRLEntryModel;
 
@@ -30,7 +31,6 @@ public class CRLEditorDialog extends JDialog {
     private JButton exporterButton;
     private JTable table1;
     private JButton ajouterButton;
-    private JButton buttonModifyMessagesButton;
     private JLabel subTitle;
     private JLabel validityPeriodLabel;
     private CertificateValue certificate;
@@ -85,7 +85,7 @@ public class CRLEditorDialog extends JDialog {
     }
 
     private void addCertificate() {
-        ;
+        //FIXME: does not work if crl not created;
         CertificateSelectDialog dialog = new CertificateSelectDialog(certificate.getChildren());
         dialog.pack();
         CRLEntry value = dialog.showDialog();
@@ -95,22 +95,21 @@ public class CRLEditorDialog extends JDialog {
     }
 
     private void onOK() {
-        Date nextUpdate;
-        if (service.getCRL() != null && service.getCRL().getNextUpdate() != null)
-            nextUpdate = service.getCRL().getNextUpdate();
-        else
-            nextUpdate = new Date();
-        //TODO: manage next update
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, 7);
-        nextUpdate = cal.getTime();
-        try {
-            service.saveCRL(nextUpdate, ((CRLEntryModel) table1.getModel()).getValues());
-        } catch (CRLException | ServiceException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        SaveCrlDialog dialog = new SaveCrlDialog(null);
+        CrlValue value = dialog.showDialog();
+        if (value != null) {
+            //TODO: manage next update
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DATE, 7);
+
+            try {
+                service.saveCRL(value.getThisUpdate(), value.getNextUpdate(), ((CRLEntryModel) table1.getModel()).getValues());
+            } catch (CRLException | ServiceException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         dispose();
     }

@@ -40,10 +40,11 @@ public class CRLService {
         return crl;
     }
 
-    public void saveCRL(Date nexUpdate, List<CRLEntry> newEntries)
+    public void saveCRL(Date thisUpdate, Date nexUpdate, List<CRLEntry> newEntries)
             throws CRLException, IOException, ServiceException {
         KeyStoreHelper ktools = new KeyStoreHelper();
-        Date thisDate = new Date();
+        if (null == thisUpdate)
+            thisUpdate = new Date();
         if (signer.getPrivateKey() == null) {
             signer = ktools.findCertificateByAlias(KSConfig.getInternalKeystores().getStorePKI(), signer.getAlias(), MkSession.password);
         }
@@ -64,7 +65,7 @@ public class CRLService {
             }
         }
         try {
-            newCRL = manager.generateCrl(signer, thisDate, nexUpdate, filter.values());
+            newCRL = manager.generateCrl(signer, thisUpdate, nexUpdate, filter.values());
         } catch (OperatorCreationException e) {
             throw new CRLException(e);
         }
