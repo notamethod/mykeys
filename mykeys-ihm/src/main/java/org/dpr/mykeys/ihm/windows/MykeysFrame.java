@@ -42,8 +42,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
     // répertoire des images
     String magRep = ".\\";
     String nomImage = "";
-    private JPanel p;// panel principal qui contient les images
+    // private JPanel p;// panel principal qui contient les images
 
+    JToolBar toolbar;
     // messages
     private HashMap<String, KeyStoreValue> ksList = new HashMap<>();
     //keystores
@@ -224,15 +225,20 @@ public class MykeysFrame extends JFrame implements WindowListener {
         // Create a toolbar and give it an etched border.
         menuOptions.add(menu3);
         menuOptions.add(menu4);
-        JButton menuStd = new JButton("std");
+        JToggleButton menuStd = new JToggleButton(Messages.getString("mode.standard"));
         menuStd.addActionListener(e -> switchCard("STD"));
-        JButton menuPKI = new JButton("pki");
+        JToggleButton menuPKI = new JToggleButton(Messages.getString("mode.pki"));
         menuPKI.addActionListener(e -> switchCard("PKI"));
-        menuBar.add(menuStd);
-        menuBar.add(menuPKI);
+        //TOOD: save preferences
+        menuStd.setSelected(true);
+        ButtonGroup group = new ButtonGroup();
+        group.add(menuStd);
+        group.add(menuPKI);
+        toolbar = new JToolBar();
+        toolbar.add(menuStd);
+        toolbar.add(menuPKI);
         this.setJMenuBar(menuBar);
-        // JToolBar toolBar = new JToolBar();
-        // this.getContentPane().add(toolBar, BorderLayout.NORTH);
+
 
     }
 
@@ -242,9 +248,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
     }
 
     private void buildComponents() {
-        p = new JPanel();
+        JPanel p = new JPanel();
         p.setLayout(new GridLayout(1, 0));
-        this.setLayout(new GridLayout(1, 0));
+        //  this.setLayout(new GridLayout(1, 0));
         // menu
         buildMenu();
         CardLayout cards = new CardLayout();
@@ -255,8 +261,12 @@ public class MykeysFrame extends JFrame implements WindowListener {
         pnlCards.add(mainStandardPanel, "STD");
         pnlCards.add(mainPKIPanel, "PKI");
 
-        this.getContentPane().add(p);
-        this.getContentPane().getMaximumSize();
+        this.getContentPane().add(toolbar, BorderLayout.NORTH);
+
+
+        this.getContentPane().add(p, BorderLayout.CENTER);
+        //this.getContentPane().add(p);
+        // this.getContentPane().getMaximumSize();
         p.add(pnlCards);
         log.trace(this.getMaximizedBounds());
 

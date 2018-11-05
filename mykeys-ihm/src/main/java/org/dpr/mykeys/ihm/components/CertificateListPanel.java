@@ -5,10 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.CancelCreationException;
@@ -195,10 +192,20 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         SuperCreate cs = null;
-
+        CertificateType certType = null;
         if (info instanceof KeyStoreValue) {
-            CertificateTypeSelectDialog dl = new CertificateTypeSelectDialog(true);
-            CertificateType certType = dl.showDialog();
+            KeyStoreValue ksInfo = (KeyStoreValue) info;
+            //selection dialog only for pki store
+            if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
+                CertificateTypeSelectDialog dl = new CertificateTypeSelectDialog(true);
+                certType = dl.showDialog();
+            } else {
+                if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
+                    certType = CertificateType.AC;
+                } else {
+                    certType = CertificateType.STANDARD;
+                }
+            }
             if (certType != null) {
                 try {
                     cs = CertificateCreateFactory.getCreateDialog(frame, (KeyStoreValue) info, issuer, certType);
@@ -207,6 +214,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
                     return;
                 }
             }
+
         } else {
             cs = new CreateTemplateDialog(frame, true);
         }
