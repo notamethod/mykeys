@@ -180,16 +180,16 @@ public class MykeysFrame extends JFrame implements WindowListener {
             log.error("error setting look and feel", e1);
         }
 
-            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
+        }
 
     }
 
-    private void buildMenu() {
+    private String buildMenu() {
 
         // menu
         JMenuBar menuBar = new JMenuBar();
@@ -230,7 +230,16 @@ public class MykeysFrame extends JFrame implements WindowListener {
         JToggleButton menuPKI = new JToggleButton(Messages.getString("mode.pki"));
         menuPKI.addActionListener(e -> switchCard("PKI"));
         //TOOD: save preferences
-        menuStd.setSelected(true);
+        String viewMode = KSConfig.getUserCfg().getString("view.mode");
+        if (viewMode != null) {
+
+            if (viewMode.equals("STD")) {
+                menuStd.setSelected(true);
+            } else {
+                menuPKI.setSelected(true);
+            }
+        } else
+            menuStd.setSelected(true);
         ButtonGroup group = new ButtonGroup();
         group.add(menuStd);
         group.add(menuPKI);
@@ -240,9 +249,15 @@ public class MykeysFrame extends JFrame implements WindowListener {
         this.setJMenuBar(menuBar);
 
 
+        return viewMode;
     }
 
+
     private void switchCard(String cardName) {
+
+
+        KSConfig.getUserCfg().setProperty("view.mode", cardName);
+
         CardLayout cl = (CardLayout) (pnlCards.getLayout());
         cl.show(pnlCards, cardName);
     }
@@ -252,7 +267,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
         p.setLayout(new GridLayout(1, 0));
         //  this.setLayout(new GridLayout(1, 0));
         // menu
-        buildMenu();
+        String viewMode = buildMenu();
         CardLayout cards = new CardLayout();
         pnlCards = new JPanel(cards);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -268,6 +283,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
         //this.getContentPane().add(p);
         // this.getContentPane().getMaximumSize();
         p.add(pnlCards);
+        if (viewMode != null) {
+            switchCard(viewMode);
+        }
         log.trace(this.getMaximizedBounds());
 
     }
