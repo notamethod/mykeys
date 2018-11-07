@@ -5,7 +5,7 @@ A simple X509 certificate manager
 Last packaged version of the app (executable jar) available on https://sourceforge.net/projects/jmykeys/
 
 
-## current release
+## stable release
 release 0.8.3
 ### Features and fixes
 - Fix #6
@@ -16,7 +16,7 @@ release 0.8.2
 - PKI management
   -  Fix on CRL creation from CA
 
-Beta release 0.8.0 introducing new features.
+Beta release 0.9.0 introducing new features.
 
 ### Features overview
 - Keystore management:
