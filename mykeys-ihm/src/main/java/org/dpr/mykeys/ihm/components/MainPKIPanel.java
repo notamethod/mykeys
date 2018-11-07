@@ -81,7 +81,7 @@ public class MainPKIPanel extends JPanel implements
 
 
         JPanel leftPanel = new JPanel();
-        listePanel = new CertificateListPanel();
+        listePanel = new CertificateListPanel("tree");
         listePanel.registerListener(this);
         JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         // Create the viewing pane.

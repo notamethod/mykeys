@@ -88,109 +88,11 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
     private TreePopupMenuKS popup;
 
     public TreeKeyStorePanel(Dimension dim) {
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        // Create the nodes.
-        rootNode = new DefaultMutableTreeNode("Magasins");
-        acNode = new DefaultMutableTreeNode(Messages.getString(
-                "store.ac.name"));
-        cliNode = new DefaultMutableTreeNode(Messages.getString(
-                "store.cert.name"));
-        mruNode = new DefaultMutableTreeNode(Messages.getString(
-                "mru.name"));
-        //
-        // crlNode = new DefaultMutableTreeNode(Messages.getString(
-        // "store.crl.name"));
-        //
-        // sandBoxNode = new
-        // DefaultMutableTreeNode(Messages.getString(
-        // "store.sandbox.name"));
-
-        treeModel = new TreeModel(rootNode);
-        treeModel.addTreeModelListener(new TreeKeyStoreModelListener());
-
-        tree = new GradientTree(treeModel);
-        log.trace(tree.getUI());
-
-        GradientTreeRenderer renderer = new GradientTreeRenderer();
-
-        tree.setCellRenderer(renderer);
-        renderer.jtree1 = tree;
-        ToolTipManager.sharedInstance().registerComponent(tree);
-        // javax.swing.ToolTipManager.ToolTipManager.sharedInstance().registerComponent(tree);
-        tree.getSelectionModel().setSelectionMode(
-                TreeSelectionModel.SINGLE_TREE_SELECTION);
-
-        popup = new TreePopupMenuKS("Popup name", this);
-
-        treeModel.insertNodeInto(acNode, rootNode, rootNode.getChildCount());
-        treeModel.insertNodeInto(cliNode, rootNode, rootNode.getChildCount());
-        treeModel.insertNodeInto(mruNode, rootNode, rootNode.getChildCount());
-        // treeModel.insertNodeInto(crlNode, rootNode,
-        // rootNode.getChildCount());
-        // treeModel.insertNodeInto(sandBoxNode, rootNode,
-        // rootNode.getChildCount());
-
-        tree.setRootVisible(false);
-
-        tree.addMouseListener(this);
-        tree.addTreeWillExpandListener(this);
-        tree.addTreeExpansionListener(this);
-        // drop enabled
-        tree.setDropMode(DropMode.ON);
-        tree.setTransferHandler(new TreeTransferHandler());
-        // Create the scroll pane and add the tree to it.
-        JScrollPane treeView = new JScrollPane(tree);
-        JPanel leftPanel = new JPanel();
-        listePanel = new CertificateListPanel();
-        JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        // Create the viewing pane.
-        detailPanel = new DetailPanel();
-
-        JScrollPane scrollDetail = new JScrollPane(detailPanel);
-        scrollDetail.getVerticalScrollBar().setUnitIncrement(16);
-        splitLeftPanel.setBottomComponent(scrollDetail);
-        splitLeftPanel.setTopComponent(listePanel);
-        splitLeftPanel.setDividerLocation(150);
-        // Add the scroll panes to a split pane.
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setTopComponent(treeView);
-        splitPane.setBottomComponent(splitLeftPanel);
-        splitPane.setDividerLocation(210);
-
-        // Add the split pane to this panel.
-        add(splitPane);
 
     }
 
-    /**
-     * Create the GUI and show it. For thread safety, this method should be
-     * invoked from the event-dispatching thread.
-     */
-    private static void createAndShowGUI() {
-        // Create and set up the window.
-        JFrame frame = new JFrame("TreeIconDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create and set up the content pane.
-        TreeKeyStorePanel newContentPane = new TreeKeyStorePanel(null);
-        newContentPane.setOpaque(true); // content panes must be opaque
-        frame.setContentPane(newContentPane);
-
-        // Display the window.
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        // Schedule a job for the event-dispatching thread:
-        // creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
-    }
 
     public static Map<String, String> getListCerts(String path, String type,
                                                    String password) throws KeyToolsException, KeyStoreException, ServiceException {

@@ -126,7 +126,7 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
     private DropTarget dropTarget;
 
     private ListProfilePanel() {
-		super();
+		super("flat");
 
 		init();
 

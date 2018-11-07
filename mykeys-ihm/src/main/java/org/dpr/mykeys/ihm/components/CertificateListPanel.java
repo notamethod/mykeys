@@ -44,6 +44,7 @@ import static org.dpr.swingtools.ImageUtils.createImageIcon;
 @SuppressWarnings("serial")
 public class CertificateListPanel extends JPanel implements DropTargetListener, CertificateActionListener {
     private static final Log log = LogFactory.getLog(CertificateListPanel.class);
+
     NodeInfo ksInfo;
     CertificatesView listCerts;
     private List<EventCompListener> listeners = new ArrayList<>();
@@ -54,13 +55,13 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     //private DefaultListModel listModel;
     private DropTarget dropTarget;
 
-    public CertificateListPanel() {
+    public CertificateListPanel(String viewType) {
         super(new BorderLayout());
 
-        init();
+        init(viewType);
     }
 
-    private void init() {
+    private void init(String viewType) {
         // Create the DropTarget and register
         // it with the JPanel.
         dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true, null);
@@ -81,7 +82,9 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         ListSelectionListener listListener = new CertListListener();
 
-        String viewType = KSConfig.getUserCfg().getString("certificate.list.style", "flat");
+        String viewTypePref = KSConfig.getUserCfg().getString("certificate.list.style", "flat");
+        if (viewType == null)
+            viewType = viewTypePref;
         if (viewType.equalsIgnoreCase("tree")) {
             listCerts = new TreeCertificatesView();
             ((TreeCertificatesView) listCerts).addCertListener(this);

@@ -93,7 +93,7 @@ public class MainPanel extends JPanel implements
         // Create the scroll pane and add the tree to it.
         JScrollPane treeView = new JScrollPane(treeksKeystoreMngr.getTree());
         JPanel leftPanel = new JPanel();
-        listePanel = new CertificateListPanel();
+        listePanel = new CertificateListPanel(null);
         listePanel.registerListener(this);
         JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         // Create the viewing pane.
