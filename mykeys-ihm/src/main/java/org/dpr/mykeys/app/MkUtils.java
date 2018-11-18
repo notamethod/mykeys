@@ -1,16 +1,10 @@
 package org.dpr.mykeys.app;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 
 class MkUtils {
 
-	public MkUtils() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public static void copyFile(InputStream is, File out) throws Exception {
+	public static void copyFile(InputStream is, File out) throws IOException {
 
 
 		try (FileOutputStream fos = new FileOutputStream(out)) {

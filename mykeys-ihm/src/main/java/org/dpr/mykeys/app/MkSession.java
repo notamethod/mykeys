@@ -7,4 +7,9 @@ public class MkSession {
     public static char[] password;
     public static String user;
     public static String hashPWd;
+
+    public synchronized static void updateCreds(String id, char[] password) {
+        MkSession.password = password;
+        MkSession.user = id;
+    }
 }

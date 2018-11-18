@@ -34,8 +34,8 @@ public class AuthenticationService {
         }
 
         kh.addCertToKeyStore(ki, cer);
-        MkSession.password = cer.getPassword();
-        MkSession.user = id;
+        MkSession.updateCreds(id, cer.getPassword());
+
     }
 
     public CertificateValue loadUser(String id, char[] pwd) {
@@ -48,8 +48,8 @@ public class AuthenticationService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        cer.setPassword(pwd);
+        if (cer != null)
+            cer.setPassword(pwd);
         return cer;
     }
 

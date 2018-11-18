@@ -212,8 +212,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
                 String path = tfDirectory.getText();
                 // saisie mot de passe
-                char[] password = null;
-                char[] privKeyPwd = null;
+                char[] pd = null;
+                char[] privKeyPd = null;
                 Object o = infosPanel.getElements().get(
                         "isExportKey");
                 boolean isExportCle = o == null ? false : (Boolean) o;
@@ -224,24 +224,24 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                         "formatCert");
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                     if (isExportCle) {
-                        privKeyPwd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
+                        privKeyPd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
                     }
                 } else if (!ksInfo.getName().startsWith("previous")) {
-                    privKeyPwd = MkSession.password;
+                    privKeyPd = MkSession.password;
                 } else {
-                    privKeyPwd = InternalKeystores.MK1_PD.toCharArray();
+                    privKeyPd = InternalKeystores.MK1_PD.toCharArray();
                 }
                 // TODO check it
-                setPassword(password, certInfos);
+                setPassword(pd, certInfos);
                 if (format.equalsIgnoreCase("pkcs12")) {
-                    password = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
+                    pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
 
 
                     CommonServices cact = new CommonServices();
 
                     try {
                         cact.exportCert(ksInfo, StoreFormat.PKCS12, path,
-                                password, certInfos.get(0), isExportCle, privKeyPwd);
+                                pd, certInfos.get(0), isExportCle, privKeyPd);
                     } catch (Exception e) {
                         log.error(e);
                         DialogUtil.showError(ExportCertificateDialog.this,
@@ -251,7 +251,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                     try {
                         kServ.exportDers(certInfos, path);
                         if (isExportCle) {
-                            kServ.exportPrivateKey(certInfos.get(0), privKeyPwd,
+                            kServ.exportPrivateKey(certInfos.get(0), privKeyPd,
                                     tfDirectory.getText());
                         }
 
@@ -266,7 +266,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                     try {
                         kServ.exportPems(certInfos, path);
                         if (isExportCle) {
-                            kServ.exportPrivateKeyPEM(certInfos.get(0), ksInfo, privKeyPwd,
+                            kServ.exportPrivateKeyPEM(certInfos.get(0), ksInfo, privKeyPd,
                                     tfDirectory.getText());
                         }
 

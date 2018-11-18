@@ -38,9 +38,6 @@ import java.util.*;
 public class MyKeys {
 
     private static final Log log = LogFactory.getLog(MyKeys.class);
-    //private static final String ACFileName = "ACKS.jks";
-    // messages
-
 
     /**
      * @param args
@@ -79,8 +76,6 @@ public class MyKeys {
             throw new RuntimeException("Fatal Error", e);
         }
 
-        // buildComponents();
-        // updateKeyStoreList();
     }
 
 
@@ -112,7 +107,6 @@ public class MyKeys {
             SwingUtilities.invokeAndWait(() -> {
                 CreateUserDialog cs = new CreateUserDialog(
                         null, true);
-                //cs.setLocationRelativeTo(MykeysFrame);
                 cs.setVisible(true);
             });
             justCreated = true;

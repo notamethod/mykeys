@@ -19,18 +19,18 @@ import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 
 /**
  * Helpers for internal keystores.
- * Since this version, keystores are "protected" by the same password as previous version
- * but private keys are protected by user password.
+ * Since this version, keystores are "protected" by the same pad as previous version
+ * but private keys are protected by user pad.
  */
 public class InternalKeystores {
 
     private static final Log log = LogFactory.getLog(InternalKeystores.class);
-    private static final String password = "mKeys983178";
-    public static String MK1_PD = "mKeys983178";
-    private static String USERDB = "userDB.jks";
+    private static final String pad = "mKeys983178";
+    public static final String MK1_PD = "mKeys983178";
+    private static final String USERDB = "userDB.jks";
     private static String cfgPath;
-    public static String MK1_STORE_AC = "mykeysAc.jks";
-    public static String MK1_STORE_CERT = "mykeysCert.jks";
+    public static final String MK1_STORE_AC = "mykeysAc.jks";
+    public static final String MK1_STORE_CERT = "mykeysCert.jks";
 
     private KeyStoreValue storeAC;
 
@@ -53,7 +53,7 @@ public class InternalKeystores {
     }
 
     public String getPassword() {
-        return password;
+        return pad;
     }
 
     private String pathAC;
@@ -86,7 +86,6 @@ public class InternalKeystores {
     public KeyStoreValue getStoreAC() {
 
         KeyTools kt = new KeyTools();
-        String pwd = password;
         KeyStoreValue kinfo;
         File f = new File(pathAC);
         if (!f.exists()) {
@@ -95,7 +94,6 @@ public class InternalKeystores {
 
                 InputStream is = (InternalKeystores.class.getResourceAsStream("/install/mykeysAc.jks"));
                 MkUtils.copyFile(is, f);
-                // InternalKeystores.class.getResource("/org.dpr.mykeys/config/myKeysAc.jks").getFile()getChannel();
 
             } catch (Exception e) {
                 log.error(e);
@@ -111,8 +109,6 @@ public class InternalKeystores {
 
     public KeyStoreValue getStorePKI() {
 
-        KeyTools kt = new KeyTools();
-        String pwd = password;
         KeyStoreValue kinfo;
         File f = new File(pathPKI);
         if (!f.exists()) {
@@ -168,12 +164,12 @@ public class InternalKeystores {
 
         KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 
-        String pwd = password;
+        String pd = pad;
         KeyStoreValue kinfo;
         File f = new File(pathUDB);
         if (!existsUserDatabase()) {
 
-            ksBuilder.create(pathUDB, pwd.toCharArray());
+            ksBuilder.create(pathUDB, pd.toCharArray());
 
         }
         kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
@@ -186,12 +182,12 @@ public class InternalKeystores {
     public void createUserDB() throws Exception {
         KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
         KeyTools kt = new KeyTools();
-        String pwd = password;
+        String pd = pad;
         KeyStoreValue kinfo;
-        File f = new File(pathUDB);
+        new File(pathUDB);
         if (!existsUserDatabase()) {
             try {
-                ksBuilder.create(pathUDB, pwd.toCharArray());
+                ksBuilder.create(pathUDB, pd.toCharArray());
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -207,13 +203,13 @@ public class InternalKeystores {
 
     public KeyStoreValue getStoreCertificate() throws KeyStoreException {
         KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
-        String pwd = password;
+        String pd = pad;
         KeyStoreValue kinfo;
         File f = new File(pathCert);
         // create keystore
         if (!f.exists()) {
             try {
-                ksBuilder.create(pathCert, pwd.toCharArray());
+                ksBuilder.create(pathCert, pd.toCharArray());
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block
