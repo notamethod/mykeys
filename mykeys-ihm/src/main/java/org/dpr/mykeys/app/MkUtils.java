@@ -11,18 +11,14 @@ class MkUtils {
 	}
 
 	public static void copyFile(InputStream is, File out) throws Exception {
-		// InputStream fis = new FileInputStream(in);
-		FileOutputStream fos = new FileOutputStream(out);
-		try {
+
+
+		try (FileOutputStream fos = new FileOutputStream(out)) {
 			byte[] buf = new byte[1024];
 			int i;
 			while ((i = is.read(buf)) != -1) {
 				fos.write(buf, 0, i);
 			}
-		} finally {
-			if (is != null)
-				is.close();
-			fos.close();
 		}
 	}
 

@@ -26,7 +26,7 @@ public class InternalKeystores {
 
     private static final Log log = LogFactory.getLog(InternalKeystores.class);
     private static final String password = "mKeys983178";
-    public static String MK1_PASSWORD = "mKeys983178";
+    public static String MK1_PD = "mKeys983178";
     private static String USERDB = "userDB.jks";
     private static String cfgPath;
     public static String MK1_STORE_AC = "mykeysAc.jks";

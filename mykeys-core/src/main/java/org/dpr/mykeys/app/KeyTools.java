@@ -136,10 +136,8 @@ public class KeyTools {
 
     protected void saveKeyStore(KeyStore ks, KeyStoreValue ksInfo) throws KeyToolsException {
         log.debug("saveKeyStore ");
-        try {
-            OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
+        try (OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()))) {
             ks.store(fos, ksInfo.getPassword());
-            fos.close();
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
             throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
         }
@@ -166,11 +164,8 @@ public class KeyTools {
     @Deprecated
     public void exportDer(CertificateValue certInfo, String fName) throws KeyToolsException {
         /* save the public key in a file */
-        try {
-
-            FileOutputStream keyfos = new FileOutputStream(new File(fName + ".der"));
+        try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".der"));) {
             keyfos.write(certInfo.getCertificate().getEncoded());
-            keyfos.close();
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);
@@ -184,10 +179,7 @@ public class KeyTools {
         try {
             List<String> lines = new ArrayList<>();
             lines.add(BEGIN_PEM);
-            // FileUtils.writeLines(file, lines)
             File f = new File(fName + ".pem");
-            // FileOutputStream keyfos = new FileOutputStream(new File(fName
-            // + ".pem"));
             byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
             String tmpString = new String(b);
             String[] datas = tmpString.split("(?<=\\G.{64})");
@@ -234,24 +226,4 @@ public class KeyTools {
 
     }
 
-
-    /**
-     * .
-     * <p>
-     * <BR>
-     *
-     * @param crl
-     * @param crlFile
-     * @throws IOException
-     * @throws CRLException
-     */
-    public void saveCRL(X509CRL crl, File crlFile) throws CRLException, IOException {
-        OutputStream output = new FileOutputStream(crlFile);
-        IOUtils.write(crl.getEncoded(), output);
-
-    }
-
-
-    public void exportDers(List<CertificateValue> certInfos, String path) {
-    }
 }

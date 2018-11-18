@@ -474,8 +474,10 @@ public class CRLManager {
         File f = new File(crlFile);
         if (f.getParentFile() != null && !f.getParentFile().exists())
             f.getParentFile().mkdirs();
-        OutputStream output = new FileOutputStream(crlFile);
-        IOUtils.write(crl.getEncoded(), output);
+        try (OutputStream output = new FileOutputStream(crlFile);) {
+            IOUtils.write(crl.getEncoded(), output);
+        }
+
     }
 
 

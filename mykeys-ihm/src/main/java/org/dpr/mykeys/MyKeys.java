@@ -66,12 +66,12 @@ public class MyKeys {
             boolean justCreated = checkUpdate();
             checkConfig();
             if (justCreated) {
-                // migrate();
-                login();
+                log.debug("jest created");
             } else {
                 // migrate();
-                login();
+                //todo ?
             }
+            login();
 
         } catch (Exception e) {
 

@@ -23,6 +23,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 public class ProfileServices
 
 {
+    //TODO: manage CAs from PKI store too
     public static final Log log = LogFactory.getLog(ProfileServices.class);
     private final static String PROFIL_EXTENSION = ".mkprof";
     private String profilPath;

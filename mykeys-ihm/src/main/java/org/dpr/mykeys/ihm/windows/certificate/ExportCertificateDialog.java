@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -230,7 +229,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                 } else if (!ksInfo.getName().startsWith("previous")) {
                     privKeyPwd = MkSession.password;
                 } else {
-                    privKeyPwd = InternalKeystores.MK1_PASSWORD.toCharArray();
+                    privKeyPwd = InternalKeystores.MK1_PD.toCharArray();
                 }
                 // TODO check it
                 setPassword(password, certInfos);

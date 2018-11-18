@@ -204,14 +204,14 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     private KeyStore getKeystore(String ksName, StoreFormat format, char[] pwd) throws ServiceException {
 
-            return loadKeyStore(ksName, format, pwd).getKeystore();
+        return loadKeyStore(ksName, format, pwd).getKeystore();
 
     }
 
     public KeyStore getKeystore() throws ServiceException {
 
 
-            return loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).getKeystore();
+        return loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).getKeystore();
 
     }
 
@@ -326,7 +326,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             throws ServiceException, GeneralSecurityException {
         List<CertificateValue> certs = new ArrayList<>();
 
-            KeyStore ks = load(value);
+        KeyStore ks = load(value);
 
 
         Enumeration<String> enumKs;
@@ -372,19 +372,19 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             throws ServiceException, IOException, GeneralSecurityException {
 
         log.info("import x509 from pem file");
-        BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(ksv.getPath())));
-
-        //xCert = builder.generateFromCSR(buf, issuer).get();
-        PemReader reader = new PemReader(buf);
-
-        PemObject obj;
-
-        while ((obj = reader.readPemObject()) != null) {
-            X509Certificate cert = new JcaX509CertificateConverter().setProvider("BC")
-                    .getCertificate(new X509CertificateHolder(obj.getContent()));
+        try (BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(ksv.getPath())));) {
 
 
-            addCertToKeyStore(ksInfo, new CertificateValue(null, cert));
+            PemReader reader = new PemReader(buf);
+
+            PemObject obj;
+
+            while ((obj = reader.readPemObject()) != null) {
+                X509Certificate cert = new JcaX509CertificateConverter().setProvider("BC")
+                        .getCertificate(new X509CertificateHolder(obj.getContent()));
+
+                addCertToKeyStore(ksInfo, new CertificateValue(null, cert));
+            }
         }
     }
 
@@ -446,6 +446,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     public void exportPrivateKey(CertificateValue certInfo, char[] password, String fName) throws KeyToolsException {
         /* save the private key in a file */
+
         try {
             KeyStore ks = getKeystore();
             PrivateKey privateKey;
@@ -455,9 +456,12 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                 privateKey = (PrivateKey) ks.getKey(certInfo.getAlias(), password);
             }
             byte[] privKey = privateKey.getEncoded();
-            FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));
-            keyfos.write(privKey);
-            keyfos.close();
+
+            try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));) {
+                keyfos.write(privKey);
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);

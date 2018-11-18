@@ -62,7 +62,8 @@ public class AuthenticationService {
         } catch (Exception e) {
             throw new AuthenticationException("authentication failed", e);
         }
-
+        if (cer == null)
+            throw new AuthenticationException("authentication failed, can't load certificate");
         cer.setPassword(pwd);
         return cer;
     }
