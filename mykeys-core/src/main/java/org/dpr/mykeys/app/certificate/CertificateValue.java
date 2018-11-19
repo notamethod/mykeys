@@ -42,6 +42,9 @@ public class CertificateValue implements ChildInfo, Cloneable {
     private int keyLength;
     private Hashtable x509PrincipalMap = new Hashtable();
     private Map<String, String> subjectMap = new LinkedHashMap<>();
+
+
+    private String freeSubject;
     private String alias;
     private boolean[] keyUsage = new boolean[9];
     private Date notBefore;
@@ -103,6 +106,10 @@ public class CertificateValue implements ChildInfo, Cloneable {
         }
         this.duration = dur;
 
+    }
+
+    public void setFreeSubject(String freeSubject) {
+        this.freeSubject = freeSubject;
     }
 
     public String getIssuer() {
@@ -326,6 +333,10 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     }
 
+    public String getFreeSubject() {
+        return freeSubject;
+    }
+
     public X500Name subjectMapToX509Name() {
         X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
         Set setKey = subjectMap.keySet();
@@ -343,10 +354,11 @@ public class CertificateValue implements ChildInfo, Cloneable {
             }
         }
         return nameBuilder.build();
-
-
     }
 
+    public X500Name freeSubjectToX509Name() {
+        return new X500Name(freeSubject);
+    }
     /**
      * @return the alias
      */

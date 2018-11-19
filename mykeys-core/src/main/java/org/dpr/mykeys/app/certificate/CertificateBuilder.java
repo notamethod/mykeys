@@ -126,12 +126,16 @@ public class CertificateBuilder extends KeyTools {
 			certGen.setIssuerDN(certIssuer.getCertificate().getSubjectX500Principal());
 		} else {
 			certGen.setIssuerDN(new X509Principal(new X509Principal(certModel.subjectMapToX509Name())));
+			if (certModel.getFreeSubject() != null)
+				certGen.setIssuerDN(new X509Principal(new X509Principal(certModel.freeSubjectToX509Name())));
 		}
 
 		certGen.setPublicKey(keypair.getPublic());
 		setDuration(certModel);
 
 		certGen.setSubjectDN(new X509Principal(certModel.subjectMapToX509Name()));
+		if (certModel.getFreeSubject() != null)
+			certGen.setSubjectDN(new X509Principal(certModel.freeSubjectToX509Name()));
 		certGen.setSignatureAlgorithm(certModel.getAlgoSig());
 		int maxLength = -1;
 		if (isAC) {

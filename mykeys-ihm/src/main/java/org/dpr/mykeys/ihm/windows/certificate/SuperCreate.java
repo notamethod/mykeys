@@ -109,6 +109,8 @@ public class SuperCreate extends JDialog implements ItemListener {
         LabelValuePanel subjectPanel = new LabelValuePanel();
 
         PanelUtils.addSubjectToPanel(typeCer, subjectPanel);
+        if (KSConfig.getUserCfg().getProperty("freeflight") != null)
+            subjectPanel.put("Free subject", "freesubject", "");
         createInfoPanel(null, null, null);
 
         JPanel checkPanel = new JPanel(new GridLayout(0, 3));
@@ -358,7 +360,7 @@ public class SuperCreate extends JDialog implements ItemListener {
             certInfo.setPolicyID(((String) elements.get("policyID")));
             // certInfo.setPolicyID(infosPanel.getElements().getList("policyID").get(0));
             certInfo.setPolicyCPS(((String) elements.get("policyCPS")));
-
+            certInfo.setFreeSubject((String) elements.get("freesubject"));
         }
 
     }
