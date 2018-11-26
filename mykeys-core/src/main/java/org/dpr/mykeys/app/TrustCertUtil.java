@@ -42,7 +42,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Buck
- *
  */
 class TrustCertUtil {
 
@@ -84,7 +83,7 @@ class TrustCertUtil {
      * @return
      * @throws GeneralSecurityException
      */
-    public static X509Certificate[] getTrustedCerts(KeyStore ks, String provider)
+    public static X509Certificate[] getTrustedCerts(KeyStore ks)
             throws GeneralSecurityException {
         Enumeration<String> en = ks.aliases();
         Set<X509Certificate> lstCerts = new HashSet<>();
@@ -127,12 +126,11 @@ class TrustCertUtil {
             // fichier vide
         }
 
-        OutputStream output = new FileOutputStream(destFile);
-
-        for (X509Certificate certificat : certs) {
-            output.write(certificat.getEncoded());
+        try (OutputStream output = new FileOutputStream(destFile);) {
+            for (X509Certificate certificat : certs) {
+                output.write(certificat.getEncoded());
+            }
         }
-        output.close();
 
     }
 
@@ -183,7 +181,7 @@ class TrustCertUtil {
         }
 
         // create certificate path
-        CertificateFactory factory = CertificateFactory.getInstance("X.509",
+        CertificateFactory factory = CertificateFactory.getInstance(X509_CERTIFICATE_TYPE,
                 provider);
         List certChain = new ArrayList();
 
@@ -350,9 +348,10 @@ class TrustCertUtil {
             f = new File(javaHome, subPath);
         try (FileInputStream is = new FileInputStream(f)) {
             KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-            String password = "changeit";
+
+            String password = "changeit"; //NOSONAR
             keystore.load(is, password.toCharArray());
-            X509Certificate[] certs = getTrustedCerts(keystore, "");
+            X509Certificate[] certs = getTrustedCerts(keystore);
             return certs;
         } catch (FileNotFoundException e) {
             if (subPath == null)
@@ -369,7 +368,6 @@ class TrustCertUtil {
 
     public static void main(String[] args) {
         X509Certificate[] certs = getDefaultTrustedCerts(null);
-        System.out.println(certs.length);
         for (X509Certificate cert : certs) {
             System.out.println(cert.getSubjectX500Principal());
         }

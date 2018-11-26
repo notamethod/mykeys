@@ -50,7 +50,7 @@ public class MyKeys {
 
     private void init() {
 
-        //Locale.setDefault(Locale.ENGLISH);
+        //to test another locale: Locale.setDefault(Locale.ENGLISH);
         log.debug("loading configuration...");
 
         KSConfig.initResourceBundle();

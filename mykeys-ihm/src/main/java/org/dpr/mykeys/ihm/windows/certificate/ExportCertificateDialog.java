@@ -44,7 +44,6 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
     private boolean isExportCle = false;
 
-    // Map<String, String> elements = new HashMap<String, String>();
 
     public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
             List<CertificateValue> certInfos, boolean modal) {
@@ -72,13 +71,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
             mapType.put("pkcs12", "pkcs12");
         }
 
-        // mapType.put("der", "der");
-
         infosPanel = new LabelValuePanel();
 
-        // infosPanel.put("Format", JComboBox.class, "formatCert", mapType);
         infosPanel.put("Format", ButtonGroup.class, "formatCert", mapType, "");
-        // infosPanel.put("Export de la clé privée", JCheckBox, "");
         if (isContainsPrivateKey(certInfos)) {
 
             infosPanel.put(Messages.getString("export.private.key"), JCheckBox.class,
@@ -98,7 +93,6 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         jbChoose.setActionCommand("CHOOSE_IN");
 
         JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        // jpDirectory.add(jl4);
         jpDirectory.add(tfDirectory);
         jpDirectory.add(jbChoose);
         JButton jbOK = new JButton(Messages.getString("button.confirm"));
@@ -177,9 +171,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
             Map<String, Object> elements = infosPanel.getElements();
             String command = event.getActionCommand();
             if (command.equals("CHOOSE_IN")) {
-                // if (StringUtils.isEmpty(tfDirectory.getText()){
-                //
-                // }
+
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
                 File outputFile = getTargetFile(format);

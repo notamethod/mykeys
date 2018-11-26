@@ -498,9 +498,10 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             lines.add(KeyTools.END_KEY);
             FileUtils.writeLines(f, lines);
 
-            FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));
-            keyfos.write(privKey);
-            keyfos.close();
+            try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));) {
+                keyfos.write(privKey);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);

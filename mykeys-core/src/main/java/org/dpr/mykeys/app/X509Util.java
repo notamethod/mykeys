@@ -88,25 +88,27 @@ public class X509Util {
             }
             PolicyInformation[] policyInformation = policies.getPolicyInformation();
             int k = 1;
-            for (PolicyInformation pInfo : policyInformation) {
-                //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
-                ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers();
-                if (policyQualifiers != null) {
-                    policyQualifiers.forEach(name -> log.debug("policyQualifier: " + name));
-                    for (int i = 0; i < policyQualifiers.size(); i++) {
-                        ASN1Sequence pol = (ASN1Sequence) policyQualifiers.getObjectAt(i);
-                        for (int j = 0; j < pol.size(); j++) {
-                            returnPolicies.put(pol.toString(), pol.getObjectAt(j).toString());
-                            log.debug("pol: " + pol + " " + pol.getObjectAt(j));
+            if (policies != null) {
+                for (PolicyInformation pInfo : policyInformation) {
+                    //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
+                    ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers();
+                    if (policyQualifiers != null) {
+                        policyQualifiers.forEach(name -> log.debug("policyQualifier: " + name));
+                        for (int i = 0; i < policyQualifiers.size(); i++) {
+                            ASN1Sequence pol = (ASN1Sequence) policyQualifiers.getObjectAt(i);
+                            for (int j = 0; j < pol.size(); j++) {
+                                returnPolicies.put(pol.toString(), pol.getObjectAt(j).toString());
+                                log.debug("pol: " + pol + " " + pol.getObjectAt(j));
+                            }
                         }
                     }
-                }
 
-                ASN1ObjectIdentifier policyId = pInfo.getPolicyIdentifier();
-                returnPolicies.put("policyid" + k, policyId.toString());
-                k++;
-                log.debug("Polycy ID: " + policyId.toString());
-                return returnPolicies;
+                    ASN1ObjectIdentifier policyId = pInfo.getPolicyIdentifier();
+                    returnPolicies.put("policyid" + k, policyId.toString());
+                    k++;
+                    log.debug("Polycy ID: " + policyId.toString());
+                    // return returnPolicies;
+                }
             }
         }
         // try {
