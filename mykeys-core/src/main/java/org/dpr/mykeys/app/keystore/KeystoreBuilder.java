@@ -22,7 +22,7 @@ import java.security.cert.X509Certificate;
 public class KeystoreBuilder extends KeyTools {
 
 
-    public static final Log log = LogFactory.getLog(KeyStoreHelper.class);
+    public static final Log log = LogFactory.getLog(KeystoreBuilder.class);
     private KeyStore keystore;
 
     public KeystoreBuilder(KeyStore keystore) {

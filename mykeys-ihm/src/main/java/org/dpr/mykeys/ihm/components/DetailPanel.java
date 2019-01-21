@@ -71,7 +71,7 @@ public class DetailPanel extends JPanel {
     private Component getDetailInstance(ChildInfo info) {
         if (info instanceof CertificateValue) {
             CertificateValue value = (CertificateValue) info;
-            if (value.getType().equals(CertificateType.AC))
+            if (value.getType() != null && value.getType().equals(CertificateType.AC))
                 return new CertificateCADetailPanel(value);
             else
                 return new CertificateDetailPanel(value);

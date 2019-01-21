@@ -141,8 +141,9 @@ public class ImportStoreDialog extends JDialog {
 						typeKS = findTypeKS(tfDirectory.getText());
 					}
 					StoreFormat format = StoreFormat.fromValue(typeKS);
+					char[] pdin = ((String) elements.get("pwd1")).toCharArray();
 					kserv.importStore(tfDirectory.getText(), format,
-							((String) elements.get("pwd1")).toCharArray());
+							pdin.length == 0 ? null : pdin);
 					// KSConfig.getUserCfg().addProperty("magasin." + typeKS,
 					// tfDirectory.getText());
 					KSConfig.getUserCfg().addProperty(
