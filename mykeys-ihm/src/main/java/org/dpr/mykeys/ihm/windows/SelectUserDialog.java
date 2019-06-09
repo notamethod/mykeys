@@ -20,7 +20,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.security.KeyStoreException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -172,7 +171,7 @@ public class SelectUserDialog extends MkDialog {
                 CertificateHelperNew ch = new CertificateHelperNew();
                 AuthenticationService auth = new AuthenticationService();
                 try {
-                    auth.AuthenticateUSer(name, pwdChar);
+                    auth.authenticateUSer(name, pwdChar);
                     SelectUserDialog.this.setVisible(false);
                     MkSession.user = name;
                     MkSession.password = pwdChar;

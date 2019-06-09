@@ -1,5 +1,7 @@
 package org.dpr.mykeys.app;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -8,6 +10,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.CertificateHelperNew;
 import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
+import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -15,6 +18,8 @@ import java.util.List;
 
 public class AuthenticationService {
 
+    private static final Log log = LogFactory
+            .getLog(AuthenticationService.class);
     public void createUser(String id, char[] pwd) throws ServiceException {
         CertificateHelperNew ch = new CertificateHelperNew();
         KeyStoreHelper kh = new KeyStoreHelper();
@@ -45,15 +50,14 @@ public class AuthenticationService {
         try {
             cer = ch.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e);
         }
         if (cer != null)
             cer.setPassword(pwd);
         return cer;
     }
 
-    public CertificateValue AuthenticateUSer(String id, char[] pwd) throws AuthenticationException {
+    public CertificateValue authenticateUSer(String id, char[] pwd) throws AuthenticationException {
         KeyStoreHelper ch = new KeyStoreHelper();
         CertificateValue cer;
 

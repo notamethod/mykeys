@@ -42,9 +42,6 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
     private KeyStoreValue ksInfo;
 
-    private boolean isExportCle = false;
-
-
     public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
             List<CertificateValue> certInfos, boolean modal) {
         super(owner, modal);
@@ -66,8 +63,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         Map<String, String> mapType = new LinkedHashMap<>();
 
         mapType.put("pem", "pem");
+        mapType.put("der", "der");
         if (!isMultiple) {
-            mapType.put("der", "der");
+
             mapType.put("pkcs12", "pkcs12");
         }
 
@@ -155,21 +153,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
     }
 
-    private String getAlias() {
-
-        String retAlias = certInfos.get(0).getAlias();
-        if (certInfos.size() > 1)
-            retAlias += "_multi";
-        return retAlias;
-    }
-
     @Override
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getItemSelectable();
         JCheckBox jc = (JCheckBox) source;
-        isExportCle = jc.isSelected();
-
-
     }
 
     class DialogAction extends AbstractAction {
@@ -218,7 +205,6 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                         "isExportKey");
                 boolean isExportCle = o == null ? false : (Boolean) o;
 
-                KeyTools kt = new KeyTools();
                 KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
@@ -266,8 +252,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                     try {
                         kServ.exportPems(certInfos, path);
                         if (isExportCle) {
-                            kServ.exportPrivateKeyPEM(certInfos.get(0), ksInfo, privKeyPd,
-                                    tfDirectory.getText());
+                            kServ.exportPrivateKeyNew(certInfos.get(0), ksInfo, privKeyPd,
+                                    tfDirectory.getText(), StoreFormat.PEM);
+
                         }
 
                     } catch (Exception e) {

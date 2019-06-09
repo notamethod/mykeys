@@ -32,10 +32,8 @@ import java.util.*;
 
 public class CreateCertProfilDialog extends SuperCreate implements ItemListener, ActionListener {
 
-    protected LabelValuePanel infosPanel;
-    private LabelValuePanel panelInfoVisible;
 
-    private CertificateValue certInfo = new CertificateValue();
+    private LabelValuePanel panelInfoVisible;
 
     private Properties profile = null;
     private String strProf = null;

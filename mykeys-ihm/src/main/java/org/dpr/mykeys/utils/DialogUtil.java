@@ -39,15 +39,15 @@ public class DialogUtil {
 
     public static char[] showPasswordDialog(Component parent, String titre) {
         final JPasswordField jpf = new JPasswordField();
-        JOptionPane jop = new JOptionPane(jpf, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        // FIXME: label
-        JDialog dialog = jop.createDialog(parent, titre);
-        dialog.addComponentListener(new ComponentAdapter() {
-
-            public void componentShown(ComponentEvent e) {
+        JOptionPane jop = new JOptionPane(jpf, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
+            @Override
+            public void selectInitialValue() {
                 jpf.requestFocusInWindow();
             }
-        });
+        };
+        // FIXME: label
+        JDialog dialog = jop.createDialog(parent, titre);
+
         dialog.setVisible(true);
         if (jop.getValue() == null) {
             return null;

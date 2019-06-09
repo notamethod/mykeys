@@ -3,15 +3,15 @@ package org.dpr.mykeys.app.keystore;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.BagInfo;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 import java.io.File;
 import java.security.KeyStore;
 import java.util.List;
 
-public class KeyStoreValue extends BagInfo implements NodeInfo {
+public class KeyStoreValue implements NodeInfo {
 
     public static final Log log = LogFactory.getLog(KeyStoreValue.class);
     private String name;
@@ -26,6 +26,7 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
     private boolean isProtected = false;
     //TODO
     private KeyStore keystore;
+    private List<? extends ChildInfo> certificates;
     private char[] password;
 
     public KeyStoreValue(String name, String path, StoreModel storeModel,
@@ -63,6 +64,14 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
         this.storeFormat = storeFormat;
         password = cs;
     }
+
+    public KeyStoreValue(String fic, StoreFormat storeFormat) {
+
+        this.path = new File(fic).getPath();
+        this.storeFormat = storeFormat;
+
+    }
+
 
     @Override
     public boolean isProtected() {
@@ -215,6 +224,10 @@ public class KeyStoreValue extends BagInfo implements NodeInfo {
 
     @Override
     public List<? extends ChildInfo> getChildList() {
-        return null;
+        return certificates;
+    }
+
+    public void setChildList(List<? extends ChildInfo> certificates) {
+        this.certificates = certificates;
     }
 }

@@ -27,7 +27,7 @@ public class KeyTools {
     public static final String END_PEM = "-----END CERTIFICATE-----";
     public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
     public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
-    private static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
+    public static final int NUM_ALLOWED_INTERMEDIATE_CAS = 0;
     public static String EXT_P12 = ".p12";
     public static String EXT_PEM = ".pem";
     public static String EXT_DER = ".der";
@@ -39,55 +39,9 @@ public class KeyTools {
 
     public static void main(String[] args) {
         KeyTools test = new KeyTools();
-        // test.KeyPairGen("RSA", 512, new CertificateInfo());
-        // KeyStore ks= test.loadKeyStore("keystorePub.p12", TYPE_P12);
-        // X509Certificate cert = test.genererX509();
-        // test.saveCert("cert001", ks, cert);
-        // test.saveKeyStore(ks, "password".toCharArray());
-        // test.createKeyStore("JKS");
-        // test.createKeyStore(TYPE_P12, "keystorePub.p12");
+
         Security.addProvider(new BouncyCastleProvider());
-//		try {
-//			test.generateCrl2();
-//		} catch (UnrecoverableKeyException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (InvalidKeyException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (KeyStoreException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (NoSuchProviderException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (NoSuchAlgorithmException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (CertificateException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (CRLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalStateException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SignatureException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (KeyToolsException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        // Set aa = Security.getProvider("BC").getServices();
-        // Object o = Security.getProvider("BC").get("Signature");
-        //
-        // Set bb = Security.getProvider("BC").keySet();
-        // Set cc = Security.getProvider("BC").getServices();
+
 
     }
 

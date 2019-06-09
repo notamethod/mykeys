@@ -103,10 +103,6 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
 
 	}
 
-	// Map<String, String> elements = new HashMap<String, String>();
-	LabelValuePanel infosPanel;
-
-    private NodeInfo ksInfo;
 
     private ActionPanel dAction;
 

@@ -4,14 +4,13 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
-import org.dpr.mykeys.app.BagInfo;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 
-public class ProfilStoreInfo extends BagInfo implements NodeInfo {
+public class ProfilStoreInfo implements NodeInfo {
 
 	private String name;
 
@@ -183,10 +182,16 @@ public class ProfilStoreInfo extends BagInfo implements NodeInfo {
 	}
 
 	@Override
-	public void open() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void open() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isProtected() {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
 	
 }
