@@ -210,7 +210,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);
 
-                    kserv.addCertToKeyStore(ksInfo, newCertificate);
+                    kserv.addCertToKeyStore(ksInfo, newCertificate, null, null);
                     CreateCertProfilDialog.this.setVisible(false);
 
                 } catch (Exception e) {

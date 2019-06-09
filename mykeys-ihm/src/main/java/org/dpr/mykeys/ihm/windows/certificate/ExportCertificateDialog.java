@@ -128,7 +128,15 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         if (pathSrc != null && !pathSrc.isDirectory()) {
             pathSrc = new File(pathSrc.getParent());
         }
-        String alias = getAlias();
+
+        //get alias
+        String retAlias = certInfos.get(0).getAlias();
+        if (certInfos.size() > 1)
+            retAlias += "_multi";
+        if (retAlias == null)
+            retAlias = certInfos.get(0).getName();
+
+        final String alias = retAlias;
         String fileName = null;
         if (null == format) {
             return new File(pathSrc, alias);

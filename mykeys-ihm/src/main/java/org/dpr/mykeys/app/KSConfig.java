@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle; 
+import java.util.ResourceBundle;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -33,6 +33,7 @@ public class KSConfig {
 
 	public static final String STORE_PREFIX = "store";
 
+
     public static final String MKPATH = ".mykeys2";
 	public static final String MK1PATH = ".myKeys";
 
@@ -40,7 +41,8 @@ public class KSConfig {
 	
 	public static String externalPath;
 
-	private static InternalKeystores internalKeystores;
+
+    private static InternalKeystores internalKeystores;
 	
 	private static ResourceBundle messages;
 
@@ -80,7 +82,8 @@ public class KSConfig {
 		userConfig.setAutoSave(true);
 		defaultConfig.setAutoSave(true);
 
-	}
+
+    }
 
 
 	public static String getCfgPath() {

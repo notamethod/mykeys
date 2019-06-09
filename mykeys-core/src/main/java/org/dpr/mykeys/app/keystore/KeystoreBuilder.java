@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 public class KeystoreBuilder extends KeyTools {
 
@@ -79,6 +80,14 @@ public class KeystoreBuilder extends KeyTools {
 
     public KeystoreBuilder addCert(KeyStoreValue ksInfo, CertificateValue certInfo) throws KeyToolsException {
         saveCertChain(keystore, certInfo);
+        saveKeyStore(keystore, ksInfo);
+        return this;
+    }
+
+    public KeystoreBuilder addCerts(KeyStoreValue ksInfo, List<CertificateValue> certs) throws KeyToolsException {
+        for (CertificateValue certInfo : certs) {
+            saveCertChain(keystore, certInfo);
+        }
         saveKeyStore(keystore, ksInfo);
         return this;
     }

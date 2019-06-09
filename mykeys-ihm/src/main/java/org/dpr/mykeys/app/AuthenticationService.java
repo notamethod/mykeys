@@ -33,7 +33,7 @@ public class AuthenticationService {
             throw new ServiceException(Messages.getString("certificate.error.create") + id, e); //$NON-NLS-1$
         }
 
-        kh.addCertToKeyStore(ki, cer);
+        kh.addCertToKeyStore(ki, cer, null, null);
         MkSession.updateCreds(id, cer.getPassword());
 
     }

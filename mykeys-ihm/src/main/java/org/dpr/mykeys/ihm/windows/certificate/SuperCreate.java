@@ -316,7 +316,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                         log.debug("Using keystore password to prtect private key");
                         newCertificate.setPassword(ksInfo.getPassword());
                     }
-                    kserv.addCertToKeyStore(ksInfo, newCertificate);
+                    kserv.addCertToKeyStore(ksInfo, newCertificate, null, null);
                     SuperCreate.this.setVisible(false);
 
                 } catch (Exception e) {

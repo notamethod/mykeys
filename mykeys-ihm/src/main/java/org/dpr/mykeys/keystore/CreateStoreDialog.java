@@ -22,8 +22,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.dpr.mykeys.app.keystore.KeyStoreHelper.KSTYPE_EXT_JKS;
-import static org.dpr.mykeys.app.keystore.KeyStoreHelper.KSTYPE_EXT_P12;
+import static org.dpr.mykeys.app.keystore.KeystoreUtils.KSTYPE_EXT_JKS;
+import static org.dpr.mykeys.app.keystore.KeystoreUtils.KSTYPE_EXT_P12;
 
 public class CreateStoreDialog extends JDialog {
 

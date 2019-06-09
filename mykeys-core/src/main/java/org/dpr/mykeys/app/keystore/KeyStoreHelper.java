@@ -15,7 +15,6 @@ import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.utils.ActionStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.security.*;
@@ -30,12 +29,6 @@ import java.util.List;
 public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     private static final Log log = LogFactory.getLog(KeyStoreHelper.class);
 
-    private static final String[] KSTYPE_EXTS_PKCS12 = {"p12", "pfx", "pkcs12"};
-    private static final String[] KSTYPE_EXTS_DER = {"der", "cer"};
-    private static final String KSTYPE_EXT_PEM = "pem";
-    public static final String KSTYPE_EXT_JKS = "jks";
-    public static final String KSTYPE_EXT_P12 = "p12";
-
     public static final String MK3_SN = "D4 A0 81";
     private KeyStoreValue ksInfo;
 
@@ -48,42 +41,6 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    private static StoreFormat findTypeKStore(@NotNull String filename) {
-
-        log.debug("finding type of file...");
-        try {
-            String ext = filename.substring(filename.lastIndexOf('.') + 1, filename.length());
-            if (ext.equalsIgnoreCase(KSTYPE_EXT_JKS)) {
-                return StoreFormat.JKS;
-            }
-            for (String aliasType : KSTYPE_EXTS_PKCS12) {
-                if (ext.equalsIgnoreCase(aliasType)) {
-                    return StoreFormat.PKCS12;
-                }
-            }
-            for (String aliasType : KSTYPE_EXTS_DER) {
-                if (ext.equalsIgnoreCase(aliasType)) {
-                    return StoreFormat.DER;
-                }
-            }
-            if (ext.equalsIgnoreCase(KSTYPE_EXT_PEM)) {
-                return StoreFormat.PEM;
-            }
-            return null;
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-
-    }
-
-    private static StoreFormat findKeystoreType(String filename) {
-
-        StoreFormat format = findTypeKStore(filename);
-
-        log.info("type of file is " + format);
-        return format;
-
-    }
 
     public void setKsInfo(KeyStoreValue ksInfo) {
         this.ksInfo = ksInfo;
@@ -168,16 +125,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         ksBuilder.addCertToKeyStoreNew((X509Certificate) cert, ksInfo, certInfo);
     }
 
-    private void importX509Cert(String alias, KeyStoreValue ksin)
-            throws KeyToolsException, GeneralSecurityException, ServiceException {
-
-        importX509Cert(alias, ksin, null);
-
-    }
-
     public ActionStatus importCertificates(KeyStoreValue ksin, char[] newPwd)
             throws ServiceException, GeneralSecurityException, KeyToolsException {
-        ksin.setStoreFormat(findKeystoreType(ksin.getPath()));
+        ksin.setStoreFormat(KeystoreUtils.findKeystoreType(ksin.getPath()));
         if (ksin.getPassword() == null && (StoreFormat.JKS.equals(ksin.getStoreFormat()) || StoreFormat.PKCS12.equals(ksin.getStoreFormat()))) {
             return ActionStatus.ASK_PASSWORD;
         }
@@ -186,13 +136,6 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    public ActionStatus importCertificates(KeyStoreValue ksin)
-            throws ServiceException, GeneralSecurityException, KeyToolsException {
-        ksin.setStoreFormat(findKeystoreType(ksin.getPath()));
-
-        return importCertificates(ksin, null);
-
-    }
 
     /**
      * @param ksName
@@ -221,7 +164,17 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         if (ksInfo.getPassword() == null && ksInfo.getStoreFormat().equals(StoreFormat.PKCS12)) {
             return certs;
         }
-
+        if (ksInfo.getStoreFormat().equals(StoreFormat.UNKNOWN))
+            ksInfo.setStoreFormat(KeystoreUtils.findKeystoreType(ksInfo.getPath()));
+        if (ksInfo.getStoreFormat().equals(StoreFormat.PEM)) {
+            try {
+                certs = getCertsFromPem();
+                ksInfo.setOpen(true);
+            } catch (IOException | GeneralSecurityException e) {
+                throw new ServiceException("get pem error", e);
+            }
+            return certs;
+        }
         KeyStore ks = getKeystore();
 
 
@@ -315,7 +268,8 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
         } else if (StoreFormat.PEM.equals(storeFormat)) {
             try {
-                importX509CertFromPem(alias, value, charArray);
+                List<CertificateValue> certs = getCertsFromPem();
+                addCertsToKeyStore(ksInfo, certs);
             } catch (IOException | GeneralSecurityException e) {
                 throw new ServiceException(e);
             }
@@ -362,17 +316,15 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
         List<CertificateValue> certs = CertificateUtils.loadX509Certs(ksv.getPath());
 
-        for (CertificateValue certValue : certs) {
-            addCertToKeyStore(ksInfo, certValue);
+        addCertsToKeyStore(ksInfo, certs);
 
-        }
     }
 
-    public void importX509CertFromPem(String alias, KeyStoreValue ksv, char[] charArray)
+    public List<CertificateValue> getCertsFromPem()
             throws ServiceException, IOException, GeneralSecurityException {
 
-        log.info("import x509 from pem file");
-        try (BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(ksv.getPath())));) {
+        List<CertificateValue> certs = new ArrayList<>();
+        try (BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(ksInfo.getPath())));) {
 
 
             PemReader reader = new PemReader(buf);
@@ -383,10 +335,12 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                 X509Certificate cert = new JcaX509CertificateConverter().setProvider("BC")
                         .getCertificate(new X509CertificateHolder(obj.getContent()));
 
-                addCertToKeyStore(ksInfo, new CertificateValue(null, cert));
+                certs.add(new CertificateValue(null, cert));
             }
         }
+        return certs;
     }
+
 
 
     public void removeCertificate(KeyStoreValue ksValue, CertificateValue certificateInfo) throws
@@ -524,14 +478,20 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     }
 
 
+
     /**
-     * @param certificate The certificate to add in keystore
      * @throws ServiceException
      */
-    public void addCertToKeyStore(KeyStoreValue ki, CertificateValue certificate) throws ServiceException {
+    private void addCertsToKeyStore(KeyStoreValue ki, List<CertificateValue> certificates) throws ServiceException {
 
-        addCertToKeyStore(ki, certificate, null, null);
+        try {
+            KeyStore ks = load(ki);
+            KeystoreBuilder ksb = new KeystoreBuilder(ks);
 
+            ksb.addCerts(ki, certificates);
+        } catch (KeyToolsException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -539,8 +499,8 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
      * @param password    keystore's password
      * @throws ServiceException
      */
-    private void addCertToKeyStore(KeyStoreValue ki, CertificateValue certificate, char[] password,
-                                   char[] certificatePassword) throws ServiceException {
+    public void addCertToKeyStore(KeyStoreValue ki, CertificateValue certificate, char[] password,
+                                  char[] certificatePassword) throws ServiceException {
 
         try {
             KeyStore ks = load(ki);
@@ -616,6 +576,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     public KeyStoreValue loadKeyStore(String ksName, StoreFormat format, char[] pwd) throws ServiceException {
         // KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         KeyStoreValue keystoreValue = new KeyStoreValue(new File(ksName), format, pwd);
+
         String type = StoreFormat.getValue(format);
         keystoreValue.setPassword(pwd);
         KeyStore ks;
@@ -650,15 +611,13 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         KeyStore keystore = loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword()).getKeystore();
 
         return keystore;
-
     }
 
-    private PrivateKey getPrivateKey(String alias, KeyStore keyStore, char[] motDePasse)
-            throws GeneralSecurityException {
-        //
-        // PrivateKeyEntry pkEntry = (PrivateKeyEntry) keyStore.getEntry(alias,
-        // new KeyStore.PasswordProtection(motDePasse));
-        PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, motDePasse);
+
+    public PrivateKey getPrivateKey(KeyStoreValue ksInfoIn, String alias, char[] password) throws
+            KeyToolsException, GeneralSecurityException, ServiceException {
+        KeyStore keyStore = loadKeyStore(ksInfoIn.getPath(), ksInfoIn.getStoreFormat(), ksInfoIn.getPassword()).getKeystore();
+        PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, password);
         if (privateKey != null) {
             return privateKey;
         } else {
@@ -667,15 +626,9 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         }
     }
 
-    public PrivateKey getPrivateKey(KeyStoreValue ksInfoIn, String alias, char[] password) throws
-            KeyToolsException, GeneralSecurityException, ServiceException {
-        KeyStore kstore = loadKeyStore(ksInfoIn.getPath(), ksInfoIn.getStoreFormat(), ksInfoIn.getPassword()).getKeystore();
-        return getPrivateKey(alias, kstore, password);
-    }
-
 
     public KeyStoreValue createKeyStoreValue(File ksFile) {
-        StoreFormat format = findKeystoreType(ksFile.getAbsolutePath());
+        StoreFormat format = KeystoreUtils.findKeystoreType(ksFile.getAbsolutePath());
         KeyStoreValue ksv = new KeyStoreValue(ksFile, format, null);
         return ksv;
     }
@@ -687,7 +640,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
      * @return
      */
     public boolean isPasswordProtected(KeyStoreValue ksv) {
-        ksv.setStoreFormat(findKeystoreType(ksv.getPath()));
+        ksv.setStoreFormat(KeystoreUtils.findKeystoreType(ksv.getPath()));
         if (StoreFormat.JKS.equals(ksv.getStoreFormat()) || StoreFormat.PKCS12.equals(ksv.getStoreFormat())) {
             return true;
         }

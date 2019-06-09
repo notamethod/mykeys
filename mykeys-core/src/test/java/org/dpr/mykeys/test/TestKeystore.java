@@ -151,7 +151,7 @@ public class TestKeystore {
         val.setPassword(pwd);
         //ki.setPassword(pwd);
 
-        service.addCertToKeyStore(ki, val);
+        service.addCertToKeyStore(ki, val, null, null);
     }
 
     private void delete(Path target) {

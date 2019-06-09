@@ -20,6 +20,7 @@ import javax.swing.filechooser.FileFilter;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.KeystoreUtils;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
@@ -31,14 +32,6 @@ import org.dpr.swingtools.components.LabelValuePanel;
 public class ImportStoreDialog extends JDialog {
 
 	private JDropText tfDirectory;
-
-	private static final String KSTYPE_KEY_JKS = "JKS";
-
-	private static final String KSTYPE_KEY_PKCS12 = "p12";
-
-	private static final String KSTYPE_EXT_JKS = "jks";
-
-	private static final String[] KSTYPE_EXT_PKCS12 = {"p12", "pfx", "pkcs12"};
 
 	private LabelValuePanel infosPanel;
 
@@ -136,11 +129,7 @@ public class ImportStoreDialog extends JDialog {
 
 				KeyStoreHelper  kserv = new KeyStoreHelper(null);
 				try {
-					String typeKS = (String) elements.get("typeKS");
-					if (elements.get("typeKS").equals("auto")) {
-						typeKS = findTypeKS(tfDirectory.getText());
-					}
-					StoreFormat format = StoreFormat.fromValue(typeKS);
+					StoreFormat format = KeystoreUtils.findKeystoreType(tfDirectory.getText());
 					char[] pdin = ((String) elements.get("pwd1")).toCharArray();
 					kserv.importStore(tfDirectory.getText(), format,
 							pdin.length == 0 ? null : pdin);
@@ -162,25 +151,6 @@ public class ImportStoreDialog extends JDialog {
 
 			} else if (command.equals("CANCEL")) {
 				ImportStoreDialog.this.setVisible(false);
-			}
-
-		}
-
-		private String findTypeKS(String filename) {
-			try {
-				String ext = filename.substring(filename.lastIndexOf('.') + 1,
-						filename.length());
-				if (ext.equalsIgnoreCase(KSTYPE_EXT_JKS)) {
-					return KSTYPE_KEY_JKS;
-				}
-				for (String aliasType : KSTYPE_EXT_PKCS12) {
-					if (ext.equalsIgnoreCase(aliasType)) {
-						return KSTYPE_KEY_PKCS12;
-					}
-				}
-				return null;
-			} catch (IndexOutOfBoundsException e) {
-				return null;
 			}
 
 		}
