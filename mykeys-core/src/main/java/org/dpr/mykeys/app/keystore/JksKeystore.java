@@ -50,10 +50,9 @@ public class JksKeystore implements MkKeystore {
 
     @Override
     public void save(KeyStoreValue ksValue) throws ServiceException {
-        try {
-            OutputStream fos = new FileOutputStream(new File(ksValue.getPath()));
+        try (OutputStream fos = new FileOutputStream(new File(ksValue.getPath()))) {
+
             getKeyStore(ksValue).store(fos, ksValue.getPassword());
-            fos.close();
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
             throw new ServiceException("Echec de sauvegarde du magasin impossible:" + ksValue.getPath(), e);
         }

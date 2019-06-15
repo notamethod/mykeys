@@ -1,48 +1,12 @@
 package org.dpr.mykeys.ihm.components;
 
-import static org.dpr.swingtools.ImageUtils.createImageIcon;
-
-import java.awt.BorderLayout;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.swing.AbstractAction;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.ListSelectionModel;
-import javax.swing.TransferHandler;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.CancelCreationException;
@@ -51,7 +15,22 @@ import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 import org.dpr.mykeys.ihm.windows.certificate.*;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.swingtools.components.LabelValuePanel;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
 @SuppressWarnings("serial")
 public class ListProfilePanel extends CertificateListPanel implements DropTargetListener {
@@ -59,19 +38,6 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
 
     private ProfileServices profileService = new ProfileServices(KSConfig.getProfilsPath());
 
-    class ListTransferHandler extends TransferHandler {
-		DataFlavor certFlavor;
-
-		public ListTransferHandler() {
-			try {
-				String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-						+ org.dpr.mykeys.app.certificate.CertificateValue.class.getName() + "\"";
-				certFlavor = new DataFlavor(certType);
-			} catch (ClassNotFoundException e) {
-				log.trace("ClassNotFound: " + e.getMessage());
-			}
-		}
-	}
 
 	private DetailPanel detailPanel;
     private KeysAction actions;
@@ -133,9 +99,6 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
 		// it with the JPanel.
 		dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true, null);
 		dAction = new ActionPanel();
-		// setBackground(new Color(125,0,0));
-		// BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
-		// this.setLayout(bl);
 
 		// titre = new GradientLabel("Gestion des certificats");
 		// add(titre);
@@ -365,10 +328,7 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
 				}
 				updateInfo(ListProfilePanel.this.ksInfo);
 				break;
-			//
-			// case CLOSE_STORE:
-			// treeKeyStoreParent.closeStore(node, true);
-			// break;
+
 
 			case ADD_CERT:
 				addElement(ksInfo, false);
@@ -439,12 +399,13 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
 		SuperCreate cs = null;
         if (info instanceof KeyStoreValue) {
             cs = new CreateCertProfilDialog(frame, (KeyStoreValue) info, true);
-		} 
-		cs.setLocationRelativeTo(frame);
-		cs.setResizable(false);
-		cs.setVisible(true);
-		updateInfo(info);
-
+		}
+		if (cs != null) {
+			cs.setLocationRelativeTo(frame);
+			cs.setResizable(false);
+			cs.setVisible(true);
+			updateInfo(info);
+		}
 		return;
 	}
 

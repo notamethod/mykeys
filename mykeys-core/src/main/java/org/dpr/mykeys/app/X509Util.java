@@ -24,6 +24,10 @@ public class X509Util {
     private final static Log log = LogFactory.getLog(X509Util.class);
     private static Map<String, String> mapNames = null;
 
+    private X509Util() {
+        super();
+    }
+
     /**
      * @return the mapNames
      */
@@ -86,9 +90,9 @@ public class X509Util {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PolicyInformation[] policyInformation = policies.getPolicyInformation();
             int k = 1;
             if (policies != null) {
+                PolicyInformation[] policyInformation = policies.getPolicyInformation();
                 for (PolicyInformation pInfo : policyInformation) {
                     //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
                     ASN1Sequence policyQualifiers = pInfo.getPolicyQualifiers();
@@ -160,12 +164,6 @@ public class X509Util {
     }
 
 
-    // public static String BiToHex(BigInteger bi) {
-    //
-    // log.trace("max long = " + Long.toHexString(Long.MAX_VALUE));
-    // log.trace("bi as long = " + Long.toHexString(bi.longValue()));
-    // log.trace("bi as hex = " + bi.toString(16));
-    // }
 
     public static Map<ASN1ObjectIdentifier, String> getSubjectMap(X509Certificate x509Certificate) {
         X500Principal x500Principal = x509Certificate.getSubjectX500Principal();

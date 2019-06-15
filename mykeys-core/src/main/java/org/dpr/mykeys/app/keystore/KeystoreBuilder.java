@@ -57,7 +57,6 @@ public class KeystoreBuilder extends KeyTools {
         keystore.store(fos, password);
         fos.close();
 
-
         return this;
 
     }
@@ -118,27 +117,6 @@ public class KeystoreBuilder extends KeyTools {
         return certInfo.getAlias();
 
     }
-
-    public KeystoreBuilder removeCert(CertificateValue certificateInfo) throws KeyStoreException {
-
-        keystore.deleteEntry(certificateInfo.getAlias());
-
-        return this;
-    }
-
-
-    public void save(KeyStoreValue ksInfo) throws KeyToolsException {
-
-        try {
-            OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()));
-            keystore.store(fos, ksInfo.getPassword());
-            fos.close();
-        } catch (KeyStoreException | IOException | CertificateException | NoSuchAlgorithmException e) {
-            throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
-        }
-    }
-
-
 
     private void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateValue certInfo)
             throws KeyToolsException {

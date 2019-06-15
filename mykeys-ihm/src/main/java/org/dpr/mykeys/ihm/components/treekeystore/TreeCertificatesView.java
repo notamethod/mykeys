@@ -41,7 +41,7 @@ public class TreeCertificatesView implements CertificatesView {
 
             @Override
             public void addElement(ChildInfo ci) {
-                treeks.fillNodes(KS_AC_NAME,
+                treeks.fillNodes(
                         ci);
             }
 

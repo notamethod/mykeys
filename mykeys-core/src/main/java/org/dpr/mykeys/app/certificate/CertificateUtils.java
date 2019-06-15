@@ -88,24 +88,6 @@ public class CertificateUtils {
 
     }
 
-    /**
-     * Chargement certificat X509 à partir d'un flux.
-     * <p>
-     * <BR>
-     *
-     * @param aCertStream
-     * @return
-     * @throws GeneralSecurityException
-     */
-    private static X509Certificate loadX509CertOld(InputStream aCertStream)
-            throws GeneralSecurityException {
-        // création d'une fabrique de certificat X509
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
-
-        // chargement du certificat
-        X509Certificate cert = (X509Certificate) cf.generateCertificate(aCertStream);
-        return cert;
-    }
 
     public static Set<X509Certificate> loadX509Certs(InputStream aCertStream) throws GeneralSecurityException {
 
@@ -122,9 +104,9 @@ public class CertificateUtils {
         // NodeInfo nInfo = new KeyStoreValue(new File(fileName));
         List<CertificateValue> certsRetour = new ArrayList<>();
 
-        InputStream is = null;
-        try {
-            is = new FileInputStream(new File(fileName));
+
+        try (InputStream is = new FileInputStream(new File(fileName))) {
+
             Set<X509Certificate> certs = loadX509Certs(is);
 
             for (X509Certificate cert : certs) {
@@ -133,16 +115,9 @@ public class CertificateUtils {
                 certsRetour.add(certInfo);
             }
 
-        } catch (FileNotFoundException | GeneralSecurityException e) {
+        } catch (GeneralSecurityException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         return certsRetour;
 

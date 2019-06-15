@@ -107,20 +107,6 @@ public class CertificateHelper {
     }
 
 
-    public X509Certificate[] generateCrlToFix() {
-        // if (ktool == null) {
-        // ktool = new KeyTools();
-        // }
-        // X509Certificate[] xCerts;
-        // try {
-        // xCerts = ktool.genererX509(certInfo, certInfo.getIssuer(), false);
-        // } catch (Exception e) {
-        // throw new CertificateException(e);
-        // }
-        // return xCerts;
-        return null;
-    }
-
     public String keyUsageToString() {
         String value = "";
         boolean[] keyUsage = certInfo.getKeyUsage();
@@ -141,21 +127,6 @@ public class CertificateHelper {
         }
 
     }
-//TODEL
-//	public X509Certificate[] genererX509(CertificateValue infoEmetteur, CertificateValue certInfo,
-//			String aliasEmetteur, boolean isAC) throws Exception {
-//		CertificateBuilder builder = new CertificateBuilder();
-//		Usage usage = null;
-//		KeyStoreValue ksInfo = null;
-//		if (!StringUtils.isBlank(aliasEmetteur)) {
-//			char[] password = InternalKSTmp.getPassword();
-//			ksInfo = InternalKSTmp.getStoreAC();
-//			infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
-//			usage = Usage.CODESIGNING;
-//		}
-//		return builder.generate(certInfo, infoEmetteur, isAC, usage).getCertificates();
-//	}
-
 
     /**
      * Generate a X509 certificate from CSR file
@@ -179,6 +150,8 @@ public class CertificateHelper {
             //xCert = builder.generateFromCSR(buf, issuer).get();
             PemReader reader = new PemReader(buf);
             PKCS10CertificationRequest csr = convertPemToPKCS10CertificationRequest(reader);
+            if (csr == null)
+                return cert;
 
             X500Name x500Name = csr.getSubject();
             log.info("x500Name is: " + x500Name + "\n");

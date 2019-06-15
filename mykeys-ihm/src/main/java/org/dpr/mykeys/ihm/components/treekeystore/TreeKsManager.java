@@ -135,7 +135,7 @@ public class TreeKsManager implements MouseListener,
     }
 
     public static Map<String, String> getListCerts(String path, String type,
-                                                   String password) throws KeyToolsException, KeyStoreException, ServiceException {
+                                                   String password) throws KeyStoreException, ServiceException {
         KeyTools kt = new KeyTools();
         KeyStore ks = null;
         KeyStoreHelper ksv = new KeyStoreHelper(null);
@@ -516,18 +516,7 @@ public class TreeKsManager implements MouseListener,
 
                 log.trace(selPath);
             } else if (e.getClickCount() == 2) {
-                // DefaultMutableTreeNode tNode = (DefaultMutableTreeNode)
-                // selPath
-                // .getLastPathComponent();
-                // Object object = tNode.getUserObject();
-                // if (object instanceof KeyStoreValue) {
-                // KeyStoreValue ksInfo = ((KeyStoreValue) object);
-                //
-                // if (!ksInfo.isOpen()) {
-                // openStore(tNode, false, true);
-                //
-                // }
-                // }
+                //nothing
             }
         }
     }
@@ -764,7 +753,7 @@ public class TreeKsManager implements MouseListener,
             treeModel.insertNodeInto(node, rootNode, rootNode.getChildCount());
     }
 
-    public void fillNodes(String ks_ac_name, ChildInfo ci) {
+    public void fillNodes(ChildInfo ci) {
         if (ci instanceof CertificateValue) {
             CertificateValue value = (CertificateValue) ci;
             log.debug(value.getCertificateChain());
@@ -832,6 +821,8 @@ public class TreeKsManager implements MouseListener,
             if (object instanceof KeyStoreValue) {
                 ksInfo = ((KeyStoreValue) object);
             }
+            if (ksInfo == null)
+                return false;
             MkKeystore mks = MkKeystore.getInstance(ksInfo.getStoreFormat());
             try {
                 mks.getCertificates(ksInfo).addAll(transferData);
@@ -860,8 +851,9 @@ public class TreeKsManager implements MouseListener,
             support.setShowDropLocation(true);
             //log.trace(nodesFlavor.getHumanPresentableName());
             if (!support.isDataFlavorSupported(nodesFlavor)) {
+                //why ?
                 //return false;
-                System.out.println("no flavor");
+
             }
             JTree.DropLocation dropLocation =
                     (JTree.DropLocation) support.getDropLocation();

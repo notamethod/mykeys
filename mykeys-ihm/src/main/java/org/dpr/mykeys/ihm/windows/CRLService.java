@@ -64,13 +64,14 @@ public class CRLService {
                     filter.put(newEntry.getSerialNumber(), newEntry);
             }
         }
-        try {
+        try (OutputStream output = new FileOutputStream(CRLFile)) {
             newCRL = manager.generateCrl(signer, thisUpdate, nexUpdate, filter.values());
+            IOUtils.write(newCRL.getEncoded(), output);
         } catch (OperatorCreationException e) {
             throw new CRLException(e);
         }
-        OutputStream output = new FileOutputStream(CRLFile);
-        IOUtils.write(newCRL.getEncoded(), output);
+        ;
+
     }
 
 

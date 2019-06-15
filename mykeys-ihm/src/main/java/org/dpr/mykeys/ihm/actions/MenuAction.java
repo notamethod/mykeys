@@ -85,10 +85,9 @@ public class MenuAction extends AbstractAction {
 							ManageUserDialog cs = null;
 							try {
 								cs = new ManageUserDialog();
-							} catch (IhmException e1) {
+							} catch (IhmException | ServiceException e1) {
 								e1.printStackTrace();
-							} catch (ServiceException e1) {
-								e1.printStackTrace();
+								return;
 							}
 							cs.setLocationRelativeTo(MykeysFrame);
 							cs.setVisible(true);

@@ -462,10 +462,12 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         if (info instanceof KeyStoreValue) {
             cs = new CreateCertificatFromCSRDialog(frame, (KeyStoreValue) info, true);
         }
-        cs.setLocationRelativeTo(frame);
-        cs.setResizable(false);
-        cs.setVisible(true);
-        updateInfo(info);
+        if (cs != null) {
+            cs.setLocationRelativeTo(frame);
+            cs.setResizable(false);
+            cs.setVisible(true);
+            updateInfo(info);
+        }
 
         return;
 
