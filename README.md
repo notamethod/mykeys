@@ -16,7 +16,7 @@ release 0.8.2
 - PKI management
   -  Fix on CRL creation from CA
 
-Beta release 0.9.0 introducing new features.
+Beta2 release 0.9.0 introducing new features.
 
 ### Features overview
 - Keystore management:
