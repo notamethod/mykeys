@@ -110,7 +110,7 @@ public class CertificateUtils {
         return cert;
     }
 
-    private static Set<X509Certificate> loadX509Certs(InputStream aCertStream) throws GeneralSecurityException {
+    public static Set<X509Certificate> loadX509Certs(InputStream aCertStream) throws GeneralSecurityException {
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
 

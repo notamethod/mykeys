@@ -111,6 +111,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
     public void updateInfo(NodeInfo info) throws ServiceException {
         jp.setVisible(false);
+        System.out.println("updateinfo");
 
         jp.remove(toolBarManager.getInvInstance(info));
         jp.add(toolBarManager.getInstance(info), BorderLayout.PAGE_START);
@@ -133,6 +134,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
                 listCerts.getModel().addElement(ci);
             }
             //TODO add parameter to refresh method (type ks: storemodel an dstortype)
+            listCerts.sort();
             listCerts.getModel().refresh();
         }
         toolBarManager.removeListeners(info);

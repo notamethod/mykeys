@@ -21,4 +21,6 @@ public interface CertificatesView {
     CertificateValue getSelected();
 
     List getSelectedList();
+
+    void sort();
 }

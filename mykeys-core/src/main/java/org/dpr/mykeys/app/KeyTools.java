@@ -97,59 +97,6 @@ public class KeyTools {
         }
     }
 
-    @Deprecated
-    public void saveCert(KeyStore kstore, X509Certificate cert, CertificateValue certInfo) throws KeyToolsException {
-        try {
-            // X509Certificate x509Cert = (X509Certificate) cert;
-            Certificate[] chaine = new Certificate[]{cert};
-            if (certInfo.getPrivateKey() == null) {
-                kstore.setCertificateEntry(certInfo.getAlias(), cert);
-            } else {
-
-                kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
-            }
-
-            // ks.setCertificateEntry(alias, cer);
-        } catch (KeyStoreException e) {
-            throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
-        }
-    }
-
-    @Deprecated
-    public void exportDer(CertificateValue certInfo, String fName) throws KeyToolsException {
-        /* save the public key in a file */
-        try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".der"));) {
-            keyfos.write(certInfo.getCertificate().getEncoded());
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e);
-            throw new KeyToolsException("Export de la clé publique impossible:" + certInfo.getAlias(), e);
-        }
-    }
-
-    @Deprecated
-    public void exportPem(CertificateValue certInfo, String fName) throws KeyToolsException {
-        /* save the public key in a file */
-        try {
-            List<String> lines = new ArrayList<>();
-            lines.add(BEGIN_PEM);
-            File f = new File(fName + ".pem");
-            byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
-            String tmpString = new String(b);
-            String[] datas = tmpString.split("(?<=\\G.{64})");
-            Collections.addAll(lines, datas);
-
-            lines.add(END_PEM);
-            FileUtils.writeLines(f, lines);
-            // keyfos.write(certInfo.getCertificate().getEncoded());
-            // keyfos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e);
-            throw new KeyToolsException("Export de la clé publique impossible:" + certInfo.getAlias(), e);
-        }
-    }
-
     protected CRLDistPoint getDistributionPoints(X509Certificate certX509) {
 
         X509CertificateObject certificateImpl = (X509CertificateObject) certX509;

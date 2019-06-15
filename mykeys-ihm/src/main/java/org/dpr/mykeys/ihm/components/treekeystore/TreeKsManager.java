@@ -57,12 +57,14 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -126,6 +128,7 @@ public class TreeKsManager implements MouseListener,
         // drop enabled
         tree.setDropMode(DropMode.ON);
         tree.setTransferHandler(new TreeTransferHandler());
+
         // Create the scroll pane and add the tree to it.
         JScrollPane treeView = new JScrollPane(tree);
         JPanel leftPanel = new JPanel();
@@ -795,22 +798,55 @@ public class TreeKsManager implements MouseListener,
         DataFlavor[] flavors = new DataFlavor[1];
 
         /**
-         * .
-         * <p>
-         * <BR><pre>
-         * <b>Algorithme : </b>
-         * DEBUT
-         * <p>
-         * FIN</pre>
-         *
-         * @param arg0
+         * @param support
          * @return
          * @see TransferHandler#importData(TransferSupport)
          */
         @Override
-        public boolean importData(TransferSupport arg0) {
-            // TODO Auto-generated method stub
-            return super.importData(arg0);
+        public boolean importData(TransferSupport support) {
+            if (!canImport(support)) {
+                return false;
+            }
+            DataFlavor df = null;
+            try {
+                df = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
+                        ";class=org.dpr.mykeys.app.certificate.CertificateValue");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            JTree.DropLocation dropLocation =
+                    (JTree.DropLocation) support.getDropLocation();
+            TreePath path = dropLocation.getPath();
+            Transferable transferable = support.getTransferable();
+            List<CertificateValue> transferData;
+            try {
+                transferData = (List<CertificateValue>) transferable.getTransferData(
+                        df);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } catch (UnsupportedFlavorException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            DefaultMutableTreeNode parentNode =
+                    (DefaultMutableTreeNode) path.getLastPathComponent();
+            Object object = parentNode.getUserObject();
+            KeyStoreValue ksInfo = null;
+            if (object instanceof KeyStoreValue) {
+                ksInfo = ((KeyStoreValue) object);
+            }
+            MkKeystore mks = MkKeystore.getInstance(ksInfo.getStoreFormat());
+            try {
+                mks.getCertificates(ksInfo).addAll(transferData);
+                mks.save(ksInfo);
+            } catch (ServiceException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
         }
 
         /*
@@ -824,14 +860,19 @@ public class TreeKsManager implements MouseListener,
         public boolean canImport(TransferSupport support) {
 
             if (!support.isDrop()) {
+                System.out.println("no drop");
                 return false;
             }
             support.setShowDropLocation(true);
             //log.trace(nodesFlavor.getHumanPresentableName());
             if (!support.isDataFlavorSupported(nodesFlavor)) {
                 //return false;
+                System.out.println("no flavor");
             }
-            return true;
+            JTree.DropLocation dropLocation =
+                    (JTree.DropLocation) support.getDropLocation();
+            return dropLocation.getPath() != null;
+
         }
 
     }
@@ -853,12 +894,6 @@ public class TreeKsManager implements MouseListener,
             log.trace("popuprr");
             String ac = e.getActionCommand();
             TreePath path = tree.getPathForLocation(loc.x, loc.y);
-            // //log.trace("path = " + path);
-            // //System.out.printf("loc = [%d, %d]%n", loc.x, loc.y);
-            // if(ac.equals("ADD CHILD"))
-            // log.trace("popuprr");
-            // if(ac.equals("ADD SIBLING"))
-            // addSibling(path);
         }
     }
 

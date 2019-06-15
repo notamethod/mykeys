@@ -255,7 +255,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
     private void switchCard(String cardName) {
 
-
+        //save preference
         KSConfig.getUserCfg().setProperty("view.mode", cardName);
 
         CardLayout cl = (CardLayout) (pnlCards.getLayout());

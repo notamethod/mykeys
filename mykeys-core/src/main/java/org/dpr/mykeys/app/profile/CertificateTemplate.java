@@ -10,8 +10,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.utils.OrderedProperties;
+import org.jetbrains.annotations.NotNull;
 
-public class CertificateTemplate implements ChildInfo {
+public class CertificateTemplate implements ChildInfo<CertificateTemplate> {
 
     private OrderedProperties p;
 
@@ -82,5 +83,10 @@ public class CertificateTemplate implements ChildInfo {
 
     public String getDescription() {
         return p.getProperty("description");
+    }
+
+    @Override
+    public int compareTo(@NotNull CertificateTemplate o) {
+        return 0;
     }
 }

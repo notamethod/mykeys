@@ -705,12 +705,12 @@ public class TreeKeyStorePanel extends JPanel implements MouseListener,
          */
         @Override
         public boolean canImport(TransferSupport support) {
-
+            log.trace(nodesFlavor.getHumanPresentableName());
             if (!support.isDrop()) {
                 return false;
             }
             support.setShowDropLocation(true);
-            //log.trace(nodesFlavor.getHumanPresentableName());
+            log.trace(nodesFlavor.getHumanPresentableName());
             if (!support.isDataFlavorSupported(nodesFlavor)) {
                 //return false;
             }

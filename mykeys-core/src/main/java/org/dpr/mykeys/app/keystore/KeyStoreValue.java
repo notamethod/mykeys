@@ -26,7 +26,7 @@ public class KeyStoreValue implements NodeInfo {
     private boolean isProtected = false;
     //TODO
     private KeyStore keystore;
-    private List<? extends ChildInfo> certificates;
+    private List<CertificateValue> certificates;
     private char[] password;
 
     public KeyStoreValue(String name, String path, StoreModel storeModel,
@@ -223,11 +223,19 @@ public class KeyStoreValue implements NodeInfo {
     }
 
     @Override
-    public List<? extends ChildInfo> getChildList() {
+    public List<CertificateValue> getChildList() {
         return certificates;
     }
 
-    public void setChildList(List<? extends ChildInfo> certificates) {
+    public void setChildList(List<CertificateValue> certificates) {
+        this.certificates = certificates;
+    }
+
+    public List<CertificateValue> getCertificates() {
+        return certificates;
+    }
+
+    public void setCertificates(List<CertificateValue> certificates) {
         this.certificates = certificates;
     }
 }

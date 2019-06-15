@@ -18,6 +18,7 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.X509Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
@@ -28,7 +29,7 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
-public class CertificateValue implements ChildInfo, Cloneable {
+public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable {
     private static final Log log = LogFactory.getLog(CertificateValue.class);
     private final List<GeneralName> subjectNames = new ArrayList<>();
     private Certificate[] certificateChain;
@@ -740,5 +741,11 @@ public class CertificateValue implements ChildInfo, Cloneable {
 
     public List<CertificateValue> getChildren() {
         return children;
+    }
+
+
+    @Override
+    public int compareTo(@NotNull CertificateValue o) {
+        return this.getSubjectString().compareTo(o.getSubjectString());
     }
 }

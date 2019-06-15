@@ -18,9 +18,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.Security;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -36,8 +39,38 @@ public class TestCerts {
     String emptyKeystore;
 
     private static CertificateValue fillCertInfo(KeyStoreValue ksInfo, KeyStore ks, String alias) throws ServiceException {
-        KeyStoreHelper ksv = new KeyStoreHelper(ksInfo);
-        return ksv.fillCertInfo(ks, alias);
+
+        CertificateValue certInfo;
+        try {
+            Certificate certificate = ks.getCertificate(alias);
+            Certificate[] certs = ks.getCertificateChain(alias);
+
+            certInfo = new CertificateValue(alias, (X509Certificate) certificate);
+            if (ks.isKeyEntry(alias)) {
+                certInfo.setContainsPrivateKey(true);
+
+            }
+            StringBuilder bf = new StringBuilder();
+            if (certs == null) {
+                String message = "chaine de certification nulle pour " + alias + " (" + certInfo.getName() + ")";
+                if (certInfo.isContainsPrivateKey())
+                    log.error(message);
+                else
+                    log.debug(message);
+                // return null;
+            } else {
+                for (Certificate chainCert : certs) {
+                    bf.append(chainCert.toString());
+                }
+                certInfo.setChaineStringValue(bf.toString());
+                certInfo.setCertificateChain(certs);
+            }
+
+        } catch (GeneralSecurityException e) {
+            throw new ServiceException("filling certificate Info impossible", e);
+        }
+        return certInfo;
+
 
     }
 
@@ -64,7 +97,7 @@ public class TestCerts {
             KeyStoreValue ksIn = new KeyStoreValue(new File(pathCert),
                     StoreFormat.PKCS12, "aaa".toCharArray());
             KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
-            kserv.importX509Cert(alias, ksIn, "aaa".toCharArray());
+            kserv.importX509CertToJks(alias, ksIn, "aaa".toCharArray());
 
             KeyStoreHelper kservRet = new KeyStoreHelper(ksInfo);
             List<?> lst = kservRet.getChildList();

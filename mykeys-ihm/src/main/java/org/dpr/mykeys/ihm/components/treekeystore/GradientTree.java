@@ -1,5 +1,8 @@
 package org.dpr.mykeys.ihm.components.treekeystore;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -10,6 +13,7 @@ import javax.swing.tree.TreeModel;
 
 class GradientTree extends JTree implements DropTargetListener {
 
+    private final static Log log = LogFactory.getLog(GradientTree.class);
 	public GradientTree(TreeModel newModel) {
 		super(newModel);
 		setUI(new GradientTreeUI());
@@ -18,7 +22,7 @@ class GradientTree extends JTree implements DropTargetListener {
 
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
-		// TODO Auto-generated method stub
+        log.debug("drag GTree");
 		
 	}
 
@@ -36,6 +40,7 @@ class GradientTree extends JTree implements DropTargetListener {
 
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
+        log.debug("drop");
 		
 	}
 

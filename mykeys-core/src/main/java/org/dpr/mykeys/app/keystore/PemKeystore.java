@@ -25,16 +25,15 @@ import java.util.List;
 public class PemKeystore implements MkKeystore {
 
     private static final Log log = LogFactory.getLog(PemKeystore.class);
-    private final KeyStoreValue ksValue;
 
-    public PemKeystore(KeyStoreValue ksValue) {
-        this.ksValue = ksValue;
+
+    public PemKeystore() {
     }
 
     @Override
     public void removeCertificate(KeyStoreValue ksValue, CertificateValue certificateInfo) throws ServiceException {
-        try {
-            List<CertificateValue> certs = getCertificates();
+
+        List<CertificateValue> certs = getCertificates(ksValue);
             CertificateValue certToRemove = null;
             for (CertificateValue cert : certs) {
                 if (certificateInfo.getName().equals(cert.getName())) {
@@ -43,17 +42,14 @@ public class PemKeystore implements MkKeystore {
             }
             if (certToRemove != null)
                 certs.remove(certToRemove);
-            saveCertificates(certs);
-        } catch (IOException | KeyToolsException | GeneralSecurityException e) {
-            e.printStackTrace();
-            throw new ServiceException(e);
-        }
+        saveCertificates(ksValue, certs);
+
 
     }
 
-    public List<CertificateValue> getCertificates()
-            throws ServiceException, IOException, GeneralSecurityException {
-        if (ksValue.getChildList() != null)
+    public List<CertificateValue> getCertificates(KeyStoreValue ksValue)
+            throws ServiceException {
+        if (ksValue.getCertificates() != null)
             return (List<CertificateValue>) ksValue.getChildList();
         else {
             List<CertificateValue> certs = new ArrayList<>();
@@ -70,17 +66,19 @@ public class PemKeystore implements MkKeystore {
                     certificate.setAlias(certificate.getName());
                     certs.add(certificate);
                 }
+            } catch (GeneralSecurityException | IOException e) {
+                throw new ServiceException(e);
             }
-            ksValue.setChildList(certs);
+            ksValue.setCertificates(certs);
             return certs;
         }
     }
 
-    public void saveCertificates(List<CertificateValue> certInfos) throws KeyToolsException {
+    public void save(KeyStoreValue ksValue) throws ServiceException {
         /* save the public key in a file */
         try {
             List<String> lines = new ArrayList<>();
-            for (CertificateValue certInfo : certInfos) {
+            for (CertificateValue certInfo : ksValue.getCertificates()) {
                 lines.add(KeyTools.BEGIN_PEM);
                 // FileUtils.writeLines(file, lines)
                 File f = new File(ksValue.getPath());
@@ -96,7 +94,7 @@ public class PemKeystore implements MkKeystore {
 
         } catch (Exception e) {
 
-            throw new KeyToolsException("Export de la clé publique impossible:", e);
+            throw new ServiceException("Export de la clé publique impossible:", e);
         }
     }
 
@@ -126,5 +124,10 @@ public class PemKeystore implements MkKeystore {
         } catch (Exception e) {
             throw new ServiceException("Fail to export private key", e);
         }
+    }
+
+    @Override
+    public void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos) throws ServiceException {
+
     }
 }

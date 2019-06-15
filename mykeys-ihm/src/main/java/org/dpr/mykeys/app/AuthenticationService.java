@@ -77,7 +77,7 @@ public class AuthenticationService {
         List<CertificateValue> cer;
 
         try {
-            cer = ch.getCertificates(KSConfig.getInternalKeystores().getUserDB());
+            cer = ch.getCertificatesForUser(KSConfig.getInternalKeystores().getUserDB());
         } catch (Exception e) {
             throw new ServiceException(e);
         }

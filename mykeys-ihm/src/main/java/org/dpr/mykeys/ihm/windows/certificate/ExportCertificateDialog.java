@@ -235,10 +235,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                     }
                 } else if (format.equals("der")) {
                     try {
-                        kServ.exportDers(certInfos, path);
+                        kServ.export(certInfos, path, StoreFormat.DER);
                         if (isExportCle) {
-                            kServ.exportPrivateKey(certInfos.get(0), privKeyPd,
-                                    tfDirectory.getText());
+                            kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd,
+                                    tfDirectory.getText(), StoreFormat.DER);
                         }
 
                     } catch (Exception e) {
@@ -250,9 +250,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
                 } else {
                     try {
-                        kServ.exportPems(certInfos, path);
+                        kServ.export(certInfos, path, StoreFormat.PEM);
                         if (isExportCle) {
-                            kServ.exportPrivateKeyNew(certInfos.get(0), ksInfo, privKeyPd,
+                            kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd,
                                     tfDirectory.getText(), StoreFormat.PEM);
 
                         }

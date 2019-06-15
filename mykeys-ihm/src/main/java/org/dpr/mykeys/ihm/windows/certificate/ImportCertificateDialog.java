@@ -135,7 +135,7 @@ public class ImportCertificateDialog extends JDialog {
 					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
                     //FIXME;CRR
                     KeyStoreValue value = kserv.createKeyStoreValue(new File(tfDirectory.getText()));
-                    kserv.importX509Cert(alias, value,
+					kserv.importX509CertToJks(alias, value,
 							((String) elements.get("pwd1")).toCharArray());
 
 					// ((MykeysFrame)ImportCertificateDialog.this.getParent()).updateKeyStoreList();

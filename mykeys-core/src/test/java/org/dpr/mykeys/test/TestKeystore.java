@@ -17,14 +17,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.Security;
-import java.util.Calendar;
-import java.util.Date;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 
 public class TestKeystore {
@@ -242,5 +240,101 @@ public class TestKeystore {
 
     }
 
+    @Test
+    public void testExport() {
 
+        Path resourceDirectory = Paths.get("target/test-classes/data/test1.pem");
+        CertificateValue cv = createCert();
+        List<CertificateValue> listCert = new ArrayList<>();
+        listCert.add(cv);
+        String fileName = resourceDirectory.toAbsolutePath().toString();
+        KeyStoreHelper service = new KeyStoreHelper();
+        try {
+            service.export(listCert, fileName, StoreFormat.PEM);
+        } catch (KeyToolsException e) {
+            fail();
+        }
+        KeyStoreValue ksv = new KeyStoreValue(fileName, StoreFormat.PEM);
+        service = new KeyStoreHelper(ksv);
+        boolean found = false;
+        try {
+            List<CertificateValue> certs = service.getCertificates();
+            for (CertificateValue cert : certs) {
+                if (cert.getPublicKey().equals(cv.getPublicKey()))
+                    found = true;
+            }
+            assertTrue(found);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void importPem() throws ServiceException, KeyStoreException {
+
+        char[] pwd = "111".toCharArray();
+        String filename = "target/test-classes/data/my.jks";
+        String filenamePem = "target/test-classes/data/pem/3cdeb3d0.pem";
+        KeyStoreValue ki = null;
+
+        MkKeystore mks = MkKeystore.getInstance(StoreFormat.PEM);
+        KeyStoreValue ksv = new KeyStoreValue(filenamePem, StoreFormat.PEM);
+
+        try {
+            ki = emptyKeystore(filename, pwd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+        KeyStoreHelper service = new KeyStoreHelper(ki);
+        service.importX509CertToJks(null, ksv, null);
+        ki = service.loadKeyStore(filename, StoreFormat.JKS, "111".toCharArray());
+        Enumeration<String> enumKs = ki.getKeystore().aliases();
+        int size = Collections.list(enumKs).size();
+        assertTrue("Error", size == 1);
+    }
+
+    @Test
+    public void getCertsPem() throws ServiceException, KeyStoreException {
+
+
+        String filenamePem = "target/test-classes/data/pem/3cdeb3d0.pem";
+        KeyStoreValue ki = null;
+
+        MkKeystore mks = MkKeystore.getInstance(StoreFormat.PEM);
+        KeyStoreValue ksv = new KeyStoreValue(filenamePem, StoreFormat.PEM);
+
+        assertEquals("Error", 1, mks.getCertificates(ksv).size());
+
+    }
+
+    @Test
+    public void getCertsDer() throws ServiceException, KeyStoreException {
+
+
+        String filename = "target/test-classes/data/der/3cdeb3d0.der";
+        KeyStoreValue ki = null;
+
+        MkKeystore mks = MkKeystore.getInstance(StoreFormat.DER);
+        KeyStoreValue ksv = new KeyStoreValue(filename, StoreFormat.DER);
+
+        assertEquals("Error", 1, mks.getCertificates(ksv).size());
+
+    }
+
+    private KeyStoreValue emptyKeystore(String filename, char[] pwd) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, ServiceException {
+        Path target = Paths.get(filename);
+
+        delete(target);
+
+        KeyStoreValue ki = null;
+        KeystoreBuilder ksBuilder;
+        KeyStoreHelper service = new KeyStoreHelper();
+
+        ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
+
+        ksBuilder.create(filename, "111".toCharArray());
+        return service.loadKeyStore(filename, StoreFormat.JKS, "111".toCharArray());
+
+    }
 }
