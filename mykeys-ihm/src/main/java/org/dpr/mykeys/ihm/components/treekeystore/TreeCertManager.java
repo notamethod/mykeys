@@ -120,7 +120,6 @@ public class TreeCertManager extends TreeKsManager {
             node = reorganizeNode(tmpMap,
                     entry.getValue());
         }
-        System.out.println(treeModel.getChildCount(rootNode.getFirstChild()));
         treeModel.reload();
         for (int i = 0; i < tree.getRowCount(); i++) {
             tree.expandRow(i);
@@ -139,7 +138,6 @@ public class TreeCertManager extends TreeKsManager {
         nodes.clear();
         rootNode = new DefaultMutableTreeNode("Magasins");
         treeModel.setRoot(rootNode);
-        System.out.println("CLEAR");
         DefaultMutableTreeNode acNode = new DefaultMutableTreeNode(Messages.getString(KS_AC_NAME));
 
         addNode(KS_AC_NAME, acNode, true);

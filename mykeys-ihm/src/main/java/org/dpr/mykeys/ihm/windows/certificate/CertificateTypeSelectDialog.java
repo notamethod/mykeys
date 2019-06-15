@@ -9,7 +9,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 
 public class CertificateTypeSelectDialog extends JDialog {
-    private JPanel contentPane;
+    private JPanel contentPane1;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JPanel panel1;
@@ -19,7 +19,7 @@ public class CertificateTypeSelectDialog extends JDialog {
 
 
     public CertificateTypeSelectDialog(boolean ACAccepted) {
-        setContentPane(contentPane);
+        setContentPane(contentPane1);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
@@ -44,7 +44,7 @@ public class CertificateTypeSelectDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
+        contentPane1.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }

@@ -22,8 +22,9 @@ import javax.swing.filechooser.FileSystemView;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.CommonServices;
 import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
@@ -58,14 +59,15 @@ class SignDocumentDialog extends JDialog {
 		mapType.put("CMS/PKCS#7", "CMS");
 
 		Map<String, String> mapCerts = null;
+        KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
+        KeyStoreHelper ksh = new KeyStoreHelper();
 		try {
-			mapCerts = TreeKeyStorePanel.getListCerts(
-					KSConfig.getInternalKeystores().getCertPath(), "JKS",
-					KSConfig.getInternalKeystores().getPassword());
+            mapCerts = ksh.getMapStringCerts(ksAC);
 		} catch (Exception e) {
 			//
 		}
-		if (mapCerts == null) {
+
+        if (mapCerts == null) {
 			mapCerts = new HashMap<>();
 		}
 		mapCerts.put(" ", " ");

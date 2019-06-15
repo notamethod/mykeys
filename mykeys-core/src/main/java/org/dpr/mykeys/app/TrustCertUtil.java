@@ -126,7 +126,7 @@ class TrustCertUtil {
             // fichier vide
         }
 
-        try (OutputStream output = new FileOutputStream(destFile);) {
+        try (OutputStream output = new FileOutputStream(destFile)) {
             for (X509Certificate certificat : certs) {
                 output.write(certificat.getEncoded());
             }

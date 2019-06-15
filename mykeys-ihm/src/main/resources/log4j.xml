@@ -2,7 +2,7 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration debug="false" xmlns:log4j="http://jakarta.apache.org/log4j/">
     <appender name="FILE" class="org.apache.log4j.FileAppender">
-        <param name="File" value="/tmp/logging.log"/>
+        <param name="File" value="/tmp/mykeys.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
         </layout>
@@ -40,9 +40,8 @@
         <level value="DEBUG"/>
     </logger>
     <root>
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
-        <!--<appender-ref ref="STDOUT"/>-->
     </root>
 </log4j:configuration>

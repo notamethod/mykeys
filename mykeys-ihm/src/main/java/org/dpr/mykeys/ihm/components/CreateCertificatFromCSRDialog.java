@@ -27,7 +27,6 @@ import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JDropText;
@@ -156,9 +155,10 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 		if (infosPanel == null) {
 			infosPanel = new LabelValuePanel();
 			Map<String, String> mapAC = null;
+			KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
+			KeyStoreHelper ksh = new KeyStoreHelper();
 			try {
-				mapAC = TreeKeyStorePanel.getListCerts(KSConfig.getInternalKeystores().getACPath(), "JKS",
-						KSConfig.getInternalKeystores().getPassword());
+				mapAC = ksh.getMapStringCerts(ksAC);
 			} catch (Exception e) {
 				//
 			}

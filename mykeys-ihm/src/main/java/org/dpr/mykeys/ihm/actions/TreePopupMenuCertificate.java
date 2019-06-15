@@ -123,7 +123,7 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
 
     private void notifyInsertCertificateAC(CertificateValue certificate) {
         for (CertificateActionListener listener : listeners) {
-            ((CertificateActionListener) listener).insertCertificateACRequested("what !");
+            listener.insertCertificateACRequested("what !");
         }
     }
     @Override
@@ -144,14 +144,14 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
     @Override
     public void notifyExportCertificate(String what) {
         for (CertificateActionListener listener : listeners) {
-            ((CertificateActionListener) listener).exportCertificateRequested("what !");
+            listener.exportCertificateRequested("what !");
         }
     }
 
     @Override
     public void notifyCertificateDeletion(String what) {
         for (CertificateActionListener listener : listeners) {
-            ((CertificateActionListener) listener).deleteCertificateRequested("what !");
+            listener.deleteCertificateRequested("what !");
         }
     }
 

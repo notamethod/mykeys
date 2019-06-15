@@ -296,7 +296,7 @@ public class TreeKsManager implements MouseListener,
                 tmpMap.put(key, newNode);
                 tree.scrollPathToVisible(new TreePath(node.getPath()));
             } else if (parent != null && tmpMap.get(issuerParent) != null && tmpMap.get(key) == null) {
-                treeModel.insertNodeInto(newNode, (MutableTreeNode) tmpMap.get(issuerParent), tmpMap.get(issuerParent).getChildCount());
+                treeModel.insertNodeInto(newNode, tmpMap.get(issuerParent), tmpMap.get(issuerParent).getChildCount());
                 tmpMap.put(key, newNode);
                 tree.scrollPathToVisible(new TreePath(node.getPath()));
             }
@@ -764,12 +764,7 @@ public class TreeKsManager implements MouseListener,
             treeModel.insertNodeInto(node, rootNode, rootNode.getChildCount());
     }
 
-    public void refresh() {
-        log.debug("NNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONNNNNNNNNNN");
-    }
-
     public void fillNodes(String ks_ac_name, ChildInfo ci) {
-        System.out.println("nodes " + nodes.size());
         if (ci instanceof CertificateValue) {
             CertificateValue value = (CertificateValue) ci;
             log.debug(value.getCertificateChain());
@@ -860,7 +855,6 @@ public class TreeKsManager implements MouseListener,
         public boolean canImport(TransferSupport support) {
 
             if (!support.isDrop()) {
-                System.out.println("no drop");
                 return false;
             }
             support.setShowDropLocation(true);
@@ -875,26 +869,6 @@ public class TreeKsManager implements MouseListener,
 
         }
 
-    }
-
-    class PopupHandler implements ActionListener {
-        JTree tree;
-
-        JPopupMenu popup;
-
-        Point loc;
-
-        public PopupHandler(JTree tree, JPopupMenu popup) {
-            this.tree = tree;
-            this.popup = popup;
-            // tree.addMouseListener(ma);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            log.trace("popuprr");
-            String ac = e.getActionCommand();
-            TreePath path = tree.getPathForLocation(loc.x, loc.y);
-        }
     }
 
 }

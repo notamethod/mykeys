@@ -4,9 +4,10 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
-import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.ihm.windows.certificate.FillUtils;
 import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
@@ -153,9 +154,10 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
         if (infosPanel == null) {
             infosPanel = new LabelValuePanel();
             Map<String, String> mapAC = null;
+            KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
+            KeyStoreHelper ksh = new KeyStoreHelper();
             try {
-                mapAC = TreeKeyStorePanel.getListCerts(KSConfig.getInternalKeystores().getACPath(), "JKS",
-                        KSConfig.getInternalKeystores().getPassword());
+                mapAC = ksh.getMapStringCerts(ksAC);
             } catch (Exception e) {
                 //
             }

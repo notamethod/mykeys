@@ -110,8 +110,8 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
 
     public void updateInfo(NodeInfo info) throws ServiceException {
+        log.debug("Update Info");
         jp.setVisible(false);
-        System.out.println("updateinfo");
 
         jp.remove(toolBarManager.getInvInstance(info));
         jp.add(toolBarManager.getInstance(info), BorderLayout.PAGE_START);
@@ -129,7 +129,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             }
         } else {
             KeyStoreHelper ks = new KeyStoreHelper((KeyStoreValue) ksInfo);
-            System.out.println("childlist:" + ks.getChildList().size());
+            log.debug("childlist:" + ks.getChildList().size());
             for (ChildInfo ci : ks.getChildList()) {
                 listCerts.getModel().addElement(ci);
             }
@@ -487,7 +487,6 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     @Override
     public void insertCertificateRequested(CertificateValue what) {
         try {
-            System.out.println("ADD EL");
             addElement(ksInfo, false, what);
         } catch (ServiceException e1) {
             // TODO Auto-generated catch block
@@ -539,7 +538,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     @Override
     public void deleteCertificateRequested(String what) {
         if (listCerts != null && listCerts.getSelected() != null) {
-            CertificateValue certInfo = (CertificateValue) listCerts.getSelected();
+            CertificateValue certInfo = listCerts.getSelected();
             if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
                 try {
                     showDeleteCertificateFrame(ksInfo, certInfo);
@@ -554,9 +553,9 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     @Override
     public void createCrlRequested(String what) {
         if (listCerts != null && listCerts.getSelected() != null) {
-            CertificateValue certInfo = (CertificateValue) listCerts.getSelected();
+            CertificateValue certInfo = listCerts.getSelected();
             try {
-                showCreateCrlFrame(ksInfo, (CertificateValue) certInfo, false);
+                showCreateCrlFrame(ksInfo, certInfo, false);
             } catch (ServiceException e1) {
                 e1.printStackTrace();
             }

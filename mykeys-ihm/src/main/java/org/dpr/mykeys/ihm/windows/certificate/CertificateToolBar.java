@@ -189,7 +189,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 
         exportButton.setEnabled(b);
         deleteButton.setEnabled(b);
-        CrlManagerButton.setEnabled(b ? (ci instanceof CertificateValue) && (((CertificateValue) ci).isAcceptChildAC()) : false);
+        CrlManagerButton.setEnabled(b && ((ci instanceof CertificateValue) && (((CertificateValue) ci).isAcceptChildAC())));
 
     }
 
@@ -256,7 +256,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 
     @Override
     public void registerListener(CertificateActionListener listener) {
-        System.out.println("register " + listener);
+        log.debug("register " + listener);
         listeners.add(listener);
 
     }

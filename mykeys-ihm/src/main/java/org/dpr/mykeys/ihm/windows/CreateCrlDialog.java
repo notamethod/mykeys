@@ -11,8 +11,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.ihm.components.CertificateListPanel;
-import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.JSpinnerDate;
@@ -98,7 +97,6 @@ public class CreateCrlDialog extends JDialog {
         LocalDateTime dateTime = LocalDateTime.now();
         String formattedDateTime = dateTime.format(formatter);
         tfDirectoryOut = new JTextField(40);
-        ;
         tfDirectoryOut.setText(KSConfig.getCrlPath() + X509Util.toHexString(certificateValue.getDigestSHA256(), "", false) + CRLManager.CRL_EXTENSION);
         JButton jbChoose2 = new JButton("...");
         jbChoose2.addActionListener(dAction);
@@ -133,10 +131,10 @@ public class CreateCrlDialog extends JDialog {
         infosPanel = new LabelValuePanel();
         if (certificateValue == null) {
             Map<String, String> mapAC = null;
+            KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
+            KeyStoreHelper ksh = new KeyStoreHelper();
             try {
-                mapAC = TreeKeyStorePanel.getListCerts(
-                        KSConfig.getInternalKeystores().getACPath(), "JKS",
-                        KSConfig.getInternalKeystores().getPassword());
+                mapAC = ksh.getMapStringCerts(ksAC);
             } catch (Exception e) {
                 //
             }

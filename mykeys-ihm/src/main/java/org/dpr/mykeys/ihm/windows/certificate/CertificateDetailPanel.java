@@ -148,7 +148,7 @@ public class CertificateDetailPanel extends JPanel {
                 }
                 String value = info.getSubjectMap().get(key);
                 if (value.startsWith("#")) {
-                    value = new String(Hex.decode(value.substring(1, value.length())));
+                    value = new String(Hex.decode(value.substring(1)));
                 }
                 infosPanel.put(name, JTextField.class, "", value, false);
             }

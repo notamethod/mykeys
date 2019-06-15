@@ -13,7 +13,6 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.MenuAction;
 import org.dpr.mykeys.ihm.components.MainPKIPanel;
 import org.dpr.mykeys.ihm.components.MainPanel;
-import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
@@ -142,16 +141,6 @@ public class MykeysFrame extends JFrame implements WindowListener {
             }
         });
 
-    }
-
-    protected static ImageIcon createImageIcon(String path) {
-        java.net.URL imgURL = TreeKeyStorePanel.class.getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
-        }
     }
 
     private void init() throws KeyStoreException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -341,7 +330,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
                 List list = KSConfig.getUserCfg().getList(key);
                 for (Object o : list) {
                     String dirName = (String) o;
-                    String fileName = dirName.substring(dirName.lastIndexOf("\\") + 1, dirName.length());
+                    String fileName = dirName.substring(dirName.lastIndexOf("\\") + 1);
                     KeyStoreValue ki = new KeyStoreValue(fileName, dirName, StoreModel.fromValue(typeTmp[1]),
                             StoreFormat.valueOf(typeTmp[2]));
                     byte[] encoded = Base64.getEncoder().encode(dirName.getBytes());

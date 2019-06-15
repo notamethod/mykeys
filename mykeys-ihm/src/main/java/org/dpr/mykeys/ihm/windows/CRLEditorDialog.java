@@ -25,7 +25,7 @@ import java.util.Date;
 public class CRLEditorDialog extends JDialog {
     private final static Log log = LogFactory.getLog(CRLEditorDialog.class);
     private final CRLEntryModel model;
-    private JPanel contentPane;
+    private JPanel contentPane1;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JButton exporterButton;
@@ -41,7 +41,7 @@ public class CRLEditorDialog extends JDialog {
 
         this.certificate = certificate;
         service = new CRLService(certificate);
-        setContentPane(contentPane);
+        setContentPane(contentPane1);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
@@ -66,7 +66,7 @@ public class CRLEditorDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
+        contentPane1.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }

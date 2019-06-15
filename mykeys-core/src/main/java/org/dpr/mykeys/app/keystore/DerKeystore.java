@@ -49,7 +49,7 @@ public class DerKeystore implements MkKeystore {
             byte[] privKey = privateKey.getEncoded();
 
 // binary ?
-            try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));) {
+            try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"))) {
                 keyfos.write(privKey);
             }
 
@@ -79,8 +79,9 @@ public class DerKeystore implements MkKeystore {
 
     @Override
     public List<CertificateValue> getCertificates(KeyStoreValue ksValue) throws ServiceException {
-        if (ksValue.getCertificates() != null)
-            return (List<CertificateValue>) ksValue.getChildList();
+        if (ksValue.getCertificates() != null && !ksValue.getCertificates().isEmpty())
+            return ksValue.getChildList();
+
         List<CertificateValue> certsRetour = new ArrayList<>();
         //  InputStream is = null;
         try (InputStream is = new FileInputStream(new File(ksValue.getPath()))) {
@@ -103,5 +104,10 @@ public class DerKeystore implements MkKeystore {
         }
         ksValue.setCertificates(certsRetour);
         return certsRetour;
+    }
+
+    @Override
+    public void addCert(KeyStoreValue ki, CertificateValue certificate) throws ServiceException {
+
     }
 }

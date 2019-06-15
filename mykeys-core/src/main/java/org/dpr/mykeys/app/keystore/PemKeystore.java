@@ -49,11 +49,11 @@ public class PemKeystore implements MkKeystore {
 
     public List<CertificateValue> getCertificates(KeyStoreValue ksValue)
             throws ServiceException {
-        if (ksValue.getCertificates() != null)
-            return (List<CertificateValue>) ksValue.getChildList();
+        if (ksValue.getCertificates() != null && !ksValue.getCertificates().isEmpty())
+            return ksValue.getChildList();
         else {
             List<CertificateValue> certs = new ArrayList<>();
-            try (BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(ksValue.getPath())));) {
+            try (BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(ksValue.getPath())))) {
 
                 PemReader reader = new PemReader(buf);
 
@@ -72,6 +72,11 @@ public class PemKeystore implements MkKeystore {
             ksValue.setCertificates(certs);
             return certs;
         }
+    }
+
+    @Override
+    public void addCert(KeyStoreValue ki, CertificateValue certificate) throws ServiceException {
+
     }
 
     public void save(KeyStoreValue ksValue) throws ServiceException {

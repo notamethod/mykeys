@@ -112,7 +112,7 @@ public class DetailPanel extends JPanel {
         jp.add(getDetailInstance(info));
         titre.setText(Messages.getString("detail.cert.title"));
         if (info instanceof CertificateValue) {
-            jtab.setTitleAt(0, ((CertificateValue) ((CertificateValue) info)).getAlias());
+            jtab.setTitleAt(0, info.getAlias());
         }
 
         jtab.setVisible(true);

@@ -16,7 +16,7 @@ public class KeystoreUtils {
 
         log.debug("finding type of file...");
         try {
-            String ext = filename.substring(filename.lastIndexOf('.') + 1, filename.length());
+            String ext = filename.substring(filename.lastIndexOf('.') + 1);
             if (ext.equalsIgnoreCase(KSTYPE_EXT_JKS)) {
                 return StoreFormat.JKS;
             }

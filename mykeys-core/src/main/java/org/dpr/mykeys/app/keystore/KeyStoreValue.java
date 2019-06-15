@@ -9,6 +9,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 
 import java.io.File;
 import java.security.KeyStore;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KeyStoreValue implements NodeInfo {
@@ -26,7 +27,7 @@ public class KeyStoreValue implements NodeInfo {
     private boolean isProtected = false;
     //TODO
     private KeyStore keystore;
-    private List<CertificateValue> certificates;
+    private List<CertificateValue> certificates = new ArrayList<>();
     private char[] password;
 
     public KeyStoreValue(String name, String path, StoreModel storeModel,
@@ -236,6 +237,7 @@ public class KeyStoreValue implements NodeInfo {
     }
 
     public void setCertificates(List<CertificateValue> certificates) {
-        this.certificates = certificates;
+        this.certificates.clear();
+        this.certificates.addAll(certificates);
     }
 }

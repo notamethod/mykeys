@@ -3,32 +3,18 @@ package org.dpr.mykeys.ihm.windows;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.MkSession;
-import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
-import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.JSpinnerDate;
 import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.security.cert.X509CRL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
-
-import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
 public class SaveCrlDialog extends JDialog {
     private static final Log log = LogFactory.getLog(SaveCrlDialog.class);

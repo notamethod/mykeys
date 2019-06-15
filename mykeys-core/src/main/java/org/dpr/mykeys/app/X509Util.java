@@ -91,7 +91,7 @@ public class X509Util {
             if (policies != null) {
                 for (PolicyInformation pInfo : policyInformation) {
                     //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
-                    ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers();
+                    ASN1Sequence policyQualifiers = pInfo.getPolicyQualifiers();
                     if (policyQualifiers != null) {
                         policyQualifiers.forEach(name -> log.debug("policyQualifier: " + name));
                         for (int i = 0; i < policyQualifiers.size(); i++) {

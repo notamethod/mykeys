@@ -17,7 +17,6 @@ public class CertificateCADetailPanel extends CertificateDetailPanel {
 
     @Override
     protected void addCrlPanel(LabelValuePanel infosPanel) {
-        System.out.println("CRL");
 
         JButton jbCreate = new JButton(Messages.getString("edit"));
         JButton jbChoose2 = new JButton("...");

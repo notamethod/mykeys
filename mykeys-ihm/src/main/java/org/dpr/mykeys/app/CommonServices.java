@@ -39,7 +39,7 @@ public class CommonServices {
 			certInfoEx.setCertificateChain(certInfo.getCertificateChain());
 			certInfoEx.setPassword(privKeyPwd);
 
-			char pwd[] = ksInfoIn.getPassword();
+			char[] pwd = ksInfoIn.getPassword();
 			if (ksInfoIn.getStoreType().equals(StoreLocationType.INTERNAL)) {
 				// pwd=certInfoEx.getPassword();
 				certInfoEx.setPassword(pwd);

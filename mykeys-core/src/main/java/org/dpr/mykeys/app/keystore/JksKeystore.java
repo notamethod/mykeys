@@ -62,31 +62,51 @@ public class JksKeystore implements MkKeystore {
 
     @Override
     public List<CertificateValue> getCertificates(KeyStoreValue ksValue) throws ServiceException {
-        if (null == ksValue.getKeystore()) {
 
-            ksValue.setKeystore(loadKeyStore(ksValue.getPath(), ksValue.getStoreFormat(), ksValue.getPassword()));
-        }
-        KeyStore ks = ksValue.getKeystore();
-        List<CertificateValue> certs = new ArrayList<>();
+        if (ksValue.getCertificates() != null && !ksValue.getCertificates().isEmpty())
+            return ksValue.getChildList();
+        else {
 
-        Enumeration<String> enumKs;
-        try {
-            enumKs = ks.aliases();
-            if (enumKs != null && enumKs.hasMoreElements()) {
 
-                while (enumKs.hasMoreElements()) {
-                    String alias = enumKs.nextElement();
+            if (null == ksValue.getKeystore()) {
 
-                    CertificateValue certInfo = fillCertInfo(ks, alias);
-                    certs.add(certInfo);
-                }
+                ksValue.setKeystore(loadKeyStore(ksValue.getPath(), ksValue.getStoreFormat(), ksValue.getPassword()));
             }
-        } catch (KeyStoreException e) {
-            // TODO Auto-generated catch block
+            KeyStore ks = ksValue.getKeystore();
+            List<CertificateValue> certs = new ArrayList<>();
+
+            Enumeration<String> enumKs;
+            try {
+                enumKs = ks.aliases();
+                if (enumKs != null && enumKs.hasMoreElements()) {
+
+                    while (enumKs.hasMoreElements()) {
+                        String alias = enumKs.nextElement();
+
+                        CertificateValue certInfo = fillCertInfo(ks, alias);
+                        certs.add(certInfo);
+                    }
+                }
+            } catch (KeyStoreException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            ksValue.setCertificates(certs);
+            return certs;
+        }
+    }
+
+    @Override
+    public void addCert(KeyStoreValue ksValue, CertificateValue certificate) throws ServiceException {
+        KeyStore ks = loadKeyStore(ksValue.getPath(), ksValue.getStoreFormat(), ksValue.getPassword());
+        KeystoreBuilder ksb = new KeystoreBuilder(ks);
+        try {
+            ksb.addCert(ksValue, certificate);
+            ksValue.getCertificates().add(certificate);
+        } catch (KeyToolsException e) {
             e.printStackTrace();
         }
-        ksValue.setCertificates(certs);
-        return certs;
+
     }
 
     public void saveKeyStore(KeyStore ks, String path, char[] password) throws KeyToolsException {

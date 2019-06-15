@@ -17,10 +17,7 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     private static final Log log = LogFactory.getLog(KeyStoreHelper.class);
@@ -262,7 +259,6 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
         KeyStore ks = load(value);
 
-
         Enumeration<String> enumKs;
         try {
             enumKs = ks.aliases();
@@ -415,17 +411,15 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     public void addCertToKeyStore(KeyStoreValue ki, CertificateValue certificate, char[] password,
                                   char[] certificatePassword) throws ServiceException {
 
-        try {
-            KeyStore ks = load(ki);
-            KeystoreBuilder ksb = new KeystoreBuilder(ks);
+
             if (password != null)
                 ki.setPassword(password);
             if (certificatePassword != null)
                 certificate.setPassword(certificatePassword);
-            ksb.addCert(ki, certificate);
-        } catch (KeyToolsException e) {
-            throw new ServiceException(e);
-        }
+        MkKeystore mks = MkKeystore.getInstance(ki.getStoreFormat());
+
+        mks.addCert(ki, certificate);
+        ki.getCertificates().add(certificate);
     }
 
     public CertificateValue findCertificateAndPrivateKeyByAlias(KeyStoreValue store, String alias) throws
@@ -547,20 +541,21 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         return ksv;
     }
 
-    /**
-     * check if keystore is protected by password
-     *
-     * @param ksv
-     * @return
-     */
-    public boolean isPasswordProtected(KeyStoreValue ksv) {
-        ksv.setStoreFormat(KeystoreUtils.findKeystoreType(ksv.getPath()));
-        if (StoreFormat.JKS.equals(ksv.getStoreFormat()) || StoreFormat.PKCS12.equals(ksv.getStoreFormat())) {
-            return true;
-        }
-        return false;
-    }
 
+    public Map<String, String> getMapStringCerts(KeyStoreValue ksv) {
+        MkKeystore mks = MkKeystore.getInstance(ksv.getStoreFormat());
+        Map<String, String> certsAC = new HashMap<>();
+        try {
+            for (CertificateValue cv : mks.getCertificates(ksv)) {
+                certsAC.put(cv.getName(), cv.getAlias());
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        return certsAC;
+
+    }
 
     public void export(List<CertificateValue> certInfos, String fName, StoreFormat format) throws KeyToolsException {
         /* save the public key in a file */

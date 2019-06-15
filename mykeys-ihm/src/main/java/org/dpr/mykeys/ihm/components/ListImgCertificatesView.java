@@ -158,13 +158,11 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
         }
 
         public DataFlavor[] getTransferDataFlavors() {
-            System.out.println(flavors);
             return flavors;
         }
 
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             boolean issup = nodesFlavor.equals(flavor);
-            System.out.println("check " + flavors + issup);
             return nodesFlavor.equals(flavor);
         }
     }

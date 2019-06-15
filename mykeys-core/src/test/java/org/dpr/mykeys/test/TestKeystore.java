@@ -312,7 +312,7 @@ public class TestKeystore {
     public void getCertsDer() throws ServiceException, KeyStoreException {
 
 
-        String filename = "target/test-classes/data/der/3cdeb3d0.der";
+        String filename = "target/test-classes/data/der/3cdeb3d0x.der";
         KeyStoreValue ki = null;
 
         MkKeystore mks = MkKeystore.getInstance(StoreFormat.DER);

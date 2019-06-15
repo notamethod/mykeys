@@ -14,7 +14,6 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
-import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStorePanel;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.utils.DialogUtil;
@@ -178,9 +177,10 @@ public class SuperCreate extends JDialog implements ItemListener {
 
     private Component getSignaturePanel() {
         Map<String, String> mapAC = null;
+        KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
+        KeyStoreHelper ksh = new KeyStoreHelper();
         try {
-            mapAC = TreeKeyStorePanel.getListCerts(KSConfig.getInternalKeystores().getACPath(), "JKS",
-                    KSConfig.getInternalKeystores().getPassword());
+            mapAC = ksh.getMapStringCerts(ksAC);
         } catch (Exception e) {
             //
         }

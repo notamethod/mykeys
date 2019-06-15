@@ -6,9 +6,9 @@ import javax.swing.*;
 
 public interface IModelFactory {
 
-    public void removeAllElements();
+    void removeAllElements();
 
-    public void addElement(ChildInfo ci);
+    void addElement(ChildInfo ci);
 
     void refresh();
 }

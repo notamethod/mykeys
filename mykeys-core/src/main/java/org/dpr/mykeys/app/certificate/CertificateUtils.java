@@ -26,7 +26,7 @@ public class CertificateUtils {
             }
         }
         if (isKeyUsage) {
-            return value.substring(1, value.length());
+            return value.substring(1);
         } else {
             return null;
         }
@@ -58,7 +58,7 @@ public class CertificateUtils {
         }
 
         if (!value.isEmpty()) {
-            return value.substring(1, value.length());
+            return value.substring(1);
         } else {
             return null;
         }
@@ -84,10 +84,7 @@ public class CertificateUtils {
     }
 
     public static boolean isKeyUsage(boolean[] keyUsage, int i) {
-        if (i < keyUsage.length && keyUsage[i])
-            return true;
-
-        return false;
+        return i < keyUsage.length && keyUsage[i];
 
     }
 
