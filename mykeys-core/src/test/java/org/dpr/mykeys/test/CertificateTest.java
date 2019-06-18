@@ -4,8 +4,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateBuilder;
+import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
+import org.dpr.mykeys.utils.ProviderUtil;
+
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
@@ -59,10 +61,10 @@ public class CertificateTest {
         certModel.setNotAfter(cal.getTime());
         CertificateValue certIssuer = new CertificateValue();
         certModel.setSubjectMap("CN=toto");
-        CertificateHelper certServ = new CertificateHelper(certModel);
+        CertificateBuilder certServ = new CertificateBuilder();
 
         try {
-            certServ.createCertificate(certModel, certModel);
+            certServ.generate(certModel, certModel, false);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);
@@ -85,7 +87,7 @@ public class CertificateTest {
         certModel.setNotBefore(new Date());
         certModel.setNotAfter(cal.getTime());
 
-        CertificateHelper certServ = new CertificateHelper(certModel);
+        CertificateCSRHelper certServ = new CertificateCSRHelper();
         KeyStoreHelper ksh = new KeyStoreHelper();
         CertificateValue certIssuer = ksh.findCertificateAndPrivateKeyByAlias(getStoreAC(), AC_NAME);
         try {

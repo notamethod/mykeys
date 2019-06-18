@@ -5,8 +5,8 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
-import org.dpr.mykeys.app.certificate.CertificateUtils;
+import org.dpr.mykeys.app.certificate.CertificateBuilder;
+import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -196,7 +196,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                     fillCertInfo();
                     X509Certificate[] xCerts = null;
 
-                    CertificateHelper cm = new CertificateHelper(certInfo);
+                    CertificateBuilder cm = new CertificateBuilder();
                     KeyTools ktools = new KeyTools();
                     KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
                     //FIXME
@@ -204,7 +204,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                     if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
                         issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 
-                    CertificateValue newCertificate = cm.createCertificate(isAC, issuer);
+                    CertificateValue newCertificate = cm.generate(certInfo, issuer, isAC).getValue();
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);
 

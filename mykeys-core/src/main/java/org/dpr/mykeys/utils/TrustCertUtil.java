@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.utils;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -137,7 +137,6 @@ class TrustCertUtil {
     /**
      * Vérification chaine de certificats.
      *
-     * @param password
      * @param anchors
      * @param certs
      * @param crls
@@ -284,7 +283,6 @@ class TrustCertUtil {
     /**
      * Récupère les AC reconnues à partir d'un Stream.
      *
-     * @param is               le inputStream à lire
      * @param securityProvider
      * @throws GeneralSecurityException
      */

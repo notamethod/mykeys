@@ -8,9 +8,8 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.ihm.windows.CertificateHelperNew;
+import org.dpr.mykeys.app.certificate.CertificateHelperNew;
 import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
-import org.dpr.mykeys.ihm.windows.certificate.ExportCertificateDialog;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;

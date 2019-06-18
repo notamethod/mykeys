@@ -4,8 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
-import org.dpr.mykeys.app.X509Util;
-import org.dpr.mykeys.app.certificate.CertificateUtils;
+import org.dpr.mykeys.utils.KeystoreUtils;
+import org.dpr.mykeys.utils.X509Util;
+import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.utils.ActionStatus;
 
@@ -407,14 +408,11 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
      */
     public void addCertToKeyStore(KeyStoreValue ki, CertificateValue certificate, char[] password,
                                   char[] certificatePassword) throws ServiceException {
-
-
             if (password != null)
                 ki.setPassword(password);
             if (certificatePassword != null)
                 certificate.setPassword(certificatePassword);
         MkKeystore mks = MkKeystore.getInstance(ki.getStoreFormat());
-
         mks.addCert(ki, certificate);
         ki.getCertificates().add(certificate);
     }
@@ -438,7 +436,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
             Certificate certificate = ks.getCertificate(alias);
             //mk3 is a special CA: let it different for now
-            if (certificate != null && certificate instanceof X509Certificate) {
+            if (certificate instanceof X509Certificate) {
                 String sn0 = X509Util.toHexString(((X509Certificate) certificate).getSerialNumber(), " ", true);
                 if (MK3_SN.equals(sn0.trim())) {
                     password = store.getPassword();

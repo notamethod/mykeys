@@ -86,23 +86,7 @@ public class CertificateBuilder extends KeyTools {
 	 * @return
 	 * @throws Exception
 	 */
-	// public X509Certificate[] genererX509(CertificateInfo certInfo, String
-	// aliasEmetteur, boolean isAC)
-	// throws Exception {
-	//
-	// KeyStoreValue ksInfo = null;
-	// if (!StringUtils.isBlank(aliasEmetteur)) {
-	// char[] password = KSConfig.getInternalKeystores().getPassword().toCharArray();
-	// ksInfo = KSConfig.getInternalKeystores().getACKeystore();
-	//
-	//
-	//
-	// infoEmetteur.setPrivateKey((PrivateKey) ks.getKey(aliasEmetteur, password));
-	// return genererX509CodeSigning(certInfo, infoEmetteur, isAC);
-	// } else {
-	// return genererX509(certInfo, certInfo, isAC);
-	// }
-	// }
+
 
 	@SuppressWarnings("deprecation")
 	private CertificateValue genererX509(CertificateValue certModel, CertificateValue certIssuer, boolean isAC)
@@ -289,7 +273,7 @@ public class CertificateBuilder extends KeyTools {
 
 		cert.verify(certIssuer.getPublicKey());
 		X509Certificate[] certChain = null;
-		// FIXME: g�rer la chaine de l'�metteur
+
 		if (certIssuer.getCertificate() != null) {
 			certChain = new X509Certificate[2];
 			certChain[0] = cert;
@@ -385,9 +369,12 @@ public class CertificateBuilder extends KeyTools {
 
 	}
 
-	public CertificateBuilder generate(CertificateValue certInfo, CertificateValue infoEmetteur, boolean isAC)
+	public CertificateBuilder generate(CertificateValue certInfo, CertificateValue issuer, boolean isAC)
 			throws Exception {
-		return generate(certInfo, infoEmetteur, isAC, Usage.DEFAULT);
+		if (issuer == null) {
+			issuer = certInfo;
+		}
+		return generate(certInfo, issuer, isAC, Usage.DEFAULT);
 
 	}
 

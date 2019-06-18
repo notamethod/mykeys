@@ -20,7 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.mykeys.ihm.windows.CreateUserDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.SelectUserDialog;

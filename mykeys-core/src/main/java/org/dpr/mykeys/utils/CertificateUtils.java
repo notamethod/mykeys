@@ -1,7 +1,8 @@
-package org.dpr.mykeys.app.certificate;
+package org.dpr.mykeys.utils;
 
 import org.dpr.mykeys.app.KeyUsageEnum;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.app.certificate.CertificateValue;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -14,7 +15,7 @@ public class CertificateUtils {
     Map<Integer, String> mapKeyUSage = new HashMap<>();
 
     public static String keyUsageToString(boolean[] keyUsage) {
-        String value = "";
+        StringBuilder value = new StringBuilder();
         boolean isKeyUsage = false;
         if (keyUsage == null) {
             return "null";
@@ -22,7 +23,7 @@ public class CertificateUtils {
         for (int i = 0; i < keyUsage.length; i++) {
             if (keyUsage[i]) {
                 isKeyUsage = true;
-                value = value + ", " + X509Constants.keyUsageLabel[i];
+                value.append(", ").append(X509Constants.keyUsageLabel[i]);
             }
         }
         if (isKeyUsage) {
@@ -49,15 +50,15 @@ public class CertificateUtils {
     }
 
     public static String keyUsageToString(int keyUsage) {
-        String value = "";
+        StringBuilder value = new StringBuilder();
         boolean isKeyUsage = false;
 
         for (KeyUsageEnum usage : KeyUsageEnum.values()) {
             if ((keyUsage & usage.getIntValue()) == usage.getIntValue())
-                value = value + ", " + usage.getLabel();
+                value.append(", ").append(usage.getLabel());
         }
 
-        if (!value.isEmpty()) {
+        if (value.length() > 0) {
             return value.substring(1);
         } else {
             return null;

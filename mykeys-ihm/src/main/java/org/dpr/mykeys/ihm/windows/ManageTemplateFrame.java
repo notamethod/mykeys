@@ -6,7 +6,6 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.app.profile.ProfileServices;
-import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.model.ProfileModel;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.utils.DialogUtil;

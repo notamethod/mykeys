@@ -17,7 +17,8 @@ import org.bouncycastle.operator.DefaultAlgorithmNameFinder;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.utils.X509Util;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.GeneralSecurityException;

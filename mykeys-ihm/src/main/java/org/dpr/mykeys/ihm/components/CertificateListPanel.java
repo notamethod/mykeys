@@ -16,7 +16,6 @@ import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
 import org.dpr.mykeys.ihm.windows.IhmException;
 import org.dpr.mykeys.ihm.windows.certificate.*;
-import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.template.CreateTemplateDialog;
 import org.dpr.mykeys.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
@@ -284,8 +283,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     public void showExportCertificatesFrame(NodeInfo info, List selectedValuesList) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         JFrame frame = (JFrame) this.getTopLevelAncestor();
-        List<CertificateValue> certificates = new ArrayList<>();
-        certificates.addAll(selectedValuesList);
+        List<CertificateValue> certificates = new ArrayList<>(selectedValuesList);
         ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);

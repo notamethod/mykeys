@@ -5,9 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.app.certificate.CertificateBuilder;
+import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.mykeys.app.TamperedWithException;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.junit.BeforeClass;
@@ -226,11 +227,11 @@ public class TestKeystore {
         certModel.setNotBefore(new Date());
         certModel.setNotAfter(cal.getTime());
         CertificateValue certIssuer = new CertificateValue();
-        CertificateHelper certServ = new CertificateHelper(certModel);
+        CertificateBuilder certServ = new CertificateBuilder();
 
         CertificateValue retValue = null;
         try {
-            retValue = certServ.createCertificate(certModel, certModel);
+            retValue = certServ.generate(certModel, certModel, false).getValue();
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);

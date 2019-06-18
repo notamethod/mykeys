@@ -1,7 +1,8 @@
-package org.dpr.mykeys.app.keystore;
+package org.dpr.mykeys.utils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.keystore.StoreFormat;
 
 public class KeystoreUtils {
     public static final String KSTYPE_EXT_JKS = "jks";

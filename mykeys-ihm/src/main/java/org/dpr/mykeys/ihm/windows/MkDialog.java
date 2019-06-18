@@ -1,11 +1,8 @@
 package org.dpr.mykeys.ihm.windows;
 
-import org.dpr.mykeys.Messages;
-
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
-import java.util.Map;
 
 public class MkDialog extends JDialog {
 

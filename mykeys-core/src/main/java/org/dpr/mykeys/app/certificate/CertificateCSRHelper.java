@@ -16,9 +16,6 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 
 import java.io.*;
@@ -27,106 +24,18 @@ import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
-public class CertificateHelper {
+public class CertificateCSRHelper {
 
 
     private static final int CSR_VALIDITY = 365;
     private static final String CSR_SIGN_ALGORITHM = "SHA256withRSA";
-    private static final Log log = LogFactory.getLog(CertificateHelper.class);
-    KeyTools ktool;
-    private CertificateValue certInfo;
-
-    public CertificateHelper(CertificateValue certInfo) {
-        super();
-        this.certInfo = certInfo;
-    }
-
-    private CertificateHelper() {
-        super();
-    }
-
-    public CertificateValue createCertificate(CertificateValue issuer) throws CertificateException {
-
-        return createCertificate(false, issuer);
-    }
-
-    /**
-     * @param isAC   true is is an CA
-     * @param issuer certificate issuer
-     * @return
-     * @throws CertificateException
-     */
-    public CertificateValue createCertificate(boolean isAC, CertificateValue issuer) throws CertificateException {
-
-        CertificateBuilder builder = new CertificateBuilder();
-        try {
-
-            if (issuer == null) {
-                issuer = certInfo;
-            }
-            return builder.generate(certInfo, issuer, isAC).getValue();
-        } catch (Exception e) {
-            log.error(e);
-            throw new CertificateException(e);
-        }
-    }
-
-    public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer) throws CertificateException {
-
-        CertificateBuilder builder = new CertificateBuilder();
-        try {
-
-            if (issuer == null) {
-                issuer = certInfo;
-            }
-            return builder.generate(certModel, issuer, false).getValue();
-        } catch (Exception e) {
-            log.error(e);
-            throw new CertificateException(e);
-        }
-    }
-
-    public CertificateValue createCertificate(CertificateValue certModel, CertificateValue issuer, Usage usage) throws CertificateException {
-
-        CertificateBuilder builder = new CertificateBuilder();
-        try {
-
-            if (issuer == null) {
-                issuer = certInfo;
-            }
-            return builder.generate(certModel, issuer, false, usage).getValue();
-        } catch (Exception e) {
-            log.error(e);
-            throw new CertificateException(e);
-        }
-    }
+    private static final Log log = LogFactory.getLog(CertificateCSRHelper.class);
 
 
-    public String keyUsageToString() {
-        String value = "";
-        boolean[] keyUsage = certInfo.getKeyUsage();
-        boolean isKeyUsage = false;
-        if (keyUsage == null) {
-            return "null";
-        }
-        for (int i = 0; i < keyUsage.length; i++) {
-            if (keyUsage[i]) {
-                isKeyUsage = true;
-                value = value + ", " + X509Constants.keyUsageLabel[i];
-            }
-        }
-        if (isKeyUsage) {
-            return value.substring(1);
-        } else {
-            return null;
-        }
-
-    }
 
     /**
      * Generate a X509 certificate from CSR file

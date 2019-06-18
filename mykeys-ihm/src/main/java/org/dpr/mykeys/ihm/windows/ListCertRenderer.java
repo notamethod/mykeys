@@ -25,11 +25,6 @@ public class ListCertRenderer extends DefaultListCellRenderer {
 	 * 
 	 * <BR>
 	 * 
-	 * @param arg0
-	 * @param arg1
-	 * @param arg2
-	 * @param arg3
-	 * @param arg4
 	 * @return
 	 * 
 	 * @see javax.swing.DefaultListCellRenderer#getListCellRendererComponent(javax.swing.JList,

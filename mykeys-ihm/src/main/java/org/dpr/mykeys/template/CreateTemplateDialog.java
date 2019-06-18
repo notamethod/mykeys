@@ -2,7 +2,7 @@ package org.dpr.mykeys.template;
 
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateUtils;
+import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;

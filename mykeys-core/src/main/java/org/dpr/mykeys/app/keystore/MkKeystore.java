@@ -1,10 +1,7 @@
 package org.dpr.mykeys.app.keystore;
 
-import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.util.List;
 

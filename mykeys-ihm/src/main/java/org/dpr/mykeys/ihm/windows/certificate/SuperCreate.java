@@ -5,9 +5,9 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
-import org.dpr.mykeys.app.ProviderUtil;
+import org.dpr.mykeys.app.certificate.CertificateBuilder;
+import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -294,7 +294,7 @@ public class SuperCreate extends JDialog implements ItemListener {
 
                     KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
                     certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
-                    CertificateHelper certServ = new CertificateHelper(certInfo);
+                    CertificateBuilder certServ = new CertificateBuilder();
 
                     if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
                         ksAC = ksInfo;
@@ -308,7 +308,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                         if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
                             inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
                     }
-                    CertificateValue newCertificate = certServ.createCertificate(isAC, inIssuer);
+                    CertificateValue newCertificate = certServ.generate(certInfo, inIssuer, isAC).getValue();
 
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);

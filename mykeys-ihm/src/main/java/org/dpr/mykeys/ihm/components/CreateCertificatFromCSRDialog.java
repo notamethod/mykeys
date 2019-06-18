@@ -23,7 +23,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -120,7 +120,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
                     DialogUtil.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
 					return;
 				}
-				CertificateHelper cm = new CertificateHelper(certInfo);
+				CertificateCSRHelper cm = new CertificateCSRHelper();
                 KeyStoreHelper kserv = new KeyStoreHelper();
 				try (InputStream is = new FileInputStream(tfDirectory.getText())) {
                     // load issuer

@@ -17,16 +17,12 @@
 package org.dpr.mykeys.ihm.model;
 
 
-import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.utils.X509Util;
 import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.security.cert.X509CRLEntry;
 import java.util.ArrayList;
 import java.util.List;
 

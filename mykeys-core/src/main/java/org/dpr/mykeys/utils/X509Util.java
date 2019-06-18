@@ -1,4 +1,4 @@
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.utils;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
@@ -48,17 +48,17 @@ public class X509Util {
     }
 
     public static String toHexString(byte[] b, String separator, boolean upperCase) {
-        String retour = "";
+        StringBuilder retour = new StringBuilder();
         char[] car = Hex.encodeHex(b);
         for (int i = 0; i < car.length; i = i + 2) {
-            retour += String.valueOf(car[i]);
-            retour += String.valueOf(car[i + 1]);
-            retour += separator;
+            retour.append(String.valueOf(car[i]));
+            retour.append(String.valueOf(car[i + 1]));
+            retour.append(separator);
         }
         if (upperCase) {
-            return retour.toUpperCase();
+            return retour.toString().toUpperCase();
         } else {
-            return retour.toLowerCase();
+            return retour.toString().toLowerCase();
         }
     }
 

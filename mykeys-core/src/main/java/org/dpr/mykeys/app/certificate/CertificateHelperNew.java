@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.windows;
+package org.dpr.mykeys.app.certificate;
 
 import java.math.BigInteger;
 import java.security.*;
@@ -15,8 +15,7 @@ import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.dpr.mykeys.app.ProviderUtil;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.mykeys.app.CertificateType;
 
 public class CertificateHelperNew {

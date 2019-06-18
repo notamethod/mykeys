@@ -7,7 +7,6 @@ import org.dpr.mykeys.app.AuthenticationService;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.model.UserModel;
 import org.dpr.mykeys.utils.DialogUtil;
 

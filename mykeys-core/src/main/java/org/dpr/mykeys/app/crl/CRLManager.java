@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.*;
-import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
@@ -21,7 +20,7 @@ import org.bouncycastle.jce.provider.X509CertificateObject;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
-import org.dpr.mykeys.app.X509Util;
+import org.dpr.mykeys.utils.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
 
@@ -197,8 +196,6 @@ public class CRLManager {
 	 * 
 	 * @param date
 	 *            : date sur laquelle tester la validité
-	 * @param crlFile
-	 *            : fichier de crl
 	 * @return
 	 * @throws CRLException
 	 * @throws NoSuchProviderException
@@ -367,7 +364,6 @@ public class CRLManager {
 	 * du champCN de l'AC].crl
 	 * 
 	 * 
-	 * @param certificate
 	 * @return
 	 */
 	@Deprecated
@@ -388,7 +384,6 @@ public class CRLManager {
 	 * du champCN de l'AC].crl
 	 * 
 	 * 
-	 * @param certificate
 	 * @return
 	 */
     @Deprecated

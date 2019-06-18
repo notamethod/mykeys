@@ -42,7 +42,6 @@ class CertListModel implements ListModel {
 	 * .
 	 * 
 	 * 
-	 * @param arg0
 	 * @return
 	 * 
 	 * @see javax.swing.ListModel#getElementAt(int)

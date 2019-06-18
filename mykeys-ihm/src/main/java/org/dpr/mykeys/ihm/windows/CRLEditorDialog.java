@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.windows;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
@@ -25,7 +26,7 @@ import java.util.Date;
 public class CRLEditorDialog extends JDialog {
     private final static Log log = LogFactory.getLog(CRLEditorDialog.class);
     private final CRLEntryModel model;
-    private JPanel contentPane1;
+    private JPanel contentPane0;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JButton exporterButton;
@@ -35,19 +36,25 @@ public class CRLEditorDialog extends JDialog {
     private JLabel validityPeriodLabel;
     private CertificateValue certificate;
     private CRLService service;
+    private File crlFile;
     CRLState state;
 
     public CRLEditorDialog(CertificateValue certificate) {
 
         this.certificate = certificate;
         service = new CRLService(certificate);
-        setContentPane(contentPane1);
+        setContentPane(contentPane0);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
+            }
+        });
+        exporterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onExport();
             }
         });
 
@@ -66,7 +73,7 @@ public class CRLEditorDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane1.registerKeyboardAction(new ActionListener() {
+        contentPane0.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
@@ -81,7 +88,6 @@ public class CRLEditorDialog extends JDialog {
                 addCertificate();
             }
         });
-
     }
 
     private void addCertificate() {
@@ -107,6 +113,24 @@ public class CRLEditorDialog extends JDialog {
                 service.saveCRL(value.getThisUpdate(), value.getNextUpdate(), ((CRLEntryModel) table1.getModel()).getValues());
             } catch (CRLException | ServiceException e) {
                 e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        dispose();
+    }
+
+    private void onExport() {
+        JFileChooser jfc = new JFileChooser();
+        // the first, only, and selected filter is 'All Files'
+
+        // jfc.setSelectedFile(outputFile);
+        // jPanel1.add(jfc);
+        if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+            String fileExport = jfc.getSelectedFile().getAbsolutePath();
+            try {
+                FileUtils.copyFile(crlFile, new File(fileExport));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -150,6 +174,7 @@ public class CRLEditorDialog extends JDialog {
                 }
             }
             validityPeriodLabel.setText(Messages.getString("crl.validity.period", crl.getThisUpdate(), crl.getNextUpdate()));
+            crlFile = f;
         } catch (FileNotFoundException e) {
             log.info("crl does not exist yet !");
             state = CRLState.NEW;

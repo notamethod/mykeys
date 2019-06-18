@@ -27,11 +27,6 @@ public class CertificateCreateFactory {
         //return null;
     }
 
-    public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, CertificateValue issuer, boolean acceptAC) throws CancelCreationException {
-        return new CreateCertificatDialog(owner, info, issuer,
-                true);
-    }
-
     public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, CertificateValue issuer, CertificateType certificateType) throws CancelCreationException {
         switch (certificateType) {
             case STANDARD:

@@ -138,7 +138,6 @@ public class ImportCertificateDialog extends JDialog {
 					kserv.importX509CertToJks(alias, value,
 							((String) elements.get("pwd1")).toCharArray());
 
-					// ((MykeysFrame)ImportCertificateDialog.this.getParent()).updateKeyStoreList();
 					ImportCertificateDialog.this.setVisible(false);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

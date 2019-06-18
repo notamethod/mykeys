@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileFilter;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeystoreUtils;
+import org.dpr.mykeys.utils.KeystoreUtils;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;

@@ -2,7 +2,6 @@ package org.dpr.mykeys.ihm.components;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.util.EventListener;
 import java.util.List;

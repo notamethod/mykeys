@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NonNls;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -72,33 +71,33 @@ public class SubjectUtil {
     //x509.policynotice
 
     public static String toHexString(byte[] b, String separator, boolean upperCase) {
-        String retour = "";
+        StringBuilder retour = new StringBuilder();
         char[] car = Hex.encodeHex(b);
         for (int i = 0; i < car.length; i = i + 2) {
-            retour += String.valueOf(car[i]);
-            retour += String.valueOf(car[i + 1]);
-            retour += separator;
+            retour.append(String.valueOf(car[i]));
+            retour.append(String.valueOf(car[i + 1]));
+            retour.append(separator);
         }
         if (upperCase) {
-            return retour.toUpperCase();
+            return retour.toString().toUpperCase();
         } else {
-            return retour.toLowerCase();
+            return retour.toString().toLowerCase();
         }
     }
 
     public static String toHexString(BigInteger bi, String separator, boolean upperCase) {
-        String retour = "";
+        StringBuilder retour = new StringBuilder();
         String converted = bi.toString(16);
         char[] charArray = converted.toCharArray();
         for (int i = 0; i < charArray.length - 1; i = i + 2) {
-            retour += String.valueOf(charArray[i]);
-            retour += String.valueOf(charArray[i + 1]);
-            retour += separator;
+            retour.append(String.valueOf(charArray[i]));
+            retour.append(String.valueOf(charArray[i + 1]));
+            retour.append(separator);
         }
         if (upperCase) {
-            return retour.toUpperCase();
+            return retour.toString().toUpperCase();
         } else {
-            return retour.toLowerCase();
+            return retour.toString().toLowerCase();
         }
     }
 

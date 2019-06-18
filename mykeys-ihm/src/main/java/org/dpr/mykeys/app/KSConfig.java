@@ -15,6 +15,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.StoreModel;
+import org.dpr.mykeys.utils.X509Util;
 
 import javax.swing.filechooser.FileSystemView;
 
