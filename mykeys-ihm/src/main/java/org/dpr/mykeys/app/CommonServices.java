@@ -18,11 +18,6 @@ import org.dpr.mykeys.app.keystore.*;
  */
 public class CommonServices {
 
-    public void exportCert(KeyStoreValue ksInfo, StoreFormat pkcs12, String path, char[] password,
-                           CertificateValue certInfo, boolean isExportCle) throws Exception {
-		exportCert(ksInfo, pkcs12, path, password, certInfo, isExportCle, null);
-
-	}
 
     public void exportCert(KeyStoreValue ksInfoIn, StoreFormat storeFormat, String path, char[] passwordExport,
                            CertificateValue certInfo, boolean isExportCle, char[] privKeyPwd) throws Exception {

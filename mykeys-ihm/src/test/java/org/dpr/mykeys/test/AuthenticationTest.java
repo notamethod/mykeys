@@ -28,8 +28,6 @@ public class AuthenticationTest {
 
     private static final String AC_NAME = "mykeys root ca 2";
 
-    private KeyTools ktools = new KeyTools();
-
     @BeforeClass
     public static void init() {
 

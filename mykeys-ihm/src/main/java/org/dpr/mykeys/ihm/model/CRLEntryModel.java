@@ -26,7 +26,6 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("SpellCheckingInspection")
 public class CRLEntryModel extends AbstractTableModel {
 
     private List<CRLEntry> certificates = new ArrayList<>();

@@ -32,25 +32,6 @@ public class ProfileServices
         this.profilPath = profilPath;
     }
 
-    public void saveToFile(Map<String, Object> elements, String name) throws ProfilException, IOException {
-        if (StringUtils.isBlank(name)) {
-            throw new ProfilException("nom obligatoire");
-        }
-        File profDir = new File(profilPath);
-        if (!profDir.exists()) {
-            profDir.mkdirs();
-        }
-        File f = new File(profDir, name + PROFIL_EXTENSION);
-        if (f.exists()) {
-            throw new ProfilException("Le profil existe d�j�");
-        }
-        Properties p = new Properties();
-        for (Map.Entry<String, Object> entry : elements.entrySet()) {
-            p.setProperty(entry.getKey(), (String) entry.getValue());
-        }
-        p.store(new FileOutputStream(f), "");
-    }
-
     public Properties loadProfile(String name) throws ProfilException {
         File f = new File(profilPath, name + PROFIL_EXTENSION);
 

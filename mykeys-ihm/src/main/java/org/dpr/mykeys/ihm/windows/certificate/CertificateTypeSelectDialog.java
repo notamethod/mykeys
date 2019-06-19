@@ -99,12 +99,7 @@ public class CertificateTypeSelectDialog extends JDialog {
         button2.setSelected(false);
         button2.setName(CertificateType.AC.toString());
         button2.addChangeListener(changeListener);
-//        final JRadioButton button2 = new JRadioButton("Serveur");
-//        button2.setName(CertificateType.SERVER.toString());
-//        final JRadioButton button3 = new JRadioButton("Signature de code");
-//        button3.setName(CertificateType.CODE_SIGNING.toString());
-//        button2.addChangeListener(changeListener);
-//        button3.addChangeListener(changeListener);
+
         ButtonGroup vanillaOrMod = new ButtonGroup();
         vanillaOrMod.add(button1);
         vanillaOrMod.add(button2);
