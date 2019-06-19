@@ -414,7 +414,6 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                 certificate.setPassword(certificatePassword);
         MkKeystore mks = MkKeystore.getInstance(ki.getStoreFormat());
         mks.addCert(ki, certificate);
-        ki.getCertificates().add(certificate);
     }
 
     public CertificateValue findCertificateAndPrivateKeyByAlias(KeyStoreValue store, String alias) throws

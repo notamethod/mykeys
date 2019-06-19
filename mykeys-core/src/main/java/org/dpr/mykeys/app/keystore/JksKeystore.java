@@ -30,6 +30,10 @@ public class JksKeystore implements MkKeystore {
 
                 ksValue.setKeystore(loadKeyStore(ksValue.getPath(), ksValue.getStoreFormat(), ksValue.getPassword()));
             }
+            List<CertificateValue> certs = getCertificates(ksValue);
+
+            if (certificateInfo != null)
+                certs.remove(certificateInfo);
             ksValue.getKeystore().deleteEntry(certificateInfo.getAlias());
             saveKeyStore(ksValue.getKeystore(), ksValue.getPath(), ksValue.getPassword());
 
@@ -111,6 +115,7 @@ public class JksKeystore implements MkKeystore {
     public void saveKeyStore(KeyStore ks, String path, char[] password) throws KeyToolsException {
 
         try {
+            ks.aliases();
             OutputStream fos = new FileOutputStream(new File(path));
             ks.store(fos, password);
             fos.close();
