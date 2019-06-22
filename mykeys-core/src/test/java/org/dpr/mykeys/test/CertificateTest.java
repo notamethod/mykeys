@@ -3,15 +3,15 @@ package org.dpr.mykeys.test;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.KeyTools;
-import org.dpr.mykeys.app.certificate.CertificateBuilder;
 import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
-import org.dpr.mykeys.utils.ProviderUtil;
-
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.utils.ProviderUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -61,10 +61,10 @@ public class CertificateTest {
         certModel.setNotAfter(cal.getTime());
         CertificateValue certIssuer = new CertificateValue();
         certModel.setSubjectMap("CN=toto");
-        CertificateBuilder certServ = new CertificateBuilder();
+        CertificateHelper certServ = new CertificateHelper();
 
         try {
-            certServ.generate(certModel, certModel, false);
+            certServ.generate(certModel, certModel, CertificateType.STANDARD);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);

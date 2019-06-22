@@ -5,8 +5,7 @@ import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateBuilder;
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -15,6 +14,7 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
+import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingtools.FrameModel;
@@ -196,7 +196,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                     fillCertInfo();
                     X509Certificate[] xCerts = null;
 
-                    CertificateBuilder cm = new CertificateBuilder();
+                    CertificateHelper cm = new CertificateHelper();
                     KeyTools ktools = new KeyTools();
                     KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
                     //FIXME
@@ -204,7 +204,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                     if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
                         issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 
-                    CertificateValue newCertificate = cm.generate(certInfo, issuer, isAC).getValue();
+                    CertificateValue newCertificate = cm.generate(certInfo, issuer, typeCer);
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);
 

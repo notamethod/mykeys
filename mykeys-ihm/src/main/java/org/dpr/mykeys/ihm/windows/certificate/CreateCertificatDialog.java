@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.windows.certificate;
 
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.ihm.CancelCreationException;
@@ -29,6 +30,14 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
         this.pack();
         //this.setVisible(true);
 
+    }
+
+    public CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo, CertificateValue issuer, boolean modal, CertificateType certificateType) throws CancelCreationException {
+        super(owner, modal);
+        this.ksInfo = ksInfo;
+        this.typeCer = certificateType;
+        init(issuer);
+        this.pack();
     }
 
     public static void main(String[] args) throws CancelCreationException {

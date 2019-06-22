@@ -3,14 +3,14 @@ package org.dpr.mykeys.test;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.certificate.CertificateBuilder;
-import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.mykeys.app.TamperedWithException;
-import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.utils.ProviderUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.*;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
 import java.security.cert.CertificateException;
 import java.util.*;
 
@@ -227,11 +230,11 @@ public class TestKeystore {
         certModel.setNotBefore(new Date());
         certModel.setNotAfter(cal.getTime());
         CertificateValue certIssuer = new CertificateValue();
-        CertificateBuilder certServ = new CertificateBuilder();
+        CertificateHelper certServ = new CertificateHelper();
 
         CertificateValue retValue = null;
         try {
-            retValue = certServ.generate(certModel, certModel, false).getValue();
+            retValue = certServ.generate(certModel, certModel, CertificateType.STANDARD);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);

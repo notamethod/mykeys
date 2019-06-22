@@ -21,6 +21,7 @@ import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.utils.X509Util;
 import org.jetbrains.annotations.NotNull;
 
+import javax.security.auth.x500.X500Principal;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
@@ -28,6 +29,9 @@ import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable {
@@ -339,26 +343,32 @@ public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable 
         return freeSubject;
     }
 
-    public X500Name subjectMapToX509Name() {
+    public X500Name subjectMapToX500Name() {
         X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
+
         Set setKey = subjectMap.keySet();
         for (Object aSetKey : setKey) {
             String key = (String) aSetKey;
             String value = subjectMap.get(key);
-            Object oidKey = X509Name.DefaultLookUp.get(key.toLowerCase());
-            DefaultAlgorithmNameFinder a;
-            if (oidKey != null && value != null && !value.equals("")) {
-
-                nameBuilder.addRDN((ASN1ObjectIdentifier) oidKey, subjectMap.get(key));
-                // i++;
-            } else {
+            Object oidKey = null;
+            try {
+                oidKey = BCStyle.INSTANCE.attrNameToOID(key.toLowerCase());
+                if (oidKey != null && value != null && !value.equals("")) {
+                    nameBuilder.addRDN((ASN1ObjectIdentifier) oidKey, subjectMap.get(key));
+                    // i++;
+                } else {
+                    log.error("No OID: " + key);
+                }
+            } catch (Exception e) {
                 log.error("No OID: " + key);
             }
+
         }
         return nameBuilder.build();
     }
 
-    public X500Name freeSubjectToX509Name() {
+
+    public X500Name freeSubjectToX500Name() {
         return new X500Name(freeSubject);
     }
     /**
@@ -749,4 +759,29 @@ public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable 
     public int compareTo(@NotNull CertificateValue o) {
         return this.getSubjectString().compareTo(o.getSubjectString());
     }
+
+    public Date getFrom() {
+
+        if (getDuration() > 0 || null == getNotBefore()) {
+            return new Date();
+
+        } else {
+            return getNotBefore();
+
+        }
+
+    }
+
+    public Date getTo() {
+
+        if (getDuration() > 0) {
+
+            LocalDateTime ldt = LocalDateTime.ofInstant(getNotBefore().toInstant(), ZoneId.systemDefault());
+            ZonedDateTime zdt = ldt.plusYears(getDuration()).atZone(ZoneId.systemDefault());
+            notAfter = Date.from(zdt.toInstant());
+        }
+        return notAfter;
+
+    }
+
 }

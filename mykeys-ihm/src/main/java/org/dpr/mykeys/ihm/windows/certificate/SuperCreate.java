@@ -3,11 +3,11 @@ package org.dpr.mykeys.ihm.windows.certificate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
-import org.dpr.mykeys.app.certificate.CertificateBuilder;
-import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.mykeys.app.X509Constants;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -15,8 +15,8 @@ import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
-import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.utils.DialogUtil;
+import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.swingtools.components.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
@@ -27,17 +27,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class SuperCreate extends JDialog implements ItemListener {
 
     protected static final Log log = LogFactory.getLog(SuperCreate.class);
     protected KeyStoreValue ksInfo;
     protected boolean isAC = false;
+
     LabelValuePanel infosPanel;
     CertificateValue certInfo = new CertificateValue();
-    private CertificateType typeCer;
+    protected CertificateType typeCer;
     private LabelValuePanel durationPanel;
     private CertificateValue issuer;
     protected List<JCheckBox> keyUsageCheckBoxes = new ArrayList<>();
@@ -71,7 +72,9 @@ public class SuperCreate extends JDialog implements ItemListener {
     }
 
     protected CertificateType getCertificateType() {
-        return CertificateType.STANDARD;
+        if (typeCer == null)
+            return CertificateType.STANDARD;
+        return typeCer;
     }
 
     protected void init(CertificateValue issuer) throws CancelCreationException {
@@ -294,7 +297,6 @@ public class SuperCreate extends JDialog implements ItemListener {
 
                     KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
                     certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
-                    CertificateBuilder certServ = new CertificateBuilder();
 
                     if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
                         ksAC = ksInfo;
@@ -308,7 +310,8 @@ public class SuperCreate extends JDialog implements ItemListener {
                         if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
                             inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
                     }
-                    CertificateValue newCertificate = certServ.generate(certInfo, inIssuer, isAC).getValue();
+                    CertificateHelper chn = new CertificateHelper();
+                    CertificateValue newCertificate = chn.generate(certInfo, inIssuer, typeCer);
 
                     if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                         newCertificate.setPassword(MkSession.password);

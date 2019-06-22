@@ -45,6 +45,6 @@ public class CertificateCreateFactory {
                 break;
         }
         return new CreateCertificatDialog(owner, info, issuer,
-                true);
+                true, certificateType);
     }
 }

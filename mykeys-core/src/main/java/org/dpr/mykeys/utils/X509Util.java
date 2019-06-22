@@ -41,8 +41,6 @@ public class X509Util {
             mapNames.put("C", "x509.subject.country");
             mapNames.put("L", "x509.subject.location");
             mapNames.put("ST", "x509.subject.street");
-
-
         }
         return mapNames;
     }

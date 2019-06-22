@@ -8,7 +8,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.app.certificate.CertificateHelperNew;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class AuthenticationService {
     private static final Log log = LogFactory
             .getLog(AuthenticationService.class);
     public void createUser(String id, char[] pwd) throws ServiceException {
-        CertificateHelperNew ch = new CertificateHelperNew();
+        CertificateHelper ch = new CertificateHelper();
         KeyStoreHelper kh = new KeyStoreHelper();
         CertificateValue cer;
         KeyStoreValue ki;

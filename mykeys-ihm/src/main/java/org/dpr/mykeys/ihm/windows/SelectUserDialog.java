@@ -6,7 +6,7 @@ import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.AuthenticationService;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.MkSession;
-import org.dpr.mykeys.app.certificate.CertificateHelperNew;
+import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
 import org.dpr.mykeys.utils.ComponentUtils;
@@ -168,7 +168,7 @@ public class SelectUserDialog extends MkDialog {
                 }
 
                 char[] pwdChar = pwd.toCharArray();
-                CertificateHelperNew ch = new CertificateHelperNew();
+                CertificateHelper ch = new CertificateHelper();
                 AuthenticationService auth = new AuthenticationService();
                 try {
                     auth.authenticateUSer(name, pwdChar);

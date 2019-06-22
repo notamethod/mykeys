@@ -47,8 +47,6 @@ public class CertificateCSRHelper {
      */
     public CertificateValue generateFromCSR(InputStream fic, CertificateValue issuer) throws ServiceException, IOException {
 
-        CertificateBuilder builder = new CertificateBuilder();
-
         X509Certificate[] certificates = null;
         CertificateValue cert = null;
         try {

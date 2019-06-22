@@ -92,22 +92,28 @@ public class CertificateTypeSelectDialog extends JDialog {
 
         final JRadioButton button1 = new JRadioButton("Client");
         button1.setSelected(true);
-        typeCer = CertificateType.STANDARD;
+
         button1.setName(CertificateType.STANDARD.toString());
         button1.addChangeListener(changeListener);
         final JRadioButton button2 = new JRadioButton("AC");
+
         button2.setSelected(false);
         button2.setName(CertificateType.AC.toString());
         button2.addChangeListener(changeListener);
-
+        final JRadioButton button3 = new JRadioButton("Code Signing");
+        button3.setSelected(false);
+        button3.setName(CertificateType.CODE_SIGNING.toString());
+        button3.addChangeListener(changeListener);
         ButtonGroup vanillaOrMod = new ButtonGroup();
         vanillaOrMod.add(button1);
         vanillaOrMod.add(button2);
+        vanillaOrMod.add(button3);
         //  vanillaOrMod.add(button3);
         panel1.add(button1);
         if (acAccepted)
             panel1.add(button2);
 //        contentPane.add(panel1);
+        panel1.add(button3);
         if (panel0 != null)
             panel0.add(panel1);
 
