@@ -3,6 +3,7 @@ package org.dpr.mykeys.app.keystore;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -65,15 +66,19 @@ public class KeystoreBuilder extends KeyTools {
         return keystore;
     }
 
-    public void addCertToKeyStoreNew(X509Certificate cert, KeyStoreValue ksInfo, CertificateValue certInfo)
+    public void addCertToKeyStoreNew(KeyStoreValue ksInfo, CertificateValue certInfo)
             throws KeyToolsException {
 
-        saveCertChain(keystore, cert, certInfo);
+        saveCertChain(keystore, certInfo);
         saveKeyStore(keystore, ksInfo);
     }
 
-    public void addCert(X509Certificate cert, KeyStoreValue ksInfo, CertificateValue certInfo) throws KeyToolsException {
-        saveCertChain(keystore, cert, certInfo);
+    public void addCertsToKeyStore(KeyStoreValue ksInfo, List<CertificateValue> certInfos)
+            throws KeyToolsException {
+
+        for (CertificateValue certificate : certInfos) {
+            saveCertChain(keystore, certificate);
+        }
         saveKeyStore(keystore, ksInfo);
     }
 
@@ -116,29 +121,6 @@ public class KeystoreBuilder extends KeyTools {
         }
         return certInfo.getAlias();
 
-    }
-
-    private void saveCertChain(KeyStore kstore, X509Certificate cert, CertificateValue certInfo)
-            throws KeyToolsException {
-        try {
-            // pas bonne chaine
-            // X509Certificate x509Cert = (X509Certificate) cert;
-
-            if (certInfo.getPrivateKey() == null) {
-                kstore.setCertificateEntry(certInfo.getAlias(), cert);
-            } else {
-                Certificate[] chaine;
-                if (certInfo.getCertificateChain() != null) {
-                    chaine = certInfo.getCertificateChain();
-                } else {
-                    chaine = new Certificate[]{cert};
-                }
-                kstore.setKeyEntry(certInfo.getAlias(), certInfo.getPrivateKey(), certInfo.getPassword(), chaine);
-            }
-
-        } catch (KeyStoreException e) {
-            throw new KeyToolsException("Sauvegarde du certificat impossible:" + certInfo.getAlias(), e);
-        }
     }
 
 

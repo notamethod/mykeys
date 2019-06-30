@@ -6,6 +6,9 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -22,7 +25,7 @@ public class JksKeystore implements MkKeystore {
     }
 
     @Override
-    public void removeCertificate(KeyStoreValue ksValue, CertificateValue certificateInfo) throws ServiceException {
+    public void removeCertificates(KeyStoreValue ksValue, List<CertificateValue> certificates) throws ServiceException {
 
         try {
 
@@ -32,9 +35,11 @@ public class JksKeystore implements MkKeystore {
             }
             List<CertificateValue> certs = getCertificates(ksValue);
 
-            if (certificateInfo != null)
-                certs.remove(certificateInfo);
-            ksValue.getKeystore().deleteEntry(certificateInfo.getAlias());
+            for (CertificateValue certificateInfo : certificates) {
+                if (certificateInfo != null)
+                    certs.remove(certificateInfo);
+                ksValue.getKeystore().deleteEntry(certificateInfo.getAlias());
+            }
             saveKeyStore(ksValue.getKeystore(), ksValue.getPath(), ksValue.getPassword());
 
         } catch (Exception e) {
@@ -43,7 +48,7 @@ public class JksKeystore implements MkKeystore {
     }
 
     @Override
-    public void savePrivateKey(PrivateKey privateKey, String fName) throws ServiceException {
+    public void savePrivateKey(PrivateKey privateKey, String fName, char[] pass) throws ServiceException {
 
     }
 
@@ -54,12 +59,33 @@ public class JksKeystore implements MkKeystore {
 
     @Override
     public void save(KeyStoreValue ksValue) throws ServiceException {
-        try (OutputStream fos = new FileOutputStream(new File(ksValue.getPath()))) {
-
-            getKeyStore(ksValue).store(fos, ksValue.getPassword());
-        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
-            throw new ServiceException("Echec de sauvegarde du magasin impossible:" + ksValue.getPath(), e);
+        File file = new File(ksValue.getPath());
+        KeyStore keystore = null;
+        if (!file.exists()) {
+            try {
+                keystore = create(ksValue.getPath(), ksValue.getPassword());
+            } catch (Exception e) {
+                throw new ServiceException("creating fail", e);
+            }
         }
+        addCerts(ksValue);
+
+    }
+
+    private KeyStore create(String name, char[] password) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
+        KeyStore keystore = KeyStore.getInstance(StoreFormat.JKS.toString());
+        Path path = Paths.get(name);
+        if (Files.exists(path)) {
+            throw new IOException("File already exists " + path.toString());
+        }
+        keystore.load(null, password);
+        OutputStream fos = new FileOutputStream(new File(name));
+        keystore.store(fos, password);
+        fos.close();
+        return keystore;
+
+
+
 
     }
 
@@ -107,7 +133,18 @@ public class JksKeystore implements MkKeystore {
             ksb.addCert(ksValue, certificate);
             ksValue.getCertificates().add(certificate);
         } catch (KeyToolsException e) {
-            e.printStackTrace();
+            throw new ServiceException("addCerts fail", e);
+        }
+
+    }
+
+    private void addCerts(KeyStoreValue ksValue) throws ServiceException {
+        KeyStore ks = loadKeyStore(ksValue.getPath(), ksValue.getStoreFormat(), ksValue.getPassword());
+        KeystoreBuilder ksb = new KeystoreBuilder(ks);
+        try {
+            ksb.addCerts(ksValue, ksValue.getCertificates());
+        } catch (KeyToolsException e) {
+            throw new ServiceException("addCerts fail", e);
         }
 
     }

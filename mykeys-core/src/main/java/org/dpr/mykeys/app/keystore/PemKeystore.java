@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PemKeystore implements MkKeystore {
+public class PemKeystore extends ClassicKeystore implements MkKeystore {
 
     private static final Log log = LogFactory.getLog(PemKeystore.class);
 
@@ -27,22 +27,6 @@ public class PemKeystore implements MkKeystore {
     public PemKeystore() {
     }
 
-    @Override
-    public void removeCertificate(KeyStoreValue ksValue, CertificateValue certificateInfo) throws ServiceException {
-
-        List<CertificateValue> certs = getCertificates(ksValue);
-            CertificateValue certToRemove = null;
-            for (CertificateValue cert : certs) {
-                if (certificateInfo.getName().equals(cert.getName())) {
-                    certToRemove = cert;
-                }
-            }
-            if (certToRemove != null)
-                certs.remove(certToRemove);
-        saveCertificates(ksValue, certs);
-
-
-    }
 
     public List<CertificateValue> getCertificates(KeyStoreValue ksValue)
             throws ServiceException {
@@ -100,7 +84,7 @@ public class PemKeystore implements MkKeystore {
         }
     }
 
-    public void savePrivateKey(PrivateKey privateKey, String fName)
+    public void savePrivateKey(PrivateKey privateKey, String fName, char[] pass)
             throws ServiceException {
 
         try {

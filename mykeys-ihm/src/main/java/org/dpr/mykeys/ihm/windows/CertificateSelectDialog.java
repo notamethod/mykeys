@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CertificateSelectDialog extends JDialog {
-    private JPanel contentPane0;
+    private JPanel contentPane1;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JComboBox comboBox1;
@@ -24,7 +24,7 @@ public class CertificateSelectDialog extends JDialog {
     Map<String, CertificateValue> certificateMap = new HashMap<>();
 
     public CertificateSelectDialog(List<CertificateValue> children) {
-        setContentPane(contentPane0);
+        setContentPane(contentPane1);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
@@ -49,7 +49,7 @@ public class CertificateSelectDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane0.registerKeyboardAction(new ActionListener() {
+        contentPane1.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }

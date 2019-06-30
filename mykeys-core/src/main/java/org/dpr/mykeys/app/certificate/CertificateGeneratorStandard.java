@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.*;
@@ -119,21 +118,23 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
 
 
         if (StringUtils.isNotBlank(certModel.getPolicyCPS())) {
-            PolicyQualifierInfo policyQualifierInfo = new PolicyQualifierInfo(certModel.getPolicyCPS());
-            PolicyInformation policyInformation = new PolicyInformation(PolicyQualifierId.id_qt_cps,
-                    new DERSequence(policyQualifierInfo));
-            ASN1EncodableVector certificatePolicies = new ASN1EncodableVector();
-            final UserNotice un = new UserNotice(null, new DisplayText(DisplayText.CONTENT_TYPE_UTF8STRING, certModel.getPolicyNotice()));
-            PolicyQualifierInfo not = new PolicyQualifierInfo(PolicyQualifierId.id_qt_unotice, un);
-            certificatePolicies.add(policyInformation);
-            certificatePolicies.add(not);
-            if (!certModel.getPolicyID().isEmpty()) {
-                PolicyInformation extraPolicyInfo = new PolicyInformation(new ASN1ObjectIdentifier(certModel.getPolicyID()),
-                        new DERSequence(new ASN1ObjectIdentifier("")));
-                certificatePolicies.add(extraPolicyInfo);
-            }
+            ASN1EncodableVector qualifiers = getPolicyInformation(certModel.getPolicyID(), certModel.getPolicyCPS(), certModel.getPolicyNotice());
+            certGen.addExtension(Extension.certificatePolicies, false, new DERSequence(qualifiers));
+//            PolicyQualifierInfo policyQualifierInfo = new PolicyQualifierInfo(certModel.getPolicyCPS());
+//            PolicyInformation policyInformation = new PolicyInformation(PolicyQualifierId.id_qt_cps,
+//                    new DERSequence(policyQualifierInfo));
+//            ASN1EncodableVector certificatePolicies = new ASN1EncodableVector();
+//            final UserNotice un = new UserNotice(null, new DisplayText(DisplayText.CONTENT_TYPE_UTF8STRING, certModel.getPolicyNotice()));
+//            PolicyQualifierInfo not = new PolicyQualifierInfo(PolicyQualifierId.id_qt_unotice, un);
+//            certificatePolicies.add(policyInformation);
+//            certificatePolicies.add(not);
+//            if (!certModel.getPolicyID().isEmpty()) {
+//                PolicyInformation extraPolicyInfo = new PolicyInformation(new ASN1ObjectIdentifier(certModel.getPolicyID()),
+//                        new DERSequence(new ASN1ObjectIdentifier("")));
+//                certificatePolicies.add(extraPolicyInfo);
+//            }
 
-            certGen.addExtension(Extension.certificatePolicies, false, new DERSequence(certificatePolicies));
+
         }
 
         // gen.addExtension(X509Extensions.ExtendedKeyUsage, true,
@@ -190,5 +191,29 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
 
     }
 
+
+    private ASN1EncodableVector getPolicyInformation(String policyOID, String cps, String unotice) {
+
+        ASN1EncodableVector qualifiers = new ASN1EncodableVector();
+
+        if (!StringUtils.isEmpty(unotice)) {
+            UserNotice un = new UserNotice(null, new DisplayText(DisplayText.CONTENT_TYPE_BMPSTRING, unotice));
+            PolicyQualifierInfo pqiUNOTICE = new PolicyQualifierInfo(PolicyQualifierId.id_qt_unotice, un);
+            qualifiers.add(pqiUNOTICE);
+        }
+        if (!StringUtils.isEmpty(cps)) {
+
+            PolicyQualifierInfo pqiCPS = new PolicyQualifierInfo(cps);
+            PolicyInformation policyInformation = new PolicyInformation(PolicyQualifierId.id_qt_cps,
+                    new DERSequence(pqiCPS));
+            qualifiers.add(pqiCPS);
+        }
+
+//		PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier(policyOID),
+//				new DERSequence(qualifiers));
+
+        return qualifiers;
+
+    }
 
 }

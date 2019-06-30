@@ -128,9 +128,13 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             }
         } else {
             KeyStoreHelper ks = new KeyStoreHelper((KeyStoreValue) ksInfo);
-            log.debug("childlist:" + ks.getChildList().size());
-            for (ChildInfo ci : ks.getChildList()) {
-                listCerts.getModel().addElement(ci);
+            if (ks.getChildList() != null) {
+
+
+                log.debug("childlist:" + ks.getChildList().size());
+                for (ChildInfo ci : ks.getChildList()) {
+                    listCerts.getModel().addElement(ci);
+                }
             }
             //TODO add parameter to refresh method (type ks: storemodel an dstortype)
             listCerts.sort();
@@ -266,11 +270,11 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
      * @param certificateInfo
      * @throws ServiceException
      */
-    public void showDeleteCertificateFrame(NodeInfo info, CertificateValue certificateInfo) throws ServiceException {
+    public void showDeleteCertificateFrame(NodeInfo info, List<CertificateValue> certificateInfo) throws ServiceException {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
         try {
-            ksv.removeCertificate(kinfo, certificateInfo);
+            ksv.removeCertificates(kinfo, certificateInfo);
 
         } catch (Exception e1) {
             DialogUtil.showError(this, e1.getMessage());
@@ -538,8 +542,8 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     @Override
     public void deleteCertificateRequested(String what) {
         if (listCerts != null && listCerts.getSelected() != null) {
-            CertificateValue certInfo = listCerts.getSelected();
-            if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.getName()))) {
+            List<CertificateValue> certInfo = listCerts.getSelectedList();
+            if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.toString()))) {
                 try {
                     showDeleteCertificateFrame(ksInfo, certInfo);
                 } catch (ServiceException e1) {

@@ -11,7 +11,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-public class DerKeystore implements MkKeystore {
+public class DerKeystore extends ClassicKeystore implements MkKeystore {
 
     private static final Log log = LogFactory.getLog(DerKeystore.class);
 
@@ -19,22 +19,9 @@ public class DerKeystore implements MkKeystore {
     public DerKeystore() {
     }
 
-    @Override
-    public void removeCertificate(KeyStoreValue ksValue, CertificateValue certificateInfo) throws ServiceException {
-        List<CertificateValue> certs = getCertificates(ksValue);
-        CertificateValue certToRemove = null;
-        for (CertificateValue cert : certs) {
-            if (certificateInfo.getName().equals(cert.getName())) {
-                certToRemove = cert;
-            }
-        }
-        if (certToRemove != null)
-            certs.remove(certToRemove);
-        saveCertificates(ksValue, certs);
-    }
 
     @Override
-    public void savePrivateKey(PrivateKey privateKey, String fName) throws ServiceException {
+    public void savePrivateKey(PrivateKey privateKey, String fName, char[] pass) throws ServiceException {
         try {
 
             byte[] privKey = privateKey.getEncoded();

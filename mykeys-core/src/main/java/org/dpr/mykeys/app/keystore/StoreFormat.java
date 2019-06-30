@@ -3,7 +3,21 @@ package org.dpr.mykeys.app.keystore;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 
 public enum StoreFormat {
-	JKS, PKCS12, PEM, DER, UNKNOWN, PROPERTIES;
+    JKS(".jks"), PKCS12(".p12"), PEM(".pem"), DER(".der"), UNKNOWN(""), PROPERTIES("");
+
+    private final String extension;
+
+
+    private StoreFormat(String extension) {
+        this.extension = extension;
+
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+
 	public static StoreFormat fromValue(String v) {
 		StoreFormat fmt = null;
 		try {

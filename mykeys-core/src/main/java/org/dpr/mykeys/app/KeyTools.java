@@ -24,6 +24,7 @@ public class KeyTools {
     public static String EXT_P12 = ".p12";
     public static String EXT_PEM = ".pem";
     public static String EXT_DER = ".der";
+    public static String EXT_JKS = ".jks";
     // FIXME:en création de magasin si l'extension est saisie ne pas la mettre 2
     // fois.
     // FIXME: ne pas autoriser la saisie de la clé privée dans les magasins

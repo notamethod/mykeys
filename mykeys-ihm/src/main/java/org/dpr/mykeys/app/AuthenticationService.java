@@ -13,6 +13,7 @@ import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.List;
 
 public class AuthenticationService {
@@ -92,7 +93,8 @@ public class AuthenticationService {
         try {
             cer = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
-            kh.removeCertificate(ki, cer);
+            List<CertificateValue> list = Arrays.asList(cer);
+            kh.removeCertificates(ki, list);
         } catch (Exception e) {
             throw new ServiceException(e);
         }

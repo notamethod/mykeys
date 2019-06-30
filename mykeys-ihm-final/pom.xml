@@ -11,7 +11,15 @@
     </parent>
 
     <artifactId>mykeys-ihm-final</artifactId>
+    <properties>
+        <keystore.path>dev.keystore</keystore.path>
+        <keystore.type>JKS</keystore.type>
+        <keystore.alias>signingKey</keystore.alias>
+        <keystore.password>changeit</keystore.password>
+        <keystore.store.password>${keystore.password}</keystore.store.password>
+        <keystore.key.password>${keystore.password}</keystore.key.password>
 
+    </properties>
     <dependencies>
         <dependency>
             <groupId>${parent.groupId}</groupId>
@@ -59,7 +67,32 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jarsigner-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>sign</id>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <keystore>${keystore.path}</keystore>
+                            <storetype>${keystore.type}</storetype>
+                            <alias>${keystore.alias}</alias>
+                            <storepass>${keystore.store.password}</storepass>
+                            <keypass>${keystore.key.password}</keypass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

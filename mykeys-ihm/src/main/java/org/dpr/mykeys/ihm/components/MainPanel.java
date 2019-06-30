@@ -62,10 +62,9 @@ public class MainPanel extends JPanel implements
     private CertificateListPanel listePanel;
     private TreeKsManager treeksKeystoreMngr;
 
-    final String KS_AC_NAME = "store.ac.name";
     final String KS_CLI_NAME = "store.cert.name";
     final String KS_MRU_NAME = "mru.name";
-    final String KS_PKI_NAME = "store.pki.name";
+
     //
     // DefaultMutableTreeNode crlNode;
     //
@@ -80,8 +79,6 @@ public class MainPanel extends JPanel implements
 
         treeksKeystoreMngr.registerListener(this);
 
-        treeksKeystoreMngr.addNode(KS_AC_NAME, new DefaultMutableTreeNode(Messages.getString(
-                KS_AC_NAME)), true);
         treeksKeystoreMngr.addNode(KS_CLI_NAME, new DefaultMutableTreeNode(Messages.getString(
                 KS_CLI_NAME)), true);
 
@@ -158,7 +155,7 @@ public class MainPanel extends JPanel implements
             KeyStoreValue ksinfo = ksList.get(dir);
             DefaultMutableTreeNode node = null;
             if (ksinfo.getStoreModel().equals(StoreModel.CASTORE)) {
-                node = treeksKeystoreMngr.addObject(KS_AC_NAME, ksinfo, true);
+                // no more maintened
             } else {
 
                 if (ksinfo.getStoreType().equals(StoreLocationType.INTERNAL))
@@ -177,9 +174,6 @@ public class MainPanel extends JPanel implements
 
     private void addInternalKS() throws KeyStoreException {
 
-
-        treeksKeystoreMngr.addObject(KS_AC_NAME,
-                KSConfig.getInternalKeystores().getStoreAC(), true);
 
         treeksKeystoreMngr.addObject(KS_CLI_NAME, KSConfig.getInternalKeystores().getStoreCertificate(), true);
 

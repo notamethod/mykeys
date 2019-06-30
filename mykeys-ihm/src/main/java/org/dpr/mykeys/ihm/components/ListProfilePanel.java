@@ -415,17 +415,17 @@ public class ListProfilePanel extends CertificateListPanel implements DropTarget
 	 * .
 	 * 
 	 * <BR>
-	 * 
 	 *
-	 * @param info
+	 *  @param info
 	 * @param certificateInfo
 	 */
-    public void showDeleteCertificateFrame(NodeInfo info, CertificateValue certificateInfo) {
+	public void showDeleteCertificateFrame(NodeInfo info, List<CertificateValue> certificateInfo) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
 	
 		KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
+
 		try {
-            ksv.removeCertificate(kinfo, certificateInfo);
+			ksv.removeCertificates(kinfo, certificateInfo);
 
 		} catch (Exception e1) {
             DialogUtil.showError(this, e1.getMessage());

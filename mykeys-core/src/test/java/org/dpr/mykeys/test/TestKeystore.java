@@ -254,7 +254,7 @@ public class TestKeystore {
         String fileName = resourceDirectory.toAbsolutePath().toString();
         KeyStoreHelper service = new KeyStoreHelper();
         try {
-            service.export(listCert, fileName, StoreFormat.PEM);
+            service.export(listCert, fileName, StoreFormat.PEM, null);
         } catch (KeyToolsException e) {
             fail();
         }

@@ -113,7 +113,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         certInfo.setPrivateKey((PrivateKey) ks.getKey(aliasOri, ksin.getPassword()));
 
         KeystoreBuilder ksBuilder = new KeystoreBuilder(load(ksInfo));
-        ksBuilder.addCertToKeyStoreNew((X509Certificate) cert, ksInfo, certInfo);
+        ksBuilder.addCertToKeyStoreNew(ksInfo, certInfo);
     }
 
     public ActionStatus importCertificates(KeyStoreValue ksin, char[] newPwd)
@@ -298,14 +298,13 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     @Deprecated
     /**
-     * @deprecated : call directly mks
      */
-    public void removeCertificate(KeyStoreValue ksValue, CertificateValue certificateInfo) throws
+    public void removeCertificates(KeyStoreValue ksValue, List<CertificateValue> certificatesInfo) throws
             KeyToolsException, KeyStoreException {
         MkKeystore mks = MkKeystore.getInstance(ksValue.getStoreFormat());
 
         try {
-            mks.removeCertificate(ksValue, certificateInfo);
+            mks.removeCertificates(ksValue, certificatesInfo);
         } catch (ServiceException e) {
             e.printStackTrace();
         }
@@ -354,15 +353,15 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     }
 
 
-    public void exportPrivateKey(CertificateValue certInfo, KeyStoreValue ksInfo, char[] password, String fName, StoreFormat format)
+    public void exportPrivateKey(CertificateValue certInfo, KeyStoreValue ksInfo, char[] passwordIn, char[] passwordOut, String fName, StoreFormat format)
             throws KeyToolsException {
 
         try {
 
-            PrivateKey privateKey = getPrivateKey(ksInfo, certInfo.getAlias(), password);
+            PrivateKey privateKey = getPrivateKey(ksInfo, certInfo.getAlias(), passwordIn);
             KeyStoreValue ksout = new KeyStoreValue(fName, format);
             MkKeystore mks = MkKeystore.getInstance(ksout.getStoreFormat());
-            mks.savePrivateKey(privateKey, fName);
+            mks.savePrivateKey(privateKey, fName, passwordOut);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -370,6 +369,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             throw new KeyToolsException("Export de la clé privée impossible:" + certInfo.getAlias(), e);
         }
     }
+
 
     public KeyStore importStore(String path, StoreFormat storeFormat, char[] password) throws
             ServiceException {
@@ -551,11 +551,13 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    public void export(List<CertificateValue> certInfos, String fName, StoreFormat format) throws KeyToolsException {
+    public void export(List<CertificateValue> certInfos, String fName, StoreFormat format, char[] pwd) throws KeyToolsException {
         /* save the public key in a file */
 
         try {
             KeyStoreValue ksv = new KeyStoreValue(fName, format);
+            if (pwd != null)
+                ksv.setPassword(pwd);
             ksv.setCertificates(certInfos);
             MkKeystore mks = MkKeystore.getInstance(format);
             mks.save(ksv);

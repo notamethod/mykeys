@@ -22,14 +22,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.security.PrivateKey;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ExportCertificateDialog extends JDialog implements ItemListener {
 
-    public static final String PEM_KEY_EXT = ".key";
-    public static final String PEM_CERT_EXT = ".cer";
     private static final Log log = LogFactory
             .getLog(ExportCertificateDialog.class);
     private JTextField tfDirectory;
@@ -62,11 +61,13 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
         Map<String, String> mapType = new LinkedHashMap<>();
 
-        mapType.put("pem", "pem");
-        mapType.put("der", "der");
+        //FIXME:enum
+        mapType.put("pem", StoreFormat.PEM.toString());
+        mapType.put("der", StoreFormat.DER.toString());
+        mapType.put("jks", StoreFormat.JKS.toString());
         if (!isMultiple) {
 
-            mapType.put("pkcs12", "pkcs12");
+            mapType.put("pkcs12", StoreFormat.PKCS12.toString());
         }
 
         infosPanel = new LabelValuePanel();
@@ -139,19 +140,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         if (null == format) {
             return new File(pathSrc, alias);
         }
-        if (format.equalsIgnoreCase("pkcs12")) {
-            fileName = alias + KeyTools.EXT_P12;
-        } else if (format.equalsIgnoreCase("der")) {
-            fileName = alias + KeyTools.EXT_DER;
-        } else if (format.equalsIgnoreCase("pem")) {
-            fileName = alias + KeyTools.EXT_PEM;
-        } else {
-            fileName = alias;
-        }
+
+        fileName = alias + StoreFormat.valueOf(format).getExtension();
+
         return new File(pathSrc, fileName);
 
-
     }
+
+
 
     @Override
     public void itemStateChanged(ItemEvent e) {
@@ -191,13 +187,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                 }
 
             } else if (command.equals("OK")) {
+
                 if (tfDirectory.getText().equals("")) {
                     DialogUtil.showError(ExportCertificateDialog.this,
                             "Champs invalides");
                     return;
                 }
 
-                String path = tfDirectory.getText();
+
                 // saisie mot de passe
                 char[] pd = null;
                 char[] privKeyPd = null;
@@ -208,6 +205,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                 KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
                 String format = (String) infosPanel.getElements().get(
                         "formatCert");
+                StoreFormat storeFormat = StoreFormat.valueOf(format);
+                String path = tfDirectory.getText().endsWith(storeFormat.getExtension()) ? tfDirectory.getText() : tfDirectory.getText() + storeFormat.getExtension();
+
                 if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                     if (isExportCle) {
                         privKeyPd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
@@ -219,51 +219,68 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                 }
                 // TODO check it
                 setPassword(pd, certInfos);
-                if (format.equalsIgnoreCase("pkcs12")) {
-                    pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
+//                kServ.getPrivateKey()
+//                certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, value.getPassword()));
+//                if (charArray != null)
+//                    certInfo.setPassword(charArray);
 
 
-                    CommonServices cact = new CommonServices();
+                switch (storeFormat) {
+                    case PKCS12:
+                        pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
+                        CommonServices cact = new CommonServices();
 
-                    try {
-                        cact.exportCert(ksInfo, StoreFormat.PKCS12, path,
-                                pd, certInfos.get(0), isExportCle, privKeyPd);
-                    } catch (Exception e) {
-                        log.error(e);
-                        DialogUtil.showError(ExportCertificateDialog.this,
-                                e.getLocalizedMessage());
-                    }
-                } else if (format.equals("der")) {
-                    try {
-                        kServ.export(certInfos, path, StoreFormat.DER);
-                        if (isExportCle) {
-                            kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd,
-                                    tfDirectory.getText(), StoreFormat.DER);
+                        try {
+                            cact.exportCert(ksInfo, StoreFormat.PKCS12, path,
+                                    pd, certInfos.get(0), isExportCle, privKeyPd);
+                        } catch (Exception e) {
+                            log.error(e);
+                            DialogUtil.showError(ExportCertificateDialog.this,
+                                    e.getLocalizedMessage());
                         }
+                        break;
+                    case JKS:
+                        pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
 
-                    } catch (Exception e) {
+                        try {
+                            if (isExportCle) {
+                                for (CertificateValue cert : certInfos) {
+                                    PrivateKey pk = kServ.getPrivateKey(ksInfo, cert.getAlias(), privKeyPd);
+                                    cert.setPrivateKey(pk);
+                                    cert.setPassword(privKeyPd);
+                                }
+                                kServ.export(certInfos, path, storeFormat, pd);
+                            }
+                        } catch (Exception e) {
+                            log.error(e.getLocalizedMessage(), e);
 
-                        DialogUtil.showError(ExportCertificateDialog.this,
-                                e.getLocalizedMessage());
-
-                    }
-
-                } else {
-                    try {
-                        kServ.export(certInfos, path, StoreFormat.PEM);
-                        if (isExportCle) {
-                            kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd,
-                                    tfDirectory.getText(), StoreFormat.PEM);
+                            DialogUtil.showError(ExportCertificateDialog.this,
+                                    e.getLocalizedMessage());
 
                         }
+                        break;
+                    case DER:
+                    case PEM:
 
-                    } catch (Exception e) {
+                        try {
+                            kServ.export(certInfos, path, storeFormat, pd);
+                            if (isExportCle) {
+                                kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd, null,
+                                        tfDirectory.getText(), storeFormat);
+                            }
 
-                        DialogUtil.showError(ExportCertificateDialog.this,
-                                e.getLocalizedMessage());
+                        } catch (Exception e) {
+                            log.error(e.getLocalizedMessage(), e);
 
-                    }
+                            DialogUtil.showError(ExportCertificateDialog.this,
+                                    e.getLocalizedMessage());
+
+                        }
+                        break;
+                    default:
+                        break;
                 }
+
                 ExportCertificateDialog.this.setVisible(false);
                 DialogUtil.showInfo(ExportCertificateDialog.this,
                         "Exportation terminée");

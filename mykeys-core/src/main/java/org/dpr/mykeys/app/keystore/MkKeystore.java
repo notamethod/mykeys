@@ -18,11 +18,12 @@ public interface MkKeystore {
         }
     }
 
-    void removeCertificate(KeyStoreValue ksValue, CertificateValue certificateInfo) throws
+    void removeCertificates(KeyStoreValue ksValue, List<CertificateValue> certificatesInfo) throws
             ServiceException;
 
-    void savePrivateKey(PrivateKey privateKey, String fName)
+    void savePrivateKey(PrivateKey privateKey, String fName, char[] pass)
             throws ServiceException;
+
 
     void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos) throws
             ServiceException;

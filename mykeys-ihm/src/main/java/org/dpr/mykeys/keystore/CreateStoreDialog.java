@@ -168,7 +168,7 @@ public class CreateStoreDialog extends JDialog {
                 try {
                     StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
                     KeystoreBuilder ksBuilder = new KeystoreBuilder(format);
-                    createKeyStore(format, dir, ((String) elements.get("password")).toCharArray());
+
                     ksBuilder.create(dir, ((String) elements.get("password")).toCharArray());
                     KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
 
