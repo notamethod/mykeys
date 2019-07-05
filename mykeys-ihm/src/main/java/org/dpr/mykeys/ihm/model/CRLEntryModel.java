@@ -28,14 +28,14 @@ import java.util.List;
 
 public class CRLEntryModel extends AbstractTableModel {
 
-    private List<CRLEntry> certificates = new ArrayList<>();
+    private final List<CRLEntry> certificates = new ArrayList<>();
 
     public CRLEntryModel() {
         super();
 
     }
 
-    private String[] colName = new String[]{"Serial", "Subject", "Date", "Reason"};
+    private final String[] colName = new String[]{"Serial", "Subject", "Date", "Reason"};
 
     public void setCertificates(List<CRLEntry> albums) {
         this.certificates.clear();

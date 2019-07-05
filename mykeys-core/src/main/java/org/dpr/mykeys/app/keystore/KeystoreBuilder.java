@@ -3,10 +3,9 @@ package org.dpr.mykeys.app.keystore;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.CertificateType;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.utils.CertificateUtils;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -18,10 +17,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.List;
 
-public class KeystoreBuilder extends KeyTools {
+public class KeystoreBuilder {
 
 
     public static final Log log = LogFactory.getLog(KeystoreBuilder.class);
@@ -99,7 +97,7 @@ public class KeystoreBuilder extends KeyTools {
     private String saveCertChain(KeyStore keystore, CertificateValue certInfo) throws KeyToolsException {
 
         if (StringUtils.isBlank(certInfo.getAlias())) {
-            BigInteger bi = KeyTools.RandomBI(30);
+            BigInteger bi = CertificateUtils.randomBigInteger(30);
             certInfo.setAlias(bi.toString(16));
         }
         try {
@@ -123,5 +121,12 @@ public class KeystoreBuilder extends KeyTools {
 
     }
 
-
+    protected void saveKeyStore(KeyStore ks, KeyStoreValue ksInfo) throws KeyToolsException {
+        log.debug("saveKeyStore ");
+        try (OutputStream fos = new FileOutputStream(new File(ksInfo.getPath()))) {
+            ks.store(fos, ksInfo.getPassword());
+        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+            throw new KeyToolsException("Echec de sauvegarde du magasin impossible:" + ksInfo.getPath(), e);
+        }
+    }
 }

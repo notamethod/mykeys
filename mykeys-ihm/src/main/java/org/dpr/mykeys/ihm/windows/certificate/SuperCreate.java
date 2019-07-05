@@ -37,11 +37,11 @@ public class SuperCreate extends JDialog implements ItemListener {
     protected boolean isAC = false;
 
     LabelValuePanel infosPanel;
-    CertificateValue certInfo = new CertificateValue();
+    final CertificateValue certInfo = new CertificateValue();
     protected CertificateType typeCer;
     private LabelValuePanel durationPanel;
     private CertificateValue issuer;
-    protected List<JCheckBox> keyUsageCheckBoxes = new ArrayList<>();
+    protected final List<JCheckBox> keyUsageCheckBoxes = new ArrayList<>();
 
     protected SuperCreate() {
         super();
@@ -287,50 +287,54 @@ public class SuperCreate extends JDialog implements ItemListener {
         @Override
         public void actionPerformed(ActionEvent event) {
             String command = event.getActionCommand();
-            if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN":
 
-            } else if (command.equals("OK")) {
-                try {
-                    fillCertInfo();
+                    break;
+                case "OK":
+                    try {
+                        fillCertInfo();
 
-                    KeyStoreHelper kserv = new KeyStoreHelper();
+                        KeyStoreHelper kserv = new KeyStoreHelper();
 
-                    KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
-                    certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
+                        KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
+                        certInfo.setIssuer((String) infosPanel.getElements().get("emetteur"));
 
-                    if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
-                        ksAC = ksInfo;
-                    }
-                    CertificateValue inIssuer = SuperCreate.this.issuer;
-                    if (inIssuer != null) {
-                        certInfo.setIssuer(inIssuer.getAlias());
-                        inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
-
-                    } else {
-                        if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
+                        if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
+                            ksAC = ksInfo;
+                        }
+                        CertificateValue inIssuer = SuperCreate.this.issuer;
+                        if (inIssuer != null) {
+                            certInfo.setIssuer(inIssuer.getAlias());
                             inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
-                    }
-                    CertificateHelper chn = new CertificateHelper();
-                    CertificateValue newCertificate = chn.generate(certInfo, inIssuer, typeCer);
 
-                    if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
-                        newCertificate.setPassword(MkSession.password);
-                    if (newCertificate.getPassword() == null || newCertificate.getPassword().length <= 0) {
-                        log.debug("Using keystore password to prtect private key");
-                        newCertificate.setPassword(ksInfo.getPassword());
+                        } else {
+                            if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
+                                inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
+                        }
+                        CertificateHelper chn = new CertificateHelper();
+                        CertificateValue newCertificate = chn.generate(certInfo, inIssuer, typeCer);
+
+                        if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
+                            newCertificate.setPassword(MkSession.password);
+                        if (newCertificate.getPassword() == null || newCertificate.getPassword().length <= 0) {
+                            log.debug("Using keystore password to prtect private key");
+                            newCertificate.setPassword(ksInfo.getPassword());
+                        }
+                        kserv.addCertToKeyStore(ksInfo, newCertificate, null, null);
+                        SuperCreate.this.setVisible(false);
+
+                    } catch (Exception e) {
+
+                        log.error("certificate generation error", e);
+                        DialogUtil.showError(SuperCreate.this, e.getMessage());
+
                     }
-                    kserv.addCertToKeyStore(ksInfo, newCertificate, null, null);
+
+                    break;
+                case "CANCEL":
                     SuperCreate.this.setVisible(false);
-
-                } catch (Exception e) {
-
-                    log.error("certificate generation error", e);
-                    DialogUtil.showError(SuperCreate.this, e.getMessage());
-
-                }
-
-            } else if (command.equals("CANCEL")) {
-                SuperCreate.this.setVisible(false);
+                    break;
             }
 
         }

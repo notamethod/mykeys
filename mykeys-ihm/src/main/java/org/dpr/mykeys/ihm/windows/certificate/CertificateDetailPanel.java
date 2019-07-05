@@ -22,7 +22,7 @@ import java.util.List;
 public class CertificateDetailPanel extends JPanel {
 
     // LabelValuePanel infosPanel;
-    protected CertificateValue info;
+    protected final CertificateValue info;
 
     public CertificateDetailPanel(CertificateValue info) {
         this.info = info;
@@ -68,9 +68,7 @@ public class CertificateDetailPanel extends JPanel {
                 false);
 
 
-        info.getOtherParams().forEach((k, v) -> {
-            otherInfosPanel.put(k, JTextField.class, "", v, false);
-        });
+        info.getOtherParams().forEach((k, v) -> otherInfosPanel.put(k, JTextField.class, "", v, false));
         otherInfosPanel.put("Digest SHA256", JTextArea.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", true),
                 false);
 

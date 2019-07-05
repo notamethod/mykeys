@@ -8,7 +8,7 @@ public enum StoreFormat {
     private final String extension;
 
 
-    private StoreFormat(String extension) {
+    StoreFormat(String extension) {
         this.extension = extension;
 
     }

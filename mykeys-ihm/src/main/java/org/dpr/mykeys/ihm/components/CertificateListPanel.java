@@ -9,7 +9,6 @@ import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.CancelCreationException;
-import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
@@ -30,7 +29,6 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -46,13 +44,10 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
     NodeInfo ksInfo;
     CertificatesView listCerts;
-    private List<EventCompListener> listeners = new ArrayList<>();
-    private ToolBarManager toolBarManager = new ToolBarManager();
-    private KeysAction actions;
-    private ActionPanel dAction;
+    private final List<EventCompListener> listeners = new ArrayList<>();
+    private final ToolBarManager toolBarManager = new ToolBarManager();
+
     private JPanel jp;
-    //private DefaultListModel listModel;
-    private DropTarget dropTarget;
 
     public CertificateListPanel(String viewType) {
         super(new BorderLayout());
@@ -63,15 +58,15 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     private void init(String viewType) {
         // Create the DropTarget and register
         // it with the JPanel.
-        dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true, null);
-        dAction = new ActionPanel();
+        //private DefaultListModel listModel;
+        DropTarget dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true, null);
+        ActionPanel dAction = new ActionPanel();
 
         jp = new JPanel(new BorderLayout());
         final ImageIcon icon = createImageIcon("/images/Locked.png");
 
-        actions = new KeysAction();
 
-        toolBarManager.init("", actions, this);
+        toolBarManager.init("", this);
         //for some times...
 
         if (toolBarManager.getInstance() instanceof CertificateToolBar) {
@@ -287,7 +282,8 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     public void showExportCertificatesFrame(NodeInfo info, List selectedValuesList) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         JFrame frame = (JFrame) this.getTopLevelAncestor();
-        List<CertificateValue> certificates = new ArrayList<>(selectedValuesList);
+        List<CertificateValue> certificates;
+        certificates = new ArrayList<>(selectedValuesList);
         ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
         cs.setLocationRelativeTo(frame);
         cs.setResizable(false);
@@ -331,7 +327,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             DialogUtil.showError(this, e1.getMessage());
             log.error("error opening keystore", e1);
             //reset password to try next time
-            if (resetPassword == true)
+            if (resetPassword)
                 ((KeyStoreValue) ksInfo).setPassword(null);
             return false;
         }
@@ -449,7 +445,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
                 service.importCertificates(ksin, newPwd);
             }
             updateInfo(ksInfo);
-        } catch (KeyToolsException | GeneralSecurityException e) {
+        } catch (Exception e) {
             log.error(e);
             DialogUtil.showError(this, e.getLocalizedMessage());
 
@@ -502,10 +498,8 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     public void insertCertificateFromProfileRequested(String what) {
         try {
             addCertFromPRofile(ksInfo, false);
-        } catch (ServiceException e1) {
+        } catch (ServiceException | IhmException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IhmException e1) {
             e1.printStackTrace();
         }
 
@@ -630,47 +624,20 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         @Override
         public void actionPerformed(ActionEvent event) {
             String command = event.getActionCommand();
-            if (command.equals("CHECK_OCSP")) {
-                log.trace("OCSP");
+            switch (command) {
+                case "CHECK_OCSP":
+                    log.trace("OCSP");
 
-            } else if (command.equals("OK")) {
+                    break;
+                case "OK":
 
-                KeyTools kt = new KeyTools();
-
-            } else if (command.equals("CANCEL")) {
-                // ExportCertificateDialog.this.setVisible(false);
+                    break;
+                case "CANCEL":
+                    // ExportCertificateDialog.this.setVisible(false);
+                    break;
             }
         }
 
     }
 
-    public class KeysAction implements ActionListener {
-//TODO: kill this class !
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            final String action = e.getActionCommand();
-            final Object composant = e.getSource();
-
-            TypeAction typeAction = TypeAction.getTypeAction(action);
-            JDialog cs;
-            JFrame frame = null;
-            switch (typeAction) {
-
-                case OPEN_STORE:
-
-                    break;
-                //
-                // case CLOSE_STORE:
-                // treeKeyStoreParent.closeStore(node, true);
-                // break;
-
-
-                default:
-                    break;
-            }
-        }
-
-
-    }
 }

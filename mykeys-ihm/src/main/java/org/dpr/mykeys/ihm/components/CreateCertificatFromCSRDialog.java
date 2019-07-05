@@ -40,7 +40,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 
 	private JDropText tfDirectory;
 
-	private CertificateValue certInfo = new CertificateValue();
+    private final CertificateValue certInfo = new CertificateValue();
 
     public CreateCertificatFromCSRDialog(Frame owner, KeyStoreValue ksInfo, boolean modal) {
 
@@ -112,34 +112,38 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			String command = event.getActionCommand();
-			if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN":
 
-			} else if (command.equals("OK")) {
+                    break;
+                case "OK":
 
-				if (tfDirectory.getText().equals("")) {
-                    DialogUtil.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
-					return;
-				}
-				CertificateCSRHelper cm = new CertificateCSRHelper();
-                KeyStoreHelper kserv = new KeyStoreHelper();
-				try (InputStream is = new FileInputStream(tfDirectory.getText())) {
-                    // load issuer
-                    CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), (String) infosPanel.getElements().get("emetteur"));
-                    CertificateValue certificate = cm.generateFromCSR(is, issuer);
-                    //FIXME if password in ksinfo null
-                    kserv.addCertToKeyStore(ksInfo, certificate, null, null);
-					CreateCertificatFromCSRDialog.this.setVisible(false);
+                    if (tfDirectory.getText().equals("")) {
+                        DialogUtil.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
+                        return;
+                    }
+                    CertificateCSRHelper cm = new CertificateCSRHelper();
+                    KeyStoreHelper kserv = new KeyStoreHelper();
+                    try (InputStream is = new FileInputStream(tfDirectory.getText())) {
+                        // load issuer
+                        CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), (String) infosPanel.getElements().get("emetteur"));
+                        CertificateValue certificate = cm.generateFromCSR(is, issuer);
+                        //FIXME if password in ksinfo null
+                        kserv.addCertToKeyStore(ksInfo, certificate, null, null);
+                        CreateCertificatFromCSRDialog.this.setVisible(false);
 
-				} catch (Exception e) {
+                    } catch (Exception e) {
 
-					log.error("error generating certificate", e);
-                    DialogUtil.showError(CreateCertificatFromCSRDialog.this, e.getMessage());
+                        log.error("error generating certificate", e);
+                        DialogUtil.showError(CreateCertificatFromCSRDialog.this, e.getMessage());
 
-				}
+                    }
 
-			} else if (command.equals("CANCEL")) {
-				CreateCertificatFromCSRDialog.this.setVisible(false);
-			}
+                    break;
+                case "CANCEL":
+                    CreateCertificatFromCSRDialog.this.setVisible(false);
+                    break;
+            }
 
 		}
 

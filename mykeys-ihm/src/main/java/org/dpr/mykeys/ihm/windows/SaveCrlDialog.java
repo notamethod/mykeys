@@ -20,8 +20,6 @@ public class SaveCrlDialog extends JDialog {
     private static final Log log = LogFactory.getLog(SaveCrlDialog.class);
 
     private LabelValuePanel infosPanel;
-    // CertificateInfo certInfo = new CertificateInfo();
-    private CertificateValue certificateValue;
     private CrlValue result;
 
     public SaveCrlDialog(JFrame owner) {
@@ -36,7 +34,7 @@ public class SaveCrlDialog extends JDialog {
     public SaveCrlDialog(JFrame owner, CertificateValue certificateValue) {
 
         super(owner, true);
-        this.certificateValue = certificateValue;
+        // CertificateInfo certInfo = new CertificateInfo();
         init();
         this.pack();
 

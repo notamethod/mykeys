@@ -24,7 +24,7 @@ public class ManageUserDialog extends JFrame {
     private JTable table;
     private UserModel modele;
 
-    public ManageUserDialog() throws IhmException, ServiceException {
+    public ManageUserDialog() throws ServiceException {
         setTitle(Messages.getString(Messages.getString("users.title")));
         setPreferredSize(new Dimension(500, 400));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

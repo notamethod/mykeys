@@ -52,7 +52,7 @@ import java.util.Vector;
  *
  * @see Properties
  */
-@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+@SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "RedundantSuppression"})
 public final class OrderedProperties implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -264,6 +264,7 @@ public final class OrderedProperties implements Serializable {
         return Arrays.hashCode(properties.entrySet().toArray());
     }
 
+    @SuppressWarnings("squid:S2118")
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
         stream.writeObject(properties);
@@ -377,7 +378,7 @@ public final class OrderedProperties implements Serializable {
         }
 
         @Override
-        public Object put(Object key, Object value) {
+        public synchronized Object put(Object key, Object value) {
             return targetProperties.put((String) key, (String) value);
         }
 

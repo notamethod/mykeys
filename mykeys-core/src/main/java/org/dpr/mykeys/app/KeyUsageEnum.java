@@ -10,8 +10,8 @@ public enum KeyUsageEnum {
             KeyUsage.keyCertSign, "keyCertSign"), encipherOnly(KeyUsage.encipherOnly,
             "encipherOnly"), decipherOnly(KeyUsage.decipherOnly, "decipherOnly");
 
-    private int intValue;
-    private String label;
+    private final int intValue;
+    private final String label;
 
     KeyUsageEnum(int value, String strValue) {
         intValue = value;

@@ -16,9 +16,7 @@ import javax.swing.border.EmptyBorder;
 public class Preferences extends JDialog {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("Messages"); //$NON-NLS-1$
 
-	private final JPanel contentPanel = new JPanel();
-
-	/**
+    /**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -37,7 +35,8 @@ public class Preferences extends JDialog {
 	public Preferences() {
 		setBounds(100, 100, 514, 533);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        JPanel contentPanel = new JPanel();
+        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		

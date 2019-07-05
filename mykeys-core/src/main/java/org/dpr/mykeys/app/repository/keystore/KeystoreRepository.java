@@ -1,11 +1,15 @@
-package org.dpr.mykeys.app.keystore;
+package org.dpr.mykeys.app.repository.keystore;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
+import org.dpr.mykeys.app.keystore.MkKeystore;
+import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.repository.RepositoryException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ClassicKeystore implements MkKeystore {
+public abstract class KeystoreRepository implements MkKeystore {
 
     public void removeCertificates(KeyStoreValue ksValue, List<CertificateValue> certificates) throws ServiceException {
         List<CertificateValue> certs = getCertificates(ksValue);
@@ -19,5 +23,14 @@ public abstract class ClassicKeystore implements MkKeystore {
         }
         certs.removeAll(certsToRemove);
         saveCertificates(ksValue, certs);
+    }
+
+
+    public void save(KeyStoreValue ksValue) throws RepositoryException {
+        save(ksValue, SAVE_OPTION.NONE);
+    }
+
+    public enum SAVE_OPTION {
+        REPLACE, ADD, NONE
     }
 }

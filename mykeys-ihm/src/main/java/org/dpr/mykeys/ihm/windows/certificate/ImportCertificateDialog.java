@@ -21,9 +21,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JDropText;
 import org.dpr.swingtools.components.JFieldsPanel;
@@ -43,7 +43,7 @@ public class ImportCertificateDialog extends JDialog {
 
 	private LabelValuePanel infosPanel;
 
-	private KeyStoreValue ksInfo;
+    private final KeyStoreValue ksInfo;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
@@ -111,45 +111,49 @@ public class ImportCertificateDialog extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
-			if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN":
 
 
-			} else if (command.equals("OK")) {
-				if (tfDirectory.getText().equals("")
-						|| elements.get("pwd1") == null) {
-                    DialogUtil.showError(ImportCertificateDialog.this,
-							"Champs invalides");
-					return;
-				}
+                    break;
+                case "OK":
+                    if (tfDirectory.getText().equals("")
+                            || elements.get("pwd1") == null) {
+                        DialogUtil.showError(ImportCertificateDialog.this,
+                                "Champs invalides");
+                        return;
+                    }
 
-				try {
-					String typeCert = (String) elements.get("typeCert");
-					if (elements.get("typeCert").equals("auto")) {
-						typeCert = null;// findTypeKS(tfDirectory.getText());
-					}
-					String alias = (String) elements.get("alias");
-                    if (alias == null || alias.isEmpty()) {
-                        BigInteger bi = KeyTools.RandomBI(30);
-                        alias = bi.toString(16);
-					}
-					KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
-                    //FIXME;CRR
-                    KeyStoreValue value = kserv.createKeyStoreValue(new File(tfDirectory.getText()));
-					kserv.importX509CertToJks(alias, value,
-							((String) elements.get("pwd1")).toCharArray());
+                    try {
+                        String typeCert = (String) elements.get("typeCert");
+                        if (elements.get("typeCert").equals("auto")) {
+                            typeCert = null;// findTypeKS(tfDirectory.getText());
+                        }
+                        String alias = (String) elements.get("alias");
+                        if (alias == null || alias.isEmpty()) {
+                            BigInteger bi = CertificateUtils.randomBigInteger(30);
+                            alias = bi.toString(16);
+                        }
+                        KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
+                        //FIXME;CRR
+                        KeyStoreValue value = kserv.createKeyStoreValue(new File(tfDirectory.getText()));
+                        kserv.importX509CertToJks(alias, value,
+                                ((String) elements.get("pwd1")).toCharArray());
 
-					ImportCertificateDialog.this.setVisible(false);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-                    DialogUtil.showError(ImportCertificateDialog.this,
-							e.getLocalizedMessage());
-					// e.printStackTrace();
+                        ImportCertificateDialog.this.setVisible(false);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        DialogUtil.showError(ImportCertificateDialog.this,
+                                e.getLocalizedMessage());
+                        // e.printStackTrace();
 
-				}
+                    }
 
-			} else if (command.equals("CANCEL")) {
-				ImportCertificateDialog.this.setVisible(false);
-			}
+                    break;
+                case "CANCEL":
+                    ImportCertificateDialog.this.setVisible(false);
+                    break;
+            }
 
 		}
 

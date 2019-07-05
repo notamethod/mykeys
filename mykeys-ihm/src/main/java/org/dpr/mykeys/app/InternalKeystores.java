@@ -58,8 +58,8 @@ public class InternalKeystores {
 
     private String pathAC;
     private String pathCert;
-    private String pathProfils;
-    private String pathUDB;
+    private final String pathProfils;
+    private final String pathUDB;
     private String pathPKI;
 
 
@@ -85,7 +85,6 @@ public class InternalKeystores {
 
     public KeyStoreValue getStoreAC() {
 
-        KeyTools kt = new KeyTools();
         KeyStoreValue kinfo;
         File f = new File(pathAC);
         if (!f.exists()) {
@@ -164,12 +163,11 @@ public class InternalKeystores {
 
         KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
 
-        String pd = pad;
         KeyStoreValue kinfo;
         File f = new File(pathUDB);
         if (!existsUserDatabase()) {
 
-            ksBuilder.create(pathUDB, pd.toCharArray());
+            ksBuilder.create(pathUDB, pad.toCharArray());
 
         }
         kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
@@ -181,13 +179,11 @@ public class InternalKeystores {
 
     public void createUserDB() throws Exception {
         KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
-        KeyTools kt = new KeyTools();
-        String pd = pad;
         KeyStoreValue kinfo;
         new File(pathUDB);
         if (!existsUserDatabase()) {
             try {
-                ksBuilder.create(pathUDB, pd.toCharArray());
+                ksBuilder.create(pathUDB, pad.toCharArray());
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -203,13 +199,12 @@ public class InternalKeystores {
 
     public KeyStoreValue getStoreCertificate() throws KeyStoreException {
         KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
-        String pd = pad;
         KeyStoreValue kinfo;
         File f = new File(pathCert);
         // create keystore
         if (!f.exists()) {
             try {
-                ksBuilder.create(pathCert, pd.toCharArray());
+                ksBuilder.create(pathCert, pad.toCharArray());
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block

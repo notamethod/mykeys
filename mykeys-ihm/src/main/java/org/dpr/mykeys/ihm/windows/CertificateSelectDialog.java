@@ -18,27 +18,18 @@ public class CertificateSelectDialog extends JDialog {
     private JComboBox comboBox1;
     private JTextField textField1;
     private JComboBox comboReason;
-    private JPanel reasonPanel;
     private CRLEntry result;
     private CertificateValue selectedCertificate;
-    Map<String, CertificateValue> certificateMap = new HashMap<>();
+    final Map<String, CertificateValue> certificateMap = new HashMap<>();
 
     public CertificateSelectDialog(List<CertificateValue> children) {
         setContentPane(contentPane1);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        buttonOK.addActionListener(e -> onOK());
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -49,11 +40,7 @@ public class CertificateSelectDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane1.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane1.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         CertificateValue[] lists = new CertificateValue[children.size()];
 
         int i = 0;
@@ -61,7 +48,7 @@ public class CertificateSelectDialog extends JDialog {
             certificateMap.put(value.getSubjectString(), value);
             comboBox1.addItem(value.getSubjectString());
         }
-        List<String> ls = new ArrayList<String>();
+        List<String> ls = new ArrayList<>();
         comboReason.setModel(new DefaultComboBoxModel(CRLManager.REASONSTRING));
 
 
@@ -93,6 +80,6 @@ public class CertificateSelectDialog extends JDialog {
     }
 
     private void createUIComponents() {
-        reasonPanel = new JPanel();
+        JPanel reasonPanel = new JPanel();
     }
 }

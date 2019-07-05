@@ -1,6 +1,5 @@
 package org.dpr.mykeys.app.certificate;
 
-import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 
 import java.io.IOException;

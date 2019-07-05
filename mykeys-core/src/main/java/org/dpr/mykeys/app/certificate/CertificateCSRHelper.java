@@ -110,11 +110,10 @@ public class CertificateCSRHelper {
         AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find(CSR_SIGN_ALGORITHM);
         AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
 
-        int validity = CSR_VALIDITY;
         X500Name issuer = new X500Name(caCert.getSubjectX500Principal().getName());
         BigInteger serial = new BigInteger(32, new SecureRandom());
         Date from = new Date();
-        Date to = new Date(System.currentTimeMillis() + (validity * 86400000L));
+        Date to = new Date(System.currentTimeMillis() + (CSR_VALIDITY * 86400000L));
 
         JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
         X509v3CertificateBuilder certgen = new X509v3CertificateBuilder(issuer, serial, from, to, inputCSR.getSubject(),
@@ -130,8 +129,7 @@ public class CertificateCSRHelper {
         ContentSigner signer = new BcRSAContentSignerBuilder(sigAlgId, digAlgId)
                 .build(PrivateKeyFactory.createKey(caPrivate.getEncoded()));
         X509CertificateHolder holder = certgen.build(signer);
-        byte[] certencoded = holder.toASN1Structure().getEncoded();
-        return certencoded;
+        return holder.toASN1Structure().getEncoded();
 
     }
 

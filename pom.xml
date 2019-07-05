@@ -4,7 +4,7 @@
 	<groupId>org.dpr.apps</groupId>
 	<artifactId>mykeys</artifactId>
 	<version>0.9.0.beta2</version>
-	<name>(J)myKeys</name>
+    <name>MyKeys</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>mykeys-core</module>

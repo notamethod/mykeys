@@ -37,6 +37,8 @@ import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
+import org.dpr.mykeys.app.repository.RepositoryException;
+import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
@@ -77,10 +79,10 @@ public class TreeKsManager implements MouseListener,
 
     private final static Log log = LogFactory.getLog(TreeKsManager.class);
 
-    protected List<EventCompListener> listeners = new ArrayList<>();
-    protected GradientTree tree;
-    protected Map<String, DefaultMutableTreeNode> nodes;
-    protected Map<String, DefaultMutableTreeNode> fixedNodes;
+    protected final List<EventCompListener> listeners = new ArrayList<>();
+    protected final GradientTree tree;
+    protected final Map<String, DefaultMutableTreeNode> nodes;
+    protected final Map<String, DefaultMutableTreeNode> fixedNodes;
     protected DefaultMutableTreeNode rootNode;
     protected TreePopupMenu popupMenu;
     protected final String KS_AC_NAME = "store.ac.name";
@@ -91,9 +93,9 @@ public class TreeKsManager implements MouseListener,
         return popupMenu;
     }
 
-    protected TreeModel treeModel;
+    protected final TreeModel treeModel;
 
-    private TreePopupMenu popup;
+    private final TreePopupMenu popup;
 
     public TreeKsManager() {
 
@@ -135,7 +137,6 @@ public class TreeKsManager implements MouseListener,
 
     public static Map<String, String> getListCerts(String path, String type,
                                                    String password) throws KeyStoreException, ServiceException {
-        KeyTools kt = new KeyTools();
         KeyStore ks = null;
         KeyStoreHelper ksv = new KeyStoreHelper(null);
         ks = ksv.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray()).getKeystore();
@@ -173,9 +174,8 @@ public class TreeKsManager implements MouseListener,
      * <BR>
      *
      * @param info
-     * @throws ServiceException
      */
-    private void displayKeystoreList(NodeInfo info) throws ServiceException {
+    private void displayKeystoreList(NodeInfo info) {
         notifyCertListToUpdate(info);
 
     }
@@ -486,30 +486,21 @@ public class TreeKsManager implements MouseListener,
                     if (object instanceof KeyStoreValue) {
                         KeyStoreValue ksiInfo = ((KeyStoreValue) object);
                         if (ksiInfo != null)
-                            try {
-                                displayKeystoreList(ksiInfo);
-                            } catch (ServiceException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            }
+
+                            displayKeystoreList(ksiInfo);
+
 
                     } else if (object instanceof ProfilStoreInfo) {
                         ProfilStoreInfo ksiInfo = ((ProfilStoreInfo) object);
                         if (ksiInfo != null)
-                            try {
-                                displayKeystoreList(ksiInfo);
-                            } catch (ServiceException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            }
+
+                            displayKeystoreList(ksiInfo);
+
 
                     } else {
-                        try {
-                            displayKeystoreList(null);
-                        } catch (ServiceException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
+
+                        displayKeystoreList(null);
+
                     }
                 }
 
@@ -805,10 +796,7 @@ public class TreeKsManager implements MouseListener,
             try {
                 transferData = (List<CertificateValue>) transferable.getTransferData(
                         df);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            } catch (UnsupportedFlavorException e) {
+            } catch (IOException | UnsupportedFlavorException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -825,8 +813,8 @@ public class TreeKsManager implements MouseListener,
             MkKeystore mks = MkKeystore.getInstance(ksInfo.getStoreFormat());
             try {
                 mks.getCertificates(ksInfo).addAll(transferData);
-                mks.save(ksInfo);
-            } catch (ServiceException e) {
+                mks.save(ksInfo, KeystoreRepository.SAVE_OPTION.ADD);
+            } catch (ServiceException | RepositoryException e) {
                 e.printStackTrace();
                 return false;
             }

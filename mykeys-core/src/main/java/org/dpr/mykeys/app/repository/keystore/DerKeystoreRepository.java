@@ -1,8 +1,12 @@
-package org.dpr.mykeys.app.keystore;
+package org.dpr.mykeys.app.repository.keystore;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
+import org.dpr.mykeys.app.keystore.MkKeystore;
+import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.repository.RepositoryException;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -11,12 +15,12 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-public class DerKeystore extends ClassicKeystore implements MkKeystore {
+public class DerKeystoreRepository extends KeystoreRepository implements MkKeystore {
 
-    private static final Log log = LogFactory.getLog(DerKeystore.class);
+    private static final Log log = LogFactory.getLog(DerKeystoreRepository.class);
 
 
-    public DerKeystore() {
+    public DerKeystoreRepository() {
     }
 
 
@@ -38,25 +42,30 @@ public class DerKeystore extends ClassicKeystore implements MkKeystore {
     }
 
     @Override
-    public void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos) throws ServiceException {
+    public void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos) {
 
     }
 
     @Override
-    public void save(KeyStoreValue ksValue) throws ServiceException {
+    public void save(KeyStoreValue ksValue, SAVE_OPTION option) throws RepositoryException {
+
+        File file = new File(ksValue.getPath() + ".der");
+        if (file.exists() && option.equals(SAVE_OPTION.NONE)) {
+            throw new RepositoryException("File already exists " + file.getAbsolutePath());
+        }
         try {
-            try (FileOutputStream keyfos = new FileOutputStream(new File(ksValue.getPath() + ".der"))) {
+            try (FileOutputStream keyfos = new FileOutputStream(file)) {
                 for (CertificateValue certInfo : ksValue.getCertificates()) {
                     keyfos.write(certInfo.getCertificate().getEncoded());
                 }
             }
         } catch (Exception e) {
-            throw new ServiceException("Export de la clé publique impossible:", e);
+            throw new RepositoryException("Export de la clé publique impossible:", e);
         }
     }
 
     @Override
-    public List<CertificateValue> getCertificates(KeyStoreValue ksValue) throws ServiceException {
+    public List<CertificateValue> getCertificates(KeyStoreValue ksValue) {
         if (ksValue.getCertificates() != null && !ksValue.getCertificates().isEmpty())
             return ksValue.getChildList();
 
@@ -85,7 +94,9 @@ public class DerKeystore extends ClassicKeystore implements MkKeystore {
     }
 
     @Override
-    public void addCert(KeyStoreValue ki, CertificateValue certificate) throws ServiceException {
+    public void addCert(KeyStoreValue ki, CertificateValue certificate) {
 
     }
+
+
 }

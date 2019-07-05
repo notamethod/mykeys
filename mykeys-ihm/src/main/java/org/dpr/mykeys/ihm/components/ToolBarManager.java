@@ -33,8 +33,8 @@ class ToolBarManager {
         }
     }
 
-    public void init(String string, CertificateListPanel.KeysAction actions, CertificateListPanel listPanel) {
-        certToolbar = new CertificateToolBar("", actions);
+    public void init(String string, CertificateListPanel listPanel) {
+        certToolbar = new CertificateToolBar("");
         profToolBar = new ProfileToolBar("", new KeysProfileAction(listPanel, listPanel));
 
     }

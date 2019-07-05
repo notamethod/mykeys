@@ -49,8 +49,8 @@ public class X509Util {
         StringBuilder retour = new StringBuilder();
         char[] car = Hex.encodeHex(b);
         for (int i = 0; i < car.length; i = i + 2) {
-            retour.append(String.valueOf(car[i]));
-            retour.append(String.valueOf(car[i + 1]));
+            retour.append(car[i]);
+            retour.append(car[i + 1]);
             retour.append(separator);
         }
         if (upperCase) {
@@ -61,14 +61,16 @@ public class X509Util {
     }
 
     public static String toHexString(BigInteger bi, String separator, boolean upperCase) {
-        String retour = "";
+        String retour;
         String converted = bi.toString(16);
         char[] charArray = converted.toCharArray();
+        StringBuilder retourBuilder = new StringBuilder();
         for (int i = 0; i < charArray.length - 1; i = i + 2) {
-            retour += String.valueOf(charArray[i]);
-            retour += String.valueOf(charArray[i + 1]);
-            retour += separator;
+            retourBuilder.append(charArray[i]);
+            retourBuilder.append(charArray[i + 1]);
+            retourBuilder.append(separator);
         }
+        retour = retourBuilder.toString();
         if (upperCase) {
             return retour.toUpperCase();
         } else {

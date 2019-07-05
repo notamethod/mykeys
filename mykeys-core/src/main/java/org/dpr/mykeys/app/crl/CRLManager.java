@@ -35,7 +35,7 @@ public class CRLManager {
     public static final String CRL_EXTENSION = ".crl";
 
 	public static final String[] REASONSTRING = new String[]{"unspecified", "keyCompromise", "cACompromise", "affiliationChanged", "superseded", "cessationOfOperation", "certificateHold", "unknown", "removeFromCRL", "privilegeWithdrawn", "aACompromise"};
-	private String provider;
+    private final String provider;
 
 	/**
 	 * . <BR>
@@ -323,8 +323,7 @@ public class CRLManager {
 		fname = fname + CRL_EXTENSION;
 		String orga = map.get(X509Name.O);
 		File fpath = new File(pathName, orga);
-		File crlFile = new File(fpath, fname);
-		return crlFile;
+        return new File(fpath, fname);
 	}
 
 	/**
@@ -395,8 +394,7 @@ public class CRLManager {
 		fname = fname + CRL_EXTENSION;
 		String orga = map.get(X509Name.O);
 		File fpath = new File(pathName, orga);
-		File crlFile = new File(fpath, fname);
-		return crlFile;
+        return new File(fpath, fname);
 	}
 
     /**
@@ -413,7 +411,7 @@ public class CRLManager {
     public X509CRL generateCrl(CertificateValue certSign, CrlValue crlValue, List<String> serialList)
             throws
             CRLException, IllegalStateException,
-            OperatorCreationException, IOException {
+            OperatorCreationException {
 
 
         X509Certificate certificate = certSign.getCertificate();

@@ -24,7 +24,6 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
     public Component getTreeCellRendererComponent(JTree tree, Object value,
                                                   boolean isSelected, boolean expanded, boolean leaf, int row,
                                                   boolean hasFocus) {
-        Object text = value;
         final JLabel rc = (JLabel) super.getTreeCellRendererComponent(tree,
                 value, isSelected, expanded, leaf, row, hasFocus);
         String tooltip = null;

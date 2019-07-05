@@ -24,15 +24,9 @@ public class KSConfig {
 	private static final Log log = LogFactory.getLog(KSConfig.class);
 	private static PropertiesConfiguration userConfig;
 
-	private static String crlPathName = "crls";
+    private static PropertiesConfiguration defaultConfig;
 
-	private static PropertiesConfiguration defaultConfig;
-
-	private static String usrFileName = "user.properties";
-
-	private static String defaultFileName = "default.properties";
-
-	public static final String STORE_PREFIX = "store";
+    public static final String STORE_PREFIX = "store";
 
 
     public static final String MKPATH = ".mykeys2";
@@ -56,7 +50,8 @@ public class KSConfig {
 			path = System.getProperty("user.home") + File.separator + cfgPathName  + File.separator;
 		else 
 			path=externalPath;
-		try {
+        String usrFileName = "user.properties";
+        try {
 			userConfig = new PropertiesConfiguration(path + File.separator
 					+ usrFileName);
 
@@ -67,7 +62,8 @@ public class KSConfig {
 			userConfig.setFile(new File(path, usrFileName));
 
 		}
-		try {
+        String defaultFileName = "default.properties";
+        try {
 
 			defaultConfig = new PropertiesConfiguration(path + File.separator
 					+ defaultFileName);
@@ -205,6 +201,7 @@ public class KSConfig {
 	}
 
 	public static String getCrlPath() {
-		return path + crlPathName + File.separator;
+        String crlPathName = "crls";
+        return path + crlPathName + File.separator;
 	}
 }

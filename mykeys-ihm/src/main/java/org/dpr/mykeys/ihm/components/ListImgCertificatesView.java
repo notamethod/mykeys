@@ -15,18 +15,18 @@ import java.util.List;
 
 public class ListImgCertificatesView extends Component implements CertificatesView {
 
-    private JImgList listCerts;
+    private final JImgList listCerts;
 
     DataFlavor nodesFlavor;
-    DataFlavor[] flavors = new DataFlavor[1];
+    final DataFlavor[] flavors = new DataFlavor[1];
 
     @Override
     public Component getListCerts() {
         return listCerts;
     }
 
-    private IModelFactory model;
-    private DefaultListModel listModel;
+    private final IModelFactory model;
+    private final DefaultListModel listModel;
     //private ListSelectionListener listListener;
 
     public ListImgCertificatesView() {
@@ -143,7 +143,7 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
     }
 
     public class CertificatesTransferable implements Transferable {
-        List<CertificateValue> nodes;
+        final List<CertificateValue> nodes;
 
         public CertificatesTransferable(List<CertificateValue> nodes) {
             this.nodes = nodes;

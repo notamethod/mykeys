@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.CertificateType;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -31,8 +30,6 @@ public class CertificateTest {
     private final static Log log = LogFactory.getLog(CertificateTest.class);
 
     private static final String AC_NAME = "mykeys root ca 2";
-
-    private KeyTools ktools = new KeyTools();
 
     @BeforeClass
     public static void init() {
@@ -138,9 +135,7 @@ public class CertificateTest {
         String fpath = new File("target/test-classes/crl1.crl").getAbsolutePath();
         try {
             man.saveCRL(crl, fpath);
-        } catch (CRLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (CRLException | IOException e) {
             e.printStackTrace();
         }
         try (FileInputStream fis = new FileInputStream(fpath)) {

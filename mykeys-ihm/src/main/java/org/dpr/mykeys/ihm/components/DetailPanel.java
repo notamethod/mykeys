@@ -5,7 +5,6 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.ihm.windows.certificate.CertificateCADetailPanel;
@@ -25,10 +24,7 @@ public class DetailPanel extends JPanel {
 
     CertificateValue certificatInfo;
 
-    private ActionPanel dAction;
-
     private JPanel jp;
-    private JPanel jpExt;
     private JTabbedPane jtab;
 
     private JLabel titre = new JLabel();
@@ -40,7 +36,7 @@ public class DetailPanel extends JPanel {
     }
 
     private void init() {
-        dAction = new ActionPanel();
+        ActionPanel dAction = new ActionPanel();
 
         BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
         this.setLayout(bl);
@@ -48,7 +44,7 @@ public class DetailPanel extends JPanel {
         titre = new JLabel("");
         jtab = new JTabbedPane();
         jp = new JPanel();
-        jpExt = new JPanel();
+        JPanel jpExt = new JPanel();
 
         jp.setLayout(new FlowLayout(FlowLayout.LEADING));
         jpExt.setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -86,15 +82,16 @@ public class DetailPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent event) {
             String command = event.getActionCommand();
-            if (command.equals("CHECK_OCSP")) {
-                log.trace("OCSP");
+            switch (command) {
+                case "CHECK_OCSP":
+                    log.trace("OCSP");
 
-            } else if (command.equals("OK")) {
-
-                KeyTools kt = new KeyTools();
-
-            } else if (command.equals("CANCEL")) {
-                // ExportCertificateDialog.this.setVisible(false);
+                    break;
+                case "OK":
+                    break;
+                case "CANCEL":
+                    // ExportCertificateDialog.this.setVisible(false);
+                    break;
             }
 
         }

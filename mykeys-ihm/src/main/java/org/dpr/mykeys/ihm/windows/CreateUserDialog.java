@@ -22,9 +22,8 @@ public class CreateUserDialog extends MkDialog {
 	private static final Log log = LogFactory.getLog(CreateUserDialog.class);
 
 	private LabelValuePanel infosPanel;
-	private Class<? extends Component> previousWindow;
 
-	public CreateUserDialog(JFrame owner, boolean modal) {
+    public CreateUserDialog(JFrame owner, boolean modal) {
 
 		super(owner, modal);
 
@@ -37,7 +36,6 @@ public class CreateUserDialog extends MkDialog {
     public CreateUserDialog(JFrame owner, boolean modal, Class<? extends Component> dialogClass) {
         super(owner, modal);
 		log.info("xxx");
-        previousWindow = dialogClass;
         init();
         this.pack();
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - getWidth() / 2, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - getHeight() / 2);

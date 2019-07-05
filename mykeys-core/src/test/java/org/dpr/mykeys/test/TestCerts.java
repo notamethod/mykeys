@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.tsp.TimeStampToken;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.TimeStampManager;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
@@ -130,7 +129,6 @@ public class TestCerts {
             fail();
         }
 
-        KeyTools kt = new KeyTools();
         KeyStore ks = null;
 
         String fileName = null;
@@ -181,8 +179,6 @@ public class TestCerts {
     @Test
     public void TimeStamp() throws ServiceException {
         Security.addProvider(new BouncyCastleProvider());
-
-        KeyTools kt = new KeyTools();
 
         KeyStore ks = null;
         String fileName = null;

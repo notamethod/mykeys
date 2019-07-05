@@ -4,6 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
+import org.dpr.mykeys.app.repository.EntityAlreadyExistsException;
+import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
 import org.dpr.mykeys.utils.KeystoreUtils;
 import org.dpr.mykeys.utils.X509Util;
 import org.dpr.mykeys.utils.CertificateUtils;
@@ -117,7 +119,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     }
 
     public ActionStatus importCertificates(KeyStoreValue ksin, char[] newPwd)
-            throws ServiceException, GeneralSecurityException, KeyToolsException {
+            throws ServiceException {
         ksin.setStoreFormat(KeystoreUtils.findKeystoreType(ksin.getPath()));
         if (ksin.getPassword() == null && (StoreFormat.JKS.equals(ksin.getStoreFormat()) || StoreFormat.PKCS12.equals(ksin.getStoreFormat()))) {
             return ActionStatus.ASK_PASSWORD;
@@ -168,32 +170,13 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                     ksInfo.setOpen(true);
                 return certs;
             case JKS:
+            case PKCS12:
                 certs = mks.getCertificates(ksInfo);
                 return certs;
             default:
                 return null;
         }
 
-//        KeyStore ks = getKeystore();
-//
-//
-//        Enumeration<String> enumKs;
-//        try {
-//            enumKs = ks.aliases();
-//            if (enumKs != null && enumKs.hasMoreElements()) {
-//
-//                while (enumKs.hasMoreElements()) {
-//                    String alias = enumKs.nextElement();
-//
-//                    CertificateValue certInfo = fillCertInfo(ks, alias);
-//                    certs.add(certInfo);
-//                }
-//            }
-//        } catch (KeyStoreException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        return certs;
     }
 
 
@@ -216,9 +199,10 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
      */
     @Override
     public List<CertificateValue> getChildList() throws ServiceException {
-        log.debug("get child list");
+
         List<CertificateValue> certs;
         certs = getCertificates();
+        log.debug("get child list" + certs.size());
         return certs;
     }
 
@@ -299,8 +283,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     @Deprecated
     /**
      */
-    public void removeCertificates(KeyStoreValue ksValue, List<CertificateValue> certificatesInfo) throws
-            KeyToolsException, KeyStoreException {
+    public void removeCertificates(KeyStoreValue ksValue, List<CertificateValue> certificatesInfo) {
         MkKeystore mks = MkKeystore.getInstance(ksValue.getStoreFormat());
 
         try {
@@ -509,14 +492,13 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     }
 
     public KeyStore load(KeyStoreValue ksin) throws ServiceException {
-        KeyStore keystore = loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword()).getKeystore();
 
-        return keystore;
+        return loadKeyStore(ksin.getPath(), ksin.getStoreFormat(), ksin.getPassword()).getKeystore();
     }
 
 
     public PrivateKey getPrivateKey(KeyStoreValue ksInfoIn, String alias, char[] password) throws
-            KeyToolsException, GeneralSecurityException, ServiceException {
+            GeneralSecurityException, ServiceException {
         KeyStore keyStore = loadKeyStore(ksInfoIn.getPath(), ksInfoIn.getStoreFormat(), ksInfoIn.getPassword()).getKeystore();
 
         PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, password);
@@ -531,8 +513,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     public KeyStoreValue createKeyStoreValue(File ksFile) {
         StoreFormat format = KeystoreUtils.findKeystoreType(ksFile.getAbsolutePath());
-        KeyStoreValue ksv = new KeyStoreValue(ksFile, format, null);
-        return ksv;
+        return new KeyStoreValue(ksFile, format, null);
     }
 
 
@@ -551,21 +532,26 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    public void export(List<CertificateValue> certInfos, String fName, StoreFormat format, char[] pwd) throws KeyToolsException {
+    public boolean export(List<CertificateValue> certInfos, String fName, StoreFormat format, char[] pwd, KeystoreRepository.SAVE_OPTION option) throws KeyToolsException {
         /* save the public key in a file */
 
+        boolean exportToNewFile = true;
         try {
             KeyStoreValue ksv = new KeyStoreValue(fName, format);
             if (pwd != null)
                 ksv.setPassword(pwd);
             ksv.setCertificates(certInfos);
             MkKeystore mks = MkKeystore.getInstance(format);
-            mks.save(ksv);
+            mks.save(ksv, option);
 
+        } catch (EntityAlreadyExistsException e) {
+
+            exportToNewFile = false;
 
         } catch (Exception e) {
 
             throw new KeyToolsException("Export de la clé publique impossible:", e);
         }
+        return exportToNewFile;
     }
 }

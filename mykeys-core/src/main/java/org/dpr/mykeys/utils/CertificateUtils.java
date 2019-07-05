@@ -5,7 +5,9 @@ import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.*;
@@ -96,8 +98,7 @@ public class CertificateUtils {
 
         // chargement du certificat
         Collection<X509Certificate> certs = (Collection<X509Certificate>) cf.generateCertificates(aCertStream);
-        Set<X509Certificate> certificates = new HashSet<>(certs);
-        return certificates;
+        return new HashSet<>(certs);
     }
 
     public static List<CertificateValue> loadX509Certs(String fileName) {
@@ -125,4 +126,15 @@ public class CertificateUtils {
     }
 
 
+    /**
+     * get a random BigInteger
+     *
+     * @param numBits
+     * @return
+     */
+    public static BigInteger randomBigInteger(int numBits) {
+        SecureRandom random = new SecureRandom();
+        return new BigInteger(numBits, random);
+
+    }
 }

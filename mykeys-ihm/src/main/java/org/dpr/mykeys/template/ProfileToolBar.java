@@ -31,7 +31,7 @@ public class ProfileToolBar extends ObjToolBar {
         this.title = title;
     }
 
-    private KeysProfileAction actions;
+    private final KeysProfileAction actions;
 
     public ProfileToolBar(String name, KeysProfileAction actions) {
         super(name);

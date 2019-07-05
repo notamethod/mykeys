@@ -6,10 +6,8 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.StoreFormat;
-import org.dpr.mykeys.app.keystore.StoreLocationType;
+import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
@@ -35,11 +33,11 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     private LabelValuePanel infosPanel;
 
     @NotNull
-    private List<CertificateValue> certInfos;
+    private final List<CertificateValue> certInfos;
 
-    private boolean isMultiple;
+    private final boolean isMultiple;
 
-    private KeyStoreValue ksInfo;
+    private final KeyStoreValue ksInfo;
 
     public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
             List<CertificateValue> certInfos, boolean modal) {
@@ -161,131 +159,153 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         public void actionPerformed(ActionEvent event) {
             Map<String, Object> elements = infosPanel.getElements();
             String command = event.getActionCommand();
-            if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN": {
 
-                String format = (String) infosPanel.getElements().get(
-                        "formatCert");
-                File outputFile = getTargetFile(format);
+                    String format = (String) infosPanel.getElements().get(
+                            "formatCert");
+                    File outputFile = getTargetFile(format);
 
-                JFileChooser jfc = new JFileChooser(outputFile);
-                // the first, only, and selected filter is 'All Files'
-                jfc.removeChoosableFileFilter(jfc.getFileFilter());
-                //add filters
-                jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers der (*.der)"));
-                jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers PKCS12 (*.p12)"));
-                jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers pem (*.pem)"));
-                jfc.setSelectedFile(outputFile);
-                // jPanel1.add(jfc);
-                if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    JFileChooser jfc = new JFileChooser(outputFile);
+                    // the first, only, and selected filter is 'All Files'
+                    jfc.removeChoosableFileFilter(jfc.getFileFilter());
+                    //add filters
+                    jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers der (*.der)"));
+                    jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers PKCS12 (*.p12)"));
+                    jfc.addChoosableFileFilter(new KeyStoreFileFilter("der", "fichiers pem (*.pem)"));
+                    jfc.setSelectedFile(outputFile);
+                    // jPanel1.add(jfc);
+                    if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-                    //TODO: remove or not ?
-                    KSConfig.getUserCfg().setProperty("output.path",
-                            jfc.getSelectedFile().getParent());
-                    tfDirectory
-                            .setText(jfc.getSelectedFile().getAbsolutePath());
+                        //TODO: remove or not ?
+                        KSConfig.getUserCfg().setProperty("output.path",
+                                jfc.getSelectedFile().getParent());
+                        tfDirectory
+                                .setText(jfc.getSelectedFile().getAbsolutePath());
 
-                }
-
-            } else if (command.equals("OK")) {
-
-                if (tfDirectory.getText().equals("")) {
-                    DialogUtil.showError(ExportCertificateDialog.this,
-                            "Champs invalides");
-                    return;
-                }
-
-
-                // saisie mot de passe
-                char[] pd = null;
-                char[] privKeyPd = null;
-                Object o = infosPanel.getElements().get(
-                        "isExportKey");
-                boolean isExportCle = o == null ? false : (Boolean) o;
-
-                KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
-                String format = (String) infosPanel.getElements().get(
-                        "formatCert");
-                StoreFormat storeFormat = StoreFormat.valueOf(format);
-                String path = tfDirectory.getText().endsWith(storeFormat.getExtension()) ? tfDirectory.getText() : tfDirectory.getText() + storeFormat.getExtension();
-
-                if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-                    if (isExportCle) {
-                        privKeyPd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
                     }
-                } else if (!ksInfo.getName().startsWith("previous")) {
-                    privKeyPd = MkSession.password;
-                } else {
-                    privKeyPd = InternalKeystores.MK1_PD.toCharArray();
+
+                    break;
                 }
-                // TODO check it
-                setPassword(pd, certInfos);
+                case "OK": {
+
+                    if (tfDirectory.getText().equals("")) {
+                        DialogUtil.showError(ExportCertificateDialog.this,
+                                "Champs invalides");
+                        return;
+                    }
+
+
+                    // saisie mot de passe
+                    char[] pd = null;
+                    char[] privKeyPd = null;
+                    Object o = infosPanel.getElements().get(
+                            "isExportKey");
+                    boolean isExportCle = o == null ? false : (Boolean) o;
+
+                    KeyStoreHelper kServ = new KeyStoreHelper(ksInfo);
+                    String format = (String) infosPanel.getElements().get(
+                            "formatCert");
+                    StoreFormat storeFormat = StoreFormat.valueOf(format);
+                    String path = tfDirectory.getText().endsWith(storeFormat.getExtension()) ? tfDirectory.getText() : tfDirectory.getText() + storeFormat.getExtension();
+
+                    if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
+                        if (isExportCle) {
+                            privKeyPd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
+                        }
+                    } else if (!ksInfo.getName().startsWith("previous")) {
+                        privKeyPd = MkSession.password;
+                    } else {
+                        privKeyPd = InternalKeystores.MK1_PD.toCharArray();
+                    }
+                    // TODO check it
+                    setPassword(pd, certInfos);
 //                kServ.getPrivateKey()
 //                certInfo.setPrivateKey((PrivateKey) ks.getKey(alias, value.getPassword()));
 //                if (charArray != null)
 //                    certInfo.setPassword(charArray);
 
 
-                switch (storeFormat) {
-                    case PKCS12:
-                        pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
-                        CommonServices cact = new CommonServices();
+                    switch (storeFormat) {
+                        case PKCS12:
+                            pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
 
-                        try {
-                            cact.exportCert(ksInfo, StoreFormat.PKCS12, path,
-                                    pd, certInfos.get(0), isExportCle, privKeyPd);
-                        } catch (Exception e) {
-                            log.error(e);
-                            DialogUtil.showError(ExportCertificateDialog.this,
-                                    e.getLocalizedMessage());
-                        }
-                        break;
-                    case JKS:
-                        pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
+                            try {
+                                if (isExportCle) {
+                                    for (CertificateValue cert : certInfos) {
+                                        PrivateKey pk = kServ.getPrivateKey(ksInfo, cert.getAlias(), privKeyPd);
+                                        cert.setPrivateKey(pk);
+                                        cert.setPassword(privKeyPd);
+                                    }
 
-                        try {
-                            if (isExportCle) {
-                                for (CertificateValue cert : certInfos) {
-                                    PrivateKey pk = kServ.getPrivateKey(ksInfo, cert.getAlias(), privKeyPd);
-                                    cert.setPrivateKey(pk);
-                                    cert.setPassword(privKeyPd);
                                 }
-                                kServ.export(certInfos, path, storeFormat, pd);
+                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.NONE);
+                                if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
+                                    kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.REPLACE);
+                                }
+                            } catch (Exception e) {
+                                log.error(e);
+                                DialogUtil.showError(ExportCertificateDialog.this,
+                                        e.getLocalizedMessage());
                             }
-                        } catch (Exception e) {
-                            log.error(e.getLocalizedMessage(), e);
+                            break;
+                        case JKS:
+                            pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
 
-                            DialogUtil.showError(ExportCertificateDialog.this,
-                                    e.getLocalizedMessage());
+                            try {
+                                if (isExportCle) {
+                                    for (CertificateValue cert : certInfos) {
+                                        PrivateKey pk = kServ.getPrivateKey(ksInfo, cert.getAlias(), privKeyPd);
+                                        cert.setPrivateKey(pk);
+                                        cert.setPassword(privKeyPd);
+                                    }
 
-                        }
-                        break;
-                    case DER:
-                    case PEM:
+                                }
+                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.NONE);
+                                if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
+                                    kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.REPLACE);
+                                }
+                            } catch (Exception e) {
+                                log.error(e.getLocalizedMessage(), e);
 
-                        try {
-                            kServ.export(certInfos, path, storeFormat, pd);
-                            if (isExportCle) {
-                                kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd, null,
-                                        tfDirectory.getText(), storeFormat);
+                                DialogUtil.showError(ExportCertificateDialog.this,
+                                        e.getLocalizedMessage());
+
                             }
+                            break;
+                        case DER:
+                        case PEM:
 
-                        } catch (Exception e) {
-                            log.error(e.getLocalizedMessage(), e);
+                            try {
+                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.NONE);
+                                if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
+                                    kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.REPLACE);
+                                }
+                                if (isExportCle) {
+                                    kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd, null,
+                                            tfDirectory.getText(), storeFormat);
+                                }
 
-                            DialogUtil.showError(ExportCertificateDialog.this,
-                                    e.getLocalizedMessage());
+                            } catch (Exception e) {
+                                log.error(e.getLocalizedMessage(), e);
 
-                        }
-                        break;
-                    default:
-                        break;
+                                DialogUtil.showError(ExportCertificateDialog.this,
+                                        e.getLocalizedMessage());
+
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    ExportCertificateDialog.this.setVisible(false);
+                    DialogUtil.showInfo(ExportCertificateDialog.this,
+                            "Exportation terminée");
+                    break;
                 }
-
-                ExportCertificateDialog.this.setVisible(false);
-                DialogUtil.showInfo(ExportCertificateDialog.this,
-                        "Exportation terminée");
-            } else if (command.equals("CANCEL")) {
-                ExportCertificateDialog.this.setVisible(false);
+                case "CANCEL":
+                    ExportCertificateDialog.this.setVisible(false);
+                    break;
             }
 
         }
@@ -302,8 +322,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
      */
     class KeyStoreFileFilter extends FileFilter {
 
-        private String filterExtension;
-        private String filterDescription;
+        private final String filterExtension;
+        private final String filterDescription;
 
         private KeyStoreFileFilter(String extension, String descrip) {
             this.filterExtension = extension;

@@ -108,7 +108,8 @@ public class ImportStoreDialog extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
-			if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN":
 //				JFileChooser jfc = new JFileChooser();
 //				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 //
@@ -119,39 +120,42 @@ public class ImportStoreDialog extends JDialog {
 //
 //				}
 
-			} else if (command.equals("OK")) {
-				if (tfDirectory.getText().equals("")
-						|| elements.get("pwd1") == null) {
-                    DialogUtil.showError(ImportStoreDialog.this,
-							"Champs invalides");
-					return;
-				}
+                    break;
+                case "OK":
+                    if (tfDirectory.getText().equals("")
+                            || elements.get("pwd1") == null) {
+                        DialogUtil.showError(ImportStoreDialog.this,
+                                "Champs invalides");
+                        return;
+                    }
 
-				KeyStoreHelper  kserv = new KeyStoreHelper(null);
-				try {
-					StoreFormat format = KeystoreUtils.findKeystoreType(tfDirectory.getText());
-					char[] pdin = ((String) elements.get("pwd1")).toCharArray();
-					kserv.importStore(tfDirectory.getText(), format,
-							pdin.length == 0 ? null : pdin);
-					// KSConfig.getUserCfg().addProperty("magasin." + typeKS,
-					// tfDirectory.getText());
-					KSConfig.getUserCfg().addProperty(
-							"store." + StoreModel.CERTSTORE + "."
-									+ format.toString(), tfDirectory.getText());
-					((MykeysFrame) ImportStoreDialog.this.getParent())
-							.updateKeyStoreList();
-					ImportStoreDialog.this.setVisible(false);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-                    DialogUtil.showError(ImportStoreDialog.this,
-							e.getLocalizedMessage());
-					// e.printStackTrace();
+                    KeyStoreHelper kserv = new KeyStoreHelper(null);
+                    try {
+                        StoreFormat format = KeystoreUtils.findKeystoreType(tfDirectory.getText());
+                        char[] pdin = ((String) elements.get("pwd1")).toCharArray();
+                        kserv.importStore(tfDirectory.getText(), format,
+                                pdin.length == 0 ? null : pdin);
+                        // KSConfig.getUserCfg().addProperty("magasin." + typeKS,
+                        // tfDirectory.getText());
+                        KSConfig.getUserCfg().addProperty(
+                                "store." + StoreModel.CERTSTORE + "."
+                                        + format.toString(), tfDirectory.getText());
+                        ((MykeysFrame) ImportStoreDialog.this.getParent())
+                                .updateKeyStoreList();
+                        ImportStoreDialog.this.setVisible(false);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        DialogUtil.showError(ImportStoreDialog.this,
+                                e.getLocalizedMessage());
+                        // e.printStackTrace();
 
-				}
+                    }
 
-			} else if (command.equals("CANCEL")) {
-				ImportStoreDialog.this.setVisible(false);
-			}
+                    break;
+                case "CANCEL":
+                    ImportStoreDialog.this.setVisible(false);
+                    break;
+            }
 
 		}
 

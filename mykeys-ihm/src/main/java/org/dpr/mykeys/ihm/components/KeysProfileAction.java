@@ -22,11 +22,8 @@ public class KeysProfileAction implements ActionListener {
 	public KeysProfileAction(CertificateListPanel listPanel, JComponent frameSource) {
 		super();
 		this.listPanel = listPanel;
-		this.frameSource = frameSource;
-		// this.ksInfo = ksInfo;
+        // this.ksInfo = ksInfo;
 	}
-
-	private JComponent frameSource;
 
     // private KeyStoreValue ksInfo;
 

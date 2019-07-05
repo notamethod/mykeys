@@ -27,7 +27,6 @@ import java.util.Map;
 
 public class SelectUserDialog extends MkDialog {
     private static final Log log = LogFactory.getLog(SelectUserDialog.class);
-    private final int CPTMAX = 4;
 
     // CertificateInfo certInfo = new CertificateInfo();
     public JFileChooser jfc;
@@ -152,61 +151,65 @@ public class SelectUserDialog extends MkDialog {
         @Override
         public void actionPerformed(ActionEvent event) {
             String command = event.getActionCommand();
-            if (command.equals("OK")) {
+            switch (command) {
+                case "OK":
 
-                Map<String, Object> elements = infosPanel.getElements();
+                    Map<String, Object> elements = infosPanel.getElements();
 
-                String name = (String) modelCombo.getSelectedItem();
-                String pwd = (String) elements.get("password");
+                    String name = (String) modelCombo.getSelectedItem();
+                    String pwd = (String) elements.get("password");
 
-                if (name == null || name.isEmpty()) {
-                    DialogUtil.showError(SelectUserDialog.this, Messages.getFullString("mandatory", "label." + name));
-                    return;
-                }
-                if (!ComponentUtils.checkFields(SelectUserDialog.this, elements, "password")) {
-                    return;
-                }
-
-                char[] pwdChar = pwd.toCharArray();
-                CertificateHelper ch = new CertificateHelper();
-                AuthenticationService auth = new AuthenticationService();
-                try {
-                    auth.authenticateUSer(name, pwdChar);
-                    SelectUserDialog.this.setVisible(false);
-                    MkSession.user = name;
-                    MkSession.password = pwdChar;
-                    loginOK();
-                    //stay alive until cpt max
-                } catch (AuthenticationException e) {
-                    log.error("authentication failure", e);
-                    DialogUtil.showError(SelectUserDialog.this, Messages.getString("error.authentication"));
-                    if (cpt++ > CPTMAX)
-                        System.exit(1);
-                    return;
-                }
-
-
-            } else if (command.equals("CANCEL")) {
-                SelectUserDialog.this.setVisible(false);
-                System.exit(0);
-            } else if (command.equals("ADD")) {
-                SelectUserDialog.this.setVisible(false);
-                log.info("hide select");
-                log.info("add new user.");
-                SwingUtilities.invokeLater(() -> {
-                    CreateUserDialog cs = new CreateUserDialog(null, true, SelectUserDialog.class);
-                    log.info("show. new user");
-                    //cs.setLocationRelativeTo(SelectUserDialog.this);
-                    cs.setVisible(true);
-                    try {
-                        log.info("update");
-                        update();
-                        SelectUserDialog.this.setVisible(true);
-                        log.info("show again...");
-                    } catch (IhmException e) {
-                        e.printStackTrace();
+                    if (name == null || name.isEmpty()) {
+                        DialogUtil.showError(SelectUserDialog.this, Messages.getFullString("mandatory", "label." + name));
+                        return;
                     }
-                });
+                    if (!ComponentUtils.checkFields(SelectUserDialog.this, elements, "password")) {
+                        return;
+                    }
+
+                    char[] pwdChar = pwd.toCharArray();
+                    CertificateHelper ch = new CertificateHelper();
+                    AuthenticationService auth = new AuthenticationService();
+                    try {
+                        auth.authenticateUSer(name, pwdChar);
+                        SelectUserDialog.this.setVisible(false);
+                        MkSession.user = name;
+                        MkSession.password = pwdChar;
+                        loginOK();
+                        //stay alive until cpt max
+                    } catch (AuthenticationException e) {
+                        log.error("authentication failure", e);
+                        DialogUtil.showError(SelectUserDialog.this, Messages.getString("error.authentication"));
+                        int CPTMAX = 4;
+                        if (cpt++ > CPTMAX)
+                            System.exit(1);
+                        return;
+                    }
+
+
+                    break;
+                case "CANCEL":
+                    SelectUserDialog.this.setVisible(false);
+                    System.exit(0);
+                case "ADD":
+                    SelectUserDialog.this.setVisible(false);
+                    log.info("hide select");
+                    log.info("add new user.");
+                    SwingUtilities.invokeLater(() -> {
+                        CreateUserDialog cs = new CreateUserDialog(null, true, SelectUserDialog.class);
+                        log.info("show. new user");
+                        //cs.setLocationRelativeTo(SelectUserDialog.this);
+                        cs.setVisible(true);
+                        try {
+                            log.info("update");
+                            update();
+                            SelectUserDialog.this.setVisible(true);
+                            log.info("show again...");
+                        } catch (IhmException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    break;
             }
         }
 

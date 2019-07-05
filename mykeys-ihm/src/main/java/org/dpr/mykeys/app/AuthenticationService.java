@@ -2,7 +2,6 @@ package org.dpr.mykeys.app;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.operator.OperatorCreationException;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -14,6 +13,7 @@ import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AuthenticationService {
@@ -31,10 +31,10 @@ public class AuthenticationService {
             if (cerCheck != null) {
                 throw new ServiceException(Messages.getString(Messages.getString("certificate.error.create.exists"), id));
             }
-            cer = ch.createCertificate(CertificateType.AUTH, id, pwd);
+            cer = ch.createCertificate(CertificateType.AUTH_MK, id, pwd);
             cer.setPassword(pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
-        } catch (GeneralSecurityException | OperatorCreationException | IOException e) {
+        } catch (GeneralSecurityException | IOException e) {
             throw new ServiceException(Messages.getString("certificate.error.create") + id, e); //$NON-NLS-1$
         }
 
@@ -93,7 +93,7 @@ public class AuthenticationService {
         try {
             cer = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
-            List<CertificateValue> list = Arrays.asList(cer);
+            List<CertificateValue> list = Collections.singletonList(cer);
             kh.removeCertificates(ki, list);
         } catch (Exception e) {
             throw new ServiceException(e);

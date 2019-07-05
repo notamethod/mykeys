@@ -52,7 +52,7 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
 
     private JMenuItem menuChangePwd;
 
-    private TreeKeyStoreActions treeKeyStoreParent;
+    private final TreeKeyStoreActions treeKeyStoreParent;
 
     private TreePath path;
 

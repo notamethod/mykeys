@@ -19,9 +19,8 @@ import java.util.List;
 public class TreeCertificatesView implements CertificatesView {
 
     final String KS_AC_NAME = "store.ac.name";
-    private TreeCertManager treeks;
-    private IModelFactory model;
-    private Enumeration<TreeNode> children;
+    private final TreeCertManager treeks;
+    private final IModelFactory model;
 
 
     public TreeCertManager getTreeManager() {
@@ -101,7 +100,7 @@ public class TreeCertificatesView implements CertificatesView {
             Object object = tNode.getUserObject();
             List<CertificateValue> certs = new ArrayList<>();
 
-            children = tNode.children();
+            Enumeration<TreeNode> children = tNode.children();
             if (children != null) {
                 while (children.hasMoreElements()) {
                     DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();

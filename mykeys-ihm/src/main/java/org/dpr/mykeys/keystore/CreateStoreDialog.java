@@ -125,62 +125,66 @@ public class CreateStoreDialog extends JDialog {
         public void actionPerformed(ActionEvent event) {
             Map<String, Object> elements = infosPanel.getElements();
             String command = event.getActionCommand();
-            if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN":
 
-                JFileChooser jfc = new JFileChooser(KSConfig.getDataDir());
-                // jfc.addChoosableFileFilter(new KeyStoreFileFilter());
+                    JFileChooser jfc = new JFileChooser(KSConfig.getDataDir());
+                    // jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
-                // jPanel1.add(jfc);
-                if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    String path = jfc.getSelectedFile().getAbsolutePath();
+                    // jPanel1.add(jfc);
+                    if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                        String path = jfc.getSelectedFile().getAbsolutePath();
+                        String typeKS = (String) infosPanel.getElements().get("typeKS");
+
+                        tfDirectory.setText(path);
+
+                    }
+
+                    break;
+                case "OK":
+                    //FIXME: do not work with empty password
+                    if (tfDirectory.getText().equals("")) {
+                        DialogUtil.showError(CreateStoreDialog.this, "Champs invalides");
+                        return;
+                    }
+
+                    if (!ComponentUtils.checkFields(CreateStoreDialog.this, elements, "password")) {
+                        return;
+                    }
+
+                    if (!elements.get("password").equals(elements.get("pwd2"))) {
+                        DialogUtil.showError(CreateStoreDialog.this, "Mot de passe incorrect");
+                        return;
+                    }
+
                     String typeKS = (String) infosPanel.getElements().get("typeKS");
+                    String dir = correctExtension(tfDirectory.getText(), typeKS);
+                    Path p = Paths.get(dir);
 
-                    tfDirectory.setText(path);
+                    if (!p.isAbsolute()) {
 
-                }
-
-            } else if (command.equals("OK")) {
-                //FIXME: do not work with empty password
-                if (tfDirectory.getText().equals("")) {
-                    DialogUtil.showError(CreateStoreDialog.this, "Champs invalides");
-                    return;
-                }
-
-                if (!ComponentUtils.checkFields(CreateStoreDialog.this, elements, "password")) {
-                    return;
-                }
-
-                if (!elements.get("password").equals(elements.get("pwd2"))) {
-                    DialogUtil.showError(CreateStoreDialog.this, "Mot de passe incorrect");
-                    return;
-                }
-
-                String typeKS = (String) infosPanel.getElements().get("typeKS");
-                String dir = correctExtension(tfDirectory.getText(), typeKS);
-                Path p = Paths.get(dir);
-
-                if (!p.isAbsolute()) {
-
-                    dir = KSConfig.getDataDir() + File.separator + correctExtension(dir, typeKS);
-                }
+                        dir = KSConfig.getDataDir() + File.separator + correctExtension(dir, typeKS);
+                    }
 
 
-                try {
-                    StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
-                    KeystoreBuilder ksBuilder = new KeystoreBuilder(format);
+                    try {
+                        StoreFormat format = StoreFormat.valueOf((String) elements.get("typeKS"));
+                        KeystoreBuilder ksBuilder = new KeystoreBuilder(format);
 
-                    ksBuilder.create(dir, ((String) elements.get("password")).toCharArray());
-                    KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
+                        ksBuilder.create(dir, ((String) elements.get("password")).toCharArray());
+                        KSConfig.getUserCfg().addProperty("store." + StoreModel.CERTSTORE + "." + format.toString(), dir);
 
-                    result = true;
+                        result = true;
+                        CreateStoreDialog.this.setVisible(false);
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                        DialogUtil.showError(CreateStoreDialog.this, e.getMessage());
+                    }
+
+                    break;
+                case "CANCEL":
                     CreateStoreDialog.this.setVisible(false);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    DialogUtil.showError(CreateStoreDialog.this, e.getMessage());
-                }
-
-            } else if (command.equals("CANCEL")) {
-                CreateStoreDialog.this.setVisible(false);
+                    break;
             }
 
         }

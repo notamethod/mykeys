@@ -16,12 +16,7 @@ public class DialogUtil {
      */
     public static void showError(Component c, String string) {
 
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(c, string, Messages.getString("error.title"), JOptionPane.ERROR_MESSAGE);
-
-        });
-
-
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(c, string, Messages.getString("error.title"), JOptionPane.ERROR_MESSAGE));
     }
 
     /**

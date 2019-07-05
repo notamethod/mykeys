@@ -30,8 +30,8 @@ import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 public class CreateTemplateDialog extends SuperCreate implements ItemListener {
 
     private LabelValuePanel infosPanel;
-    private Map<String, JCheckBox> checkBoxes = new HashMap<>();
-    private CertificateValue certInfo = new CertificateValue();
+    private final Map<String, JCheckBox> checkBoxes = new HashMap<>();
+    private final CertificateValue certInfo = new CertificateValue();
     private boolean isEditing = false;
 
     public CreateTemplateDialog(Frame owner, boolean modal) {
@@ -221,24 +221,28 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
         @Override
         public void actionPerformed(ActionEvent event) {
             String command = event.getActionCommand();
-            if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN":
 
-            } else if (command.equals("OK")) {
-                try {
-                    fillCertInfo();
-                    ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
-                    pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"), certInfo, isEditing);
+                    break;
+                case "OK":
+                    try {
+                        fillCertInfo();
+                        ProfileServices pman = new ProfileServices(KSConfig.getProfilsPath());
+                        pman.saveToFile(infosPanel.getElements(), (String) infosPanel.getElements().get("name"), certInfo, isEditing);
 
+                        CreateTemplateDialog.this.setVisible(false);
+
+                    } catch (Exception e) {
+
+                        DialogUtil.showError(CreateTemplateDialog.this, e.getMessage());
+                        e.printStackTrace();
+                    }
+
+                    break;
+                case "CANCEL":
                     CreateTemplateDialog.this.setVisible(false);
-
-                } catch (Exception e) {
-
-                    DialogUtil.showError(CreateTemplateDialog.this, e.getMessage());
-                    e.printStackTrace();
-                }
-
-            } else if (command.equals("CANCEL")) {
-                CreateTemplateDialog.this.setVisible(false);
+                    break;
             }
 
         }

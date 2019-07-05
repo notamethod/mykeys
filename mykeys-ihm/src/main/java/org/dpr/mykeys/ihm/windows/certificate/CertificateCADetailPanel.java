@@ -7,8 +7,6 @@ import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class CertificateCADetailPanel extends CertificateDetailPanel {
     public CertificateCADetailPanel(CertificateValue info) {
@@ -21,15 +19,13 @@ public class CertificateCADetailPanel extends CertificateDetailPanel {
         JButton jbCreate = new JButton(Messages.getString("edit"));
         JButton jbChoose2 = new JButton("...");
         //jbChoose.addActionListener(dAction);
-        jbCreate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        jbCreate.addActionListener(e -> {
 
-                CRLEditorDialog cs = new CRLEditorDialog(info);
+            CRLEditorDialog cs = new CRLEditorDialog(info);
 
-                cs.pack();
-                cs.setVisible(true);
+            cs.pack();
+            cs.setVisible(true);
 
-            }
         });
 
         JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));

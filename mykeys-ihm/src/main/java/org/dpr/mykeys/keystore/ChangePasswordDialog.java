@@ -40,7 +40,7 @@ public class ChangePasswordDialog extends JDialog {
 	// JPasswordField pwd2;
     private LabelValuePanel infosPanel;
 
-    private KeyStoreValue ksInfo;
+    private final KeyStoreValue ksInfo;
 
 	// Map<String, String> elements = new HashMap<String, String>();
 
@@ -169,10 +169,6 @@ public class ChangePasswordDialog extends JDialog {
 
 		String dir = KSConfig.getUserCfg().getString("data.dir");
 		if (dir == null) {
-			// if (OSInfo.getOs().equals(OS.UNIX)) {
-			// dir = KSConfig.getCfgPath();
-			// } else {
-			// document dir in windows
 			File f = FileSystemView.getFileSystemView().getDefaultDirectory();
 			File data = new File(f, getMessage("default.datadir"));
 			data.mkdirs();

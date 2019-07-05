@@ -17,7 +17,7 @@ import java.security.cert.*;
 import java.util.*;
 
 public class CRLService {
-    CRLManager manager;
+    final CRLManager manager;
     X509CRL crl;
     File CRLFile;
     CertificateValue signer;
@@ -60,8 +60,7 @@ public class CRLService {
                 }
             }
             for (CRLEntry newEntry : newEntries) {
-                if (filter.get(newEntry.getSerialNumber()) == null)
-                    filter.put(newEntry.getSerialNumber(), newEntry);
+                filter.putIfAbsent(newEntry.getSerialNumber(), newEntry);
             }
         }
         try (OutputStream output = new FileOutputStream(CRLFile)) {
@@ -70,7 +69,6 @@ public class CRLService {
         } catch (OperatorCreationException e) {
             throw new CRLException(e);
         }
-        ;
 
     }
 
@@ -91,13 +89,11 @@ public class CRLService {
         return null;
     }
 
-    public Set<? extends X509CRLEntry> getRevoked()
-            throws CRLException, IOException {
+    public Set<? extends X509CRLEntry> getRevoked() {
         if (crl == null)
             return null;
-        Set<? extends X509CRLEntry> entries = crl.getRevokedCertificates();
 
-        return entries;
+        return crl.getRevokedCertificates();
     }
 
     public X509CRL getCRL() {

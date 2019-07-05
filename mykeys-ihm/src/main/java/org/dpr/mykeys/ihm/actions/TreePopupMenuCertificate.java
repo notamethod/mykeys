@@ -32,7 +32,7 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
 
     private DefaultMutableTreeNode node;
 
-    private List<CertificateActionListener> listeners = new ArrayList<>();
+    private final List<CertificateActionListener> listeners = new ArrayList<>();
 
     private CertificateValue certificate;
 

@@ -25,7 +25,6 @@ class SignToolsToUpgrade {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//		KeyTools kt = new KeyTools();
 //		// try {
 //		// KeyStore ks = kt.loadKeyStore("fdt.p12", StoreFormat.PKCS12,
 //		// "1234".toCharArray());
@@ -220,7 +219,6 @@ class SignToolsToUpgrade {
 //		// ajouter le timestamp
 //		try {
 //			file = "c:/dev/testurl.txt";
-//			KeyTools kt = new KeyTools();
 //			// X509Certificate cert = certInfo.getCertificate();
 //			// PrivateKey privatekey = certInfo.getPrivateKey();
 //			// Chargement du fichier qui va être signé

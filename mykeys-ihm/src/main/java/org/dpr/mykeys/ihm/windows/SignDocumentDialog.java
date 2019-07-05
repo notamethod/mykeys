@@ -1,26 +1,6 @@
 package org.dpr.mykeys.ihm.windows;
 
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.AbstractAction;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileSystemView;
-
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.app.CommonServices;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -28,6 +8,15 @@ import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 class SignDocumentDialog extends JDialog {
 
@@ -133,53 +122,52 @@ class SignDocumentDialog extends JDialog {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
 			JFileChooser jfc = null;
-			if (command.equals("CHOOSE_IN")) {
-				jfc = new JFileChooser();
+			switch (command) {
+				case "CHOOSE_IN":
+					jfc = new JFileChooser();
 
-				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					tfDirectoryIn.setText(jfc.getSelectedFile()
-							.getAbsolutePath());
+					if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+						tfDirectoryIn.setText(jfc.getSelectedFile()
+								.getAbsolutePath());
 
-				}
-			} else if (command.equals("CHOOSE_OUT")) {
-				jfc = new JFileChooser();
-				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
+					}
+					break;
+				case "CHOOSE_OUT":
+					jfc = new JFileChooser();
+					// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
-				// jPanel1.add(jfc);
-				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					String path = jfc.getSelectedFile().getAbsolutePath();
-					String typeSig = (String) infosPanel.getElements().get(
-							"typeSig");
-					if (!path.toUpperCase().endsWith("PK7")
-							&& typeSig.equals("CMS")) {
-						path = path + ".pk7";
+					// jPanel1.add(jfc);
+					if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+						String path = jfc.getSelectedFile().getAbsolutePath();
+						String typeSig = (String) infosPanel.getElements().get(
+								"typeSig");
+						if (!path.toUpperCase().endsWith("PK7")
+								&& typeSig.equals("CMS")) {
+							path = path + ".pk7";
+						}
+
+						tfDirectoryOut.setText(path);
+
 					}
 
-					tfDirectoryOut.setText(path);
+					break;
+				case "OK":
+					if (tfDirectoryIn.getText().equals("")
+							|| elements.get("pwd1") == null) {
+						DialogUtil.showError(SignDocumentDialog.this,
+								"Champs invalides");
+						return;
+					}
+					if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
+						DialogUtil.showError(SignDocumentDialog.this,
+								"Mot de passe incorrect");
+						return;
+					}
 
-				}
-
-			} else if (command.equals("OK")) {
-				if (tfDirectoryIn.getText().equals("")
-						|| elements.get("pwd1") == null) {
-                    DialogUtil.showError(SignDocumentDialog.this,
-							"Champs invalides");
-					return;
-				}
-				if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-                    DialogUtil.showError(SignDocumentDialog.this,
-							"Mot de passe incorrect");
-					return;
-				}
-
-                CommonServices cact = new CommonServices();
-				// cact.signData(ksInfo, password, certInfo, false);
-				// FIXME
-				// cact.exportCert(StoreFormat.PKCS12, path, password,
-				// certInfo);
-
-			} else if (command.equals("CANCEL")) {
-				SignDocumentDialog.this.setVisible(false);
+					break;
+				case "CANCEL":
+					SignDocumentDialog.this.setVisible(false);
+					break;
 			}
 		}
 

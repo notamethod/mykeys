@@ -4,12 +4,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.CertificateType;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.TamperedWithException;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
 import org.dpr.mykeys.utils.ProviderUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,8 +34,6 @@ public class TestKeystore {
     private final static Log log = LogFactory.getLog(TestKeystore.class);
 
     private static final String AC_NAME = "mykeys root ca 2";
-
-    private KeyTools ktools = new KeyTools();
 
     @BeforeClass
     public static void init() {
@@ -245,6 +243,35 @@ public class TestKeystore {
     }
 
     @Test
+    public void testCreateCert() {
+        boolean isAC = false;
+        CertificateValue certModel = new CertificateValue("aliastest");
+        certModel.setAlgoPubKey("RSA");
+        certModel.setAlgoSig("SHA1WithRSAEncryption");
+
+        certModel.setKeyLength(1024);
+        certModel.setSubjectMap("CN=toto");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, 1);
+        certModel.setNotBefore(new Date());
+        certModel.setNotAfter(cal.getTime());
+        certModel.setPolicyCPS("CPO000");
+        CertificateValue certIssuer = new CertificateValue();
+        CertificateHelper certServ = new CertificateHelper();
+
+        CertificateValue retValue = null;
+        try {
+            retValue = certServ.generate(certModel, certModel, CertificateType.STANDARD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            fail(e.getMessage());
+        }
+
+
+    }
+
+    @Test
     public void testExport() {
 
         Path resourceDirectory = Paths.get("target/test-classes/data/test1.pem");
@@ -254,7 +281,7 @@ public class TestKeystore {
         String fileName = resourceDirectory.toAbsolutePath().toString();
         KeyStoreHelper service = new KeyStoreHelper();
         try {
-            service.export(listCert, fileName, StoreFormat.PEM, null);
+            service.export(listCert, fileName, StoreFormat.PEM, null, KeystoreRepository.SAVE_OPTION.REPLACE);
         } catch (KeyToolsException e) {
             fail();
         }
@@ -299,7 +326,7 @@ public class TestKeystore {
     }
 
     @Test
-    public void getCertsPem() throws ServiceException, KeyStoreException {
+    public void getCertsPem() throws ServiceException {
 
 
         String filenamePem = "target/test-classes/data/pem/3cdeb3d0.pem";
@@ -313,7 +340,7 @@ public class TestKeystore {
     }
 
     @Test
-    public void getCertsDer() throws ServiceException, KeyStoreException {
+    public void getCertsDer() throws ServiceException {
 
 
         String filename = "target/test-classes/data/der/3cdeb3d0x.der";

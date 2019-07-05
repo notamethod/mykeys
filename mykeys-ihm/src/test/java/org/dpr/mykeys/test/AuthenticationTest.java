@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.AuthenticationService;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.utils.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.ServiceException;

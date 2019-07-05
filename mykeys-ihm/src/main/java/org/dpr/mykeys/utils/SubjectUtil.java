@@ -74,8 +74,8 @@ public class SubjectUtil {
         StringBuilder retour = new StringBuilder();
         char[] car = Hex.encodeHex(b);
         for (int i = 0; i < car.length; i = i + 2) {
-            retour.append(String.valueOf(car[i]));
-            retour.append(String.valueOf(car[i + 1]));
+            retour.append(car[i]);
+            retour.append(car[i + 1]);
             retour.append(separator);
         }
         if (upperCase) {
@@ -90,8 +90,8 @@ public class SubjectUtil {
         String converted = bi.toString(16);
         char[] charArray = converted.toCharArray();
         for (int i = 0; i < charArray.length - 1; i = i + 2) {
-            retour.append(String.valueOf(charArray[i]));
-            retour.append(String.valueOf(charArray[i + 1]));
+            retour.append(charArray[i]);
+            retour.append(charArray[i + 1]);
             retour.append(separator);
         }
         if (upperCase) {

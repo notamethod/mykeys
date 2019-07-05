@@ -6,8 +6,6 @@ import java.awt.*;
 
 public class PreferencesDialogOld extends JDialog {
 
-    private final JPanel contentPanel = new JPanel();
-
     /**
      * Launch the application.
      */
@@ -27,6 +25,7 @@ public class PreferencesDialogOld extends JDialog {
     private PreferencesDialogOld() {
         setBounds(100, 100, 619, 407);
         getContentPane().setLayout(null);
+        JPanel contentPanel = new JPanel();
         contentPanel.setBounds(0, 0, 603, 336);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel);

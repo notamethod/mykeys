@@ -45,11 +45,9 @@ public class MykeysFrame extends JFrame implements WindowListener {
 
     JToolBar toolbar;
     // messages
-    private HashMap<String, KeyStoreValue> ksList = new HashMap<>();
+    private final HashMap<String, KeyStoreValue> ksList = new HashMap<>();
     //keystores
     private MainPanel mainStandardPanel;
-    //pki
-    private MainPKIPanel mainPKIPanel;
 
     private JPanel pnlCards;
 
@@ -130,15 +128,13 @@ public class MykeysFrame extends JFrame implements WindowListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new MykeysFrame();
-                } catch (Exception e) {
-                    log.error("init error", e);
-                }
-
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new MykeysFrame();
+            } catch (Exception e) {
+                log.error("init error", e);
             }
+
         });
 
     }
@@ -261,7 +257,8 @@ public class MykeysFrame extends JFrame implements WindowListener {
         pnlCards = new JPanel(cards);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainStandardPanel = new MainPanel(this.getPreferredSize());
-        mainPKIPanel = new MainPKIPanel(this.getPreferredSize());
+        //pki
+        MainPKIPanel mainPKIPanel = new MainPKIPanel(this.getPreferredSize());
         pnlCards.add(mainStandardPanel, "STD");
         pnlCards.add(mainPKIPanel, "PKI");
 

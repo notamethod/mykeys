@@ -31,9 +31,8 @@ import org.dpr.swingtools.components.LabelValuePanel;
 public class VerifSigDialog extends JDialog {
 
 	private JTextField tfDirectoryIn;
-	private JTextField tfDirectoryOut;
 
-	// JComboBox ksType;
+    // JComboBox ksType;
 	// JPasswordField pwd1;
 	// JPasswordField pwd2;
 	private LabelValuePanel infosPanel;
@@ -94,7 +93,7 @@ public class VerifSigDialog extends JDialog {
 		jbChoose.addActionListener(dAction);
 		jbChoose.setActionCommand("CHOOSE_IN");
 
-		tfDirectoryOut = new JTextField(40);
+        JTextField tfDirectoryOut = new JTextField(40);
 		tfDirectoryOut.setText(f.getAbsolutePath());
 		JButton jbChoose2 = new JButton("...");
 		jbChoose2.addActionListener(dAction);
@@ -135,54 +134,59 @@ public class VerifSigDialog extends JDialog {
 			Map<String, Object> elements = infosPanel.getElements();
 			String command = event.getActionCommand();
 			JFileChooser jfc = null;
-			if (command.equals("CHOOSE_IN")) {
-				jfc = new JFileChooser();
+            switch (command) {
+                case "CHOOSE_IN":
+                    jfc = new JFileChooser();
 
-				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					tfDirectoryIn.setText(jfc.getSelectedFile()
-							.getAbsolutePath());
+                    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                        tfDirectoryIn.setText(jfc.getSelectedFile()
+                                .getAbsolutePath());
 
-				}
-			} else if (command.equals("CHOOSE_OUT")) {
-				jfc = new JFileChooser();
-				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
+                    }
+                    break;
+                case "CHOOSE_OUT":
+                    jfc = new JFileChooser();
+                    // jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
-				// jPanel1.add(jfc);
-				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					String path = jfc.getSelectedFile().getAbsolutePath();
-					String typeSig = (String) infosPanel.getElements().get(
-							"typeSig");
-					if (!path.toUpperCase().endsWith("PK7")
-							&& typeSig.equals("CMS")) {
-						path = path + ".pk7";
-					}
+                    // jPanel1.add(jfc);
+                    if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                        String path = jfc.getSelectedFile().getAbsolutePath();
+                        String typeSig = (String) infosPanel.getElements().get(
+                                "typeSig");
+                        if (!path.toUpperCase().endsWith("PK7")
+                                && typeSig.equals("CMS")) {
+                            path = path + ".pk7";
+                        }
 
-					tfDirectoryIn.setText(path);
+                        tfDirectoryIn.setText(path);
 
-				}
+                    }
 
-			} else if (command.equals("OK")) {
-				// if (tfDirectoryIn.getText().equals("")
-				// || elements.get("pwd1") == null) {
-				// MykeysFrame.showError(VerifSigDialog.this,
-				// "Champs invalides");
-				// return;
-				// }
-				// if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
-				// MykeysFrame.showError(VerifSigDialog.this,
-				// "Mot de passe incorrect");
-				// return;
-				// }
-				SignTools st = new SignTools();
-				try {
-					st.verify2("c:/dev/prv1.pk7", "c:/dev/SMC_test.sql");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                    break;
+                case "OK":
+                    // if (tfDirectoryIn.getText().equals("")
+                    // || elements.get("pwd1") == null) {
+                    // MykeysFrame.showError(VerifSigDialog.this,
+                    // "Champs invalides");
+                    // return;
+                    // }
+                    // if (!elements.get("pwd1").equals(elements.get("pwd2"))) {
+                    // MykeysFrame.showError(VerifSigDialog.this,
+                    // "Mot de passe incorrect");
+                    // return;
+                    // }
+                    SignTools st = new SignTools();
+                    try {
+                        st.verify2("c:/dev/prv1.pk7", "c:/dev/SMC_test.sql");
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
 
-			} else if (command.equals("CANCEL")) {
-				VerifSigDialog.this.setVisible(false);
+                    break;
+                case "CANCEL":
+                    VerifSigDialog.this.setVisible(false);
+                    break;
 			}
 
 		}

@@ -12,8 +12,12 @@ import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.jce.provider.X509CertificateObject;
 import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.x509.extension.X509ExtensionUtil;
+import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.utils.ProviderUtil;
 
 import java.io.IOException;
@@ -23,7 +27,7 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Map;
 
-import static org.dpr.mykeys.app.KeyTools.RandomBI;
+import static org.dpr.mykeys.utils.CertificateUtils.randomBigInteger;
 
 public class CertificateGeneratorStandard implements CertificateGeneratorExtensions {
 
@@ -41,7 +45,7 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
      * @param algo
      * @param keyLength
      */
-    private KeyPair generateKeyPair(String algo, int keyLength) {
+    private KeyPair generateKeyPair(String algo, int keyLength) throws ServiceException {
         KeyPair keypair = null;
         try {
             if (log.isDebugEnabled()) {
@@ -52,10 +56,8 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
             keyGen.initialize(keyLength);
 
             keypair = keyGen.genKeyPair();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new ServiceException("keypair generation error", e);
         }
         return keypair;
     }
@@ -83,7 +85,7 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
 
         KeyPair keypair = generateKeyPair(certModel.getAlgoPubKey(), certModel.getKeyLength());
         // SerialNumber
-        BigInteger serial = RandomBI(30);
+        BigInteger serial = randomBigInteger(30);
         if (StringUtils.isBlank(certModel.getAlias())) {
             certModel.setAlias(serial.toString(16));
         }
@@ -120,6 +122,8 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
         if (StringUtils.isNotBlank(certModel.getPolicyCPS())) {
             ASN1EncodableVector qualifiers = getPolicyInformation(certModel.getPolicyID(), certModel.getPolicyCPS(), certModel.getPolicyNotice());
             certGen.addExtension(Extension.certificatePolicies, false, new DERSequence(qualifiers));
+
+
 //            PolicyQualifierInfo policyQualifierInfo = new PolicyQualifierInfo(certModel.getPolicyCPS());
 //            PolicyInformation policyInformation = new PolicyInformation(PolicyQualifierId.id_qt_cps,
 //                    new DERSequence(policyQualifierInfo));
@@ -216,4 +220,63 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
 
     }
 
+    public CertificateValue createCertificateAuth(String id, char[] charArray) throws ServiceException {
+
+        // X500Name owner = new X500Name("CN=" + fqdn);
+        X500Name subject = new X500Name("CN=" + id);
+        BigInteger serial = new BigInteger(32, new SecureRandom());
+        Date from = new Date();
+        Date to = new Date(System.currentTimeMillis() + (AUTH_VALIDITY * 86400000L));
+        KeyPair keypair = generateKeyPair("RSA", 2048);
+        // Prepare the information required for generating an X.509 certificate.
+        X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(subject, serial, from, to, subject,
+                keypair.getPublic());
+
+
+        CertificateValue value = null;
+        try {
+            ContentSigner signer = new JcaContentSignerBuilder("SHA256WithRSAEncryption").build(keypair.getPrivate());
+            X509CertificateHolder certHolder = builder.build(signer);
+            X509Certificate cert = new JcaX509CertificateConverter().setProvider(ProviderUtil.provider).getCertificate(certHolder);
+
+            cert.verify(keypair.getPublic());
+            value = new CertificateValue(id, cert);
+        } catch (GeneralSecurityException | OperatorCreationException e) {
+            throw new ServiceException("create auth error", e);
+        }
+        value.setPrivateKey(keypair.getPrivate());
+        return value;
+
+
+    }
+
+    protected CRLDistPoint getDistributionPoints(X509Certificate certX509) {
+
+        X509CertificateObject certificateImpl = (X509CertificateObject) certX509;
+
+        byte[] extension = certificateImpl.getExtensionValue(X509Extensions.CRLDistributionPoints.getId());
+
+        if (extension == null) {
+            if (log.isWarnEnabled()) {
+                log.warn("Pas de CRLDistributionPoint pour: " + certificateImpl.getSubjectDN());//
+            }
+            return null;
+        }
+
+        CRLDistPoint distPoints = null;
+
+        try {
+            distPoints = CRLDistPoint.getInstance(X509ExtensionUtil.fromExtensionValue(extension));
+        } catch (Exception e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Extension de CRLDistributionPoint non reconnue pour: " + certificateImpl.getSubjectDN());//
+            }
+            if (log.isDebugEnabled()) {
+                log.debug(e);
+            }
+
+        }
+        return distPoints;
+
+    }
 }

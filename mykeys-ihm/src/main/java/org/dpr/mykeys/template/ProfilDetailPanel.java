@@ -13,7 +13,7 @@ import java.util.Enumeration;
 
 public class ProfilDetailPanel extends LabelValuePanel {
 
-    private CertificateTemplate info;
+    private final CertificateTemplate info;
 
     public ProfilDetailPanel(CertificateTemplate info) {
         this.info = info;

@@ -34,8 +34,8 @@ public class CRLEditorDialog extends JDialog {
     private JButton ajouterButton;
     private JLabel subTitle;
     private JLabel validityPeriodLabel;
-    private CertificateValue certificate;
-    private CRLService service;
+    private final CertificateValue certificate;
+    private final CRLService service;
     private File crlFile;
     CRLState state;
 
@@ -47,22 +47,10 @@ public class CRLEditorDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-        exporterButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onExport();
-            }
-        });
+        buttonOK.addActionListener(e -> onOK());
+        exporterButton.addActionListener(e -> onExport());
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -73,21 +61,12 @@ public class CRLEditorDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane0.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane0.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         model = new CRLEntryModel();
         table1.setModel(model);
         init();
 
-        ajouterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addCertificate();
-            }
-        });
+        ajouterButton.addActionListener(e -> addCertificate());
     }
 
     private void addCertificate() {
@@ -111,9 +90,7 @@ public class CRLEditorDialog extends JDialog {
 
             try {
                 service.saveCRL(value.getThisUpdate(), value.getNextUpdate(), ((CRLEntryModel) table1.getModel()).getValues());
-            } catch (CRLException | ServiceException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (CRLException | ServiceException | IOException e) {
                 e.printStackTrace();
             }
         }

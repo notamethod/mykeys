@@ -26,7 +26,7 @@ public class ProfileServices
     //TODO: manage CAs from PKI store too
     public static final Log log = LogFactory.getLog(ProfileServices.class);
     private final static String PROFIL_EXTENSION = ".mkprof";
-    private String profilPath;
+    private final String profilPath;
 
     public ProfileServices(String profilPath) {
         this.profilPath = profilPath;
@@ -84,6 +84,7 @@ public class ProfileServices
         }
 
         p.setProperty("&keyUsage", String.valueOf(certInfo.getIntKeyUsage()));
+        //noinspection ImplicitArrayToString
         p.setProperty("&keyUsage2", String.valueOf(certInfo.getKeyUsage()));
         p.store(new FileOutputStream(f), "");
 
@@ -91,8 +92,7 @@ public class ProfileServices
 
     public String[] getProfiles() {
         File profDir = new File(profilPath);
-        String[] list = profDir.list((dir, name) -> name.toLowerCase().endsWith(".mkprof"));
-        return list;
+        return profDir.list((dir, name) -> name.toLowerCase().endsWith(".mkprof"));
     }
 
     public void delete(CertificateTemplate certificateTemplate) throws IOException {

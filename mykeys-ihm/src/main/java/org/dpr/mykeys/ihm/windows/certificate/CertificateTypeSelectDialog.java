@@ -23,17 +23,9 @@ public class CertificateTypeSelectDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        buttonOK.addActionListener(e -> onOK());
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -44,11 +36,7 @@ public class CertificateTypeSelectDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane0.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane0.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         init(ACAccepted);
         pack();
     }
@@ -80,13 +68,11 @@ public class CertificateTypeSelectDialog extends JDialog {
 
     private void init(boolean acAccepted) {
 
-        ChangeListener changeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent changEvent) {
-                JRadioButton aButton = (JRadioButton) changEvent.getSource();
+        ChangeListener changeListener = changEvent -> {
+            JRadioButton aButton = (JRadioButton) changEvent.getSource();
 
-                if (aButton.isSelected()) {
-                    typeCer = CertificateType.valueOf(aButton.getName());
-                }
+            if (aButton.isSelected()) {
+                typeCer = CertificateType.valueOf(aButton.getName());
             }
         };
 

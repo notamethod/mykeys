@@ -53,8 +53,8 @@ public class MainPKIPanel extends JPanel implements
         DropTargetListener, EventCompListener {
 
     private final static Log log = LogFactory.getLog(MainPKIPanel.class);
-    private DetailPanel detailPanel;
-    private CertificateListPanel listePanel;
+    private final DetailPanel detailPanel;
+    private final CertificateListPanel listePanel;
 
 
     final String KS_AC_NAME = "store.ac.name";
@@ -114,11 +114,7 @@ public class MainPKIPanel extends JPanel implements
     public static void main(String[] args) {
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+        SwingUtilities.invokeLater(MainPKIPanel::createAndShowGUI);
     }
 
 
@@ -251,9 +247,9 @@ public class MainPKIPanel extends JPanel implements
     }
 
     class PopupHandler implements ActionListener {
-        JTree tree;
+        final JTree tree;
 
-        JPopupMenu popup;
+        final JPopupMenu popup;
 
         Point loc;
 

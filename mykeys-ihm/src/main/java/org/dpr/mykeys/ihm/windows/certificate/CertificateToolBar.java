@@ -9,7 +9,6 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.TypeAction;
-import org.dpr.mykeys.ihm.components.CertificateListPanel;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
@@ -36,7 +35,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 	private JToggleButton unlockButton;
 
 	private String title;
-    private List<CertificateActionListener> listeners = new ArrayList<>();
+    private final List<CertificateActionListener> listeners = new ArrayList<>();
 	
 	public String getTitle() {
 		return title;
@@ -46,12 +45,10 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 		this.title = title;
 	}
 
-    CertificateListPanel.KeysAction actions;
 
-    public CertificateToolBar(String name, CertificateListPanel.KeysAction actions) {
+    public CertificateToolBar(String name) {
 		super(name);
 		setFloatable(false);
-		this.actions=actions;
 		init();
 	}
 
@@ -62,13 +59,11 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 		addCertFromCSRButton = new JButton(createImageIcon("/images/add-csr2.png"));
 		unlockButton = new JToggleButton(createImageIcon("/images/Locked.png"));
 		unlockButton.setActionCommand(TypeAction.OPEN_STORE.getValue());
-		unlockButton.addItemListener(new ItemListener() {
-			   public void itemStateChanged(ItemEvent ev) {
-			      if(ev.getStateChange()==ItemEvent.SELECTED){
-			      } else if(ev.getStateChange()==ItemEvent.DESELECTED){
-			      }
-			   }
-			});
+        unlockButton.addItemListener(ev -> {
+            if (ev.getStateChange() == ItemEvent.SELECTED) {
+            } else if (ev.getStateChange() == ItemEvent.DESELECTED) {
+            }
+        });
 
         unlockButton.addActionListener(e -> log.debug("Handled by Lambda listener"));
 		// unlockButton.setIcon(createImageIcon("/images/Locked.png"));

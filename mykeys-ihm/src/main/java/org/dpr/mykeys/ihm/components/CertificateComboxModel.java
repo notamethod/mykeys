@@ -5,7 +5,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import javax.swing.*;
 
 public class CertificateComboxModel extends DefaultComboBoxModel implements ComboBoxModel {
-    CertificateValue[] values;
+    final CertificateValue[] values;
     String selection;
 
 
@@ -31,7 +31,6 @@ public class CertificateComboxModel extends DefaultComboBoxModel implements Comb
 
     @Override
     public Object getElementAt(int index) {
-        CertificateValue value = values[index];
-        return value;
+        return values[index];
     }
 }

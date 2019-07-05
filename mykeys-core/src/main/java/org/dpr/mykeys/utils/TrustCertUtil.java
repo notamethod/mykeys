@@ -57,12 +57,11 @@ class TrustCertUtil {
      */
     public static X509Certificate[] getTrustedCerts(String repertoireAC,
                                                     String provider) throws GeneralSecurityException {
-        String typeCert = X509_CERTIFICATE_TYPE;
         X509Certificate[] trustedCerts;
         // Chargement de la liste des certificats de confiance
         try {
             Set<X509Certificate> certs = listerCertificats(repertoireAC,
-                    typeCert, provider);
+                    X509_CERTIFICATE_TYPE, provider);
             trustedCerts = new X509Certificate[certs.size()];
             int i = 0;
             for (X509Certificate certificat : certs) {
@@ -188,12 +187,11 @@ class TrustCertUtil {
         // certChain.add(interCert);
 
         CertPath certPath = factory.generateCertPath(certChain);
-        Set trust = anchorSet;// Collections.singleton(new TrustAnchor(rootCert,
         // null));
         // perform validation
         CertPathValidator validator = CertPathValidator.getInstance("PKIX",
                 provider);
-        PKIXParameters param = new PKIXParameters(trust);
+        PKIXParameters param = new PKIXParameters(anchorSet);
 
         param.addCertStore(store);
         param.setDate(new Date());
@@ -235,9 +233,8 @@ class TrustCertUtil {
             IOUtils.closeQuietly(certStream);
             lstCert.addAll(trustedCerts);
         }
-        Set<X509Certificate> trustedCertificates = new HashSet<>(
+        return new HashSet<>(
                 lstCert);
-        return trustedCertificates;
     }
 
     private static Set<X509Certificate> listerCertificats(
@@ -262,9 +259,8 @@ class TrustCertUtil {
                 provider);
 
         // chargement du certificat
-        Collection<X509Certificate> certs = (Collection<X509Certificate>) cf
+        return (Collection<X509Certificate>) cf
                 .generateCertificates(aCertStream);
-        return certs;
     }
 
     /**
@@ -288,9 +284,8 @@ class TrustCertUtil {
      */
     public static X509Certificate[] getTrustedCerts(InputStream certStream,
                                                     String securityProvider) throws GeneralSecurityException {
-        String typeCert = X509_CERTIFICATE_TYPE;
         Collection<X509Certificate> trustedCerts = chargerCertificatsX509(
-                certStream, typeCert, securityProvider);
+                certStream, X509_CERTIFICATE_TYPE, securityProvider);
         // suppression des doublons
         Set<X509Certificate> trustedCertificates = new HashSet<>(
                 trustedCerts);
@@ -314,12 +309,11 @@ class TrustCertUtil {
      */
     public static X509Certificate[] getAllTrustedCerts(String repertoireAC,
                                                        String provider) throws GeneralSecurityException {
-        String typeCert = X509_CERTIFICATE_TYPE;
         X509Certificate[] trustedCerts;
         // Chargement de la liste des certificats de confiance
         try {
             Set<X509Certificate> certs = listerCertificats(repertoireAC,
-                    typeCert, provider, true);
+                    X509_CERTIFICATE_TYPE, provider, true);
             trustedCerts = new X509Certificate[certs.size()];
             int i = 0;
             for (X509Certificate certificat : certs) {
@@ -349,16 +343,13 @@ class TrustCertUtil {
 
             String password = "changeit"; //NOSONAR
             keystore.load(is, password.toCharArray());
-            X509Certificate[] certs = getTrustedCerts(keystore);
-            return certs;
+            return getTrustedCerts(keystore);
         } catch (FileNotFoundException e) {
             if (subPath == null)
                 return getDefaultTrustedCerts("lib/security/cacerts");
             else
                 e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
+        } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
         return null;

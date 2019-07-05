@@ -2,7 +2,6 @@ package org.dpr.mykeys.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 
@@ -31,10 +30,7 @@ public class Test {
     }
 
     private static void ImportCert() {
-        KeyTools kt = new KeyTools();
         try {
-            String typeCert = null;
-
             String alias = "aaa";
             String path = "c:/dev/empty.jks";
             String pathCert = "c:/dev/cpi.cer";
@@ -60,8 +56,6 @@ public class Test {
         String path = "mag1.jks";
         KeyStoreValue ksInfo = new KeyStoreValue("aa", path,
                 StoreModel.CERTSTORE, StoreFormat.JKS);
-
-        KeyTools kt = new KeyTools();
         KeyStore ks = null;
         KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfo);
         ksInfo.setPassword("111".toCharArray());

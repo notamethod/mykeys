@@ -9,11 +9,9 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x509.X509Name;
 
 import org.dpr.mykeys.app.CertificateType;
 import org.bouncycastle.jce.X509Principal;
-import org.bouncycastle.operator.DefaultAlgorithmNameFinder;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
@@ -21,7 +19,6 @@ import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.utils.X509Util;
 import org.jetbrains.annotations.NotNull;
 
-import javax.security.auth.x500.X500Principal;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
@@ -46,8 +43,8 @@ public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable 
     private char[] password;
     private byte[] signature;
     private int keyLength;
-    private Hashtable x509PrincipalMap = new Hashtable();
-    private Map<String, String> subjectMap = new LinkedHashMap<>();
+    private final Hashtable x509PrincipalMap = new Hashtable();
+    private final Map<String, String> subjectMap = new LinkedHashMap<>();
 
 
     private String freeSubject;
@@ -732,8 +729,7 @@ public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable 
     }
 
     public boolean isAcceptChildAC() {
-        boolean checkAccept = isContainsPrivateKey() && (CertificateUtils.isKeyUsage(getKeyUsage(), X509Constants.USAGE_CERTSIGN));
-        return checkAccept;
+        return isContainsPrivateKey() && (CertificateUtils.isKeyUsage(getKeyUsage(), X509Constants.USAGE_CERTSIGN));
     }
 
     public CertificateType getType() {

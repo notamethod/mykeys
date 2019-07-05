@@ -28,7 +28,7 @@ public class SelectTemplateDialog extends MkDialog {
     private final int CPTMAX = 4;
 
     private LabelValuePanel infosPanel;
-    private KeyStoreValue ksInfo;
+    private final KeyStoreValue ksInfo;
     int cpt = 0;
 
     private DefaultComboBoxModel modelCombo;
@@ -89,7 +89,7 @@ public class SelectTemplateDialog extends MkDialog {
      * @return
      * @throws ServiceException
      */
-    private LabelValuePanel getInfoPanel() throws IhmException {
+    private LabelValuePanel getInfoPanel() {
         infosPanel = new LabelValuePanel();
         final Map<String, String> users = new HashMap<>();
 

@@ -56,7 +56,7 @@ public interface NodeInfo {
 
     boolean isProtected();
 
-    void open() throws KeyToolsException;
+    void open();
 
 
 

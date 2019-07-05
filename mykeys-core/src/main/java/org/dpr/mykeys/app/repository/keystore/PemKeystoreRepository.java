@@ -1,4 +1,4 @@
-package org.dpr.mykeys.app.keystore;
+package org.dpr.mykeys.app.repository.keystore;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -8,8 +8,11 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.keystore.KeyStoreValue;
+import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.repository.EntityAlreadyExistsException;
+import org.dpr.mykeys.app.repository.RepositoryException;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -19,12 +22,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PemKeystore extends ClassicKeystore implements MkKeystore {
+public class PemKeystoreRepository extends KeystoreRepository {
 
-    private static final Log log = LogFactory.getLog(PemKeystore.class);
+    public static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
+    public static final String END_PEM = "-----END CERTIFICATE-----";
+    public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
+    public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
+    private static final Log log = LogFactory.getLog(PemKeystoreRepository.class);
 
 
-    public PemKeystore() {
+    public PemKeystoreRepository() {
     }
 
 
@@ -56,31 +63,35 @@ public class PemKeystore extends ClassicKeystore implements MkKeystore {
     }
 
     @Override
-    public void addCert(KeyStoreValue ki, CertificateValue certificate) throws ServiceException {
+    public void addCert(KeyStoreValue ki, CertificateValue certificate) {
 
     }
 
-    public void save(KeyStoreValue ksValue) throws ServiceException {
+    @Override
+    public void save(KeyStoreValue ksValue, SAVE_OPTION option) throws RepositoryException {
+        File f = new File(ksValue.getPath());
+        if (f.exists() && option.equals(SAVE_OPTION.NONE)) {
+            throw new EntityAlreadyExistsException("File already exists " + f.getAbsolutePath());
+        }
         /* save the public key in a file */
         try {
             List<String> lines = new ArrayList<>();
             for (CertificateValue certInfo : ksValue.getCertificates()) {
-                lines.add(KeyTools.BEGIN_PEM);
+                lines.add(BEGIN_PEM);
                 // FileUtils.writeLines(file, lines)
-                File f = new File(ksValue.getPath());
 
                 byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
                 String tmpString = new String(b);
                 String[] datas = tmpString.split("(?<=\\G.{64})");
                 Collections.addAll(lines, datas);
 
-                lines.add(KeyTools.END_PEM);
+                lines.add(END_PEM);
                 FileUtils.writeLines(f, lines);
             }
 
         } catch (Exception e) {
 
-            throw new ServiceException("Export de la clé publique impossible:", e);
+            throw new RepositoryException("Export de la clé publique impossible:", e);
         }
     }
 
@@ -92,7 +103,7 @@ public class PemKeystore extends ClassicKeystore implements MkKeystore {
             byte[] privKey = privateKey.getEncoded();
 
             List<String> lines = new ArrayList<>();
-            lines.add(KeyTools.BEGIN_KEY);
+            lines.add(BEGIN_KEY);
             File f = new File(fName + ".pem.key");
 
             byte[] b = Base64.encodeBase64(privKey);
@@ -100,7 +111,7 @@ public class PemKeystore extends ClassicKeystore implements MkKeystore {
             String[] datas = tmpString.split("(?<=\\G.{64})");
             Collections.addAll(lines, datas);
 
-            lines.add(KeyTools.END_KEY);
+            lines.add(END_KEY);
             FileUtils.writeLines(f, lines);
 // binary ?
 //            try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));) {
@@ -113,7 +124,7 @@ public class PemKeystore extends ClassicKeystore implements MkKeystore {
     }
 
     @Override
-    public void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos) throws ServiceException {
+    public void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos) {
 
     }
 }

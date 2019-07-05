@@ -2,7 +2,6 @@ package org.dpr.mykeys.ihm.windows.certificate;
 
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.KeyTools;
 import org.dpr.mykeys.app.MkSession;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
@@ -189,36 +188,39 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
         @Override
         public void actionPerformed(ActionEvent event) {
             String command = event.getActionCommand();
-            if (command.equals("CHOOSE_IN")) {
+            switch (command) {
+                case "CHOOSE_IN":
 
-            } else if (command.equals("OK")) {
-                try {
-                    fillCertInfo();
-                    X509Certificate[] xCerts = null;
+                    break;
+                case "OK":
+                    try {
+                        fillCertInfo();
+                        X509Certificate[] xCerts = null;
 
-                    CertificateHelper cm = new CertificateHelper();
-                    KeyTools ktools = new KeyTools();
-                    KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
-                    //FIXME
-                    CertificateValue issuer = null;
-                    if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
-                        issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
+                        CertificateHelper cm = new CertificateHelper();
+                        KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
+                        //FIXME
+                        CertificateValue issuer = null;
+                        if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
+                            issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 
-                    CertificateValue newCertificate = cm.generate(certInfo, issuer, typeCer);
-                    if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
-                        newCertificate.setPassword(MkSession.password);
+                        CertificateValue newCertificate = cm.generate(certInfo, issuer, typeCer);
+                        if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
+                            newCertificate.setPassword(MkSession.password);
 
-                    kserv.addCertToKeyStore(ksInfo, newCertificate, null, null);
+                        kserv.addCertToKeyStore(ksInfo, newCertificate, null, null);
+                        CreateCertProfilDialog.this.setVisible(false);
+
+                    } catch (Exception e) {
+
+                        DialogUtil.showError(CreateCertProfilDialog.this, e.getMessage());
+                        e.printStackTrace();
+                    }
+
+                    break;
+                case "CANCEL":
                     CreateCertProfilDialog.this.setVisible(false);
-
-                } catch (Exception e) {
-
-                    DialogUtil.showError(CreateCertProfilDialog.this, e.getMessage());
-                    e.printStackTrace();
-                }
-
-            } else if (command.equals("CANCEL")) {
-                CreateCertProfilDialog.this.setVisible(false);
+                    break;
             }
 
         }
