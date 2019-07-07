@@ -262,6 +262,10 @@ public class TestKeystore {
         CertificateValue retValue = null;
         try {
             retValue = certServ.generate(certModel, certModel, CertificateType.STANDARD);
+            System.out.println(retValue.getPolicyCPS());
+
+            CertificateValue cv = new CertificateValue("xx", retValue.getCertificate());
+            System.out.println(cv.getOtherParams());
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);

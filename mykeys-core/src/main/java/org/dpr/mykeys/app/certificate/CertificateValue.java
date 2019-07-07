@@ -16,6 +16,8 @@ import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.utils.PoliciesException;
+import org.dpr.mykeys.utils.PoliciesUtil;
 import org.dpr.mykeys.utils.X509Util;
 import org.jetbrains.annotations.NotNull;
 
@@ -199,9 +201,15 @@ public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable 
         this.setKeyUsage(certX509.getKeyUsage());
         this.setNotBefore(certX509.getNotBefore());
         this.setNotAfter(certX509.getNotAfter());
-        this.setOtherParams(X509Util.getExtensions(certX509));
-
-
+        try {
+            this.setOtherParams(PoliciesUtil.getExtensionPolicies(certX509));
+        } catch (PoliciesException e) {
+            e.printStackTrace();
+        }
+//        this.setPolicyCPS(String.valueOf(X509Util.getPolicy(certX509, PolicyQualifierId.id_qt_cps)));
+//        this.setPolicyNotice(String.valueOf(X509Util.getPolicy(certX509, PolicyQualifierId.id_qt_unotice)));
+//        System.out.println(this.getPolicyCPS());
+//        System.out.println(this.getPolicyNotice());
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         md.update(certX509.getEncoded());
 

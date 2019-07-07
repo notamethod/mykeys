@@ -201,16 +201,16 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
         ASN1EncodableVector qualifiers = new ASN1EncodableVector();
 
         if (!StringUtils.isEmpty(unotice)) {
-            UserNotice un = new UserNotice(null, new DisplayText(DisplayText.CONTENT_TYPE_BMPSTRING, unotice));
+            UserNotice un = new UserNotice(null, new DisplayText(DisplayText.CONTENT_TYPE_UTF8STRING, unotice));
             PolicyQualifierInfo pqiUNOTICE = new PolicyQualifierInfo(PolicyQualifierId.id_qt_unotice, un);
             qualifiers.add(pqiUNOTICE);
         }
         if (!StringUtils.isEmpty(cps)) {
 
             PolicyQualifierInfo pqiCPS = new PolicyQualifierInfo(cps);
-            PolicyInformation policyInformation = new PolicyInformation(PolicyQualifierId.id_qt_cps,
+            PolicyInformation pi = new PolicyInformation(PolicyQualifierId.id_qt_cps,
                     new DERSequence(pqiCPS));
-            qualifiers.add(pqiCPS);
+            qualifiers.add(pi);
         }
 
 //		PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier(policyOID),

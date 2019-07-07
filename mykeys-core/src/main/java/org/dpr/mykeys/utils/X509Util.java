@@ -78,92 +78,40 @@ public class X509Util {
         }
     }
 
-    public static Map<String, String> getExtensions(X509Certificate certificate) {
 
-        Map<String, String> returnPolicies = new LinkedHashMap<>();
-        //Policies
-        byte[] policyBytes = certificate.getExtensionValue(Extension.certificatePolicies.toString());
-        if (policyBytes != null) {
-            CertificatePolicies policies = null;
-            try {
-                policies = CertificatePolicies.getInstance(X509ExtensionUtil.fromExtensionValue(policyBytes));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            int k = 1;
-            if (policies != null) {
+    public static PolicyInformation[] getPolicies(X509Certificate cert) {
+        byte[] policyBytes = cert.getExtensionValue(Extension.certificatePolicies.toString());
+        try {
+            if (policyBytes != null) {
+                CertificatePolicies policies = CertificatePolicies.getInstance(X509ExtensionUtil.fromExtensionValue(policyBytes));
                 PolicyInformation[] policyInformation = policies.getPolicyInformation();
-                for (PolicyInformation pInfo : policyInformation) {
-                    //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
-                    ASN1Sequence policyQualifiers = pInfo.getPolicyQualifiers();
-                    if (policyQualifiers != null) {
-                        policyQualifiers.forEach(name -> log.debug("policyQualifier: " + name));
-                        for (int i = 0; i < policyQualifiers.size(); i++) {
-                            ASN1Sequence pol = (ASN1Sequence) policyQualifiers.getObjectAt(i);
-                            for (int j = 0; j < pol.size(); j++) {
-                                returnPolicies.put(pol.toString(), pol.getObjectAt(j).toString());
-                                log.debug("pol: " + pol + " " + pol.getObjectAt(j));
-                            }
-                        }
-                    }
-
-                    ASN1ObjectIdentifier policyId = pInfo.getPolicyIdentifier();
-                    returnPolicies.put("policyid" + k, policyId.toString());
-                    k++;
-                    log.debug("Polycy ID: " + policyId.toString());
-                    // return returnPolicies;
-                }
+                return policyInformation;
             }
+        } catch (IOException e) {
+            log.error("get policies error", e);
         }
-        // try {
-        // obj = X509ExtensionUtil.fromExtensionValue(b);
-        // SubjectKeyIdentifier sk = new
-        // SubjectKeyIdentifier(obj.getDEREncoded());
-        // SubjectKeyIdentifier ski =
-        // SubjectKeyIdentifier.getInstance(extIn.readObject());
-        // String skiString = Utils.toHexString(ski.getKeyIdentifier(), " ",
-        // true);
-        // this.setSubjectKeyIdentifier(skiString);
-        // } catch (Exception e) {
-        // log.trace("exc");
-        //
-        // }
-        // log.trace(obj);
-        // AuditIdentity
-        // AuthorityInfoAccess
-        // AuthorityKeyIdentifier
-        // BasicConstraints
-        // BiometricInfo
-        // CertificateIssuer
-        // CertificatePolicies
-        // CRLDistributionPoints
-        // CRLNumber
-        // DeltaCRLIndicator
-        // ExtendedKeyUsage
-        // FreshestCRL
-        // InhibitAnyPolicy
-        // InstructionCode
-        // InvalidityDate
-        // IssuerAlternativeName
-        // IssuingDistributionPoint
-        // KeyUsage
-        // LogoType
-        // NameConstraints
-        // NoRevAvail
-        // PolicyConstraints
-        // PolicyMappings
-        // PrivateKeyUsagePeriod
-        // QCStatements
-        // ReasonCode
-        // SubjectAlternativeName
-        // SubjectDirectoryAttributes
-        // SubjectInfoAccess
-        // SubjectKeyIdentifier
-        // TargetInformation
-        return returnPolicies;
+        return null;
+
     }
 
-
+    public static ASN1Encodable getPolicy(X509Certificate cert, PolicyQualifierId id) {
+        ASN1Encodable policy = null;
+        PolicyInformation[] policyInformation = getPolicies(cert);
+        if (policyInformation != null) {
+            for (PolicyInformation pInfo : policyInformation) {
+                ASN1Sequence policyQualifiers = null;
+                try {
+                    policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
+                } catch (Exception e) {
+                    Object o = pInfo.getPolicyQualifiers().getObjectAt(0);
+                    id.toString().equals(o.toString());
+                }
+                if (id.equals(policyQualifiers.getObjectAt(0)))
+                    return policyQualifiers.getObjectAt(1);
+            }
+        }
+        return policy;
+    }
 
     public static Map<ASN1ObjectIdentifier, String> getSubjectMap(X509Certificate x509Certificate) {
         X500Principal x500Principal = x509Certificate.getSubjectX500Principal();

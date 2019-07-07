@@ -18,6 +18,7 @@ import java.awt.*;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.util.List;
+import java.util.Map;
 
 public class CertificateDetailPanel extends JPanel {
 
@@ -68,7 +69,9 @@ public class CertificateDetailPanel extends JPanel {
                 false);
 
 
-        info.getOtherParams().forEach((k, v) -> otherInfosPanel.put(k, JTextField.class, "", v, false));
+        info.getOtherParams().forEach((k, v) -> otherInfosPanel.put(Messages.getDefaultString(k), JTextField.class, "", v, false));
+        otherInfosPanel.put(Messages.getString("policies.title"), JTextArea.class, "signature", inlineFormat(info.getOtherParams()).toString(),
+                false);
         otherInfosPanel.put("Digest SHA256", JTextArea.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", true),
                 false);
 
@@ -92,6 +95,17 @@ public class CertificateDetailPanel extends JPanel {
         this.add(cp);
     }
 
+    private StringBuilder inlineFormat(Map<String, String> otherParams) {
+        StringBuilder sb = new StringBuilder();
+        info.getOtherParams().forEach((k, v) -> {
+            if (v == null)
+                sb.append(Messages.getDefaultString(k)).append("\n");
+            else
+                sb.append(Messages.getDefaultString(k)).append(": ").append(v).append("\n");
+            ;
+        });
+        return sb;
+    }
     protected void addCrlPanel(LabelValuePanel infosPanel) {
     }
 
