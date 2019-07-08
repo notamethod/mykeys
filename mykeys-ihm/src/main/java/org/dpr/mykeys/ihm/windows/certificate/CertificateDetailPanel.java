@@ -4,12 +4,14 @@ import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.util.encoders.Hex;
+import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.utils.X509Util;
-import org.dpr.mykeys.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.utils.X509Util;
 import org.dpr.swingtools.components.JSpinnerDate;
 import org.dpr.swingtools.components.LabelValuePanel;
+import org.dpr.swingtools.components.SWLabel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -17,8 +19,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
+import java.security.cert.CertificateParsingException;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CertificateDetailPanel extends JPanel {
 
@@ -67,14 +70,49 @@ public class CertificateDetailPanel extends JPanel {
 
         infosPanel.put("Digest SHA1", JLabel.class, "signature", X509Util.toHexString(info.getDigestSHA1(), " ", true),
                 false);
+        try {
+            Collection col = X509ExtensionUtil.getSubjectAlternativeNames(info.getCertificate());
+            if (!col.isEmpty())
+                otherInfosPanel.put(Messages.getString("alternativeNames"), JTextArea.class, "altnames", inlineFormat(col, "altname."),
+                        false);
+        } catch (CertificateParsingException e) {
+            e.printStackTrace();
+        }
 
+        if (!info.getOtherParams().isEmpty())
+            otherInfosPanel.put(Messages.getString("policies.title"), JTextArea.class, "policies", inlineFormat(info.getOtherParams()).toString(),
+                    false);
 
-        info.getOtherParams().forEach((k, v) -> otherInfosPanel.put(Messages.getDefaultString(k), JTextField.class, "", v, false));
-        otherInfosPanel.put(Messages.getString("policies.title"), JTextArea.class, "signature", inlineFormat(info.getOtherParams()).toString(),
+        Set<String> distPointSet = X509Util.getDistributionPoints(info.getCertificate());
+        if (!distPointSet.isEmpty())
+            otherInfosPanel.put(Messages.getString("x509.cdp"), JTextField.class, "crldist", inlineFormat(distPointSet, null),
                 false);
-        otherInfosPanel.put("Digest SHA256", JTextArea.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", true),
-                false);
 
+
+        try {
+            List<String> extendedKU = X509Util.getExtendedKeyUsages(info.getCertificate());
+            final boolean[] first = new boolean[]{true};
+            extendedKU.forEach(item -> {
+                otherInfosPanel.put(first[0] ? Messages.getString("eku.title") : "", JLabel.class, "keyUsage", Messages.getDefaultString(item), false);
+                first[0] = false;
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        otherInfosPanel.put("Digest SHA256", JTextField.class, "signature", X509Util.toHexString(info.getDigestSHA256(), " ", true),
+                false);
+//        public static final int otherName = 0;
+//        public static final int rfc822Name = 1;
+//        public static final int dNSName = 2;
+//        public static final int x400Address = 3;
+//        public static final int directoryName = 4;
+//        public static final int ediPartyName = 5;
+//        public static final int uniformResourceIdentifier = 6;
+//        public static final int iPAddress = 7;
+//        public static final int registeredID = 8;
 
         otherInfosPanel.put(Messages.getString("certificatchain.label"), JTextArea.class, "xCertChain", info.getChaineStringValue(), false);
         otherInfosPanel.putEmptyLine();
@@ -95,6 +133,33 @@ public class CertificateDetailPanel extends JPanel {
         this.add(cp);
     }
 
+    private StringBuilder inlineFormat(Collection col, String prefix) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : col) {
+            if (o instanceof ArrayList) {
+                List lo = (List) o;
+                for (int i = 0; i < lo.size(); i++) {
+                    Object obj = lo.get(i);
+                    if (i == 0 && prefix != null)
+                        sb.append(Messages.getDefaultString(prefix + obj.toString())).append(": ");
+                    else
+                        sb.append(obj.toString()).append(" ");
+                }
+                sb.append("\n");
+            } else {
+                sb.append(o.toString()).append("\n");
+            }
+        }
+        return sb;
+    }
+
+
+    /**
+     * Formap map elements to texte area
+     *
+     * @param otherParams the map
+     * @return
+     */
     private StringBuilder inlineFormat(Map<String, String> otherParams) {
         StringBuilder sb = new StringBuilder();
         info.getOtherParams().forEach((k, v) -> {
@@ -102,19 +167,26 @@ public class CertificateDetailPanel extends JPanel {
                 sb.append(Messages.getDefaultString(k)).append("\n");
             else
                 sb.append(Messages.getDefaultString(k)).append(": ").append(v).append("\n");
-            ;
         });
         return sb;
     }
+
     protected void addCrlPanel(LabelValuePanel infosPanel) {
     }
 
     private void addUsagePanel(LabelValuePanel infosPanel) {
-        infosPanel.addTitle(Messages.getString("usage.title"));
+        // infosPanel.addTitle(Messages.getString("usage.title"), Color.CYAN);
         List<String> keyUsageList = CertificateUtils.keyUsageToList(info.getKeyUsage());
         if (keyUsageList != null) {
-            for (String keyUsage : keyUsageList)
-                infosPanel.put("", JLabel.class, "keyUsage", keyUsage, false);
+            final boolean[] first = new boolean[]{true};
+
+            keyUsageList.forEach(item -> {
+                infosPanel.put(new SWLabel(first[0] ? Messages.getString("certinfo.keyUsage") : "", SWLabel.Style.BOLD), JLabel.class, "keyUsage", Messages.getDefaultString(item), false);
+                first[0] = false;
+            });
+
+//            for (String keyUsage : keyUsageList)
+//                infosPanel.put("", JLabel.class, "keyUsage", Messages.getDefaultString(keyUsage), false);
         }
         infosPanel.putEmptyLine();
     }

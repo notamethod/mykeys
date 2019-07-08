@@ -121,7 +121,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     }
 
     private File getTargetFile(String format) {
-        File pathSrc = new File(KSConfig.getDataDir());
+        File pathSrc = new File(KSConfig.getDefaultCertificatePath());
         if (pathSrc != null && !pathSrc.isDirectory()) {
             pathSrc = new File(pathSrc.getParent());
         }

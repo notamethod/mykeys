@@ -13,6 +13,7 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.MenuAction;
 import org.dpr.mykeys.ihm.components.MainPKIPanel;
 import org.dpr.mykeys.ihm.components.MainPanel;
+import org.dpr.mykeys.utils.ComponentUtils;
 import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
@@ -157,7 +158,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
         setDefaultLookAndFeelDecorated(true);
         try {
 
-            UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
+            UIManager.setLookAndFeel(ComponentUtils.skin);
             UIManager.put("ToolTip.foreground", new ColorUIResource(Color.ORANGE));
 
             return;
@@ -200,6 +201,8 @@ public class MykeysFrame extends JFrame implements WindowListener {
         menu3.setActionCommand("profil");
         JMenuItem menu4 = new JMenuItem(new MenuAction(this, Messages.getString("users.title")));
         menu4.setActionCommand("users");
+        JMenuItem menu5 = new JMenuItem(new MenuAction(this, Messages.getString("extraction.menu.title")));
+        menu5.setActionCommand("extractor");
         // JMenuItem menu4 = new JMenuItem(new MenuAction(this, MyKeys
         // .getMessage().getString("file.sign")));
         // menu4.setActionCommand("signFile");
@@ -210,6 +213,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
         // Create a toolbar and give it an etched border.
         menuOptions.add(menu3);
         menuOptions.add(menu4);
+        menuOptions.add(menu5);
         JToggleButton menuStd = new JToggleButton(Messages.getString("mode.standard"));
         menuStd.addActionListener(e -> switchCard("STD"));
         JToggleButton menuPKI = new JToggleButton(Messages.getString("mode.pki"));
@@ -376,7 +380,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
                     }
                     return;
                 }
-            File fileDest = new File(KSConfig.getDataDir(), "previous_" + mk1StoreCert);
+            File fileDest = new File(KSConfig.getDefaultCertificatePath(), "previous_" + mk1StoreCert);
             try {
                 Files.copy(certFile.toPath(), fileDest.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 Files.delete(certFile.toPath());

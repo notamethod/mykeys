@@ -12,3 +12,5 @@ drag & drop
 
 
             //TODO add parameter to refresh method (type ks: storemodel an dstortype) (certificatelistpanel)
+
+            todo:https://github.com/EMCECS/ssl-certificate-extractor

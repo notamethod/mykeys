@@ -197,6 +197,7 @@ public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable 
         //why ?
         certX509.getSubjectX500Principal().getName("RFC2253");
         X500Name name = new X500Name(certX509.getSubjectX500Principal().getName("RFC2253"));
+
         this.x509NameToMap(name);
         this.setKeyUsage(certX509.getKeyUsage());
         this.setNotBefore(certX509.getNotBefore());

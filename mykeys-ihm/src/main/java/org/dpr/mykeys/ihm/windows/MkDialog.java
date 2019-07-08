@@ -1,5 +1,7 @@
 package org.dpr.mykeys.ihm.windows;
 
+import org.dpr.mykeys.utils.ComponentUtils;
+
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
@@ -14,8 +16,7 @@ public class MkDialog extends JDialog {
 
         setDefaultLookAndFeelDecorated(true);
         try {
-            // UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
-            UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
+            UIManager.setLookAndFeel(ComponentUtils.skin);
             UIManager.put("ToolTip.foreground", new ColorUIResource(Color.ORANGE));
             return;
         } catch (Exception e1) {

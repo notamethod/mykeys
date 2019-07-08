@@ -65,7 +65,6 @@ public class CertificateUtils {
         } else {
             return null;
         }
-
     }
 
     public static boolean[] keyUsageFromInt(int keyUsage) {

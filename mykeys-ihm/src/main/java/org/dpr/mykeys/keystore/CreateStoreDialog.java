@@ -128,7 +128,7 @@ public class CreateStoreDialog extends JDialog {
             switch (command) {
                 case "CHOOSE_IN":
 
-                    JFileChooser jfc = new JFileChooser(KSConfig.getDataDir());
+                    JFileChooser jfc = new JFileChooser(KSConfig.getDefaultCertificatePath());
                     // jfc.addChoosableFileFilter(new KeyStoreFileFilter());
 
                     // jPanel1.add(jfc);
@@ -163,7 +163,7 @@ public class CreateStoreDialog extends JDialog {
 
                     if (!p.isAbsolute()) {
 
-                        dir = KSConfig.getDataDir() + File.separator + correctExtension(dir, typeKS);
+                        dir = KSConfig.getDefaultCertificatePath() + File.separator + correctExtension(dir, typeKS);
                     }
 
 

@@ -250,33 +250,10 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
 
     }
 
-    protected CRLDistPoint getDistributionPoints(X509Certificate certX509) {
 
-        X509CertificateObject certificateImpl = (X509CertificateObject) certX509;
-
-        byte[] extension = certificateImpl.getExtensionValue(X509Extensions.CRLDistributionPoints.getId());
-
-        if (extension == null) {
-            if (log.isWarnEnabled()) {
-                log.warn("Pas de CRLDistributionPoint pour: " + certificateImpl.getSubjectDN());//
-            }
-            return null;
-        }
-
-        CRLDistPoint distPoints = null;
-
-        try {
-            distPoints = CRLDistPoint.getInstance(X509ExtensionUtil.fromExtensionValue(extension));
-        } catch (Exception e) {
-            if (log.isWarnEnabled()) {
-                log.warn("Extension de CRLDistributionPoint non reconnue pour: " + certificateImpl.getSubjectDN());//
-            }
-            if (log.isDebugEnabled()) {
-                log.debug(e);
-            }
-
-        }
-        return distPoints;
-
-    }
+//    DERSequence subjectAlternativeNames = new DERSequence(new ASN1Encodable[] {
+//            new GeneralName(GeneralName.dNSName, "localhost"),
+//            new GeneralName(GeneralName.dNSName, "127.0.0.1")
+//    });
+//    builder.addExtension(Extension.subjectAlternativeName, false, subjectAlternativeNames);
 }

@@ -28,6 +28,8 @@ public class PoliciesUtil {
         put(PolicyQualifierId.id_qt_cps, "oid.policy.id_cps");
         put(PolicyQualifierId.id_qt_unotice, "oid.policy.id_qt_unotice");
         put(PolicyQualifierId.id_ev, "oid.policy.id_ev");
+        put(PolicyQualifierId.id_evssl_globalsign, "oid.policy.id_evssl_globalsign");
+        put(PolicyQualifierId.id_ov, "oid.policy.id_ov");
     }};
 
 
@@ -47,7 +49,6 @@ public class PoliciesUtil {
             if (policies != null) {
                 PolicyInformation[] policyInformation = policies.getPolicyInformation();
                 for (PolicyInformation pInfo : policyInformation) {
-                    //ASN1Sequence policyQualifiers = (ASN1Sequence) pInfo.getPolicyQualifiers().getObjectAt(0);
                     ASN1Sequence policyQualifiers = pInfo.getPolicyQualifiers();
                     if (policyQualifiers != null) {
                         policyQualifiers.forEach(name -> log.debug("policyQualifier: " + name));
@@ -65,7 +66,6 @@ public class PoliciesUtil {
                     returnPolicies.put(name, null);
                     k++;
                     log.debug("Polycy ID: " + name);
-                    // return returnPolicies;
                 }
             }
         }
@@ -74,9 +74,6 @@ public class PoliciesUtil {
     }
 
     private static String getName(ASN1ObjectIdentifier policyId) {
-        if (policyId.equals(PolicyQualifierId.id_dv)) {
-            System.out.println("OUI !!!");
-        }
 
         if (qualifiers.get(policyId) != null) {
             //for resource bundle
@@ -93,7 +90,6 @@ public class PoliciesUtil {
         String s = qualifiers.get(policyId.getObjectAt(0));
         if (s != null) {
             //for resource bundle
-            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" + s);
             return s;
         } else {
             //oid

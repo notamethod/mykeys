@@ -14,10 +14,10 @@ import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import javax.security.auth.x500.X500Principal;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.security.cert.CRLException;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class X509Util {
 
@@ -151,6 +151,104 @@ public class X509Util {
         return subjectMap;
     }
 
+    /**
+     * Récupération des points de distribution des CRL.
+     *
+     * <BR>
+     *
+     * @param certX509
+     * @throws CRLException
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public static Set<String> getDistributionPoints(X509Certificate certX509) {
+        Set<String> distPointSet = new HashSet<>();
+        byte[] extVal = certX509.getExtensionValue(Extension.cRLDistributionPoints.getId());
+        byte[] extension = certX509.getExtensionValue(Extension.cRLDistributionPoints.toString());
+        if (extension == null) {
+            if (log.isWarnEnabled()) {
+                log.warn("Pas de CRLDistributionPoint pour: "
+                        + certX509.getSubjectDN());//
+            }
+            return distPointSet;
+        }
+
+        CRLDistPoint distPoints;
+        try {
+            distPoints = CRLDistPoint.getInstance(X509ExtensionUtil
+                    .fromExtensionValue(extension));
+        } catch (Exception e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Extension de CRLDistributionPoint non reconnue pour: "
+                        + certX509.getSubjectDN());//
+            }
+            if (log.isDebugEnabled()) {
+                log.debug(e);
+            }
+            return distPointSet;
+        }
+
+        DistributionPoint[] pointsDistrib;
+        try {
+            pointsDistrib = distPoints.getDistributionPoints();
+        } catch (Exception e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Extension de CRLDistributionPoint non reconnue pour: "
+                        + certX509.getSubjectDN());//
+            }
+            if (log.isDebugEnabled()) {
+                log.debug(e);
+            }
+            return distPointSet;
+        }
+        for (DistributionPoint distributionPoint : pointsDistrib) {
+            DistributionPointName name = distributionPoint
+                    .getDistributionPoint();
+
+            GeneralName[] gns = ((GeneralNames) name.getName()).getNames();
+
+            for (GeneralName gn : gns) {
+
+                if (gn.getTagNo() == GeneralName.uniformResourceIdentifier) {
+
+                    //FIXME to test
+                    String distPointName = (gn.getName())
+                            .toString();
+
+                    distPointSet.add(distPointName);
+
+                    if (log.isDebugEnabled()) {
+                        log.debug("récupération url: " + distPointName);
+                    }
+
+                }
+
+            }
+        }
+        return distPointSet;
+
+    }
+
+    public static List<String> getExtendedKeyUsages(X509Certificate certificate) throws Exception {
+        List<String> keys = new ArrayList<>();
+        byte[] kuBytes = certificate.getExtensionValue(Extension.extendedKeyUsage.toString());
+        if (kuBytes != null) {
+            ExtendedKeyUsage eku = null;
+            try {
+                eku = ExtendedKeyUsage.getInstance(X509ExtensionUtil.fromExtensionValue(kuBytes));
+            } catch (IOException e) {
+                throw new Exception("invalid key usages informations", e);
+            }
+            int k = 1;
+            if (eku != null) {
+                for (KeyPurposeId pki : eku.getUsages()) {
+                    keys.add(BCUtil.extendedKeyUsages.getOrDefault(pki, pki.toString()));
+                }
+            }
+        }
+
+        return keys;
+    }
+
+
 }
-//1.3.6.1.5.5.7.2.1 - id-qt-cps: OID for CPS qualifier
-//1.3.6.1.5.5.7.2.2 - id-qt-unotice: OID for user notice qualifier

@@ -187,8 +187,7 @@ public class KSConfig {
 	 *
 	 * @return directorny name
 	 */
-	//TODO rename to getDefaultCertificatePath
-	public static String getDataDir() {
+	public static String getDefaultCertificatePath() {
 
 		String dir = getUserCfg().getString("data.dir");
 		if (dir == null) {

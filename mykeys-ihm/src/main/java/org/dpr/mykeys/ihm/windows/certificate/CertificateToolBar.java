@@ -147,8 +147,9 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 
 	public void enableListeners() {
         addCertButton.addActionListener(e -> notifyInsertCertificate(null));
-		
-	}
+
+
+    }
 
 	public void removeListeners() {
         for (ActionListener al : addCertButton.getActionListeners()) {

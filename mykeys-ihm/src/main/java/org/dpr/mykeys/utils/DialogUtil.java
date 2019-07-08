@@ -64,7 +64,6 @@ public class DialogUtil {
      */
     public static void showInfo(Component c, String string) {
         JOptionPane.showMessageDialog(c, string, "Information", JOptionPane.INFORMATION_MESSAGE);
-
     }
 
     /**

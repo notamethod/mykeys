@@ -25,6 +25,7 @@
     <orderEntry type="library" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.58" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:17.0.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.4" level="project" />
     <orderEntry type="module" module-name="mykeys-ihm" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.26" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.26" level="project" />
@@ -35,7 +36,7 @@
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-plaf:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-painters:1.6.5-1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.github.so-kes:swingtools:1.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.java.net.substance:substance:6.0" level="project" />
     <orderEntry type="library" name="Maven: org.pushing-pixels:trident:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.swt.win32.win32:x86:3.3.0-v3346" level="project" />

@@ -185,9 +185,9 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
             infosPanel.putEmptyLine();
 
             infosPanel.put(getMessage("x509.subject.country"), "C", "FR");
-            infosPanel.put(getMessage("x509.subject.organisation"), "O", "Orga");
-            infosPanel.put(getMessage("x509.subject.organisationUnit"), "OU", "Développement");
-            infosPanel.put(getMessage("x509.subject.location"), "L", "Saint-Etienne");
+            infosPanel.put(getMessage("x509.subject.organisation"), "O", "");
+            infosPanel.put(getMessage("x509.subject.organisationUnit"), "OU", "Sample");
+            infosPanel.put(getMessage("x509.subject.location"), "L", "");
             infosPanel.put(getMessage("x509.subject.street"), "SR", "");
 
             infosPanel.putEmptyLine();

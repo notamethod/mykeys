@@ -1,27 +1,29 @@
 package org.dpr.mykeys.app.crl;
 
-import java.io.*;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.security.*;
-import java.security.cert.*;
-import java.util.*;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.*;
+import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
-import org.bouncycastle.jce.provider.X509CertificateObject;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.bouncycastle.x509.extension.X509ExtensionUtil;
-import org.dpr.mykeys.utils.X509Util;
 import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.utils.X509Util;
+
+import java.io.*;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.cert.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -51,91 +53,7 @@ public class CRLManager {
         provider = "BC";
     }
 
-	/**
-	 * Récupération des points de distribution des CRL.
-	 * 
-	 * <BR>
-	 * 
-	 * 
-	 * @param certX509
-     * @param distPointSet
-	 * @throws CRLException
-	 * @throws IOException
-	 * @throws URISyntaxException
-	 */
-	public void getDistributionPoints(X509Certificate certX509,
-			Set<String> distPointSet) {
 
-		X509CertificateObject certificateImpl = (X509CertificateObject) certX509;
-		if (log.isInfoEnabled()) {
-			log.info("Recherche CRLDistributionPoint pour: "
-					+ certificateImpl.getSubjectDN());//
-		}
-		byte[] extension = certificateImpl
-				.getExtensionValue(X509Extensions.CRLDistributionPoints.getId());
-
-		if (extension == null) {
-			if (log.isWarnEnabled()) {
-				log.warn("Pas de CRLDistributionPoint pour: "
-						+ certificateImpl.getSubjectDN());//
-			}
-			return;
-		}
-
-		CRLDistPoint distPoints;
-        try {
-			distPoints = CRLDistPoint.getInstance(X509ExtensionUtil
-					.fromExtensionValue(extension));
-		} catch (Exception e) {
-			if (log.isWarnEnabled()) {
-				log.warn("Extension de CRLDistributionPoint non reconnue pour: "
-						+ certificateImpl.getSubjectDN());//
-			}
-			if (log.isDebugEnabled()) {
-				log.debug(e);
-			}
-			return;
-		}
-
-		DistributionPoint[] pointsDistrib;
-		try {
-			pointsDistrib = distPoints.getDistributionPoints();
-		} catch (Exception e) {
-			if (log.isWarnEnabled()) {
-				log.warn("Extension de CRLDistributionPoint non reconnue pour: "
-						+ certificateImpl.getSubjectDN());//
-			}
-			if (log.isDebugEnabled()) {
-				log.debug(e);
-			}
-			return;
-		}
-		for (DistributionPoint distributionPoint : pointsDistrib) {
-			DistributionPointName name = distributionPoint
-					.getDistributionPoint();
-
-			GeneralName[] gns = ((GeneralNames) name.getName()).getNames();
-
-            for (GeneralName gn : gns) {
-
-                if (gn.getTagNo() == GeneralName.uniformResourceIdentifier) {
-
-                    //FIXME to test
-                    String distPointName = (gn.getName())
-                            .toString();
-
-                    distPointSet.add(distPointName);
-
-                    if (log.isDebugEnabled()) {
-                        log.debug("récupération url: " + distPointName);
-                    }
-
-                }
-
-            }
-		}
-
-	}
 
 	/**
 	 * .

@@ -202,6 +202,8 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
             if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
                 CertificateTypeSelectDialog dl = new CertificateTypeSelectDialog(true);
                 certType = dl.showDialog();
+                if (certType == null)
+                    certType = CertificateType.STANDARD;
             } else {
                 if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
                     certType = CertificateType.AC;
@@ -485,9 +487,17 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     }
 
     @Override
-    public void insertCertificateRequested(CertificateValue what) {
+    public void insertCertificateRequested(CertificateValue certificate) {
+        if (certificate == null) {
+            if (listCerts != null && listCerts.getSelected() != null) {
+                List<CertificateValue> certInfo = listCerts.getSelectedList();
+                if (certInfo.get(0).getType().equals(CertificateType.AC))
+                    certificate = certInfo.get(0);
+            }
+        }
         try {
-            addElement(ksInfo, false, what);
+
+            addElement(ksInfo, false, certificate);
         } catch (ServiceException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();

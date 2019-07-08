@@ -87,6 +87,16 @@ public class MenuAction extends AbstractAction {
                         cs.setVisible(true);
                     });
                     break;
+                case "extractor":
+                    SwingUtilities.invokeLater(() -> {
+                        SSLExtractorDialog cs = null;
+
+                        cs = new SSLExtractorDialog();
+
+                        cs.setLocationRelativeTo(MykeysFrame);
+                        cs.setVisible(true);
+                    });
+                    break;
                 case "signFile":
                     SwingUtilities.invokeLater(() -> {
                         VerifSigDialog cs = new VerifSigDialog(MykeysFrame,
