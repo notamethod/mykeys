@@ -1,6 +1,7 @@
 package org.dpr.mykeys.app;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,9 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
 import org.dpr.mykeys.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
@@ -76,11 +80,30 @@ public class KSConfig {
 
 			setDefault(defaultConfig);
 		}
+        File f = new File(path, "mk.log");
+        addAppender(f);
 		userConfig.setAutoSave(true);
 		defaultConfig.setAutoSave(true);
-
-
     }
+
+	/**
+	 * Manually add appender: in case of first launch, directory not exists
+	 * @param f the log file
+	 */
+	private static void addAppender(File f) {
+		//This is the root logger provided by log4j
+		Logger rootLogger = Logger.getRootLogger();
+		PatternLayout layout = new PatternLayout("%d{ISO8601} [%t] %-5p %c %x - %m%n");
+		try
+		{
+			RollingFileAppender fileAppender = new RollingFileAppender(layout, f.getAbsolutePath());
+			rootLogger.addAppender(fileAppender);
+		}
+		catch (IOException e)
+		{
+			System.out.println("Failed to add appender !!");
+		}
+	}
 
 
 	public static String getCfgPath() {
