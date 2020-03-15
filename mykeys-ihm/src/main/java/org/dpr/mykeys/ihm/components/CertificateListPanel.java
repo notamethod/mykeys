@@ -203,7 +203,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
                 CertificateTypeSelectDialog dl = new CertificateTypeSelectDialog(true);
                 certType = dl.showDialog();
                 if (certType == null)
-                    certType = CertificateType.STANDARD;
+                    return;
             } else {
                 if (ksInfo.getStoreModel().equals(StoreModel.CASTORE)) {
                     certType = CertificateType.AC;
