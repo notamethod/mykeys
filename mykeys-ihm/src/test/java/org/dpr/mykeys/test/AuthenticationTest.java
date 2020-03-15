@@ -25,8 +25,6 @@ public class AuthenticationTest {
 
     private final static Log log = LogFactory.getLog(AuthenticationTest.class);
 
-    private static final String AC_NAME = "mykeys root ca 2";
-
     @BeforeClass
     public static void init() {
 

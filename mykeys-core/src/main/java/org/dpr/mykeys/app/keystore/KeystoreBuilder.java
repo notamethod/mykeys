@@ -60,23 +60,10 @@ public class KeystoreBuilder {
 
     }
 
-    public KeyStore get() {
-        return keystore;
-    }
-
     public void addCertToKeyStoreNew(KeyStoreValue ksInfo, CertificateValue certInfo)
             throws KeyToolsException {
 
         saveCertChain(keystore, certInfo);
-        saveKeyStore(keystore, ksInfo);
-    }
-
-    public void addCertsToKeyStore(KeyStoreValue ksInfo, List<CertificateValue> certInfos)
-            throws KeyToolsException {
-
-        for (CertificateValue certificate : certInfos) {
-            saveCertChain(keystore, certificate);
-        }
         saveKeyStore(keystore, ksInfo);
     }
 

@@ -144,13 +144,6 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    public KeyStore getKeystore() throws ServiceException {
-
-
-        return loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(), ksInfo.getPassword()).getKeystore();
-
-    }
-
     public List<CertificateValue> getCertificates() throws ServiceException {
         List<CertificateValue> certs = new ArrayList<>();
 

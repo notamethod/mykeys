@@ -17,8 +17,6 @@ public class CertificateCADetailPanel extends CertificateDetailPanel {
     protected void addCrlPanel(LabelValuePanel infosPanel) {
 
         JButton jbCreate = new JButton(Messages.getString("edit"));
-        JButton jbChoose2 = new JButton("...");
-        //jbChoose.addActionListener(dAction);
         jbCreate.addActionListener(e -> {
 
             CRLEditorDialog cs = new CRLEditorDialog(info);

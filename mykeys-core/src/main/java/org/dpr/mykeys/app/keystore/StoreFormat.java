@@ -33,16 +33,4 @@ public enum StoreFormat {
 		return format.toString();
 	}
 
-	public static StoreFormat fromValue(TypeObject typeObject) {
-		switch (typeObject) {
-		case MAGP12:
-			return PKCS12;
-
-        case MAGCER:
-        	return DER;
-
-		default:
-			return UNKNOWN;
-		}
-	}
 }

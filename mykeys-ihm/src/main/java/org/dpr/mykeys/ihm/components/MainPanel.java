@@ -65,12 +65,6 @@ public class MainPanel extends JPanel implements
     final String KS_CLI_NAME = "store.cert.name";
     final String KS_MRU_NAME = "mru.name";
 
-    //
-    // DefaultMutableTreeNode crlNode;
-    //
-    // DefaultMutableTreeNode sandBoxNode;
-    private TreePopupMenu popup;
-
     public MainPanel(Dimension dim) {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -173,32 +167,6 @@ public class MainPanel extends JPanel implements
 
         treeksKeystoreMngr.addObject(KS_CLI_NAME, KSConfig.getInternalKeystores().getStoreCertificate(), true);
 
-    }
-
-    public void addCertificate(DefaultMutableTreeNode node, boolean b) throws ServiceException {
-        treeksKeystoreMngr.addCertificate(node, b);
-
-    }
-
-    public void importCertificate(DefaultMutableTreeNode node, boolean b) {
-        treeksKeystoreMngr.importCertificate(node, b);
-    }
-
-    public void changePassword(DefaultMutableTreeNode node, boolean b) {
-        treeksKeystoreMngr.changePassword(node, b);
-    }
-
-
-    /**
-     * .
-     * <p>
-     * <BR>
-     *
-     * @param node
-     * @param b
-     */
-    public void addCertificateAC(DefaultMutableTreeNode node, boolean b) {
-        treeksKeystoreMngr.addCertificateAC(node, b);
     }
 
     @Override
@@ -327,32 +295,6 @@ public class MainPanel extends JPanel implements
             return true;
         }
 
-    }
-
-    class PopupHandler implements ActionListener {
-        final JTree tree;
-
-        final JPopupMenu popup;
-
-        Point loc;
-
-        public PopupHandler(JTree tree, JPopupMenu popup) {
-            this.tree = tree;
-            this.popup = popup;
-            // tree.addMouseListener(ma);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            log.trace("popuprr");
-            String ac = e.getActionCommand();
-            TreePath path = tree.getPathForLocation(loc.x, loc.y);
-            // //log.trace("path = " + path);
-            // //System.out.printf("loc = [%d, %d]%n", loc.x, loc.y);
-            // if(ac.equals("ADD CHILD"))
-            // log.trace("popuprr");
-            // if(ac.equals("ADD SIBLING"))
-            // addSibling(path);
-        }
     }
 
 }

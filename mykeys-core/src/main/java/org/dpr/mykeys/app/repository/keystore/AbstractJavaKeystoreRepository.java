@@ -98,7 +98,6 @@ public abstract class AbstractJavaKeystoreRepository extends KeystoreRepository 
     public void save(KeyStoreValue ksValue, SAVE_OPTION option) throws RepositoryException {
         File file = new File(ksValue.getPath());
         boolean exists = file.exists();
-        KeyStore keystore = null;
         try {
             if (exists) {
                 switch (option) {

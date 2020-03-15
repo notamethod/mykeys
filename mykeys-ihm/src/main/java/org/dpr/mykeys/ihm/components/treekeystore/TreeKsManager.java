@@ -135,28 +135,6 @@ public class TreeKsManager implements MouseListener,
         JPanel leftPanel = new JPanel();
     }
 
-    public static Map<String, String> getListCerts(String path, String type,
-                                                   String password) throws KeyStoreException, ServiceException {
-        KeyStore ks = null;
-        KeyStoreHelper ksv = new KeyStoreHelper(null);
-        ks = ksv.loadKeyStore(path, StoreFormat.fromValue(type), password.toCharArray()).getKeystore();
-        Map<String, String> certsAC = new HashMap<>();
-        Enumeration<String> enumKs = ks.aliases();
-        while (enumKs.hasMoreElements()) {
-            String alias = enumKs.nextElement();
-            Certificate cert = ks.getCertificate(alias);
-
-
-            CertificateValue certInfo = ksv.fillCertInfo(ks, alias);
-
-            certsAC.put(alias, alias);
-
-        }
-
-        return certsAC;
-
-    }
-
     protected void displayCertDetail(CertificateValue info) {
         notifyCertDetailToUpdate(info);
 

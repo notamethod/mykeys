@@ -149,37 +149,4 @@ public class ChangePasswordDialog extends JDialog {
 		}
 
 	}
-
-	public void updateKeyStoreList() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public String correctExtension(String name, String typeKS) {
-		if (!name.toUpperCase().endsWith("JKS") && typeKS.equals("JKS")) {
-			name = name + ".jks";
-		}
-		if (!name.toUpperCase().endsWith("p12") && typeKS.equals("PKCS12")) {
-			name = name + ".p12";
-		}
-		return name;
-	}
-
-	public String getDataDir() {
-
-		String dir = KSConfig.getUserCfg().getString("data.dir");
-		if (dir == null) {
-			File f = FileSystemView.getFileSystemView().getDefaultDirectory();
-			File data = new File(f, getMessage("default.datadir"));
-			data.mkdirs();
-			dir = data.getAbsolutePath();
-			// }
-		}
-		return dir;
-	}
-
-	public void createKeyStore(StoreFormat format, String text, char[] charArray) {
-		// TODO Auto-generated method stub
-
-	}
 }

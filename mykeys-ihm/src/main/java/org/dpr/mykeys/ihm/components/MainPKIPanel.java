@@ -61,11 +61,6 @@ public class MainPKIPanel extends JPanel implements
     final String KS_CLI_NAME = "store.cert.name";
     final String KS_MRU_NAME = "mru.name";
     final String KS_PKI_NAME = "store.pki.name";
-    //
-    // DefaultMutableTreeNode crlNode;
-    //
-    // DefaultMutableTreeNode sandBoxNode;
-    private TreePopupMenu popup;
 
     public MainPKIPanel(Dimension dim) {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));

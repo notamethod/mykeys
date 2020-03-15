@@ -126,19 +126,6 @@ public class KSConfig {
 
 	}
 
-	public static List getSubjectKeys() {
-		List<String> list = new ArrayList<>();
-		Iterator<String> iter = userConfig.getKeys("subject.key.");
-		while (iter.hasNext()) {
-			String name = iter.next();
-			if (userConfig.getBoolean(name)) {
-				list.add(name.substring("subject.key.".length()));
-			}
-		}
-		return list;
-
-	}
-
 	public static void save() {
 		// if (userConfig == null) {
 		// return;
@@ -160,13 +147,6 @@ public class KSConfig {
 		return userConfig;
 	}
 
-	/**
-	 * @return the application
-	 */
-	public static PropertiesConfiguration getDefaultCfg() {
-		return defaultConfig;
-	}
-	
 	public static void initResourceBundle() {
 		Locale currentLocale = Locale.getDefault();
 		log.info("Init RessourceBundle for locale "+currentLocale.toString());
@@ -179,26 +159,12 @@ public class KSConfig {
 		}
 		
 	}
-	
-	public static ResourceBundle getMessage() {
-		if (messages == null) {
-			Locale currentLocale = Locale.getDefault();
-			messages = ResourceBundle.getBundle(
-					"org.dpr.mykeys.config.Messages", currentLocale);
-		}
-		return messages;
-	}
-
 
     public static InternalKeystores getInternalKeystores()  {
 		if (internalKeystores == null) {
 			internalKeystores = new InternalKeystores(getCfgPath() ,getProfilsPath());
 		}
 		return internalKeystores;
-	}
-	
-	public static void initUser() {
-		
 	}
 
 	public static String getDefaultCrlPath(CertificateValue certificateValue) {
