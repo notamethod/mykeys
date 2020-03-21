@@ -2,7 +2,6 @@ package org.dpr.mykeys.ihm.components;
 
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.ihm.windows.ListCertRenderer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;

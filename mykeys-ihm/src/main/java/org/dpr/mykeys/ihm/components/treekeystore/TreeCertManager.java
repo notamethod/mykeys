@@ -2,7 +2,7 @@ package org.dpr.mykeys.ihm.components.treekeystore;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuCertificate;

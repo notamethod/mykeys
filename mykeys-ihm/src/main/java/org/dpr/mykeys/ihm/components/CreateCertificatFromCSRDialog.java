@@ -19,7 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -27,7 +27,7 @@ import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.ihm.windows.certificate.SuperCreate;
+import org.dpr.mykeys.ihm.certificate.SuperCreate;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JDropText;
 import org.dpr.swingtools.components.JFieldsPanel;

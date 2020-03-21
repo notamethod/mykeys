@@ -3,14 +3,13 @@ package org.dpr.mykeys.app.keystore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.TamperedWithException;
-import org.dpr.mykeys.app.repository.EntityAlreadyExistsException;
-import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
-import org.dpr.mykeys.utils.KeystoreUtils;
-import org.dpr.mykeys.utils.X509Util;
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.ServiceException;
+import org.dpr.mykeys.app.keystore.repository.EntityAlreadyExistsException;
+import org.dpr.mykeys.app.keystore.repository.MkKeystore;
+import org.dpr.mykeys.app.utils.X509Util;
+import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.utils.ActionStatus;
+import org.dpr.mykeys.app.utils.ActionStatus;
 
 import java.io.*;
 import java.security.*;
@@ -188,7 +187,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     /*
      * (non-Javadoc)
      *
-     * @see org.dpr.mykeys.keystore.StoreService#getChildList()
+     * @see org.dpr.mykeys.ihm.keystore.StoreService#getChildList()
      */
     @Override
     public List<CertificateValue> getChildList() throws ServiceException {
@@ -265,7 +264,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
     public void importX509CertFromDer(String alias, KeyStoreValue ksv, char[] charArray)
             throws ServiceException {
 
-        List<CertificateValue> certs = CertificateUtils.loadX509Certs(ksv.getPath());
+        List<CertificateValue> certs = loadX509Certs(ksv.getPath());
 
         addCertsToKeyStore(ksInfo, certs);
 
@@ -356,7 +355,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
                 return getKeystore(path, storeFormat, password);
 
             default:
-                CertificateUtils.loadX509Certs(path);
+                loadX509Certs(path);
                 return null;
         }
     }
@@ -525,7 +524,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    public boolean export(List<CertificateValue> certInfos, String fName, StoreFormat format, char[] pwd, KeystoreRepository.SAVE_OPTION option) throws KeyToolsException {
+    public boolean export(List<CertificateValue> certInfos, String fName, StoreFormat format, char[] pwd, SAVE_OPTION option) throws KeyToolsException {
         /* save the public key in a file */
 
         boolean exportToNewFile = true;
@@ -546,5 +545,30 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             throw new KeyToolsException("Export de la clé publique impossible:", e);
         }
         return exportToNewFile;
+    }
+
+    private List<CertificateValue> loadX509Certs(String fileName) {
+
+        // NodeInfo nInfo = new KeyStoreValue(new File(fileName));
+        List<CertificateValue> certsRetour = new ArrayList<>();
+
+
+        try (InputStream is = new FileInputStream(new File(fileName))) {
+            Set<X509Certificate> certs = CertificateUtils.loadX509Certs(is);
+            for (X509Certificate cert : certs) {
+                CertificateValue certInfo = new CertificateValue(null, cert);
+                certsRetour.add(certInfo);
+            }
+
+        } catch (GeneralSecurityException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return certsRetour;
+
+    }
+
+    public enum SAVE_OPTION {
+        REPLACE, ADD, NONE
     }
 }

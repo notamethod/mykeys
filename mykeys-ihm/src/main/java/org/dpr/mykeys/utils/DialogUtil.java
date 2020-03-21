@@ -1,6 +1,6 @@
 package org.dpr.mykeys.utils;
 
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 
 import javax.swing.*;
 import java.awt.*;

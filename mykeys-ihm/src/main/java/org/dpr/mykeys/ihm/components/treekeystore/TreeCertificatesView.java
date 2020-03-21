@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.components.treekeystore;
 
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuCertificate;

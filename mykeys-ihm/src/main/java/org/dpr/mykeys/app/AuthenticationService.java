@@ -2,17 +2,16 @@ package org.dpr.mykeys.app;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
-import org.dpr.mykeys.ihm.windows.certificate.AuthenticationException;
+import org.dpr.mykeys.ihm.certificate.AuthenticationException;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

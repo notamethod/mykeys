@@ -16,7 +16,7 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 
 import java.io.*;
 import java.math.BigInteger;

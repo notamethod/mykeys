@@ -2,9 +2,6 @@ package org.dpr.mykeys.app;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.StoreModel;

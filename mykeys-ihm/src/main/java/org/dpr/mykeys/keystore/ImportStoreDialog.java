@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.filechooser.FileFilter;
 
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.utils.KeystoreUtils;

@@ -32,23 +32,19 @@ package org.dpr.mykeys.ihm.components;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKsManager;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.security.KeyStoreException;
 import java.util.*;

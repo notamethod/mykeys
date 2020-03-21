@@ -15,10 +15,9 @@ import org.bouncycastle.jce.X509Principal;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.utils.CertificateUtils;
-import org.dpr.mykeys.utils.PoliciesException;
-import org.dpr.mykeys.utils.PoliciesUtil;
-import org.dpr.mykeys.utils.X509Util;
+import org.dpr.mykeys.app.utils.CertificateUtils;
+import org.dpr.mykeys.app.utils.PoliciesException;
+import org.dpr.mykeys.app.utils.PoliciesUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.GeneralSecurityException;

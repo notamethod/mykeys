@@ -2,6 +2,7 @@ package org.dpr.mykeys.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 

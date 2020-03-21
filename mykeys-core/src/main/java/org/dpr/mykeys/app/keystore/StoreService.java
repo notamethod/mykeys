@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 
 public  interface StoreService<T extends NodeInfo> {
 

@@ -5,7 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.utils.CertificateUtils;
 
 import java.io.*;
 import java.math.BigInteger;

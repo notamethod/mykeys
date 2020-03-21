@@ -11,9 +11,10 @@ import java.security.cert.CertificateException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
+import org.dpr.mykeys.utils.MkUtils;
 
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 

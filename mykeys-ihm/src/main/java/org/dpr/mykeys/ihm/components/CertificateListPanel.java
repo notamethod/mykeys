@@ -2,7 +2,7 @@ package org.dpr.mykeys.ihm.components;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
@@ -12,11 +12,11 @@ import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
-import org.dpr.mykeys.ihm.windows.CreateCrlDialog;
-import org.dpr.mykeys.ihm.windows.IhmException;
-import org.dpr.mykeys.ihm.windows.certificate.*;
-import org.dpr.mykeys.template.CreateTemplateDialog;
-import org.dpr.mykeys.template.SelectTemplateDialog;
+import org.dpr.mykeys.ihm.crl.CreateCrlDialog;
+import org.dpr.mykeys.ihm.IhmException;
+import org.dpr.mykeys.ihm.certificate.*;
+import org.dpr.mykeys.ihm.template.CreateTemplateDialog;
+import org.dpr.mykeys.ihm.template.SelectTemplateDialog;
 import org.dpr.mykeys.utils.ActionStatus;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -31,7 +31,6 @@ import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 

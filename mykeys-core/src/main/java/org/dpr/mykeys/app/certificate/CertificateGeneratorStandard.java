@@ -12,13 +12,11 @@ import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.jce.provider.X509CertificateObject;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.bouncycastle.x509.extension.X509ExtensionUtil;
-import org.dpr.mykeys.app.keystore.ServiceException;
-import org.dpr.mykeys.utils.ProviderUtil;
+import org.dpr.mykeys.app.ServiceException;
+import org.dpr.mykeys.app.utils.ProviderUtil;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -27,7 +25,7 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Map;
 
-import static org.dpr.mykeys.utils.CertificateUtils.randomBigInteger;
+import static org.dpr.mykeys.app.utils.CertificateUtils.randomBigInteger;
 
 public class CertificateGeneratorStandard implements CertificateGeneratorExtensions {
 

@@ -4,13 +4,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.CertificateType;
+import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.utils.ProviderUtil;
+import org.dpr.mykeys.app.utils.ProviderUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

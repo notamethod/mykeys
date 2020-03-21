@@ -9,7 +9,7 @@ import java.util.Enumeration;
 import org.apache.commons.io.FilenameUtils;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.ChildType;
-import org.dpr.mykeys.utils.OrderedProperties;
+import org.dpr.mykeys.app.utils.OrderedProperties;
 import org.jetbrains.annotations.NotNull;
 
 public class CertificateTemplate implements ChildInfo<CertificateTemplate> {

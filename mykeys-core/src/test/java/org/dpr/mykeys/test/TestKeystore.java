@@ -5,12 +5,13 @@ import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.KeyToolsException;
-import org.dpr.mykeys.app.TamperedWithException;
+import org.dpr.mykeys.app.ServiceException;
+import org.dpr.mykeys.app.keystore.TamperedWithException;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
-import org.dpr.mykeys.utils.ProviderUtil;
+import org.dpr.mykeys.app.keystore.repository.MkKeystore;
+import org.dpr.mykeys.app.utils.ProviderUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -285,7 +286,7 @@ public class TestKeystore {
         String fileName = resourceDirectory.toAbsolutePath().toString();
         KeyStoreHelper service = new KeyStoreHelper();
         try {
-            service.export(listCert, fileName, StoreFormat.PEM, null, KeystoreRepository.SAVE_OPTION.REPLACE);
+            service.export(listCert, fileName, StoreFormat.PEM, null, KeyStoreHelper.SAVE_OPTION.REPLACE);
         } catch (KeyToolsException e) {
             fail();
         }

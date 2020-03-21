@@ -1,8 +1,7 @@
 
 package org.dpr.mykeys.utils;
 
-import org.dpr.mykeys.Messages;
-import org.dpr.mykeys.utils.DialogUtil;
+import org.dpr.mykeys.ihm.Messages;
 
 import java.awt.*;
 import java.util.Map;

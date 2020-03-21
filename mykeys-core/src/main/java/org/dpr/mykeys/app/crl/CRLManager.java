@@ -12,7 +12,7 @@ import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.utils.X509Util;
+import org.dpr.mykeys.app.utils.X509Util;
 
 import java.io.*;
 import java.math.BigInteger;

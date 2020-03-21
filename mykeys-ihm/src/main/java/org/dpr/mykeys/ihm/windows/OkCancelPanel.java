@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.windows;
 
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;

@@ -7,9 +7,15 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.ihm.crl.CreateCrlDialog;
+import org.dpr.mykeys.ihm.signature.VerifSigDialog;
+import org.dpr.mykeys.ihm.tools.Preferences;
+import org.dpr.mykeys.ihm.tools.SSLExtractorDialog;
+import org.dpr.mykeys.ihm.user.ManageUserDialog;
 import org.dpr.mykeys.ihm.windows.*;
 import org.dpr.mykeys.keystore.CreateStoreDialog;
 import org.dpr.mykeys.keystore.ImportStoreDialog;
+import org.dpr.mykeys.ihm.template.ManageTemplateFrame;
 
 public class MenuAction extends AbstractAction {
 

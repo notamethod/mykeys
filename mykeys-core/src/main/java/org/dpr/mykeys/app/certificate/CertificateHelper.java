@@ -7,7 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.CertificateType;
 
 public class CertificateHelper {

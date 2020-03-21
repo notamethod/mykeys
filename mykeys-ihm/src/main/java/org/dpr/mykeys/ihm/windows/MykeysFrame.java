@@ -3,7 +3,7 @@ package org.dpr.mykeys.ihm.windows;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.Messages;
+import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.InternalKeystores;
 import org.dpr.mykeys.app.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
