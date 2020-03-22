@@ -1,5 +1,5 @@
 
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
-import org.dpr.mykeys.utils.MkUtils;
+import org.dpr.mykeys.app.utils.MkUtils;
 
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 

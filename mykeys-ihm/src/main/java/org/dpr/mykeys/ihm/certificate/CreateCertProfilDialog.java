@@ -1,8 +1,8 @@
 package org.dpr.mykeys.ihm.certificate;
 
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.MkSession;
+import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -13,7 +13,7 @@ import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.profile.ProfilException;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingtools.FrameModel;

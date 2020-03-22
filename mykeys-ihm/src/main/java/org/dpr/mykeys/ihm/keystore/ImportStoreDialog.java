@@ -1,4 +1,4 @@
-package org.dpr.mykeys.keystore;
+package org.dpr.mykeys.ihm.keystore;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -18,9 +18,9 @@ import javax.swing.JPasswordField;
 import javax.swing.filechooser.FileFilter;
 
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.utils.KeystoreUtils;
+import org.dpr.mykeys.app.keystore.KeystoreUtils;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;

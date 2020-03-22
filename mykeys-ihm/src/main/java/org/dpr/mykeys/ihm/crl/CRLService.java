@@ -2,13 +2,13 @@ package org.dpr.mykeys.ihm.crl;
 
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.operator.OperatorCreationException;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.MkSession;
+import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 
 import java.io.*;
 import java.math.BigInteger;

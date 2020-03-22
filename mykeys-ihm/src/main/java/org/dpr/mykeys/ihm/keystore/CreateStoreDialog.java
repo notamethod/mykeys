@@ -1,9 +1,9 @@
-package org.dpr.mykeys.keystore;
+package org.dpr.mykeys.ihm.keystore;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -22,8 +22,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.dpr.mykeys.utils.KeystoreUtils.KSTYPE_EXT_JKS;
-import static org.dpr.mykeys.utils.KeystoreUtils.KSTYPE_EXT_P12;
+import static org.dpr.mykeys.app.keystore.KeystoreUtils.KSTYPE_EXT_JKS;
+import static org.dpr.mykeys.app.keystore.KeystoreUtils.KSTYPE_EXT_P12;
 
 public class CreateStoreDialog extends JDialog {
 

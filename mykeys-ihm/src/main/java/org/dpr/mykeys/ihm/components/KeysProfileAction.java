@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.components;
 
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 

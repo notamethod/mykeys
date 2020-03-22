@@ -1,4 +1,4 @@
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.utils.X509Util;
+import org.dpr.mykeys.app.utils.X509Util;
 
 import javax.swing.filechooser.FileSystemView;
 

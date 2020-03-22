@@ -3,11 +3,12 @@ package org.dpr.mykeys.ihm.certificate;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.configuration.InternalKeystores;
+import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
@@ -24,6 +25,8 @@ import java.security.PrivateKey;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.dpr.mykeys.app.keystore.KeyStoreHelper.SAVE_OPTION.*;
 
 public class ExportCertificateDialog extends JDialog implements ItemListener {
 
@@ -239,9 +242,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                                     }
 
                                 }
-                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.NONE);
+                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, NONE);
                                 if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
-                                    kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.REPLACE);
+                                    kServ.export(certInfos, path, storeFormat, pd, REPLACE);
                                 }
                             } catch (Exception e) {
                                 log.error(e);
@@ -261,9 +264,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                                     }
 
                                 }
-                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.NONE);
+                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, NONE);
                                 if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
-                                    kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.REPLACE);
+                                    kServ.export(certInfos, path, storeFormat, pd, REPLACE);
                                 }
                             } catch (Exception e) {
                                 log.error(e.getLocalizedMessage(), e);
@@ -277,9 +280,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                         case PEM:
 
                             try {
-                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.NONE);
+                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, NONE);
                                 if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
-                                    kServ.export(certInfos, path, storeFormat, pd, KeystoreRepository.SAVE_OPTION.REPLACE);
+                                    kServ.export(certInfos, path, storeFormat, pd, REPLACE);
                                 }
                                 if (isExportCle) {
                                     kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd, null,

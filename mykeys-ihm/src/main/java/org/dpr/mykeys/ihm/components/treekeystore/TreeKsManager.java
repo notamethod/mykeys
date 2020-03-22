@@ -36,9 +36,9 @@ import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.app.keystore.repository.MkKeystore;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
-import org.dpr.mykeys.app.repository.RepositoryException;
-import org.dpr.mykeys.app.repository.keystore.KeystoreRepository;
+import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
@@ -48,9 +48,9 @@ import org.dpr.mykeys.ihm.model.TreeModel;
 import org.dpr.mykeys.ihm.certificate.CertificateCreateFactory;
 import org.dpr.mykeys.ihm.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.certificate.SuperCreate;
-import org.dpr.mykeys.keystore.ChangePasswordDialog;
+import org.dpr.mykeys.ihm.keystore.ChangePasswordDialog;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.mykeys.utils.X509Util;
+import org.dpr.mykeys.app.utils.X509Util;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -788,7 +788,7 @@ public class TreeKsManager implements MouseListener,
             MkKeystore mks = MkKeystore.getInstance(ksInfo.getStoreFormat());
             try {
                 mks.getCertificates(ksInfo).addAll(transferData);
-                mks.save(ksInfo, KeystoreRepository.SAVE_OPTION.ADD);
+                mks.save(ksInfo, KeyStoreHelper.SAVE_OPTION.ADD);
             } catch (ServiceException | RepositoryException e) {
                 e.printStackTrace();
                 return false;

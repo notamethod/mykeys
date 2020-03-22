@@ -1,12 +1,13 @@
-package org.dpr.mykeys.app;
+package org.dpr.mykeys.configuration;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateHelper;
 import org.dpr.mykeys.ihm.certificate.AuthenticationException;
 

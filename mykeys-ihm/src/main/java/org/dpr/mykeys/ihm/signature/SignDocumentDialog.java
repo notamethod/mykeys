@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.signature;
 
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;

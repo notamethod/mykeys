@@ -3,7 +3,7 @@ package org.dpr.mykeys.ihm.tools;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.configuration.KSConfig;
 
 import javax.swing.*;
 import java.awt.*;

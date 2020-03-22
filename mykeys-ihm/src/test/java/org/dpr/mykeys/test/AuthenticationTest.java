@@ -2,11 +2,11 @@ package org.dpr.mykeys.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.app.AuthenticationService;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.utils.ProviderUtil;
+import org.dpr.mykeys.configuration.AuthenticationService;
+import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.app.utils.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

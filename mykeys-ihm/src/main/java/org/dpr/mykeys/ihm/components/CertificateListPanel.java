@@ -2,6 +2,8 @@ package org.dpr.mykeys.ihm.components;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
@@ -17,7 +19,7 @@ import org.dpr.mykeys.ihm.IhmException;
 import org.dpr.mykeys.ihm.certificate.*;
 import org.dpr.mykeys.ihm.template.CreateTemplateDialog;
 import org.dpr.mykeys.ihm.template.SelectTemplateDialog;
-import org.dpr.mykeys.utils.ActionStatus;
+import org.dpr.mykeys.app.utils.ActionStatus;
 import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;

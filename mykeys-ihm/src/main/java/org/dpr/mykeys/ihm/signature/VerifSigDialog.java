@@ -20,8 +20,8 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.KSConfig;
-import org.dpr.mykeys.app.SignTools;
+import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.app.signature.SignTools;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;

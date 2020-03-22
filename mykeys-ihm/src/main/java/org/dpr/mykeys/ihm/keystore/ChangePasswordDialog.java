@@ -1,4 +1,4 @@
-package org.dpr.mykeys.keystore;
+package org.dpr.mykeys.ihm.keystore;
 
 import static org.dpr.mykeys.utils.MessageUtils.getMessage;
 
@@ -23,7 +23,7 @@ import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.keystore.TamperedWithException;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;

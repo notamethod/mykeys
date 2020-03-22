@@ -4,7 +4,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.utils.SubjectUtil;
 import org.dpr.swingtools.components.LabelValuePanel;

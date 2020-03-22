@@ -34,8 +34,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
-import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.ihm.actions.TreePopupMenu;
+import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 
 import javax.swing.*;

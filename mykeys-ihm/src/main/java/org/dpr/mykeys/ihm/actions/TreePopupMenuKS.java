@@ -5,12 +5,12 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStoreActions;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
-import org.dpr.mykeys.keystore.CreateStoreDialog;
-import org.dpr.mykeys.keystore.ImportStoreDialog;
+import org.dpr.mykeys.ihm.keystore.CreateStoreDialog;
+import org.dpr.mykeys.ihm.keystore.ImportStoreDialog;
 import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;

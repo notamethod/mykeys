@@ -1,8 +1,8 @@
 package org.dpr.mykeys.ihm.template;
 
-import org.dpr.mykeys.app.KSConfig;
+import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -12,7 +12,7 @@ import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.ihm.certificate.FillUtils;
 import org.dpr.mykeys.ihm.certificate.SuperCreate;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.mykeys.utils.OrderedProperties;
+import org.dpr.mykeys.app.utils.OrderedProperties;
 import org.dpr.mykeys.utils.X509AttributesUtils;
 import org.dpr.swingtools.components.LabelValuePanel;
 

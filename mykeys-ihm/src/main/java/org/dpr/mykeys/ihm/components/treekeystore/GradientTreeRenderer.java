@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.components.treekeystore;
 
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;

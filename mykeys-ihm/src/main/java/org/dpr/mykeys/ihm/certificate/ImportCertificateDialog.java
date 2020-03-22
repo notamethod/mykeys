@@ -23,7 +23,7 @@ import javax.swing.filechooser.FileFilter;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
-import org.dpr.mykeys.utils.CertificateUtils;
+import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JDropText;
 import org.dpr.swingtools.components.JFieldsPanel;

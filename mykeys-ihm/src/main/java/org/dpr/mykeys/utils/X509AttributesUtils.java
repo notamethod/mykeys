@@ -2,6 +2,7 @@ package org.dpr.mykeys.utils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.utils.ProviderUtil;
 import org.dpr.mykeys.ihm.Messages;
 
 import java.util.LinkedHashMap;

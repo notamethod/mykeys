@@ -17,7 +17,7 @@
 package org.dpr.mykeys.ihm.model;
 
 
-import org.dpr.mykeys.utils.X509Util;
+import org.dpr.mykeys.app.utils.X509Util;
 import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
 

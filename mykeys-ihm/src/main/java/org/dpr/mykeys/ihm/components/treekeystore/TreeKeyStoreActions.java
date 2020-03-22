@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.components.treekeystore;
 
-import org.dpr.mykeys.app.keystore.ServiceException;
+import org.dpr.mykeys.app.ServiceException;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
