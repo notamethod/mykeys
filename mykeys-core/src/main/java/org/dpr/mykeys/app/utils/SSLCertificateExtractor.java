@@ -54,7 +54,7 @@ public class SSLCertificateExtractor {
         this.url = url;
     }
 
-    public String run(String defaultCertificatePath, boolean getFullChaine) throws Exception {
+    public String run(String defaultCertificatePath, boolean getFullChaine, boolean checkValidity) throws Exception {
 
         URI uri = new URI(url);
         File outputFile = null;
@@ -63,14 +63,14 @@ public class SSLCertificateExtractor {
         int port = uri.getPort();
         if (port < 0)
             port = 443;
-
+        Set<TrustAnchor> anchors = getTrustAnchors();
         try {
             SSLContext ctx = null;
             ctx = SSLContext.getInstance("TLS");
             ctx.init(null, new TrustManager[]{new CustomTrustManager()}, null);
 
             printMessage("Loading Java's root certificates...");
-            Set<TrustAnchor> anchors = getTrustAnchors();
+
             if (verifyCert != null) {
                 printMessage("Loading your certificate from: " + verifyCert);
                 File f = new File(verifyCert);
@@ -156,7 +156,8 @@ public class SSLCertificateExtractor {
                     rootCert = anchor;
                 }
             }
-
+            if (checkValidity)
+                verifyChain(certificateChain, anchors);
             // write out the root
             outputFile = new File(defaultCertificatePath, host + ".pem");
             try (FileOutputStream out = new FileOutputStream(outputFile)) {
@@ -315,4 +316,18 @@ public class SSLCertificateExtractor {
         }
     }
 
+    public void verifyChain(List<X509Certificate> certificateChain, Set<TrustAnchor> anchors) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, CertificateException, CertPathValidatorException {
+        PKIXParameters params = new PKIXParameters( anchors );
+        //params.setRevocationEnabled(false);
+        CertificateFactory certFactory  = CertificateFactory.getInstance("X.509");
+        Security.setProperty("ocsp.enable", "true");
+        System.setProperty("com.sun.net.ssl.checkRevocation", "true");
+        System.setProperty("com.sun.security.enableCRLDP", "true");
+        CertPath certPath = certFactory.generateCertPath( (List) certificateChain );
+        CertPathValidator validator = CertPathValidator.getInstance( "PKIX" );
+        CertPathValidatorResult result = validator.validate( certPath, params );
+        System.out.println("Chain validated !");
+        //System.out.println("Cert PAth Result: "+result.toString());
+        //PKIXCertPathValidatorResult
+    }
 }
