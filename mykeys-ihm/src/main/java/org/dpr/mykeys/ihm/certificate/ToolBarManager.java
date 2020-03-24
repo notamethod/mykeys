@@ -1,10 +1,10 @@
-package org.dpr.mykeys.ihm.components;
+package org.dpr.mykeys.ihm.certificate;
 
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.ihm.certificate.CertificateToolBar;
-import org.dpr.mykeys.ihm.template.ProfileToolBar;
+import org.dpr.mykeys.ihm.components.ObjToolBar;
+import org.dpr.mykeys.ihm.certificate.template.ProfileToolBar;
 
 import java.awt.*;
 

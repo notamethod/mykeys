@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.model;
+package org.dpr.mykeys.ihm.user;
 
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;

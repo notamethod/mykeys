@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.certificate;
+package org.dpr.mykeys.utils;
 
 import org.apache.commons.lang.StringUtils;
 import org.dpr.mykeys.ihm.Messages;
@@ -10,7 +10,7 @@ import org.dpr.swingtools.components.LabelValuePanel;
 import java.util.Calendar;
 import java.util.Date;
 
-class PanelUtils {
+public class PanelUtils {
 
     public static final String EMAIL_KEY = "x509.subject.email";
     public static final String LOCATION_KEY = "x509.subject.email";

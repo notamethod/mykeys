@@ -1,15 +1,14 @@
-package org.dpr.mykeys.ihm.components;
+package org.dpr.mykeys.ihm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
 import org.dpr.mykeys.ihm.certificate.CertificateCADetailPanel;
 import org.dpr.mykeys.ihm.certificate.CertificateDetailPanel;
-import org.dpr.mykeys.ihm.template.ProfilDetailPanel;
+import org.dpr.mykeys.ihm.certificate.template.ProfilDetailPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.template;
+package org.dpr.mykeys.ihm.certificate.template;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;

@@ -71,7 +71,7 @@ public class CertificateTypeSelectDialog extends JDialog {
     }
 
     private void init(boolean acAccepted) {
-
+        typeCer = CertificateType.STANDARD;
         ChangeListener changeListener = changEvent -> {
             JRadioButton aButton = (JRadioButton) changEvent.getSource();
 

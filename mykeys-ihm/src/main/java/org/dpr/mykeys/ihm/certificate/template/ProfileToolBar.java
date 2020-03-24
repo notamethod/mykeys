@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.template;
+package org.dpr.mykeys.ihm.certificate.template;
 
 import static org.dpr.swingtools.ImageUtils.createImageIcon;
 
@@ -9,7 +9,7 @@ import javax.swing.JToggleButton;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
 import org.dpr.mykeys.ihm.actions.TypeAction;
-import org.dpr.mykeys.ihm.components.KeysProfileAction;
+import org.dpr.mykeys.ihm.certificate.KeysProfileAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
 
 public class ProfileToolBar extends ObjToolBar {

@@ -4,8 +4,8 @@ import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuCertificate;
-import org.dpr.mykeys.ihm.components.CertificatesView;
-import org.dpr.mykeys.ihm.components.IModelFactory;
+import org.dpr.mykeys.ihm.CertificatesView;
+import org.dpr.mykeys.ihm.IModelFactory;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 
 import javax.swing.tree.DefaultMutableTreeNode;

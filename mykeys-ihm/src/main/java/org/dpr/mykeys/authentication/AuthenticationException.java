@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.certificate;
+package org.dpr.mykeys.authentication;
 
 public class AuthenticationException extends Exception{
 

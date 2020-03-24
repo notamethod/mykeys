@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.components;
+package org.dpr.mykeys.ihm.certificate;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -27,7 +27,6 @@ import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.ihm.certificate.SuperCreate;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JDropText;
 import org.dpr.swingtools.components.JFieldsPanel;

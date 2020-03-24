@@ -15,7 +15,7 @@ import org.dpr.mykeys.ihm.user.ManageUserDialog;
 import org.dpr.mykeys.ihm.windows.*;
 import org.dpr.mykeys.ihm.keystore.CreateStoreDialog;
 import org.dpr.mykeys.ihm.keystore.ImportStoreDialog;
-import org.dpr.mykeys.ihm.template.ManageTemplateFrame;
+import org.dpr.mykeys.ihm.certificate.template.ManageTemplateFrame;
 
 public class MenuAction extends AbstractAction {
 

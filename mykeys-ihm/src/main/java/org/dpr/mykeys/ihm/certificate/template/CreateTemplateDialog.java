@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.template;
+package org.dpr.mykeys.ihm.certificate.template;
 
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.X509Constants;

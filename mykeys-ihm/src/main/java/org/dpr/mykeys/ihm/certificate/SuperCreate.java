@@ -17,6 +17,7 @@ import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.app.utils.ProviderUtil;
+import org.dpr.mykeys.utils.PanelUtils;
 import org.dpr.swingtools.components.LabelValuePanel;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.VerticalLayout;
@@ -106,7 +107,9 @@ public class SuperCreate extends JDialog implements ItemListener {
         jp.setLayout(new VerticalLayout());
         //jp.setLayout(bl);
         setContentPane(jp);
-
+        JScrollPane scrollPane = new JScrollPane(jp);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        setContentPane(scrollPane);
 
         LabelValuePanel subjectPanel = new LabelValuePanel();
 

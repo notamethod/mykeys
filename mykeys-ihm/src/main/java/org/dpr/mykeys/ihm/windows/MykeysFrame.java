@@ -62,14 +62,7 @@ public class MykeysFrame extends JFrame implements WindowListener {
         // Get toolkit
         Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-        // Get size
-        // Dimension dimension = toolkit.getScreenSize();
-
-        // this.setPreferredSize(dimension);
         this.setPreferredSize(new Dimension(745, 850));
-        // this.setResizable(false);
-
-        // setNbCols(4);
         init();
         checkUpgrade();
 

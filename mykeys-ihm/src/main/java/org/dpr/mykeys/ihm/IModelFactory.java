@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.components;
+package org.dpr.mykeys.ihm;
 
 import org.dpr.mykeys.app.ChildInfo;
 

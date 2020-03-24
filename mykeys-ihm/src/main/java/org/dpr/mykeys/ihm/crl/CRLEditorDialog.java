@@ -13,7 +13,6 @@ import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.ServiceException;
-import org.dpr.mykeys.ihm.model.CRLEntryModel;
 import org.dpr.mykeys.ihm.certificate.CertificateSelectDialog;
 
 import javax.swing.*;

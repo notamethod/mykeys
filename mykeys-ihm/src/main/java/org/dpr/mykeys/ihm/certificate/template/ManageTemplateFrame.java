@@ -1,4 +1,4 @@
-package org.dpr.mykeys.ihm.template;
+package org.dpr.mykeys.ihm.certificate.template;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

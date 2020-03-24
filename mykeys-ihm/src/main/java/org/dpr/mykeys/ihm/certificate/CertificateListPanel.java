@@ -1,24 +1,25 @@
-package org.dpr.mykeys.ihm.components;
+package org.dpr.mykeys.ihm.certificate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
-import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.CancelCreationException;
+import org.dpr.mykeys.ihm.CertificatesView;
+import org.dpr.mykeys.ihm.IhmException;
+import org.dpr.mykeys.ihm.Messages;
+import org.dpr.mykeys.ihm.components.ListImgCertificatesView;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.crl.CreateCrlDialog;
-import org.dpr.mykeys.ihm.IhmException;
-import org.dpr.mykeys.ihm.certificate.*;
-import org.dpr.mykeys.ihm.template.CreateTemplateDialog;
-import org.dpr.mykeys.ihm.template.SelectTemplateDialog;
+import org.dpr.mykeys.ihm.certificate.template.CreateTemplateDialog;
+import org.dpr.mykeys.ihm.certificate.template.SelectTemplateDialog;
 import org.dpr.mykeys.app.utils.ActionStatus;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -227,7 +228,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         if (cs == null)
             return;
         cs.setLocationRelativeTo(frame);
-        cs.setResizable(false);
+        cs.setResizable(true);
         cs.setVisible(true);
         updateInfo(info);
         return;

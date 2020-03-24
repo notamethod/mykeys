@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.dpr.mykeys.ihm.model;
+package org.dpr.mykeys.ihm.crl;
 
 
 import org.dpr.mykeys.app.utils.X509Util;

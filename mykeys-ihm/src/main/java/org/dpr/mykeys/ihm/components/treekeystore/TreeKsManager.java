@@ -525,7 +525,7 @@ public class TreeKsManager implements MouseListener,
             return;
         }
         cs.setLocationRelativeTo(frame);
-        cs.setResizable(false);
+        cs.setResizable(true);
         cs.setVisible(true);
         openStore(node, true, true);
         displayKeystoreList(ksInfo);

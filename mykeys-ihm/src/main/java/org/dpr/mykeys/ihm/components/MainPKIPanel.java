@@ -35,6 +35,8 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.ihm.certificate.CertificateListPanel;
+import org.dpr.mykeys.ihm.DetailPanel;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 
 import javax.swing.*;

@@ -1,9 +1,10 @@
-package org.dpr.mykeys.ihm.components;
+package org.dpr.mykeys.ihm.certificate;
 
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.actions.TypeAction;
+import org.dpr.mykeys.ihm.certificate.CertificateListPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
