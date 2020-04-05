@@ -26,7 +26,7 @@ class SignToolsToUpgrade {
 //			e.printStackTrace();
 //		}
 //		// try {
-//		// KeyStore ks = kt.loadKeyStore("fdt.p12", StoreFormat.PKCS12,
+//		// KeyStore ks = kt.loadKeyStore("mdr.p12", StoreFormat.PKCS12,
 //		// "1234".toCharArray());
 //		// //{85B8BEBE-A752-4728-8A60-52E946A941B7}
 //		// CertificateInfo certInfo = new CertificateInfo();
