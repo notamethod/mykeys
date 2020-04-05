@@ -714,11 +714,6 @@ public class CertificateValue implements ChildInfo<CertificateValue>, Cloneable 
         return this;
     }
 
-    @Override
-    public ChildType getChildType() {
-        return ChildType.CERTIFICATE;
-    }
-
     public Object clone() {
         CertificateValue certificate = null;
         try {

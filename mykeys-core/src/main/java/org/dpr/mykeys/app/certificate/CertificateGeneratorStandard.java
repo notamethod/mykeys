@@ -213,7 +213,7 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
 
 //		PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier(policyOID),
 //				new DERSequence(qualifiers));
-
+//wildcard policy 2.5.29.32.0
         return qualifiers;
 
     }

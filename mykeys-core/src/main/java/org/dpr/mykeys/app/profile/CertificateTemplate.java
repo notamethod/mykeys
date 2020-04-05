@@ -47,12 +47,6 @@ public class CertificateTemplate implements ChildInfo<CertificateTemplate> {
 
     }
 
-    @Override
-    public ChildType getChildType() {
-
-        return ChildType.PROFILE;
-    }
-
     public String getValue(String key) {
         // TODO Auto-generated method stub
         return p.getProperty(key);

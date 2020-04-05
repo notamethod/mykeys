@@ -62,7 +62,7 @@ public class CertificateCSRHelper {
 
             X500Name x500Name = csr.getSubject();
             log.info("x500Name is: " + x500Name + "\n");
-            log.info("x500Name is: " + csr.getSignatureAlgorithm() + "\n");
+            log.info("Signature algorithm is: " + csr.getSignatureAlgorithm() + "\n");
 
             byte[] certencoded = sign(csr, issuer.getPrivateKey(), issuer.getCertificate());
             CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
