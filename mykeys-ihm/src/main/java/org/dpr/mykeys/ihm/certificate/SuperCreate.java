@@ -7,7 +7,7 @@ import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateManager;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -315,7 +315,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                             if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
                                 inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
                         }
-                        CertificateHelper chn = new CertificateHelper();
+                        CertificateManager chn = new CertificateManager();
                         CertificateValue newCertificate = chn.generate(certInfo, inIssuer, typeCer);
 
                         if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))

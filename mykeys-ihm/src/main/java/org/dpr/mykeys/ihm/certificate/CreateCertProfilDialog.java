@@ -4,7 +4,7 @@ import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateManager;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
@@ -197,7 +197,7 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                         fillCertInfo();
                         X509Certificate[] xCerts = null;
 
-                        CertificateHelper cm = new CertificateHelper();
+                        CertificateManager cm = new CertificateManager();
                         KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
                         //FIXME
                         CertificateValue issuer = null;

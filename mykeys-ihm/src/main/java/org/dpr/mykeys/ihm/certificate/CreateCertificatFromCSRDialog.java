@@ -23,7 +23,7 @@ import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
+import org.dpr.mykeys.app.certificate.CSRManager;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreModel;
@@ -121,12 +121,12 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
                         DialogUtil.showError(CreateCertificatFromCSRDialog.this, "Champs invalides");
                         return;
                     }
-                    CertificateCSRHelper cm = new CertificateCSRHelper();
+                    CSRManager cm = new CSRManager();
                     KeyStoreHelper kserv = new KeyStoreHelper();
                     try (InputStream is = new FileInputStream(tfDirectory.getText())) {
                         // load issuer
                         CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), (String) infosPanel.getElements().get("emetteur"));
-                        CertificateValue certificate = cm.generateFromCSR(is, issuer);
+                        CertificateValue certificate = cm.generateCertificate(is, issuer);
                         //FIXME if password in ksinfo null
                         kserv.addCertToKeyStore(ksInfo, certificate, null, null);
                         CreateCertificatFromCSRDialog.this.setVisible(false);

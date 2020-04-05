@@ -1,5 +1,9 @@
 package org.dpr.mykeys.app.certificate;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -10,12 +14,12 @@ import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.CertificateType;
 
-public class CertificateHelper {
+public class CertificateManager {
 
-    private final Log log = LogFactory.getLog(CertificateHelper.class);
+    private final Log log = LogFactory.getLog(CertificateManager.class);
     private static final int AUTH_VALIDITY = 999;
 
-    public CertificateHelper() {
+    public CertificateManager() {
         super();
     }
 
@@ -93,6 +97,30 @@ public class CertificateHelper {
         if (certGen == null)
             return null;
         return certGen.generate(certInfo, inIssuer);
+    }
+
+    /**
+     * Key pair generation
+     *
+     * @param algorithm
+     * @param keyLength
+     */
+    //FIXME: refactor
+    public KeyPair generateKeyPair(String algorithm, int keyLength) throws ServiceException {
+        KeyPair keypair = null;
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("generating keypair: " + algorithm + " keypair: " + keyLength);
+            }
+
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm, "BC");
+            keyGen.initialize(keyLength);
+
+            keypair = keyGen.genKeyPair();
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new ServiceException("keypair generation error", e);
+        }
+        return keypair;
     }
 //
 //	private PolicyInformation getPolicyInformation(String policyOID, String cps, String unotice) {

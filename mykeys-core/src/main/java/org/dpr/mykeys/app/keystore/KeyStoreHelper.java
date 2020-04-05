@@ -547,6 +547,29 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
         return exportToNewFile;
     }
 
+//    public boolean export(byte[] b, File file, StoreFormat format SAVE_OPTION option) throws KeyToolsException {
+//        /* save the public key in a file */
+//
+//        boolean exportToNewFile = true;
+//        try {
+//            KeyStoreValue ksv = new KeyStoreValue(fName, format);
+//            if (pwd != null)
+//                ksv.setPassword(pwd);
+//            ksv.setCertificates(certInfos);
+//            MkKeystore mks = MkKeystore.getInstance(format);
+//            mks.save(ksv, option);
+//
+//        } catch (EntityAlreadyExistsException e) {
+//
+//            exportToNewFile = false;
+//
+//        } catch (Exception e) {
+//
+//            throw new KeyToolsException("Export de la clé publique impossible:", e);
+//        }
+//        return exportToNewFile;
+//    }
+
     private List<CertificateValue> loadX509Certs(String fileName) {
 
         // NodeInfo nInfo = new KeyStoreValue(new File(fileName));
@@ -568,6 +591,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
+    //FIXME: Move it
     public enum SAVE_OPTION {
         REPLACE, ADD, NONE
     }

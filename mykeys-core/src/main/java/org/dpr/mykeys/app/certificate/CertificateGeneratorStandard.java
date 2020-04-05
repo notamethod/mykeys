@@ -27,7 +27,7 @@ import java.util.Map;
 
 import static org.dpr.mykeys.app.utils.CertificateUtils.randomBigInteger;
 
-public class CertificateGeneratorStandard implements CertificateGeneratorExtensions {
+class CertificateGeneratorStandard implements CertificateGeneratorExtensions {
 
     private final Log log = LogFactory.getLog(CertificateGeneratorStandard.class);
     private static final int AUTH_VALIDITY = 999;
@@ -40,17 +40,17 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
     /**
      * Key pair generation
      *
-     * @param algo
+     * @param algorithm
      * @param keyLength
      */
-    private KeyPair generateKeyPair(String algo, int keyLength) throws ServiceException {
+    private KeyPair generateKeyPair(String algorithm, int keyLength) throws ServiceException {
         KeyPair keypair = null;
         try {
             if (log.isDebugEnabled()) {
-                log.debug("generating keypair: " + algo + " keypair: " + keyLength);
+                log.debug("generating keypair: " + algorithm + " keypair: " + keyLength);
             }
 
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algo, "BC");
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm, "BC");
             keyGen.initialize(keyLength);
 
             keypair = keyGen.genKeyPair();
@@ -229,7 +229,6 @@ public class CertificateGeneratorStandard implements CertificateGeneratorExtensi
         // Prepare the information required for generating an X.509 certificate.
         X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(subject, serial, from, to, subject,
                 keypair.getPublic());
-
 
         CertificateValue value = null;
         try {

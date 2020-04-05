@@ -12,6 +12,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
+import org.dpr.mykeys.app.keystore.PEMType;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -23,10 +24,7 @@ import java.util.List;
 
 class PemKeystoreRepository extends KeystoreRepository {
 
-    public static final String BEGIN_PEM = "-----BEGIN CERTIFICATE-----";
-    public static final String END_PEM = "-----END CERTIFICATE-----";
-    public static final String BEGIN_KEY = "-----BEGIN RSA PRIVATE KEY-----";
-    public static final String END_KEY = "-----END RSA PRIVATE KEY-----";
+
     private static final Log log = LogFactory.getLog(PemKeystoreRepository.class);
 
 
@@ -73,19 +71,10 @@ class PemKeystoreRepository extends KeystoreRepository {
             throw new EntityAlreadyExistsException("File already exists " + f.getAbsolutePath());
         }
         /* save the public key in a file */
-        try {
-            List<String> lines = new ArrayList<>();
+        try (FileOutputStream fout = new FileOutputStream(f)){
             for (CertificateValue certInfo : ksValue.getCertificates()) {
-                lines.add(BEGIN_PEM);
-                // FileUtils.writeLines(file, lines)
-
-                byte[] b = Base64.encodeBase64(certInfo.getCertificate().getEncoded());
-                String tmpString = new String(b);
-                String[] datas = tmpString.split("(?<=\\G.{64})");
-                Collections.addAll(lines, datas);
-
-                lines.add(END_PEM);
-                FileUtils.writeLines(f, lines);
+                byte[] b = certInfo.getCertificate().getEncoded();
+                saveXxx(b, fout, PEMType.CERTIFICATE);
             }
 
         } catch (Exception e) {
@@ -96,32 +85,46 @@ class PemKeystoreRepository extends KeystoreRepository {
 
     public void savePrivateKey(PrivateKey privateKey, String fName, char[] pass)
             throws ServiceException {
+         savePrivateKey(privateKey, fName);
+    }
+    public void savePrivateKey(PrivateKey privateKey, String fName)
+            throws ServiceException {
 
-        try {
-
+        try(FileOutputStream f = new FileOutputStream(fName + ".pem.key")) {
             byte[] privKey = privateKey.getEncoded();
-
-            List<String> lines = new ArrayList<>();
-            lines.add(BEGIN_KEY);
-            File f = new File(fName + ".pem.key");
-
-            byte[] b = Base64.encodeBase64(privKey);
-            String tmpString = new String(b);
-            String[] datas = tmpString.split("(?<=\\G.{64})");
-            Collections.addAll(lines, datas);
-
-            lines.add(END_KEY);
-            FileUtils.writeLines(f, lines);
-// binary ?
-//            try (FileOutputStream keyfos = new FileOutputStream(new File(fName + ".key"));) {
-//                keyfos.write(privKey);
-//            }
+            saveXxx(privKey, f, PEMType.PRIVATE_KEY);
 
         } catch (Exception e) {
             throw new ServiceException("Fail to export private key", e);
         }
     }
 
+    public void saveCSR(byte[] b, File f, KeyStoreHelper.SAVE_OPTION option) throws ServiceException {
+
+        try(FileOutputStream fout = new FileOutputStream(f)) {
+            saveXxx(b, fout, PEMType.REQUEST);
+        } catch (Exception e) {
+            throw new ServiceException("Fail to export private key", e);
+        }
+    }
+
+    public void saveXxx(byte[] encoded, OutputStream os, PEMType pemType) throws IOException {
+
+            byte[] base64Encoded = Base64.encodeBase64(encoded);
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            List<String> lines = new ArrayList<>();
+            lines.add(pemType.Begin());
+
+            String tmpString = new String(base64Encoded);
+            String[] datas = tmpString.split("(?<=\\G.{64})");
+            Collections.addAll(lines, datas);
+
+            lines.add(pemType.End());
+            for (String line: lines){
+                osw.write(line);
+            }
+
+    }
     @Override
     public void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos) {
 

@@ -10,7 +10,7 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateManager;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -22,7 +22,7 @@ public class AuthenticationService {
     private static final Log log = LogFactory
             .getLog(AuthenticationService.class);
     public void createUser(String id, char[] pwd) throws ServiceException {
-        CertificateHelper ch = new CertificateHelper();
+        CertificateManager ch = new CertificateManager();
         KeyStoreHelper kh = new KeyStoreHelper();
         CertificateValue cer;
         KeyStoreValue ki;

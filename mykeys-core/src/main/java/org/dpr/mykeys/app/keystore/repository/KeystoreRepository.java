@@ -5,6 +5,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,5 +29,11 @@ public abstract class KeystoreRepository implements MkKeystore {
     public void save(KeyStoreValue ksValue) throws RepositoryException {
         save(ksValue, KeyStoreHelper.SAVE_OPTION.NONE);
     }
+
+    @Override
+    public void saveCSR(byte[] b, File f, KeyStoreHelper.SAVE_OPTION option) throws ServiceException {
+        throw new ServiceException("not implemented");
+    }
+
 
 }

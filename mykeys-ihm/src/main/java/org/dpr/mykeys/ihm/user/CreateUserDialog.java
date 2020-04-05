@@ -10,7 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.authentication.AuthenticationService;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateManager;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.ihm.windows.MkDialog;
 import org.dpr.mykeys.utils.ComponentUtils;
@@ -120,7 +120,7 @@ public class CreateUserDialog extends MkDialog {
                 }
 			
 				char[] pwdChar =pwd.toCharArray();
-				CertificateHelper ch = new CertificateHelper();
+				CertificateManager ch = new CertificateManager();
 				AuthenticationService auth = new AuthenticationService();
 				try {
 					auth.createUser(nom, pwdChar);

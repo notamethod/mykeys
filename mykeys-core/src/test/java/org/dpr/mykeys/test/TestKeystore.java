@@ -7,7 +7,7 @@ import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.keystore.TamperedWithException;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CertificateManager;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.keystore.repository.MkKeystore;
@@ -229,7 +229,7 @@ public class TestKeystore {
         certModel.setNotBefore(new Date());
         certModel.setNotAfter(cal.getTime());
         CertificateValue certIssuer = new CertificateValue();
-        CertificateHelper certServ = new CertificateHelper();
+        CertificateManager certServ = new CertificateManager();
 
         CertificateValue retValue = null;
         try {
@@ -258,7 +258,7 @@ public class TestKeystore {
         certModel.setNotAfter(cal.getTime());
         certModel.setPolicyCPS("CPO000");
         CertificateValue certIssuer = new CertificateValue();
-        CertificateHelper certServ = new CertificateHelper();
+        CertificateManager certServ = new CertificateManager();
 
         CertificateValue retValue = null;
         try {

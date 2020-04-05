@@ -14,26 +14,30 @@ import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
+import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.ServiceException;
+import org.dpr.mykeys.app.keystore.KeyStoreHelper;
+import org.dpr.mykeys.app.keystore.StoreFormat;
+import org.dpr.mykeys.app.keystore.repository.MkKeystore;
 
+import javax.security.auth.x500.X500Principal;
 import java.io.*;
 import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
+import java.security.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
-public class CertificateCSRHelper {
+public class CSRManager {
 
 
     private static final int CSR_VALIDITY = 365;
     private static final String CSR_SIGN_ALGORITHM = "SHA256withRSA";
-    private static final Log log = LogFactory.getLog(CertificateCSRHelper.class);
+    private static final Log log = LogFactory.getLog(CSRManager.class);
 
 
 
@@ -45,7 +49,7 @@ public class CertificateCSRHelper {
      * @throws ServiceException
      * @throws IOException
      */
-    public CertificateValue generateFromCSR(InputStream fic, CertificateValue issuer) throws ServiceException, IOException {
+    public CertificateValue generateCertificate(InputStream fic, CertificateValue issuer) throws ServiceException, IOException {
 
         X509Certificate[] certificates = null;
         CertificateValue cert = null;
@@ -133,5 +137,20 @@ public class CertificateCSRHelper {
 
     }
 
+    public byte[] generateCSR(X500Principal principal, KeyPair pair) throws OperatorCreationException, IOException {
 
+        PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
+                new X500Principal("CN=Requested Test Certificate"), pair.getPublic());
+        JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
+        ContentSigner signer = csBuilder.build(pair.getPrivate());
+        PKCS10CertificationRequest csr = p10Builder.build(signer);
+        return csr.getEncoded();
+    }
+
+
+    public void exportToFile(byte[] csr, File f) throws ServiceException {
+        KeyStoreHelper kh = new KeyStoreHelper();
+        MkKeystore mks = MkKeystore.getInstance(StoreFormat.PEM);
+        mks.saveCSR(csr, f, KeyStoreHelper.SAVE_OPTION.NONE);
+    }
 }

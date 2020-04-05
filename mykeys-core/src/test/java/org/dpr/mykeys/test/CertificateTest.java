@@ -3,10 +3,12 @@ package org.dpr.mykeys.test;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.dpr.mykeys.app.CertificateType;
 import org.dpr.mykeys.app.ServiceException;
-import org.dpr.mykeys.app.certificate.CertificateCSRHelper;
-import org.dpr.mykeys.app.certificate.CertificateHelper;
+import org.dpr.mykeys.app.certificate.CSRManager;
+import org.dpr.mykeys.app.certificate.CertificateManager;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
@@ -15,9 +17,11 @@ import org.dpr.mykeys.app.utils.ProviderUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.security.auth.x500.X500Principal;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.KeyPair;
 import java.security.Security;
 import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
@@ -59,7 +63,7 @@ public class CertificateTest {
         certModel.setNotAfter(cal.getTime());
         CertificateValue certIssuer = new CertificateValue();
         certModel.setSubjectMap("CN=toto");
-        CertificateHelper certServ = new CertificateHelper();
+        CertificateManager certServ = new CertificateManager();
 
         try {
             certServ.generate(certModel, certModel, CertificateType.STANDARD);
@@ -85,12 +89,47 @@ public class CertificateTest {
         certModel.setNotBefore(new Date());
         certModel.setNotAfter(cal.getTime());
 
-        CertificateCSRHelper certServ = new CertificateCSRHelper();
+        CSRManager certServ = new CSRManager();
         KeyStoreHelper ksh = new KeyStoreHelper();
         CertificateValue certIssuer = ksh.findCertificateAndPrivateKeyByAlias(getStoreAC(), AC_NAME);
         try {
-            certServ.generateFromCSR(new FileInputStream(new File("src/test/resources/data/cert1.csr")), certIssuer);
+            certServ.generateCertificate(new FileInputStream(new File("src/test/resources/data/cert1.csr")), certIssuer);
         } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail();
+        }
+
+    }
+
+    @Test
+    public void create_csr2() throws ServiceException {
+
+        boolean isAC = false;
+        CertificateValue certModel = new CertificateValue("aliastest");
+        certModel.setAlgoPubKey("RSA");
+        certModel.setAlgoSig("SHA1WithRSAEncryption");
+
+        certModel.setKeyLength(1024);
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, 1);
+        certModel.setNotBefore(new Date());
+        certModel.setNotAfter(cal.getTime());
+
+        CSRManager certCsr = new CSRManager();
+        KeyStoreHelper ksh = new KeyStoreHelper();
+        CertificateValue certIssuer = ksh.findCertificateAndPrivateKeyByAlias(getStoreAC(), AC_NAME);
+        CertificateManager certServ = new CertificateManager();
+        KeyPair kp = certServ. generateKeyPair("RSA", 2048);
+        X500Principal principal = new X500Principal("CN=Requested Test Certificate");
+        JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
+        try {
+            byte[] csr = certCsr.generateCSR(principal, kp);
+            File f = new File("c:/tmp/csr.csr");
+            certCsr.exportToFile(csr, f);
+
+        } catch (IOException | OperatorCreationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             fail();
