@@ -27,8 +27,7 @@ import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class CertificateTest {
 
@@ -93,7 +92,7 @@ public class CertificateTest {
         KeyStoreHelper ksh = new KeyStoreHelper();
         CertificateValue certIssuer = ksh.findCertificateAndPrivateKeyByAlias(getStoreAC(), AC_NAME);
         try {
-            certServ.generateCertificate(new FileInputStream(new File("src/test/resources/data/cert1.csr")), certIssuer);
+            CertificateValue out=certServ.generateCertificate(new FileInputStream(new File("src/test/resources/data/cert1.csr")), certIssuer);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -103,31 +102,32 @@ public class CertificateTest {
     }
 
     @Test
-    public void create_csr2() throws ServiceException {
+    public void create_csr() throws ServiceException {
 
         boolean isAC = false;
-        CertificateValue certModel = new CertificateValue("aliastest");
-        certModel.setAlgoPubKey("RSA");
-        certModel.setAlgoSig("SHA1WithRSAEncryption");
-
-        certModel.setKeyLength(1024);
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, 1);
-        certModel.setNotBefore(new Date());
-        certModel.setNotAfter(cal.getTime());
+//        CertificateValue certModel = new CertificateValue("aliastest");
+//        certModel.setAlgoPubKey("RSA");
+//        certModel.setAlgoSig("SHA1WithRSAEncryption");
+//        certModel.setKeyLength(1024);
+//
+//        Calendar cal = Calendar.getInstance();
+//        cal.add(Calendar.MONTH, 1);
+//        certModel.setNotBefore(new Date());
+//        certModel.setNotAfter(cal.getTime());
 
         CSRManager certCsr = new CSRManager();
         KeyStoreHelper ksh = new KeyStoreHelper();
-        CertificateValue certIssuer = ksh.findCertificateAndPrivateKeyByAlias(getStoreAC(), AC_NAME);
         CertificateManager certServ = new CertificateManager();
-        KeyPair kp = certServ. generateKeyPair("RSA", 2048);
+        KeyPair kp = certServ.generateKeyPair("RSA", 2048);
         X500Principal principal = new X500Principal("CN=Requested Test Certificate");
         JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
         try {
             byte[] csr = certCsr.generateCSR(principal, kp);
-            File f = new File("c:/tmp/csr.csr");
+            File f = new File("target/test-classes/csr.csr");
+            if (f.exists())
+                f.delete();
             certCsr.exportToFile(csr, f);
+            assertTrue(f.exists());
 
         } catch (IOException | OperatorCreationException e) {
             // TODO Auto-generated catch block
