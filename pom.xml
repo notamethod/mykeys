@@ -11,10 +11,12 @@
 		<module>mykeys-ihm</module>
         <module>mykeys-ihm-final</module>
 	</modules>
-
+<properties>
+	<junit.version>5.6.1</junit.version>
+</properties>
 	<dependencyManagement>
 		<dependencies>
-					<dependency>
+			<dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcprov-jdk15on</artifactId>
 				<version>1.58</version>

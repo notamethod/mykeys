@@ -7,9 +7,9 @@ import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.utils.ProviderUtil;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.ServiceException;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +25,7 @@ public class AuthenticationTest {
 
     private final static Log log = LogFactory.getLog(AuthenticationTest.class);
 
-    @BeforeClass
+    @BeforeAll
     public static void init() {
 
         // Locale.setDefault(Locale.ENGLISH);
@@ -38,7 +38,7 @@ public class AuthenticationTest {
         ProviderUtil.initBC();
     }
 
-    @Before
+    @BeforeEach
     public void setupTests() throws IOException {
         Path source = Paths.get("target/test-classes/data/userDBOri.jks");
         Path target = Paths.get("target/test-classes/data/userDB.jks");

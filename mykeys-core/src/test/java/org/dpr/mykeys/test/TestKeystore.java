@@ -12,8 +12,8 @@ import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.keystore.repository.MkKeystore;
 import org.dpr.mykeys.app.utils.ProviderUtil;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ import java.security.cert.CertificateException;
 import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TestKeystore {
@@ -36,7 +36,7 @@ public class TestKeystore {
 
     private static final String AC_NAME = "mykeys root ca 2";
 
-    @BeforeClass
+    @BeforeAll
     public static void init() {
 
         KSConfigTestTmp.initResourceBundle();
@@ -327,7 +327,7 @@ public class TestKeystore {
         ki = service.loadKeyStore(filename, StoreFormat.JKS, "111".toCharArray());
         Enumeration<String> enumKs = ki.getKeystore().aliases();
         int size = Collections.list(enumKs).size();
-        assertTrue("Error", size == 1);
+        assertTrue(size == 1);
     }
 
     @Test
@@ -340,7 +340,7 @@ public class TestKeystore {
         MkKeystore mks = MkKeystore.getInstance(StoreFormat.PEM);
         KeyStoreValue ksv = new KeyStoreValue(filenamePem, StoreFormat.PEM);
 
-        assertEquals("Error", 1, mks.getCertificates(ksv).size());
+        assertEquals(1, mks.getCertificates(ksv).size());
 
     }
 
@@ -354,7 +354,7 @@ public class TestKeystore {
         MkKeystore mks = MkKeystore.getInstance(StoreFormat.DER);
         KeyStoreValue ksv = new KeyStoreValue(filename, StoreFormat.DER);
 
-        assertEquals("Error", 1, mks.getCertificates(ksv).size());
+        assertEquals( 1, mks.getCertificates(ksv).size(),"Error assert");
 
     }
 

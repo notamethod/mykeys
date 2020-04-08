@@ -14,8 +14,8 @@ import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.utils.ProviderUtil;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.security.auth.x500.X500Principal;
 import java.io.File;
@@ -27,7 +27,8 @@ import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class CertificateTest {
 
@@ -35,7 +36,7 @@ public class CertificateTest {
 
     private static final String AC_NAME = "mykeys root ca 2";
 
-    @BeforeClass
+    @BeforeAll
     public static void init() {
 
         KSConfigTestTmp.initResourceBundle();

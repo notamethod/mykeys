@@ -8,8 +8,8 @@ import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.utils.TimeStampManager;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +28,8 @@ import java.util.Enumeration;
 import java.util.List;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 public class TestCerts {
@@ -74,7 +74,7 @@ public class TestCerts {
 
     }
 
-    @Before
+    @BeforeEach
     public void setup() throws IOException {
         Path source = Paths.get("target/test-classes/data/empty.jks");
         Path target = Paths.get("target/test-classes/data/empty_work.jks");
