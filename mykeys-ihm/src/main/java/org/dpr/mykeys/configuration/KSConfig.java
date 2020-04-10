@@ -9,9 +9,21 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.RollingFileAppender;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.appender.RollingFileAppender;
+import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
+import org.apache.logging.log4j.core.config.AppenderRef;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CRLManager;
@@ -88,18 +100,35 @@ public class KSConfig {
 	 * @param f the log file
 	 */
 	private static void addAppender(File f) {
-		//This is the root logger provided by log4j
-		Logger rootLogger = Logger.getRootLogger();
-		PatternLayout layout = new PatternLayout("%d{ISO8601} [%t] %-5p %c %x - %m%n");
-		try
-		{
-			RollingFileAppender fileAppender = new RollingFileAppender(layout, f.getAbsolutePath());
-			rootLogger.addAppender(fileAppender);
-		}
-		catch (IOException e)
-		{
-			System.out.println("Failed to add appender !!");
-		}
+
+		final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		final Configuration config = ctx.getConfiguration();
+		Layout layout = PatternLayout.newBuilder().withPattern(PatternLayout.SIMPLE_CONVERSION_PATTERN)
+				.withConfiguration(config)
+				.build();
+
+		SizeBasedTriggeringPolicy policy = SizeBasedTriggeringPolicy.createPolicy("2MB");
+		DefaultRolloverStrategy strategy = DefaultRolloverStrategy.newBuilder()
+		.withConfig(config)
+		.withFileIndex("5")
+		.build();
+
+		RollingFileAppender appender = RollingFileAppender.newBuilder().
+				setConfiguration(config)
+				.setName("FILE")
+				.setLayout(layout)
+				.withFilePattern("rolling-%d{MM-dd-yy}.log.gz")
+				.withPolicy(policy)
+				.withStrategy(strategy)
+				.withFileName(f.getAbsolutePath()).build();
+
+		appender.start();
+		config.addAppender(appender);
+		config.getAppenders();
+		LoggerConfig conf = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+		conf.addAppender(appender, null,null);
+		ctx.updateLoggers();
+		System.out.println(ctx.getRootLogger().getAppenders().size());
 	}
 
 
