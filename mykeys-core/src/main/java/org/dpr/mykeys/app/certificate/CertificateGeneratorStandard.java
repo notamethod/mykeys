@@ -70,18 +70,18 @@ class CertificateGeneratorStandard implements CertificateGeneratorExtensions {
 
     }
 
-    public CertificateValue generate(CertificateValue certModel)
+    public CertificateValue generate(KeyPair keypair, CertificateValue certModel)
             throws Exception {
-        return generate(certModel, certModel);
+        return generate(keypair, certModel, certModel);
     }
 
-    public CertificateValue generate(CertificateValue certModel, CertificateValue certIssuer)
+    public CertificateValue generate(KeyPair keypair, CertificateValue certModel, CertificateValue certIssuer)
             throws Exception {
 
 
         JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
 
-        KeyPair keypair = generateKeyPair(certModel.getAlgoPubKey(), certModel.getKeyLength());
+
         // SerialNumber
         BigInteger serial = randomBigInteger(30);
         if (StringUtils.isBlank(certModel.getAlias())) {
@@ -218,14 +218,14 @@ class CertificateGeneratorStandard implements CertificateGeneratorExtensions {
 
     }
 
-    public CertificateValue createCertificateAuth(String id, char[] charArray) throws ServiceException {
+    public CertificateValue createCertificateAuth(String id, char[] charArray, KeyPair keypair) throws ServiceException {
 
         // X500Name owner = new X500Name("CN=" + fqdn);
         X500Name subject = new X500Name("CN=" + id);
         BigInteger serial = new BigInteger(32, new SecureRandom());
         Date from = new Date();
         Date to = new Date(System.currentTimeMillis() + (AUTH_VALIDITY * 86400000L));
-        KeyPair keypair = generateKeyPair("RSA", 2048);
+
         // Prepare the information required for generating an X.509 certificate.
         X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(subject, serial, from, to, subject,
                 keypair.getPublic());

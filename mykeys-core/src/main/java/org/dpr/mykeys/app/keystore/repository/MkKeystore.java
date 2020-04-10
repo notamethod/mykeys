@@ -7,6 +7,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.security.PrivateKey;
 import java.util.List;
 
@@ -33,6 +34,8 @@ public interface MkKeystore {
     void savePrivateKey(PrivateKey privateKey, String fName, char[] pass)
             throws ServiceException;
 
+     void exportPrivateKey(PrivateKey privateKey, OutputStream os, char[] pass)
+            throws ServiceException;
 
     void saveCertificates(KeyStoreValue ksValue, List<CertificateValue> certInfos);
 

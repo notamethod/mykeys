@@ -344,7 +344,20 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
             throw new KeyToolsException("Export de la clé privée impossible:" + certInfo.getAlias(), e);
         }
     }
+    public void exportPrivateKey(PrivateKey privateKey, OutputStream os, StoreFormat format, char[] passwordOut)
+            throws KeyToolsException {
 
+        try {
+
+            MkKeystore mks = MkKeystore.getInstance(format);
+            mks.exportPrivateKey(privateKey, os, passwordOut);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            throw new KeyToolsException("Export de la clé privée impossible:", e);
+        }
+    }
 
     public KeyStore importStore(String path, StoreFormat storeFormat, char[] password) throws
             ServiceException {

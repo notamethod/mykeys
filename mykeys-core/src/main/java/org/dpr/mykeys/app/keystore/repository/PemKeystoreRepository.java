@@ -88,10 +88,20 @@ class PemKeystoreRepository extends KeystoreRepository {
     }
     public void savePrivateKey(PrivateKey privateKey, String fName)
             throws ServiceException {
-
         try(FileOutputStream f = new FileOutputStream(fName + ".pem.key")) {
             byte[] privKey = privateKey.getEncoded();
             saveBytes(privKey, f, PEMType.PRIVATE_KEY);
+
+        } catch (Exception e) {
+            throw new ServiceException("Fail to export private key", e);
+        }
+    }
+
+    public void exportPrivateKey(PrivateKey privateKey, OutputStream os, char[] pass)
+            throws ServiceException {
+        try{
+            byte[] privKey = privateKey.getEncoded();
+            saveBytes(privKey, os, PEMType.PRIVATE_KEY);
 
         } catch (Exception e) {
             throw new ServiceException("Fail to export private key", e);
@@ -112,6 +122,7 @@ class PemKeystoreRepository extends KeystoreRepository {
         encodedList.add(encoded);
         saveBytes(encodedList, os, pemType);
     }
+
 
     public void saveBytes(List<byte[]> encodedObjects, OutputStream os, PEMType pemType) throws IOException {
 

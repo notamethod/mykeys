@@ -25,9 +25,10 @@ public class CertificateManager {
 
     public CertificateValue createCertificate(CertificateType type, String id, char[] charArray) throws ServiceException {
         CertificateGeneratorStandard certGen = new CertificateGeneratorStandard();
+        KeyPair keyPair = generateKeyPair("RSA", 2048);
         switch (type) {
             case AUTH_MK:
-                return certGen.createCertificateAuth(id, charArray);
+                return certGen.createCertificateAuth(id, charArray, keyPair);
 
             default:
                 break;
@@ -41,6 +42,7 @@ public class CertificateManager {
 
     public CertificateValue generate(CertificateValue certInfo, CertificateValue inIssuer, CertificateType usage) throws Exception {
         CertificateGeneratorStandard certGen = null;
+
         switch (usage) {
             case STANDARD:
                 certGen = new CertificateGeneratorStandard();
@@ -96,7 +98,8 @@ public class CertificateManager {
         }
         if (certGen == null)
             return null;
-        return certGen.generate(certInfo, inIssuer);
+        KeyPair kp  = generateKeyPair(certInfo.getAlgoPubKey(), certInfo.getKeyLength());
+        return certGen.generate(kp, certInfo, inIssuer);
     }
 
     /**
