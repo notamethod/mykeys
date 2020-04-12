@@ -8,7 +8,6 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.keystore.PEMType;
@@ -18,7 +17,6 @@ import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 class PemKeystoreRepository extends KeystoreRepository {
@@ -64,9 +62,9 @@ class PemKeystoreRepository extends KeystoreRepository {
     }
 
     @Override
-    public void save(KeyStoreValue ksValue, KeyStoreHelper.SAVE_OPTION option) throws RepositoryException {
+    public void save(KeyStoreValue ksValue, SAVE_OPTION option) throws RepositoryException {
         File f = new File(ksValue.getPath());
-        if (f.exists() && option.equals(KeyStoreHelper.SAVE_OPTION.NONE)) {
+        if (f.exists() && option.equals(SAVE_OPTION.NONE)) {
             throw new EntityAlreadyExistsException("File already exists " + f.getAbsolutePath());
         }
         /* save the public key in a file */
@@ -108,7 +106,7 @@ class PemKeystoreRepository extends KeystoreRepository {
         }
     }
 
-    public void saveCSR(byte[] b, File f, KeyStoreHelper.SAVE_OPTION option) throws ServiceException {
+    public void saveCSR(byte[] b, File f, SAVE_OPTION option) throws ServiceException {
 
         try(FileOutputStream fout = new FileOutputStream(f)) {
             saveBytes(b, fout, PEMType.REQUEST);
@@ -116,8 +114,16 @@ class PemKeystoreRepository extends KeystoreRepository {
             throw new ServiceException("Fail to export private key", e);
         }
     }
+    public void saveCSR(byte[] b, OutputStream os, SAVE_OPTION option) throws ServiceException {
 
-    private void saveBytes(byte[] encoded, OutputStream os, PEMType pemType) throws IOException {
+        try {
+            saveBytes(b, os, PEMType.REQUEST);
+        } catch (IOException e) {
+            throw new ServiceException("Fail to export csr", e);
+        }
+
+    }
+    public void saveBytes(byte[] encoded, OutputStream os, PEMType pemType) throws IOException {
         List<byte[]> encodedList = new ArrayList<>();
         encodedList.add(encoded);
         saveBytes(encodedList, os, pemType);

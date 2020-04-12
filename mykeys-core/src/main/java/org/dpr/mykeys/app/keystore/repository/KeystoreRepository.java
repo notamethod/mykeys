@@ -1,7 +1,6 @@
 package org.dpr.mykeys.app.keystore.repository;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
 
@@ -28,11 +27,11 @@ public abstract class KeystoreRepository implements MkKeystore {
     }
 
     public void save(KeyStoreValue ksValue) throws RepositoryException {
-        save(ksValue, KeyStoreHelper.SAVE_OPTION.NONE);
+        save(ksValue, MkKeystore.SAVE_OPTION.NONE);
     }
 
     @Override
-    public void saveCSR(byte[] b, File f, KeyStoreHelper.SAVE_OPTION option) throws ServiceException {
+    public void saveCSR(byte[] b, File f, SAVE_OPTION option) throws ServiceException {
         throw new ServiceException("not implemented");
     }
     @Override
@@ -41,5 +40,8 @@ public abstract class KeystoreRepository implements MkKeystore {
         throw new ServiceException("not implemented");
     }
 
+    public void saveCSR(byte[] b, OutputStream os, SAVE_OPTION option) throws ServiceException{
+        throw new ServiceException("not implemented");
+    }
 
 }

@@ -5,7 +5,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.KeyToolsException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeystoreBuilder;
 import org.dpr.mykeys.app.ServiceException;
@@ -93,7 +92,7 @@ public abstract class AbstractJavaKeystoreRepository extends KeystoreRepository 
     }
 
     @Override
-    public void save(KeyStoreValue ksValue, KeyStoreHelper.SAVE_OPTION option) throws RepositoryException {
+    public void save(KeyStoreValue ksValue, SAVE_OPTION option) throws RepositoryException {
         File file = new File(ksValue.getPath());
         boolean exists = file.exists();
         try {

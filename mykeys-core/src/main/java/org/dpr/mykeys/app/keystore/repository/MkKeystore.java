@@ -2,7 +2,6 @@ package org.dpr.mykeys.app.keystore.repository;
 
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 
@@ -12,7 +11,6 @@ import java.security.PrivateKey;
 import java.util.List;
 
 public interface MkKeystore {
-
 
     static MkKeystore getInstance(StoreFormat format) {
         switch (format) {
@@ -47,8 +45,13 @@ public interface MkKeystore {
 
     void addCert(KeyStoreValue ki, CertificateValue certificate) throws ServiceException;
 
-    void save(KeyStoreValue ksValue, KeyStoreHelper.SAVE_OPTION option) throws RepositoryException;
+    void save(KeyStoreValue ksValue, SAVE_OPTION option) throws RepositoryException;
 
-    void saveCSR(byte[] b, File f, KeyStoreHelper.SAVE_OPTION option) throws ServiceException;
+    void saveCSR(byte[] b, File f, SAVE_OPTION option) throws ServiceException;
 
+    void saveCSR(byte[] b, OutputStream os, SAVE_OPTION option) throws ServiceException;
+
+    enum SAVE_OPTION {
+        REPLACE, ADD, NONE
+    }
 }

@@ -788,7 +788,7 @@ public class TreeKsManager implements MouseListener,
             MkKeystore mks = MkKeystore.getInstance(ksInfo.getStoreFormat());
             try {
                 mks.getCertificates(ksInfo).addAll(transferData);
-                mks.save(ksInfo, KeyStoreHelper.SAVE_OPTION.ADD);
+                mks.save(ksInfo, MkKeystore.SAVE_OPTION.ADD);
             } catch (ServiceException | RepositoryException e) {
                 e.printStackTrace();
                 return false;

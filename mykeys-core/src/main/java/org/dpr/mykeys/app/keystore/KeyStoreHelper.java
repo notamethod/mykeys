@@ -537,7 +537,7 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    public boolean export(List<CertificateValue> certInfos, String fName, StoreFormat format, char[] pwd, SAVE_OPTION option) throws KeyToolsException {
+    public boolean export(List<CertificateValue> certInfos, String fName, StoreFormat format, char[] pwd, MkKeystore.SAVE_OPTION option) throws KeyToolsException {
         /* save the public key in a file */
 
         boolean exportToNewFile = true;
@@ -604,8 +604,4 @@ public class KeyStoreHelper implements StoreService<KeyStoreValue> {
 
     }
 
-    //FIXME: Move it
-    public enum SAVE_OPTION {
-        REPLACE, ADD, NONE
-    }
 }

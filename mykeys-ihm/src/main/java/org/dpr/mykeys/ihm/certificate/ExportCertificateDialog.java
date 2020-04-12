@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.dpr.mykeys.app.keystore.KeyStoreHelper.SAVE_OPTION.*;
+import static org.dpr.mykeys.app.keystore.repository.MkKeystore.SAVE_OPTION.*;
 
 public class ExportCertificateDialog extends JDialog implements ItemListener {
 

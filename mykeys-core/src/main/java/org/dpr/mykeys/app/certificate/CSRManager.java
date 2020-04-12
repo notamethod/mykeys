@@ -20,7 +20,6 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.dpr.mykeys.app.ServiceException;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.StoreFormat;
 import org.dpr.mykeys.app.keystore.repository.MkKeystore;
 
@@ -30,6 +29,7 @@ import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.Date;
 
 public class CSRManager {
@@ -134,23 +134,36 @@ public class CSRManager {
                 .build(PrivateKeyFactory.createKey(caPrivate.getEncoded()));
         X509CertificateHolder holder = certgen.build(signer);
         return holder.toASN1Structure().getEncoded();
-
     }
 
-    public byte[] generateCSR(X500Principal principal, KeyPair pair) throws OperatorCreationException, IOException {
-
+    public byte[] generateCSR(X500Principal principal, PrivateKey privateKey , PublicKey publicKey, String algorithm) throws OperatorCreationException, IOException {
         PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
-                new X500Principal("CN=Requested Test Certificate"), pair.getPublic());
-        JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
-        ContentSigner signer = csBuilder.build(pair.getPrivate());
+                principal, publicKey);
+        JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder(algorithm);
+        ContentSigner signer = csBuilder.build(privateKey);
         PKCS10CertificationRequest csr = p10Builder.build(signer);
         return csr.getEncoded();
     }
 
 
-    public void exportToFile(byte[] csr, File f) throws ServiceException {
-        KeyStoreHelper kh = new KeyStoreHelper();
+    public void toFile(byte[] csr, File f) throws ServiceException {
         MkKeystore mks = MkKeystore.getInstance(StoreFormat.PEM);
-        mks.saveCSR(csr, f, KeyStoreHelper.SAVE_OPTION.NONE);
+        mks.saveCSR(csr, f, MkKeystore.SAVE_OPTION.NONE);
+    }
+
+    public String toString(byte[] csr) throws ServiceException {
+        MkKeystore mks = MkKeystore.getInstance(StoreFormat.PEM);
+        ByteArrayOutputStream baos= new ByteArrayOutputStream();
+
+        mks.saveCSR(csr, baos, MkKeystore.SAVE_OPTION.NONE);
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
+
+    public byte[] tobyteArray(byte[] csr) throws ServiceException {
+        MkKeystore mks = MkKeystore.getInstance(StoreFormat.PEM);
+        ByteArrayOutputStream baos= new ByteArrayOutputStream();
+
+        mks.saveCSR(csr, baos, MkKeystore.SAVE_OPTION.NONE);
+        return baos.toByteArray();
     }
 }

@@ -117,18 +117,20 @@ public class CertificateTest {
 //        certModel.setNotAfter(cal.getTime());
 
         CSRManager certCsr = new CSRManager();
-        KeyStoreHelper ksh = new KeyStoreHelper();
+
         CertificateManager certServ = new CertificateManager();
         KeyPair kp = certServ.generateKeyPair("RSA", 2048);
         X500Principal principal = new X500Principal("CN=Requested Test Certificate");
         JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
         try {
-            byte[] csr = certCsr.generateCSR(principal, kp);
+            byte[] csr = certCsr.generateCSR(principal, kp.getPrivate(), kp.getPublic(), "SHA256withRSA");
             File f = new File("target/test-classes/csr.csr");
             if (f.exists())
                 f.delete();
-            certCsr.exportToFile(csr, f);
+            certCsr.toFile(csr, f);
             assertTrue(f.exists());
+            String a = certCsr.toString(csr);
+            System.out.println(a);
 
         } catch (IOException | OperatorCreationException e) {
             // TODO Auto-generated catch block
