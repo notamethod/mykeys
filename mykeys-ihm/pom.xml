@@ -138,9 +138,9 @@
         </dependency>
 
         <dependency>
-            <groupId>${parent.groupId}</groupId>
-            <artifactId>mykeys-core</artifactId>
-            <version>${parent.version}</version>
+            <groupId>com.notamethod</groupId>
+            <artifactId>mykeys-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
 
