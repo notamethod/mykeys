@@ -32,7 +32,7 @@ public class AuthenticationService {
             if (cerCheck != null) {
                 throw new ServiceException(Messages.getString(Messages.getString("certificate.error.create.exists"), id));
             }
-            cer = ch.createCertificate(CertificateType.AUTH_MK, id, pwd);
+            cer = ch.createLoginCertificate(id, pwd);
             cer.setPassword(pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
         } catch (GeneralSecurityException | IOException e) {
