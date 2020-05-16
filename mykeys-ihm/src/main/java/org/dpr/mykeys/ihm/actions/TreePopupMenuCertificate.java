@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.actions;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.KeyUsages;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.utils.CertificateUtils;
@@ -100,7 +101,7 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
         } else if (node.getUserObject() instanceof CertificateValue) {
             CertificateValue certInfo = (CertificateValue) node.getUserObject();
             certificate = certInfo;
-            add.setVisible(certInfo.isContainsPrivateKey() && (CertificateUtils.isKeyUsage(certInfo.getKeyUsage(), X509Constants.USAGE_CERTSIGN)));
+            add.setVisible(certInfo.isContainsPrivateKey() && (KeyUsages.isKeyUsage(certInfo.getKeyUsage(), X509Constants.USAGE_CERTSIGN)));
 //            addAC.setVisible(certInfo.isContainsPrivateKey() && (CertificateUtils.isKeyUsage(certInfo.getKeyUsage(),X509Constants.USAGE_CERTSIGN)));
             delete.setVisible(true);
             exportCert.setVisible(true);

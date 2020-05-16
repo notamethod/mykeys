@@ -753,6 +753,7 @@ public class TreeKsManager implements MouseListener,
          */
         @Override
         public boolean importData(TransferSupport support) {
+            log.debug("drop object");
             if (!canImport(support)) {
                 return false;
             }
@@ -785,15 +786,20 @@ public class TreeKsManager implements MouseListener,
             }
             if (ksInfo == null)
                 return false;
+            if ((ksInfo.isProtected() || ksInfo.getStoreFormat().equals(StoreFormat.JKS)) && !ksInfo.isOpen()){
+                log.error("Keystore must be opened first !");
+                return false;
+            }
             MkKeystore mks = MkKeystore.getInstance(ksInfo.getStoreFormat());
             try {
-                mks.getCertificates(ksInfo).addAll(transferData);
-                mks.save(ksInfo, MkKeystore.SAVE_OPTION.ADD);
-            } catch (ServiceException | RepositoryException e) {
+                mks.addCertificates(ksInfo, transferData);
+                ksInfo.getCertificates().addAll(transferData);
+              // mks.save(ksInfo, MkKeystore.SAVE_OPTION.ADD);
+            } catch (RepositoryException e) {
                 e.printStackTrace();
                 return false;
             }
-
+            notifyCertListToUpdate(ksInfo);
             return true;
         }
 

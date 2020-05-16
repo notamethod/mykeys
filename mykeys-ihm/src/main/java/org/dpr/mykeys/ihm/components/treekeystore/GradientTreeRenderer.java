@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.components.treekeystore;
 
+import org.dpr.mykeys.app.KeyUsages;
 import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.crl.CrlValue;
@@ -98,7 +99,7 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
                 CertificateValue cInfo = (CertificateValue) node.getUserObject();
                 rc.setText(getCertificateLabel(cInfo));
                 tooltip = cInfo.getName();
-                boolean[] usages = CertificateUtils.keyUsageFromInt(cInfo.getIntKeyUsage());
+                boolean[] usages = KeyUsages.keyUsageFromInt(cInfo.getKeyUsageInt());
                 ImageIcon icon = null;
                 if (usages[5] && usages[6])
                     icon = createImageIcon("/images/ca1.png");

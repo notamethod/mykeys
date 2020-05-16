@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.certificate.template;
 
+import org.dpr.mykeys.app.KeyUsages;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.utils.CertificateUtils;
@@ -71,8 +72,8 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
         if (keyUsage != null) {
             //  infosPanel.set("keyUsage", CertificateUtils.keyUsageToString(Integer.valueOf(keyUsage)));
 
-            certInfo.setKeyUsage(CertificateUtils.keyUsageFromInt(Integer.valueOf(keyUsage)));
-            boolean[] kus = CertificateUtils.keyUsageFromInt(Integer.valueOf(keyUsage));
+            //FIXME certInfo.setKeyUsage(CertificateUtils.keyUsageFromInt(Integer.valueOf(keyUsage)));
+            boolean[] kus = KeyUsages.keyUsageFromInt(Integer.valueOf(keyUsage));
             for (int i = 0; i < X509Constants.keyUsageLabel.length; i++) {
                 checkBoxes.get(X509Constants.keyUsageLabel[i]).setSelected(kus[i]);
 
@@ -157,7 +158,7 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
             KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
             KeyStoreHelper ksh = new KeyStoreHelper();
             try {
-                mapAC = ksh.getMapStringCerts(ksAC);
+                mapAC = ksh.getCAMapAlias(ksAC);
             } catch (Exception e) {
                 //
             }

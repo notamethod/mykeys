@@ -34,10 +34,16 @@ public class CreateUserDialog extends MkDialog {
 
 	}
 
+	/**
+	 * called by selectUSerDialog
+	 * @param owner
+	 * @param modal
+	 * @param dialogClass
+	 */
     public CreateUserDialog(JFrame owner, boolean modal, Class<? extends Component> dialogClass) {
         super(owner, modal);
-		log.info("xxx");
         init();
+        log.error("create user constructor");
         this.pack();
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - getWidth() / 2, (Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - getHeight() / 2);
     }
@@ -101,32 +107,26 @@ public class CreateUserDialog extends MkDialog {
 		public void actionPerformed(ActionEvent event) {
 			String command = event.getActionCommand();
 			if (command.equals("OK")) {
-
+				log.error("a1");
 				Map<String, Object> elements = infosPanel.getElements();
 
                 String nom = (String) elements.get("name");
 				String pwd=(String) elements.get("password");
-//				if (nom == null|| nom.isEmpty()) {
-//					MykeysFrame.showError(CreateUserDialog.this, Messages.getFullString("mandatory", "label.name"));
-//					return;
-//				}
-//				if (pwd == null|| pwd.isEmpty()) {
-//					MykeysFrame.showError(CreateUserDialog.this,  Messages.getFullString("mandatory", "label.password"));
-//					return;
-//				}
 
                 if (!ComponentUtils.checkFields(CreateUserDialog.this, elements, "name", "password")) {
                     return;
                 }
-			
+				log.error("a2");
 				char[] pwdChar =pwd.toCharArray();
 				CertificateManager ch = new CertificateManager();
 				AuthenticationService auth = new AuthenticationService();
 				try {
 					auth.createUser(nom, pwdChar);
 				} catch (ServiceException e) {
+					log.error(e);
                     DialogUtil.showError(CreateUserDialog.this, e.getLocalizedMessage());
 				}
+				log.error("a3");
 				CreateUserDialog.this.setVisible(false);
 
 	

@@ -3,6 +3,7 @@ package org.dpr.mykeys.ihm.certificate.template;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.dpr.mykeys.app.KeyUsages;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.app.profile.CertificateTemplate;
@@ -43,7 +44,7 @@ public class ProfilDetailPanel extends LabelValuePanel {
         }
 
         this.put(Messages.getString("x509.subject.organisationUnit"),
-                JTextArea.class, "algoPubKey", CertificateUtils.keyUsageToString(info.getIntValue("&keyUsage")), false);
+                JTextArea.class, "algoPubKey", KeyUsages.toString(info.getIntValue("&keyUsage")), false);
 
 
     }

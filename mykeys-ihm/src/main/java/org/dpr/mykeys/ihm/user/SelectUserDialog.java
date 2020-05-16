@@ -209,7 +209,7 @@ public class SelectUserDialog extends MkDialog {
                             SelectUserDialog.this.setVisible(true);
                             log.info("show again...");
                         } catch (IhmException e) {
-                            e.printStackTrace();
+                            log.error("error", e);
                         }
                     });
                     break;

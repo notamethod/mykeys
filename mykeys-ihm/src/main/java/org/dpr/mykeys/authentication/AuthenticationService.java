@@ -3,6 +3,7 @@ package org.dpr.mykeys.authentication;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateType;
+import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.ihm.Messages;
@@ -11,6 +12,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.certificate.CertificateManager;
+import org.dpr.mykeys.service.KeystoreService;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -35,7 +37,7 @@ public class AuthenticationService {
             cer = ch.createLoginCertificate(id, pwd);
             cer.setPassword(pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
-        } catch (GeneralSecurityException | IOException e) {
+        } catch (GeneralSecurityException | IOException | RepositoryException e) {
             throw new ServiceException(Messages.getString("certificate.error.create") + id, e); //$NON-NLS-1$
         }
 
@@ -88,6 +90,7 @@ public class AuthenticationService {
 
     public void deleteUser(String id) throws ServiceException {
         KeyStoreHelper kh = new KeyStoreHelper();
+        KeystoreService ks = new KeystoreService();
         CertificateValue cer;
         char[] pwd = null;
         KeyStoreValue ki;
@@ -95,7 +98,7 @@ public class AuthenticationService {
             cer = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
             List<CertificateValue> list = Collections.singletonList(cer);
-            kh.removeCertificates(ki, list);
+            ks.removeCertificates(ki, list);
         } catch (Exception e) {
             throw new ServiceException(e);
         }

@@ -62,7 +62,7 @@ public class MyKeys {
             boolean justCreated = checkUpdate();
             checkConfig();
             if (justCreated) {
-                log.debug("jest created");
+                log.debug("just created");
             } else {
                 // migrate();
                 //todo ?
@@ -95,22 +95,20 @@ public class MyKeys {
 
     private boolean checkUpdate() throws InvocationTargetException, InterruptedException {
         boolean justCreated = false;
+        log.error("b1");
         if (!KSConfig.getInternalKeystores().existsUserDatabase()) {
-
             boolean retour = DialogUtil.askConfirmDialog(null, Messages.getString("prompt.createUser"));
             if (!retour) {
                 System.exit(0);
             }
-
-
             SwingUtilities.invokeAndWait(() -> {
                 CreateUserDialog cs = new CreateUserDialog(
                         null, true);
                 cs.setVisible(true);
             });
             justCreated = true;
-
         }
+
         if (!KSConfig.getInternalKeystores().existsUserDatabase())
             System.exit(0);
 

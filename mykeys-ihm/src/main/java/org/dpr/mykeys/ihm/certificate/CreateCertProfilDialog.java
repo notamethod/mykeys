@@ -1,5 +1,6 @@
 package org.dpr.mykeys.ihm.certificate;
 
+import org.dpr.mykeys.app.KeyUsages;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
@@ -176,9 +177,9 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
         }
         String keyUsage = myProfile.getProperty("&keyUsage");
         if (keyUsage != null) {
-            panelInfoVisible.set("keyUsage", CertificateUtils.keyUsageToString(Integer.valueOf(keyUsage)));
+            panelInfoVisible.set("keyUsage", KeyUsages.toString(Integer.valueOf(keyUsage)));
 
-            certInfo.setKeyUsage(CertificateUtils.keyUsageFromInt(Integer.valueOf(keyUsage)));
+            certInfo.setKeyUsage(KeyUsages.keyUsageFromInt(Integer.valueOf(keyUsage)));
         }
 
     }

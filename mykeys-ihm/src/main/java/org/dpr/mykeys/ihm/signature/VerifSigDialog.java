@@ -64,7 +64,7 @@ public class VerifSigDialog extends JDialog {
         KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
         KeyStoreHelper ksh = new KeyStoreHelper();
 		try {
-            mapCerts = ksh.getMapStringCerts(ksAC);
+            mapCerts = ksh.getCAMapAlias(ksAC);
 		} catch (Exception e) {
 			//
 		}

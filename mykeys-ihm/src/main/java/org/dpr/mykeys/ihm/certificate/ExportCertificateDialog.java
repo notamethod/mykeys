@@ -66,10 +66,9 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         mapType.put("pem", StoreFormat.PEM.toString());
         mapType.put("der", StoreFormat.DER.toString());
         mapType.put("jks", StoreFormat.JKS.toString());
-        if (!isMultiple) {
 
             mapType.put("pkcs12", StoreFormat.PKCS12.toString());
-        }
+
 
         infosPanel = new LabelValuePanel();
 
@@ -130,11 +129,11 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
         }
 
         //get alias
-        String retAlias = certInfos.get(0).getAlias();
+        String retAlias = certInfos.get(0).getName();
         if (certInfos.size() > 1)
             retAlias += "_multi";
-        if (retAlias == null)
-            retAlias = certInfos.get(0).getName();
+//        if (retAlias == null)
+//            retAlias = certInfos.get(0).getName();
 
         final String alias = retAlias;
         String fileName = null;
@@ -214,7 +213,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
                     if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
                         if (isExportCle) {
-                            privKeyPd = DialogUtil.showPasswordDialog(null, "mot de passe de la cl� priv�e");
+                            privKeyPd = DialogUtil.showPasswordDialog(null, Messages.getString("current.private.key"));
                         }
                     } else if (!ksInfo.getName().startsWith("previous")) {
                         privKeyPd = MkSession.password;
@@ -231,29 +230,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
                     switch (storeFormat) {
                         case PKCS12:
-                            pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
-
-                            try {
-                                if (isExportCle) {
-                                    for (CertificateValue cert : certInfos) {
-                                        PrivateKey pk = kServ.getPrivateKey(ksInfo, cert.getAlias(), privKeyPd);
-                                        cert.setPrivateKey(pk);
-                                        cert.setPassword(privKeyPd);
-                                    }
-
-                                }
-                                boolean newFile = kServ.export(certInfos, path, storeFormat, pd, NONE);
-                                if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
-                                    kServ.export(certInfos, path, storeFormat, pd, REPLACE);
-                                }
-                            } catch (Exception e) {
-                                log.error(e);
-                                DialogUtil.showError(ExportCertificateDialog.this,
-                                        e.getLocalizedMessage());
-                            }
-                            break;
                         case JKS:
-                            pd = DialogUtil.showPasswordDialog(null, "mot de passe d'exportation");
+                            pd = DialogUtil.showPasswordDialog(null, Messages.getString("exportation.password"));
 
                             try {
                                 if (isExportCle) {
@@ -270,12 +248,11 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                                 }
                             } catch (Exception e) {
                                 log.error(e.getLocalizedMessage(), e);
-
                                 DialogUtil.showError(ExportCertificateDialog.this,
                                         e.getLocalizedMessage());
-
                             }
                             break;
+
                         case DER:
                         case PEM:
 

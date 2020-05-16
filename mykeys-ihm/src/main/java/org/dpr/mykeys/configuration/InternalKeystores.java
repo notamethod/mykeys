@@ -11,6 +11,9 @@ import java.security.cert.CertificateException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.ServiceException;
+import org.dpr.mykeys.app.keystore.repository.MkKeystore;
+import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
@@ -160,15 +163,15 @@ public class InternalKeystores {
         return f.exists();
     }
 
-    public KeyStoreValue getUserDB() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    public KeyStoreValue getUserDB() throws KeyStoreException, RepositoryException, IOException {
 
         KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
-
+        MkKeystore mkKeystore = MkKeystore.getInstance(StoreFormat.JKS);
         KeyStoreValue kinfo;
         File f = new File(pathUDB);
         if (!existsUserDatabase()) {
 
-            ksBuilder.create(pathUDB, pad.toCharArray());
+            mkKeystore.create(pathUDB, pad.toCharArray());
 
         }
         kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
@@ -178,34 +181,14 @@ public class InternalKeystores {
         return kinfo;
     }
 
-    public void createUserDB() throws Exception {
-        KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
-        KeyStoreValue kinfo;
-        new File(pathUDB);
-        if (!existsUserDatabase()) {
-            try {
-                ksBuilder.create(pathUDB, pad.toCharArray());
-
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        kinfo = new KeyStoreValue(Messages.getString("magasin.interne"), pathUDB, StoreModel.CERTSTORE,
-                StoreFormat.JKS, StoreLocationType.INTERNAL);
-        kinfo.setPassword(KSConfig.getInternalKeystores().getPassword().toCharArray());
-        kinfo.setOpen(true);
-
-    }
-
     public KeyStoreValue getStoreCertificate() throws KeyStoreException {
-        KeystoreBuilder ksBuilder = new KeystoreBuilder(StoreFormat.JKS);
+        MkKeystore mkKeystore = MkKeystore.getInstance(StoreFormat.JKS);
         KeyStoreValue kinfo;
         File f = new File(pathCert);
         // create keystore
         if (!f.exists()) {
             try {
-                ksBuilder.create(pathCert, pad.toCharArray());
+                mkKeystore.create(pathCert, pad.toCharArray());
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block

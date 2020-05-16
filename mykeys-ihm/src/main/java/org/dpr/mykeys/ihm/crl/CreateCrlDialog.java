@@ -134,7 +134,7 @@ public class CreateCrlDialog extends JDialog {
             KeyStoreValue ksAC = KSConfig.getInternalKeystores().getStoreAC();
             KeyStoreHelper ksh = new KeyStoreHelper();
             try {
-                mapAC = ksh.getMapStringCerts(ksAC);
+                mapAC = ksh.getCAMapAlias(ksAC);
             } catch (Exception e) {
                 //
             }

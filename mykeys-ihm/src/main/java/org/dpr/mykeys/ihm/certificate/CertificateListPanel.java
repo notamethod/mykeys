@@ -21,6 +21,7 @@ import org.dpr.mykeys.ihm.crl.CreateCrlDialog;
 import org.dpr.mykeys.ihm.certificate.template.CreateTemplateDialog;
 import org.dpr.mykeys.ihm.certificate.template.SelectTemplateDialog;
 import org.dpr.mykeys.app.utils.ActionStatus;
+import org.dpr.mykeys.service.KeystoreService;
 import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
@@ -271,7 +272,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
      */
     public void showDeleteCertificateFrame(NodeInfo info, List<CertificateValue> certificateInfo) throws ServiceException {
         KeyStoreValue kinfo = (KeyStoreValue) info;
-        KeyStoreHelper ksv = new KeyStoreHelper(kinfo);
+        KeystoreService ksv = new KeystoreService();
         try {
             ksv.removeCertificates(kinfo, certificateInfo);
 
