@@ -10,12 +10,14 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.TypeAction;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
-import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
-import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
+import org.dpr.mykeys.ihm.listeners.*;
+
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,22 +67,27 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
         });
 
         unlockButton.addActionListener(e -> log.debug("Handled by Lambda listener"));
+        unlockButton.addMouseListener(new HelpMouseListener("unlock_keystore"));
 		// unlockButton.setIcon(createImageIcon("/images/Locked.png"));
 
 		unlockButton.setDisabledIcon(createImageIcon("/images/Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		addCertFromCSRButton.setActionCommand(TypeAction.ADD_CERT_FROMCSR.getValue());
 		addCertProfButton.setActionCommand(TypeAction.ADD_CERT_PROF.getValue());
-		addCertButton.setToolTipText("create a new certificate");
-        addCertProfButton.setToolTipText("<html>create certificate from a template template</html>");
-		addCertFromCSRButton.setToolTipText("create certificate from a CSR request");
+        addCertButton.addMouseListener(new HelpMouseListener("add_cert"));
+        addCertProfButton.addMouseListener(new HelpMouseListener("add_cert_fromtemplate"));
+        addCertFromCSRButton.addMouseListener(new HelpMouseListener("add_cert_fromcsr"));
 		importButton = new JButton(createImageIcon("/images/import.png")); 
 		importButton.setActionCommand(TypeAction.IMPORT_CERT.getValue());
-        importButton.setToolTipText(Messages.getString("import_button.tooltip"));
+        importButton.addMouseListener(new HelpMouseListener("import_cert"));
+
 		exportButton = new JButton(createImageIcon("/images/export.png"));
 		exportButton.setActionCommand(TypeAction.EXPORT_CERT.getValue());
-        exportButton.setToolTipText(Messages.getString("export_button.tooltip"));
-
+        exportButton.addMouseListener(new HelpMouseListener("export_cert"));
+//        exportButton.addMouseListener(new MouseAdapter() {
+//            public void mouseEntered(MouseEvent mouseEvent) {
+//                ApplicationHelp.getInstance().requestHelp("export_cert");
+//            }});
 
 		CrlManagerButton = new JButton(createImageIcon("/images/revok.png"));
         CrlManagerButton.setActionCommand(TypeAction.CREATE_CRL.getValue());
@@ -90,9 +97,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 
 		// FIXME libelles
 		deleteButton = new JButton(createImageIcon("/images/trash_can.png"));
-        //deleteButton.setActionCommand(TypeAction.DELETE_CERT.getValue());
-        deleteButton.setToolTipText(Messages.getString("delete_certificate.tooltip"));
-
+        deleteButton.addMouseListener(new HelpMouseListener("delete_cert"));
 		deleteButton.setEnabled(false);
 		exportButton.setEnabled(false);
 		importButton.setEnabled(false);

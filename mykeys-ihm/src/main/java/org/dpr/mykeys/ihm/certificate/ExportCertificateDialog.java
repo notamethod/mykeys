@@ -250,6 +250,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                                 log.error(e.getLocalizedMessage(), e);
                                 DialogUtil.showError(ExportCertificateDialog.this,
                                         e.getLocalizedMessage());
+                                return;
                             }
                             break;
 
@@ -271,7 +272,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
                                 DialogUtil.showError(ExportCertificateDialog.this,
                                         e.getLocalizedMessage());
-
+                                return;
                             }
                             break;
                         default:

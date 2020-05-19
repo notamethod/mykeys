@@ -128,7 +128,6 @@ public class KSConfig {
 		LoggerConfig conf = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
 		conf.addAppender(appender, null,null);
 		ctx.updateLoggers();
-		System.out.println(ctx.getRootLogger().getAppenders().size());
 	}
 
 

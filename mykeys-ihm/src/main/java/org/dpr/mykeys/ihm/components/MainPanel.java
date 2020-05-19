@@ -40,6 +40,7 @@ import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKsManager;
+import org.dpr.mykeys.ihm.listeners.ApplicationHelp;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 
 import javax.swing.*;
@@ -79,25 +80,46 @@ public class MainPanel extends JPanel implements
                 KS_MRU_NAME)), true);
         // Create the scroll pane and add the tree to it.
         JScrollPane treeView = new JScrollPane(treeksKeystoreMngr.getTree());
-        JPanel leftPanel = new JPanel();
         listePanel = new CertificateListPanel(null);
         listePanel.registerListener(this);
-        JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        JSplitPane splitRightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         // Create the viewing pane.
         detailPanel = new DetailPanel();
         JScrollPane scrollDetail = new JScrollPane(detailPanel);
         scrollDetail.getVerticalScrollBar().setUnitIncrement(16);
-        splitLeftPanel.setBottomComponent(scrollDetail);
-        splitLeftPanel.setTopComponent(listePanel);
-        splitLeftPanel.setDividerLocation(150);
+        splitRightPanel.setBottomComponent(scrollDetail);
+        splitRightPanel.setTopComponent(listePanel);
+        splitRightPanel.setDividerLocation(150);
+        JSplitPane splitLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+
+        JEditorPane editorPane = new JEditorPane();
+        editorPane.setEditable(false);
+        JScrollPane editorScrollPane = new JScrollPane(editorPane);
+        editorPane.setText("Welcome to Mykeys");
+//        Dimension d = infoPanel.getPreferredSize();
+//        d.height = 50;
+//        infoPanel.setPreferredSize(d);
+//        infoPanel.setSize(d);
+
+//        infoPanel.add(jl);
+        ApplicationHelp help = ApplicationHelp.getInstance();
+        help.setTarget(editorPane);
+        splitLeftPanel.setBottomComponent(editorScrollPane);
+        splitLeftPanel.setTopComponent(treeView);
+        splitLeftPanel.setResizeWeight(0.5);
+        //splitLeftPanel.setDividerLocation(20);
+//        splitLeftPanel.setDividerLocation(splitLeftPanel.getSize().height
+//                - splitLeftPanel.getInsets().top
+//                - splitLeftPanel.getDividerSize()
+//                - 20);
         // Add the scroll panes to a split pane.
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setTopComponent(treeView);
-        splitPane.setBottomComponent(splitLeftPanel);
-        splitPane.setDividerLocation(210);
+        JSplitPane horizontalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        horizontalSplitPane.setTopComponent(splitLeftPanel);
+        horizontalSplitPane.setBottomComponent(splitRightPanel);
+       horizontalSplitPane.setDividerLocation(210);
 
         // Add the split pane to this panel.
-        add(splitPane);
+        add(horizontalSplitPane);
 
     }
 

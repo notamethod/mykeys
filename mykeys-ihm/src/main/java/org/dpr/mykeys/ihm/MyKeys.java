@@ -95,7 +95,6 @@ public class MyKeys {
 
     private boolean checkUpdate() throws InvocationTargetException, InterruptedException {
         boolean justCreated = false;
-        log.error("b1");
         if (!KSConfig.getInternalKeystores().existsUserDatabase()) {
             boolean retour = DialogUtil.askConfirmDialog(null, Messages.getString("prompt.createUser"));
             if (!retour) {

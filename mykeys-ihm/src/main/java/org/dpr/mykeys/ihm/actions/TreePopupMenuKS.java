@@ -8,6 +8,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStoreActions;
+import org.dpr.mykeys.ihm.listeners.HelpMouseListener;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.keystore.CreateStoreDialog;
 import org.dpr.mykeys.ihm.keystore.ImportStoreDialog;
@@ -70,13 +71,13 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
         addStore.addActionListener(new TreePopupAction());
         addStore.setActionCommand(TypeAction.ADD_STORE.getValue());
         addStore.setVisible(false);
-
+        addStore.addMouseListener(new HelpMouseListener("new_store"));
         importStore = new JMenuItem(Messages.getString(
                 "magasin.load"));
         importStore.addActionListener(new TreePopupAction());
         importStore.setActionCommand(TypeAction.IMPORT_STORE.getValue());
         importStore.setVisible(false);
-
+        importStore.addMouseListener(new HelpMouseListener("import_store"));
         addCertMenu = new JMenuItem("Ajouter certificat");
         addCertMenu.addActionListener(new TreePopupAction());
         addCertMenu.setActionCommand(TypeAction.ADD_CERT.getValue());
