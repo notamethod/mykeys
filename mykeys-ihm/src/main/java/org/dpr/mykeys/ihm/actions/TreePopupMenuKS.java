@@ -82,50 +82,51 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
         addCertMenu.addActionListener(new TreePopupAction());
         addCertMenu.setActionCommand(TypeAction.ADD_CERT.getValue());
         addCertMenu.setVisible(false);
+        addCertMenu.addMouseListener(new HelpMouseListener("add_cert"));
         importCert = new JMenuItem(Messages.getString(
                 "certificat.import"));
         importCert.addActionListener(new TreePopupAction());
         importCert.setActionCommand(TypeAction.IMPORT_CERT.getValue());
         importCert.setVisible(false);
-
+        importCert.addMouseListener(new HelpMouseListener("import_cert"));
         exportCert = new JMenuItem(Messages.getString(
                 "certificat.export"));
         exportCert.addActionListener(new TreePopupAction());
         exportCert.setActionCommand(TypeAction.EXPORT_CERT.getValue());
         exportCert.setVisible(false);
-
+        exportCert.addMouseListener(new HelpMouseListener("export_cert"));
         openStore = new JMenuItem("Ouvrir Magasin");
         openStore.addActionListener(new TreePopupAction());
         openStore.setActionCommand(TypeAction.OPEN_STORE.getValue());
         openStore.setVisible(false);
+        openStore.addMouseListener(new HelpMouseListener("unlock_store"));
 
-
-        closeStore = new JMenuItem("Fermer magasin");
+        closeStore = new JMenuItem("Close");
 
         closeStore.addActionListener(new TreePopupAction());
         closeStore.setActionCommand(TypeAction.CLOSE_STORE.getValue());
         closeStore.setVisible(false);
 
-        removeStore = new JMenuItem("Retirer du gestionnaire");
+        removeStore = new JMenuItem(Messages.getString("store.unload"));
         removeStore.addActionListener(new TreePopupAction());
         removeStore.setActionCommand(TypeAction.REMOVE_STORE.getValue());
         removeStore.setVisible(false);
-
+        removeStore.addMouseListener(new HelpMouseListener("remove_store"));
         openExplorer = new JMenuItem(Messages.getString("open.explorer"));
         openExplorer.addActionListener(new TreePopupAction());
         openExplorer.setActionCommand(TypeAction.OPEN_EXPLORER.getValue());
         openExplorer.setVisible(false);
-
+        openExplorer.addMouseListener(new HelpMouseListener("show_explorer"));
         deleteStore = new JMenuItem("Suppression physique");
         deleteStore.addActionListener(new TreePopupAction());
         deleteStore.setActionCommand(TypeAction.DELETE_STORE.getValue());
         deleteStore.setVisible(false);
-
+        deleteStore.addMouseListener(new HelpMouseListener("delete_store"));
         menuChangePwd = new JMenuItem(Messages.getString("magasin.change.password"));
         menuChangePwd.addActionListener(new TreePopupAction());
         menuChangePwd.setActionCommand(TypeAction.CHANGE_PWD.getValue());
         menuChangePwd.setVisible(false);
-
+        menuChangePwd.addMouseListener(new HelpMouseListener("changeit_store"));
         add(addStore);
         add(importStore);
         add(addCertMenu);

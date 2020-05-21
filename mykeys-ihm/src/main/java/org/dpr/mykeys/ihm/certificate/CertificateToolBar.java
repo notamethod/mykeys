@@ -67,7 +67,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
         });
 
         unlockButton.addActionListener(e -> log.debug("Handled by Lambda listener"));
-        unlockButton.addMouseListener(new HelpMouseListener("unlock_keystore"));
+        unlockButton.addMouseListener(new HelpMouseListener("unlock_store"));
 		unlockButton.setDisabledIcon(createImageIcon("/images/Unlocked.png"));
 		addCertButton.setActionCommand(TypeAction.ADD_CERT.getValue());
 		addCertFromCSRButton.setActionCommand(TypeAction.ADD_CERT_FROMCSR.getValue());
