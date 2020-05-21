@@ -337,6 +337,8 @@ public class MykeysFrame extends JFrame implements WindowListener {
                     String fileName = dirName.substring(dirName.lastIndexOf("\\") + 1);
                     KeyStoreValue ki = new KeyStoreValue(fileName, dirName, StoreModel.fromValue(typeTmp[1]),
                             StoreFormat.valueOf(typeTmp[2]));
+                    System.out.println(ki.isOpen());
+                    System.out.println(ki.isProtected());
                     byte[] encoded = Base64.getEncoder().encode(dirName.getBytes());
                     String hexString = Hex.encodeHexString(encoded);
 

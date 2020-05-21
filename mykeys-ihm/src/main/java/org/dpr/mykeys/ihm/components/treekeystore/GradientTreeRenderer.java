@@ -32,9 +32,10 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
         setOpenIcon(createImageIcon("/images/Go-down.png"));
         setClosedIcon(createImageIcon("/images/Go-previous.png"));
 
-        Color colorb = UIManager.getColor("Tree.textBackground");
+        Color colorb =  UIManager.getColor("Tree.textBackground");
         Color colorf = UIManager.getColor("Tree.textForeground");
-        rc.setForeground(colorf);
+        this.setBackgroundSelectionColor(Color.GRAY);
+        //setBackgroundSelectionColor
 
         // setTextNonSelectionColor( Color.black);
         if (value instanceof DefaultMutableTreeNode) {
@@ -45,8 +46,9 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
                 KeyStoreValue kInfo = (KeyStoreValue) node.getUserObject();
                 if (!kInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                     tooltip = kInfo.getPath();
-                // if (kInfo.isOpen()) {
-
+                 if (kInfo.isOpen()) {
+                     colorf = Color.cyan;
+                 }
                 ImageIcon icon = null;
                 // setTextNonSelectionColor( Color.green);
                 switch (kInfo.getStoreModel()) {
@@ -75,9 +77,9 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
                     setIcon(icon);
 
                 }
-                if (isSelected) {
-                    rc.setForeground(colorb);
-                }
+//                if (isSelected) {
+//                    rc.setForeground(colorb);
+//                }
             } else if (node.getUserObject() instanceof CrlValue) {
                 CrlValue cInfo = (CrlValue) node.getUserObject();
                 tooltip = cInfo.getPath();
@@ -91,9 +93,9 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
                     setIcon(icon);
 
                 }
-                if (isSelected) {
-                    rc.setForeground(colorb);
-                }
+//                if (isSelected) {
+//                    rc.setForeground(colorb);
+//                }
             } else if (node.getUserObject() instanceof CertificateValue) {
 
                 CertificateValue cInfo = (CertificateValue) node.getUserObject();
@@ -111,11 +113,13 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
                     setIcon(icon);
 
                 }
-                if (isSelected) {
-                    rc.setForeground(colorb);
-                }
+//                if (isSelected) {
+//                    rc.setForeground(colorb);
+//                }
             }
         }
+        rc.setForeground(colorf);
+       // System.out.println(colorf);
         if (tooltip != null) {
             this.setToolTipText(tooltip);
         }

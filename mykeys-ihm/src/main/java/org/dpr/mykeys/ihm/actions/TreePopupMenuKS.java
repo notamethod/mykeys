@@ -66,7 +66,7 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
     }
 
     private void init() {
-        log.debug("xxxxxxxxrr");
+
         addStore = new JMenuItem(Messages.getString("magasin.new"));
         addStore.addActionListener(new TreePopupAction());
         addStore.setActionCommand(TypeAction.ADD_STORE.getValue());
@@ -131,7 +131,7 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
         add(addCertMenu);
         add(importCert);
         add(exportCert);
-        // add(openStore);
+        add(openStore);
         // add(closeStore);
         add(openExplorer);
         add(removeStore);
@@ -162,8 +162,9 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
         removeStore.setVisible(false);
         deleteStore.setVisible(false);
         menuChangePwd.setVisible(false);
+        importStore.setVisible(false);
         this.node = node;
-        if (node == null || node.getParent() == null) {
+        if (node == null) {
             addStore.setVisible(true);
             importStore.setVisible(true);
 

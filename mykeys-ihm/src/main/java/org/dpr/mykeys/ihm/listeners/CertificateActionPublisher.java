@@ -2,15 +2,7 @@ package org.dpr.mykeys.ihm.listeners;
 
 import org.dpr.mykeys.app.certificate.CertificateValue;
 
-public interface CertificateActionPublisher {
-
-    void notifyopenStore(String what);
-
-    void notifyInsertCertificate(CertificateValue what);
-
-    void notifyInsertCertificateFromProfile(String what);
-
-    void notifyInsertCertificateFromCSR(String what);
+public interface CertificateActionPublisher extends KeystoreActionPublisher{
 
     void notifyImportCertificate(String what);
 
@@ -20,6 +12,5 @@ public interface CertificateActionPublisher {
 
     void notifyCreateCrl(String what);
 
-    void registerListener(CertificateActionListener listener);
 
 }

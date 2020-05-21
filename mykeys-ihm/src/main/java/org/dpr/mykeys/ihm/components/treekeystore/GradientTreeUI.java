@@ -1,13 +1,11 @@
 package org.dpr.mykeys.ihm.components.treekeystore;
 
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.AbstractLayoutCache;
@@ -16,6 +14,16 @@ class GradientTreeUI extends BasicTreeUI {
 
 	public static ComponentUI createUI(JComponent c) {
 		return new GradientTreeUI();
+	}
+
+	@Override
+	public void paint(Graphics g, JComponent c) {
+		Color dropLineColor = UIManager.getColor("Tree.dropLineColor");
+
+		UIManager.put("Tree.dropLineColor", Color.cyan);
+
+		super.paint(g, c);
+		UIManager.put("Tree.dropLineColor", dropLineColor);
 	}
 
 	@Override

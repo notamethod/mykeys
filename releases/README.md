@@ -3,6 +3,10 @@
 A simple X509 certificate manager
 
 ## new releases
+### release 0.9.7
+- Fix problem with pem keystore
+- New online help
+
 ### release 0.9.6
 - Fix user creation #8
 - Fix export problems with some formats

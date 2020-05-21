@@ -42,13 +42,17 @@ import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
+import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
+import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
+import org.dpr.mykeys.ihm.listeners.KeystoreActionPublisher;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
 import org.dpr.mykeys.ihm.certificate.CertificateCreateFactory;
 import org.dpr.mykeys.ihm.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.certificate.SuperCreate;
 import org.dpr.mykeys.ihm.keystore.ChangePasswordDialog;
+import org.dpr.mykeys.service.KeystoreService;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.app.utils.X509Util;
 
@@ -77,6 +81,7 @@ public class TreeKsManager implements MouseListener,
     private final static Log log = LogFactory.getLog(TreeKsManager.class);
 
     protected final List<EventCompListener> listeners = new ArrayList<>();
+    private final List<CertificateActionListener> keystoreListeners = new ArrayList<>();
     protected final GradientTree tree;
     protected final Map<String, DefaultMutableTreeNode> nodes;
     protected final Map<String, DefaultMutableTreeNode> fixedNodes;
@@ -325,33 +330,14 @@ public class TreeKsManager implements MouseListener,
                              boolean useInternalPwd, boolean expand) {
         KeyStoreValue ksInfo = ((KeyStoreValue) node.getUserObject());
         if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) { // equals(StoreModel.CASTORE))
-            // {
             useInternalPwd = true;
-        }
-        // ask for password
-        if (!useInternalPwd) {
-            char[] password = DialogUtil.showPasswordDialog(tree.getTopLevelAncestor());
-
-            if (password == null || password.length == 0) {
-                return false;
-            }
-
-            ksInfo.setPassword(password);
-
-        }
-        KeyStoreHelper ksBuilder = new KeyStoreHelper(ksInfo);
-
-        try {
-            ksBuilder.loadKeyStore(ksInfo.getPath(), ksInfo.getStoreFormat(),
-                    ksInfo.getPassword());
-            ksInfo.setOpen(true);
-        } catch (Exception e1) {
-            DialogUtil.showError(tree.getTopLevelAncestor(), e1.getMessage());
-            log.error("load keystore failed", e1);
-            return false;
+            log.info("internal pass");
         }
 
-        return true;
+        KeystoreService ksv = new KeystoreService();
+        boolean isOpen= ksv.openStore(ksInfo);
+        notifyCertListToUpdate(ksInfo);
+        return isOpen;
 
     }
 

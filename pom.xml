@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.dpr.apps</groupId>
 	<artifactId>mykeys</artifactId>
-	<version>0.9.6</version>
+	<version>0.9.7</version>
     <name>MyKeys</name>
 	<packaging>pom</packaging>
 	<modules>
