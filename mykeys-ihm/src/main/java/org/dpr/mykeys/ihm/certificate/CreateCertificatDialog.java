@@ -40,9 +40,4 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
         this.pack();
     }
 
-    public static void main(String[] args) throws CancelCreationException {
-        JFrame f = null;
-        CreateCertificatDialog cr = new CreateCertificatDialog(f, null,
-                null, false);
-    }
 }

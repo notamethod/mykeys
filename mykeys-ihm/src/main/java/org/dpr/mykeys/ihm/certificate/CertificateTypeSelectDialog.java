@@ -11,6 +11,9 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Select certificate type for creation
+ */
 public class CertificateTypeSelectDialog extends JDialog {
     private JPanel contentPane0;
     private JButton buttonOK;
