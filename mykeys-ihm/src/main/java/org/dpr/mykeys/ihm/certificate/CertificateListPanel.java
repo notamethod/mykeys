@@ -15,12 +15,14 @@ import org.dpr.mykeys.ihm.IhmException;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.ihm.components.ListImgCertificatesView;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
+import org.dpr.mykeys.ihm.keystore.ImportStoreDialog;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.crl.CreateCrlDialog;
 import org.dpr.mykeys.ihm.certificate.template.CreateTemplateDialog;
 import org.dpr.mykeys.ihm.certificate.template.SelectTemplateDialog;
 import org.dpr.mykeys.app.utils.ActionStatus;
+import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.service.KeystoreService;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -291,8 +293,22 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         certificates = new ArrayList<>(selectedValuesList);
         ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
         cs.setLocationRelativeTo(frame);
-        cs.setResizable(false);
-        cs.setVisible(true);
+        List<String> files = cs.showDialog();
+        if (files!=null) {
+            for (String fileName : files) {
+                StoreFormat format = KeystoreUtils.findKeystoreType(fileName);
+
+//            kserv.importStore(tfDirectory.getText(), format,
+//                    pdin.length == 0 ? null : pdin);
+//            // KSConfig.getUserCfg().addProperty("magasin." + typeKS,
+//            // tfDirectory.getText());
+//            KSConfig.getUserCfg().addProperty(
+//                    "store." + StoreModel.CERTSTORE + "."
+//                            + format.toString(), tfDirectory.getText());
+//            ((MykeysFrame) ImportStoreDialog.this.getParent())
+//                    .updateKeyStoreList();
+            }
+        }
     }
 
     public void importCertificate(NodeInfo info, boolean b) throws ServiceException {

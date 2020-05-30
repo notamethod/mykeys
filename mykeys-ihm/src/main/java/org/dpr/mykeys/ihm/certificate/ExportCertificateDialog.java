@@ -22,6 +22,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,12 +43,15 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
     private final KeyStoreValue ksInfo;
 
+    private  List<String> exportedFiles;
+
     public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
             List<CertificateValue> certInfos, boolean modal) {
         super(owner, modal);
         this.certInfos = certInfos;
         isMultiple = certInfos.size() > 1;
         this.ksInfo = ksInfo;
+        setResizable(false);
         init();
         this.pack();
     }
@@ -190,6 +194,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                     break;
                 }
                 case "OK": {
+                    exportedFiles = new ArrayList<>();
 
                     if (tfDirectory.getText().equals("")) {
                         DialogUtil.showError(ExportCertificateDialog.this,
@@ -252,6 +257,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                                         e.getLocalizedMessage());
                                 return;
                             }
+                            exportedFiles.add(path);
                             break;
 
                         case DER:
@@ -261,10 +267,13 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
                                 boolean newFile = kServ.export(certInfos, path, storeFormat, pd, NONE);
                                 if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
                                     kServ.export(certInfos, path, storeFormat, pd, REPLACE);
+                                    exportedFiles.add(path);
                                 }
                                 if (isExportCle) {
+                                    String privateKeyFileName = tfDirectory.getText();
                                     kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd, null,
-                                            tfDirectory.getText(), storeFormat);
+                                            privateKeyFileName, storeFormat);
+                                    exportedFiles.add(privateKeyFileName);
                                 }
 
                             } catch (Exception e) {
@@ -339,5 +348,10 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
             return filterDescription;
         }
 
+    }
+
+    public List<String> showDialog() {
+        setVisible(true);
+        return exportedFiles;
     }
 }

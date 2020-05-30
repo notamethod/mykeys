@@ -110,15 +110,6 @@ public class ImportStoreDialog extends JDialog {
 			String command = event.getActionCommand();
             switch (command) {
                 case "CHOOSE_IN":
-//				JFileChooser jfc = new JFileChooser();
-//				// jfc.addChoosableFileFilter(new KeyStoreFileFilter());
-//
-//				// jPanel1.add(jfc);
-//				if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-//					tfDirectory
-//							.setText(jfc.getSelectedFile().getAbsolutePath());
-//
-//				}
 
                     break;
                 case "OK":
