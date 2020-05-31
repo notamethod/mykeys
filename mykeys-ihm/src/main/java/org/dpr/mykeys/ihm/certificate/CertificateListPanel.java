@@ -15,14 +15,13 @@ import org.dpr.mykeys.ihm.IhmException;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.ihm.components.ListImgCertificatesView;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
-import org.dpr.mykeys.ihm.keystore.ImportStoreDialog;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.crl.CreateCrlDialog;
 import org.dpr.mykeys.ihm.certificate.template.CreateTemplateDialog;
 import org.dpr.mykeys.ihm.certificate.template.SelectTemplateDialog;
 import org.dpr.mykeys.app.utils.ActionStatus;
-import org.dpr.mykeys.ihm.windows.MykeysFrame;
+import org.dpr.mykeys.ihm.listeners.EventKeystoreListener;
 import org.dpr.mykeys.service.KeystoreService;
 import org.dpr.mykeys.utils.DialogUtil;
 
@@ -50,6 +49,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     NodeInfo ksInfo;
     CertificatesView listCerts;
     private final List<EventCompListener> listeners = new ArrayList<>();
+    private final List<EventKeystoreListener> keystoreListeners = new ArrayList<>();
     private final ToolBarManager toolBarManager = new ToolBarManager();
 
     private JPanel jp;
@@ -162,24 +162,29 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         jp.setVisible(true);
     }
 
-    private void displayDetail(ChildInfo info) {
-        notifyCertDetailToUpdate(info);
-
-
-    }
-
-    private void notifyCertDetailToUpdate(ChildInfo info) {
+    private void fireCertificateSelected(ChildInfo info) {
         for (EventCompListener listener : listeners) {
-            listener.showingCertDetailRequested(info);
+            listener.certificateSelected(info);
         }
     }
+
+    private void fireKeyStoreAdded(List<String> info) {
+        log.debug("fire keystore added event");
+        for (EventKeystoreListener listener : keystoreListeners) {
+            listener.KeystoreAdded(info);
+        }
+    }
+
 
 
     public void registerListener(EventCompListener listener) {
         listeners.add(listener);
 
     }
+    public void addKeystoreListener(EventKeystoreListener listener) {
+        keystoreListeners.add(listener);
 
+    }
 
     /**
      * @return the ksInfo
@@ -294,21 +299,15 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
         cs.setLocationRelativeTo(frame);
         List<String> files = cs.showDialog();
-        if (files!=null) {
-            for (String fileName : files) {
-                StoreFormat format = KeystoreUtils.findKeystoreType(fileName);
-
-//            kserv.importStore(tfDirectory.getText(), format,
-//                    pdin.length == 0 ? null : pdin);
-//            // KSConfig.getUserCfg().addProperty("magasin." + typeKS,
-//            // tfDirectory.getText());
-//            KSConfig.getUserCfg().addProperty(
-//                    "store." + StoreModel.CERTSTORE + "."
-//                            + format.toString(), tfDirectory.getText());
-//            ((MykeysFrame) ImportStoreDialog.this.getParent())
-//                    .updateKeyStoreList();
+        if (files != null) {
+            for (String file : files){
+                KSConfig.getUserCfg().addProperty(
+                        "store." + StoreModel.CERTSTORE + "."
+                                + StoreFormat.UNKNOWN, file);
             }
+            fireKeyStoreAdded(files);
         }
+
     }
 
     public void importCertificate(NodeInfo info, boolean b) throws ServiceException {
@@ -622,7 +621,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
                 if (e.getSource() instanceof JList) {
                     if (((JList) e.getSource()).getSelectedValue() instanceof ChildInfo) {
                         ChildInfo ci = (ChildInfo) ((JList) e.getSource()).getSelectedValue();
-                        displayDetail(ci);
+                        fireCertificateSelected(ci);
                         if (ksInfo.isOpen()) {
                             toolBarManager.enableElementActions(ksInfo, ci, true);
 
@@ -634,13 +633,13 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         }
 
         @Override
-        public void showingCertListRequested(NodeInfo info) {
+        public void certificateListChanged(NodeInfo info) {
 
         }
 
         @Override
-        public void showingCertDetailRequested(ChildInfo info) {
-            displayDetail(info);
+        public void certificateSelected(ChildInfo info) {
+            fireCertificateSelected(info);
             if (ksInfo.isOpen()) {
                 toolBarManager.enableElementActions(ksInfo, info, true);
 

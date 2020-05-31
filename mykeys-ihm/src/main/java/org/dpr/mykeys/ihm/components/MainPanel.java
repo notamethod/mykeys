@@ -33,6 +33,7 @@ package org.dpr.mykeys.ihm.components;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.configuration.KSConfig;
+import org.dpr.mykeys.ihm.AppManager;
 import org.dpr.mykeys.ihm.certificate.CertificateListPanel;
 import org.dpr.mykeys.ihm.DetailPanel;
 import org.dpr.mykeys.ihm.Messages;
@@ -42,6 +43,7 @@ import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKsManager;
 import org.dpr.mykeys.ihm.listeners.ApplicationHelp;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
+import org.dpr.mykeys.utils.DialogUtil;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -72,7 +74,7 @@ public class MainPanel extends JPanel implements
         treeksKeystoreMngr = new TreeKsManager();
 
         treeksKeystoreMngr.registerListener(this);
-
+        treeksKeystoreMngr.dispatchListener((files)->reloadKSList(files));
         treeksKeystoreMngr.addNode(KS_CLI_NAME, new DefaultMutableTreeNode(Messages.getString(
                 KS_CLI_NAME)), true);
 
@@ -82,6 +84,7 @@ public class MainPanel extends JPanel implements
         JScrollPane treeView = new JScrollPane(treeksKeystoreMngr.getTree());
         listePanel = new CertificateListPanel(null);
         listePanel.registerListener(this);
+        listePanel.addKeystoreListener( (files) -> reloadKSList(files));
         JSplitPane splitRightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         // Create the viewing pane.
         detailPanel = new DetailPanel();
@@ -123,6 +126,17 @@ public class MainPanel extends JPanel implements
 
     }
 
+    private void reloadKSList(List<String> files) {
+        try {
+            updateKSList(AppManager.getInstance().updateKeyStoreList(), files);
+        } catch (KeyStoreException e1) {
+            e1.printStackTrace();
+            log.error(e1.getMessage(), e1);
+            DialogUtil.showError(this, e1.getMessage());
+        }
+
+    }
+
     /**
      * Create the GUI and show it. For thread safety, this method should be
      * invoked from the event-dispatching thread.
@@ -152,9 +166,10 @@ public class MainPanel extends JPanel implements
      * Update nodes with keystores list
      *
      * @param ksList
+     * @param files
      * @throws KeyStoreException
      */
-    public void updateKSList(HashMap<String, KeyStoreValue> ksList) throws KeyStoreException {
+    public void updateKSList(HashMap<String, KeyStoreValue> ksList, List<String> files) throws KeyStoreException {
         treeksKeystoreMngr.clear();
         // Set<String> dirs = ksList.keySet();
         SortedSet<String> dirs = new TreeSet<>(
@@ -165,6 +180,7 @@ public class MainPanel extends JPanel implements
         for (String dir : dirs) {
             KeyStoreValue ksinfo = ksList.get(dir);
             DefaultMutableTreeNode node = null;
+
             if (ksinfo.getStoreModel().equals(StoreModel.CASTORE)) {
                 // no more maintened
             } else {
@@ -256,7 +272,7 @@ public class MainPanel extends JPanel implements
     }
 
     @Override
-    public void showingCertListRequested(NodeInfo info) {
+    public void certificateListChanged(NodeInfo info) {
         try {
             listePanel.updateInfo(info);
         } catch (ServiceException e) {
@@ -265,7 +281,7 @@ public class MainPanel extends JPanel implements
     }
 
     @Override
-    public void showingCertDetailRequested(ChildInfo info) {
+    public void certificateSelected(ChildInfo info) {
 
         detailPanel.updateInfo(info);
 

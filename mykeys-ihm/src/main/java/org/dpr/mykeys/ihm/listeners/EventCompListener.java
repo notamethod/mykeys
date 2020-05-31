@@ -7,7 +7,7 @@ import java.util.EventListener;
 
 public interface EventCompListener extends EventListener {
 
-    void showingCertListRequested(NodeInfo info);
+    void certificateListChanged(NodeInfo info);
 
-    void showingCertDetailRequested(ChildInfo info);
+    void certificateSelected(ChildInfo info);
 }

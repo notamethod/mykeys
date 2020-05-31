@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.filechooser.FileFilter;
 
+import org.dpr.mykeys.ihm.AppManager;
+import org.dpr.mykeys.ihm.CustomJDialog;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -29,21 +31,24 @@ import org.dpr.swingtools.components.JDropText;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.LabelValuePanel;
 
-public class ImportStoreDialog extends JDialog {
+public class ImportStoreDialog extends CustomJDialog {
 
 	private JDropText tfDirectory;
 
-	private LabelValuePanel infosPanel;
 
-	// Map<String, String> elements = new HashMap<String, String>();
+
+	private LabelValuePanel infosPanel;
 
 	public ImportStoreDialog(Frame owner, boolean modal) {
 		super(owner, modal);
-		init();
-		this.pack();
 	}
 
-	private void init() {
+	// Map<String, String> elements = new HashMap<String, String>();
+
+
+
+	@Override
+	protected void init() {
 		DialogAction dAction = new DialogAction();
         setTitle(Messages.getString("keystore.import.title"));
 		JPanel jp = new JPanel();
@@ -131,8 +136,8 @@ public class ImportStoreDialog extends JDialog {
                         KSConfig.getUserCfg().addProperty(
                                 "store." + StoreModel.CERTSTORE + "."
                                         + format.toString(), tfDirectory.getText());
-                        ((MykeysFrame) ImportStoreDialog.this.getParent())
-                                .updateKeyStoreList();
+
+						result = Boolean.TRUE;
                         ImportStoreDialog.this.setVisible(false);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block

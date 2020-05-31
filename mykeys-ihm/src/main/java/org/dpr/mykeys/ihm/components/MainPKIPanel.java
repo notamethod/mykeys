@@ -84,7 +84,7 @@ public class MainPKIPanel extends JPanel implements
         // Add the split pane to this panel.
         add(splitLeftPanel);
 
-        showingCertListRequested(KSConfig.getInternalKeystores().getStorePKI());
+        certificateListChanged(KSConfig.getInternalKeystores().getStorePKI());
 
     }
 
@@ -180,7 +180,7 @@ public class MainPKIPanel extends JPanel implements
     }
 
     @Override
-    public void showingCertListRequested(NodeInfo info) {
+    public void certificateListChanged(NodeInfo info) {
         try {
             listePanel.updateInfo(info);
         } catch (ServiceException e) {
@@ -189,7 +189,7 @@ public class MainPKIPanel extends JPanel implements
     }
 
     @Override
-    public void showingCertDetailRequested(ChildInfo info) {
+    public void certificateSelected(ChildInfo info) {
 
         detailPanel.updateInfo(info);
 

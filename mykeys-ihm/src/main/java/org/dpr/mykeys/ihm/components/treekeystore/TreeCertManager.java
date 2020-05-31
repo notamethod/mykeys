@@ -107,7 +107,7 @@ public class TreeCertManager extends TreeKsManager {
     @Override
     protected void notifyCertDetailToUpdate(CertificateValue info) {
         for (EventCompListener listener : listeners) {
-            listener.showingCertDetailRequested(info);
+            listener.certificateSelected(info);
         }
     }
 

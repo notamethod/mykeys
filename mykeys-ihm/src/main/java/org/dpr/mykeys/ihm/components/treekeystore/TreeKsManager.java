@@ -42,10 +42,10 @@ import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
+import org.dpr.mykeys.ihm.components.MainPanel;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
-import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
-import org.dpr.mykeys.ihm.listeners.KeystoreActionPublisher;
+import org.dpr.mykeys.ihm.listeners.EventKeystoreListener;
 import org.dpr.mykeys.ihm.model.TreeKeyStoreModelListener;
 import org.dpr.mykeys.ihm.model.TreeModel;
 import org.dpr.mykeys.ihm.certificate.CertificateCreateFactory;
@@ -53,7 +53,6 @@ import org.dpr.mykeys.ihm.certificate.ImportCertificateDialog;
 import org.dpr.mykeys.ihm.certificate.SuperCreate;
 import org.dpr.mykeys.ihm.keystore.ChangePasswordDialog;
 import org.dpr.mykeys.service.KeystoreService;
-import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.app.utils.X509Util;
 
 import javax.swing.*;
@@ -90,8 +89,9 @@ public class TreeKsManager implements MouseListener,
     protected final String KS_AC_NAME = "store.ac.name";
 
     public TreePopupMenu getPopup() {
-        if (popupMenu == null)
+        if (popupMenu == null) {
             popupMenu = new TreePopupMenuKS("Popup name", this);
+        }
         return popupMenu;
     }
 
@@ -144,7 +144,7 @@ public class TreeKsManager implements MouseListener,
 
     protected void notifyCertDetailToUpdate(CertificateValue info) {
         for (EventCompListener listener : listeners) {
-            listener.showingCertDetailRequested(info);
+            listener.certificateSelected(info);
         }
     }
 
@@ -163,7 +163,7 @@ public class TreeKsManager implements MouseListener,
     // maybe in an interfacee ? publisherInterface ?
     void notifyCertListToUpdate(NodeInfo info) {
         for (EventCompListener listener : listeners) {
-            listener.showingCertListRequested(info);
+            listener.certificateListChanged(info);
         }
     }
 
@@ -562,6 +562,10 @@ public class TreeKsManager implements MouseListener,
         listeners.add((EventCompListener) listener);
 
     }
+
+    public void dispatchListener(EventKeystoreListener listener) {
+        ((TreePopupMenuKS)getPopup()).addKeystoreListener(listener);
+    }
 //xxx
 
     /**
@@ -727,6 +731,8 @@ public class TreeKsManager implements MouseListener,
         if (node != null)
             tree.scrollPathToVisible(new TreePath(node.getPath()));
     }
+
+
 
     class TreeTransferHandler extends TransferHandler {
         DataFlavor nodesFlavor;

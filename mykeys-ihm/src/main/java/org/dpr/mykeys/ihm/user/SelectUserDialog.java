@@ -2,6 +2,7 @@ package org.dpr.mykeys.ihm.user;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.ihm.AppManager;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.authentication.AuthenticationService;
 import org.dpr.mykeys.configuration.KSConfig;
@@ -221,7 +222,7 @@ public class SelectUserDialog extends MkDialog {
             SwingUtilities.invokeLater(() -> {
                 //MykeysFrame frame = new MykeysFrame();
                 try {
-                    new MykeysFrame();
+                    AppManager.getInstance().start();
                 } catch (Exception e) {
                     log.error("init error", e);
                 }

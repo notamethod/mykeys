@@ -2,12 +2,14 @@ package org.dpr.mykeys.ihm.actions;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.ihm.AppManager;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStoreActions;
+import org.dpr.mykeys.ihm.listeners.EventKeystoreListener;
 import org.dpr.mykeys.ihm.listeners.HelpMouseListener;
 import org.dpr.mykeys.ihm.windows.MykeysFrame;
 import org.dpr.mykeys.ihm.keystore.CreateStoreDialog;
@@ -26,7 +28,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyStoreException;
+import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.List;
 
 public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
     public static final Log log = LogFactory.getLog(TreePopupMenuKS.class);
@@ -59,9 +63,12 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
 
     private DefaultMutableTreeNode node;
 
+    private List<EventKeystoreListener> keystoreListenerList = new ArrayList<>();
+
     public TreePopupMenuKS(String string, TreeKeyStoreActions treeKeyStore) {
         super(string);
         this.treeKeyStoreParent = treeKeyStore;
+
         init();
     }
 
@@ -224,21 +231,23 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
                     csd.setLocationRelativeTo(frame);
                     boolean result = csd.showDialog();
                     if (result) {
-                        try {
-                            ((MykeysFrame) frame).updateKeyStoreList();
-                        } catch (KeyStoreException e1) {
-                            log.error(e1.getMessage(), e1);
-                            DialogUtil.showError(frame, e1.getMessage());
 
-                        }
+                            fireKeystoreListChanged();
+
                     }
                     break;
 
                 case IMPORT_STORE:
                     frame = (JFrame) tree.getTopLevelAncestor();
-                    cs = new ImportStoreDialog(frame, true);
-                    cs.setLocationRelativeTo(frame);
-                    cs.setVisible(true);
+                    ImportStoreDialog csi = new ImportStoreDialog(frame, true);
+                    csi.setLocationRelativeTo(frame);
+                    Object resultDialog = csi.showDialog();
+                    if (resultDialog != null && (Boolean)resultDialog) {
+
+                        fireKeystoreListChanged();
+
+                    }
+
                     break;
 
                 case EXPORT_CERT:
@@ -271,7 +280,7 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
 
                 case REMOVE_STORE:
                     ksInfo = (KeyStoreValue) node.getUserObject();
-                    MykeysFrame.removeKeyStore(ksInfo.getPath());
+                    AppManager.removeKeyStore(ksInfo.getPath());
                     treeKeyStoreParent.removeNode(node);
                     break;
 
@@ -299,7 +308,7 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
                         } catch (IOException e1) {
                             DialogUtil.showError(treeKeyStoreParent.getComponent(), e1.getLocalizedMessage());
                         }
-                        MykeysFrame.removeKeyStore(ksInfo.getPath());
+                        AppManager.removeKeyStore(ksInfo.getPath());
                         treeKeyStoreParent.removeNode(node);
                     }
 
@@ -313,6 +322,16 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
 
         }
 
+    }
+
+    private void fireKeystoreListChanged() {
+        for (EventKeystoreListener eventKeystoreListener : keystoreListenerList){
+            eventKeystoreListener.KeystoreAdded(null);
+        }
+    }
+
+    public void addKeystoreListener(EventKeystoreListener listener){
+        keystoreListenerList.add(listener);
     }
 
 }
