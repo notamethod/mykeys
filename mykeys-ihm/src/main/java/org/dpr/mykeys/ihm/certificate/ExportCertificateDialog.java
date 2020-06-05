@@ -265,10 +265,14 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
                             try {
                                 boolean newFile = kServ.export(certInfos, path, storeFormat, pd, NONE);
-                                if (!newFile && DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
-                                    kServ.export(certInfos, path, storeFormat, pd, REPLACE);
-                                    exportedFiles.add(path);
+                                if (!newFile){
+                                    if ( DialogUtil.askConfirmDialog(null, Messages.getString("file.replace.question", path))) {
+                                        kServ.export(certInfos, path, storeFormat, pd, REPLACE);
+                                    }else{
+                                        return;
+                                    }
                                 }
+                                exportedFiles.add(path);
                                 if (isExportCle) {
                                     String privateKeyFileName = tfDirectory.getText();
                                     kServ.exportPrivateKey(certInfos.get(0), ksInfo, privKeyPd, null,

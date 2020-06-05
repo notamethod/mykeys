@@ -102,9 +102,6 @@ public class AppManager {
                         ki.setOpen(true);
                     }
 
-                    // if (ki.getStoreModel().equals(StoreModel.CASTORE)){
-                    // InternalKeystores.setPath(dirName);
-                    // }
                     ksList.put(dirName, ki);
                 }
             }
@@ -113,14 +110,4 @@ public class AppManager {
 
     }
 
-    public void fireKeystoreChanged() throws KeyStoreException {
-        updateKeyStoreList();
-        for (EventKeystoreListener listener: listeners){
-            listener.KeystoreAdded(null);
-        }
-    }
-
-    public void addListener(EventKeystoreListener listener){
-        listeners.add(listener);
-    }
 }

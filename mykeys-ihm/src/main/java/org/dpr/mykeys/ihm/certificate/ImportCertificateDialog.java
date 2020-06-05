@@ -20,9 +20,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 
+import org.dpr.mykeys.app.keystore.*;
+import org.dpr.mykeys.app.keystore.repository.MkKeystore;
+import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JDropText;
@@ -81,6 +82,13 @@ public class ImportCertificateDialog extends JDialog {
 
 		JLabel jl4 = new JLabel(Messages.getString("file.location"));
 		tfDirectory = new JDropText();
+		String directory = (String) KSConfig.getUserCfg().getProperty("last.location");
+
+		if (directory != null) {
+			File f = new File(directory);
+			if (f != null)
+				tfDirectory.setCurrentDirectory(f);
+		}
 
 
 		JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -134,12 +142,18 @@ public class ImportCertificateDialog extends JDialog {
                             BigInteger bi = CertificateUtils.randomBigInteger(30);
                             alias = bi.toString(16);
                         }
-                        KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
+                        KeyStoreHelper kserv = new KeyStoreHelper();
                         //FIXME;CRR
-                        KeyStoreValue value = kserv.createKeyStoreValue(new File(tfDirectory.getText()));
-                        kserv.importX509CertToJks(alias, value,
-                                ((String) elements.get("pwd1")).toCharArray());
+						StoreFormat format = null;
+						if (typeCert!=null)
+						 	format = StoreFormat.fromValue(typeCert);
+						else
+							format= KeystoreUtils.findKeystoreType(tfDirectory.getText());
+						MkKeystore sourceKeystore = MkKeystore.getInstance(format);
+						MKKeystoreValue ksSource = sourceKeystore.load(tfDirectory.getText(), ((String) elements.get("pwd1")).toCharArray());
+						kserv.importElements(ksSource, ksInfo);
 
+						KSConfig.getUserCfg().setProperty("last.location", new File(tfDirectory.getText()).getParent());
                         ImportCertificateDialog.this.setVisible(false);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
@@ -173,36 +187,6 @@ public class ImportCertificateDialog extends JDialog {
 			// }
 			return null;
 
-		}
-
-	}
-
-	/**
-	 * @author Christophe Roger
-	 * @date 8 mai 2009
-	 */
-	private class KeyStoreFileFilter extends FileFilter {
-
-		/*
-		 * (non-Javadoc)
-         *
-		 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
-		 */
-		@Override
-		public boolean accept(File arg0) {
-			// TODO Auto-generated method stub
-			return true;
-		}
-
-		/*
-		 * (non-Javadoc)
-         *
-		 * @see javax.swing.filechooser.FileFilter#getDescription()
-		 */
-		@Override
-		public String getDescription() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 	}

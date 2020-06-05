@@ -299,11 +299,12 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
         cs.setLocationRelativeTo(frame);
         List<String> files = cs.showDialog();
+        KeyStoreHelper helper = new KeyStoreHelper();
         if (files != null) {
             for (String file : files){
                 KSConfig.getUserCfg().addProperty(
                         "store." + StoreModel.CERTSTORE + "."
-                                + StoreFormat.UNKNOWN, file);
+                                + helper.findKeystoreType(file), file);
             }
             fireKeyStoreAdded(files);
         }

@@ -26,6 +26,17 @@ public class KeystoreService {
 
     }
 
+    public void addCertificates(KeyStoreValue ksValue, List<CertificateValue> certificatesInfo) throws ServiceException {
+
+        MkKeystore mks = MkKeystore.getInstance(ksValue.getStoreFormat());
+        try {
+            mks.addCertificates(ksValue, certificatesInfo);
+        } catch (RepositoryException e) {
+            throw new ServiceException("Can't add certificates", e);
+        }
+
+    }
+
     public boolean openStore(KeyStoreValue ksInfo) {
 
         boolean resetPassword = false;

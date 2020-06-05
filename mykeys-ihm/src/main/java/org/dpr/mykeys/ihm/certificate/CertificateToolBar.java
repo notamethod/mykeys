@@ -165,8 +165,9 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
         unlockButton.setEnabled(false);
         exportButton.setEnabled(false);
         deleteButton.setEnabled(false);
-        CrlManagerButton.setVisible((info instanceof KeyStoreValue) & (((KeyStoreValue) info).isCAStore()));
+        CrlManagerButton.setVisible(false);
         CrlManagerButton.setEnabled(false);
+        //this.storeModel.equals(StoreModel.PKISTORE)
         importButton.setEnabled(true);
         addCertButton.setEnabled(true);
         addCertFromCSRButton.setVisible(isCertStore(info));
@@ -182,6 +183,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
 
         exportButton.setEnabled(b);
         deleteButton.setEnabled(b);
+        CrlManagerButton.setVisible(b && ((ci instanceof CertificateValue) && (((CertificateValue) ci).isAcceptChildAC())));
         CrlManagerButton.setEnabled(b && ((ci instanceof CertificateValue) && (((CertificateValue) ci).isAcceptChildAC())));
 
     }

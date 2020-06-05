@@ -36,13 +36,10 @@ import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
 import org.dpr.mykeys.app.certificate.CertificateValue;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.keystore.repository.MkKeystore;
 import org.dpr.mykeys.app.profile.ProfilStoreInfo;
-import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
-import org.dpr.mykeys.ihm.components.MainPanel;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import org.dpr.mykeys.ihm.listeners.EventKeystoreListener;
@@ -156,12 +153,10 @@ public class TreeKsManager implements MouseListener,
      * @param info
      */
     private void displayKeystoreList(NodeInfo info) {
-        notifyCertListToUpdate(info);
-
+        fireCertificateListChanged(info);
     }
 
-    // maybe in an interfacee ? publisherInterface ?
-    void notifyCertListToUpdate(NodeInfo info) {
+    void fireCertificateListChanged(NodeInfo info) {
         for (EventCompListener listener : listeners) {
             listener.certificateListChanged(info);
         }
@@ -336,7 +331,7 @@ public class TreeKsManager implements MouseListener,
 
         KeystoreService ksv = new KeystoreService();
         boolean isOpen= ksv.openStore(ksInfo);
-        notifyCertListToUpdate(ksInfo);
+        fireCertificateListChanged(ksInfo);
         return isOpen;
 
     }
@@ -782,16 +777,16 @@ public class TreeKsManager implements MouseListener,
                 log.error("Keystore must be opened first !");
                 return false;
             }
-            MkKeystore mks = MkKeystore.getInstance(ksInfo.getStoreFormat());
+            KeystoreService ksv = new KeystoreService();
             try {
-                mks.addCertificates(ksInfo, transferData);
-                ksInfo.getCertificates().addAll(transferData);
-              // mks.save(ksInfo, MkKeystore.SAVE_OPTION.ADD);
-            } catch (RepositoryException e) {
-                e.printStackTrace();
+                ksv.addCertificates(ksInfo, transferData);
+            } catch (ServiceException e) {
+                log.error("drop failed", e);
                 return false;
             }
-            notifyCertListToUpdate(ksInfo);
+            tree.setSelectionPath(path);
+            tree.scrollPathToVisible(path);
+            fireCertificateListChanged(ksInfo);
             return true;
         }
 

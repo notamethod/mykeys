@@ -69,21 +69,12 @@ public class ImportStoreDialog extends CustomJDialog {
 
 		infosPanel.putEmptyLine();
 
-		// JLabel jl = new JLabel("Type de magasin");
-		// ksType = new JComboBox(new String[] { "JKS", "PKCS12" });
-		// JFieldsPanel jf0 = new JFieldsPanel(jl, ksType);
-        // JLabel jl1 = new JLabel(Messages.getString("label.password"));
-		// pwd1 = new JPasswordField(12);
-		// JFieldsPanel jf1 = new JFieldsPanel(jl1, pwd1);
-		// JLabel jl2 = new JLabel("Confirmer le Mot de passe");
-		// pwd2 = new JPasswordField(12);
-		// JFieldsPanel jf2 = new JFieldsPanel(jl2, pwd2);
+
 
         JLabel jl4 = new JLabel(Messages.getString("file.location"));
 		tfDirectory = new JDropText();
 		
-//		jbChoose.addActionListener(dAction);
-//		jbChoose.setActionCommand("CHOOSE_IN");
+
 
 		JPanel jpDirectory = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		// jpDirectory.add(jl4);
