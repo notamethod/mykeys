@@ -25,3 +25,5 @@
  export from jks: cannot recover key
  
  remove cert1  +ajout cert2 -> cert1 et cert2 affichés
+ 
+ gérer noprofile.error

@@ -53,7 +53,7 @@ public class CACreate extends SuperCreate implements ItemListener {
      * @return
      */
     @Override
-    protected LabelValuePanel createInfoPanel(Map<String, String> mapKeyLength,
+    protected LabelValuePanel getExtendedPanel(Map<String, String> mapKeyLength,
                                               Map<String, String> mapAlgoKey, Map<String, String> mapAlgoSig) {
 
         if (infosPanel == null) {

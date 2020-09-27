@@ -14,6 +14,7 @@ import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
+import org.dpr.mykeys.ihm.listeners.HelpMouseListener;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.mykeys.app.utils.ProviderUtil;
@@ -116,7 +117,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         PanelUtils.addSubjectToPanel(typeCer, subjectPanel);
         if (KSConfig.getUserCfg().getProperty("freeflight") != null)
             subjectPanel.put("Free subject", "freesubject", "");
-        createInfoPanel(null, null, null);
+        LabelValuePanel extendedPanel = getExtendedPanel(null, null, null);
 
         JPanel checkPanel = new JPanel(new GridLayout(0, 3));
 
@@ -129,17 +130,28 @@ public class SuperCreate extends JDialog implements ItemListener {
 
             checkPanel.add(item);
         }
+
         JXCollapsiblePane cp = new JXCollapsiblePane();
-
-        // JXCollapsiblePane can be used like any other container
+        cp.setCollapsed(true);
         cp.setLayout(new BorderLayout());
+//
+        cp.add(extendedPanel);
+        // Show/hide the "Controls"
+        JButton toggle = new JButton(cp.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION));
+        toggle.setText(Messages.getString("show.extended.info"));
+//        this.add(infosPanel);
+//        this.add(toggle);
+//        this.add(cp);
 
+        infosPanel = new LabelValuePanel();
         jp.add(subjectPanel);
         jp.add(PanelUtils.getDurationPanel(3, infosPanel, true));
         jp.add(getPubKeyPanel());
         jp.add(getSignaturePanel());
-        jp.add(infosPanel);
+        jp.add(toggle);
+        jp.add(cp);
         infosPanel.addChild(subjectPanel);
+        infosPanel.addChild(extendedPanel);
 
 
         jp.add(cp);
@@ -229,37 +241,36 @@ public class SuperCreate extends JDialog implements ItemListener {
      * @param mapAlgoSig
      * @return
      */
-    protected LabelValuePanel createInfoPanel(Map<String, String> mapKeyLength,
-                                              Map<String, String> mapAlgoKey, Map<String, String> mapAlgoSig) {
+    protected LabelValuePanel getExtendedPanel(Map<String, String> mapKeyLength,
+                                               Map<String, String> mapAlgoKey, Map<String, String> mapAlgoSig) {
 
-        if (infosPanel == null) {
-            infosPanel = new LabelValuePanel();
-            infosPanel.put(Messages.getString("x509.alias"), "alias", "");
-
-
-            infosPanel.putEmptyLine();
+        LabelValuePanel extendedPanel = null;
+        if (extendedPanel == null) {
+            extendedPanel = new LabelValuePanel();
+            extendedPanel.put(Messages.getString("x509.alias"), "alias", "");
 
             // subject
-            infosPanel.putEmptyLine();
-            infosPanel.putEmptyLine();
+            extendedPanel.putEmptyLine();
+            extendedPanel.putEmptyLine();
 
-            infosPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
-            infosPanel.put("Policy notice", "policyNotice", "");
-            infosPanel.put("Policy CPS", "policyCPS", "");
-            infosPanel.put(Messages.getString("x509.policyid"), "policyID", "");
+            extendedPanel.put(Messages.getString("x509.cdp"), "crlDistrib", "");
+            extendedPanel.put("Policy notice", "policyNotice", "");
+            extendedPanel.put("Policy CPS", "policyCPS", "");
+            extendedPanel.put(Messages.getString("x509.policyid"), "policyID", "");
             // infosPanel.putList(Messages.getString("x509.policyid"), JStringList.class, "policyID", JStringList.Position.RIGHT);
-            infosPanel.putEmptyLine();
+            extendedPanel.putEmptyLine();
 
             if (!ksInfo.getStoreType().equals(StoreLocationType.INTERNAL)) {
-                infosPanel.addTitle(Messages.getString("privatekey.title"));
-                infosPanel.put(Messages.getString("optional.privatekey.label"), JPasswordField.class, "pwd1", "",
+                extendedPanel.addTitle(Messages.getString("privatekey.title"));
+                extendedPanel.put(Messages.getString("optional.privatekey.label"), JPasswordField.class, "pwd1", "",
                         true);
-                infosPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
+                extendedPanel.getComponent("pwd1").addMouseListener(new HelpMouseListener("create_privatekey"));
+                extendedPanel.put("Confirmer le mot de passe", JPasswordField.class, "pwd2",
                         "", true);
             }
 
         }
-        return infosPanel;
+        return extendedPanel;
 
     }
 
@@ -321,7 +332,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                         if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                             newCertificate.setPassword(MkSession.password);
                         if (newCertificate.getPassword() == null || newCertificate.getPassword().length <= 0) {
-                            log.debug("Using keystore password to prtect private key");
+                            log.debug("Using keystore password to protect private key");
                             newCertificate.setPassword(ksInfo.getPassword());
                         }
                         kserv.addCertToKeyStore(ksInfo, newCertificate, null, null);
