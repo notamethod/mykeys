@@ -3,7 +3,7 @@ package org.dpr.mykeys.service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.ServiceException;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.repository.MkKeystore;
@@ -15,7 +15,7 @@ import java.util.List;
 public class KeystoreService {
 
     private static final Log log = LogFactory.getLog(KeystoreService.class);
-    public void removeCertificates(KeyStoreValue ksValue, List<CertificateValue> certificatesInfo) throws ServiceException {
+    public void removeCertificates(KeyStoreValue ksValue, List<Certificate> certificatesInfo) throws ServiceException {
         MkKeystore mks = MkKeystore.getInstance(ksValue.getStoreFormat());
 
         try {
@@ -26,7 +26,7 @@ public class KeystoreService {
 
     }
 
-    public void addCertificates(KeyStoreValue ksValue, List<CertificateValue> certificatesInfo) throws ServiceException {
+    public void addCertificates(KeyStoreValue ksValue, List<Certificate> certificatesInfo) throws ServiceException {
 
         MkKeystore mks = MkKeystore.getInstance(ksValue.getStoreFormat());
         try {

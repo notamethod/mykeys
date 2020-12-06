@@ -2,7 +2,7 @@ package org.dpr.mykeys.ihm.certificate;
 
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.ihm.CancelCreationException;
@@ -29,7 +29,7 @@ public class CACreate extends SuperCreate implements ItemListener {
         this.pack();
     }
 
-    public CACreate(JFrame owner, KeyStoreValue ksInfo, CertificateValue issuer,
+    public CACreate(JFrame owner, KeyStoreValue ksInfo, Certificate issuer,
                     boolean modal) throws CancelCreationException {
         super(owner, modal);
         this.ksInfo = ksInfo;

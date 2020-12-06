@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.certificate;
 
-import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.certificate.MkCertificate;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.ihm.components.ObjToolBar;
 import org.dpr.mykeys.ihm.certificate.template.ProfileToolBar;
@@ -54,7 +54,7 @@ class ToolBarManager {
 
     }
 
-    public void enableElementActions(NodeInfo info, ChildInfo ci, boolean b) {
+    public void enableElementActions(NodeInfo info, MkCertificate ci, boolean b) {
         getInstance(info).enableElementActions(info, ci, b);
 
     }

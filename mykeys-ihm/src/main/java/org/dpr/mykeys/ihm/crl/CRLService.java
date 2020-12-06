@@ -4,7 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -20,9 +20,9 @@ public class CRLService {
     final CRLManager manager;
     X509CRL crl;
     File CRLFile;
-    CertificateValue signer;
+    Certificate signer;
 
-    public CRLService(CertificateValue certificate) {
+    public CRLService(Certificate certificate) {
         manager = new CRLManager();
         signer = certificate;
     }
@@ -85,7 +85,7 @@ public class CRLService {
         return etatCrl;
     }
 
-    public List<X509Certificate> getChildren(CertificateValue certificate) {
+    public List<X509Certificate> getChildren(Certificate certificate) {
         return null;
     }
 

@@ -3,7 +3,7 @@ package org.dpr.mykeys.ihm.components.treekeystore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuCertificate;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
@@ -51,17 +51,17 @@ public class TreeCertManager extends TreeKsManager {
                 DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) selPath
                         .getLastPathComponent();
                 Object object = tNode.getUserObject();
-                if (object instanceof CertificateValue) {
-                    CertificateValue certInfo = ((CertificateValue) object);
-                    List<CertificateValue> certs = new ArrayList<>();
+                if (object instanceof Certificate) {
+                    Certificate certInfo = ((Certificate) object);
+                    List<Certificate> certs = new ArrayList<>();
 
                     Enumeration<TreeNode> children = tNode.children();
                     if (children != null) {
                         while (children.hasMoreElements()) {
                             DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
                             Object childObj = child.getUserObject();
-                            if (childObj instanceof CertificateValue)
-                                certs.add((CertificateValue) childObj);
+                            if (childObj instanceof Certificate)
+                                certs.add((Certificate) childObj);
                         }
                     }
                     certInfo.setChildren(certs);
@@ -99,13 +99,13 @@ public class TreeCertManager extends TreeKsManager {
 
 
     @Override
-    protected void displayCertDetail(CertificateValue info) {
+    protected void displayCertDetail(Certificate info) {
         notifyCertDetailToUpdate(info);
 
     }
 
     @Override
-    protected void notifyCertDetailToUpdate(CertificateValue info) {
+    protected void notifyCertDetailToUpdate(Certificate info) {
         for (EventCompListener listener : listeners) {
             listener.certificateSelected(info);
         }

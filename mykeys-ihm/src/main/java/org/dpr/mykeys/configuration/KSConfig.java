@@ -25,7 +25,7 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.app.utils.X509Util;
@@ -192,7 +192,7 @@ public class KSConfig {
 		return internalKeystores;
 	}
 
-	public static String getDefaultCrlPath(CertificateValue certificateValue) {
+	public static String getDefaultCrlPath(Certificate certificateValue) {
 
 		return getCrlPath() + internalKeystores.generateName(StoreModel.PKISTORE, false) + File.separator + X509Util.toHexString(certificateValue.getDigestSHA256(), "", false) + CRLManager.CRL_EXTENSION;
 	}

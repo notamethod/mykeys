@@ -15,6 +15,7 @@ import org.dpr.mykeys.ihm.components.MainPanel;
 import org.dpr.mykeys.ihm.listeners.HelpMouseListener;
 import org.dpr.mykeys.utils.ComponentUtils;
 import org.dpr.mykeys.utils.DialogUtil;
+import org.pushingpixels.substance.api.skin.SubstanceNightShadeLookAndFeel;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -110,8 +111,9 @@ public class MykeysFrame extends JFrame implements WindowListener{
         setDefaultLookAndFeelDecorated(true);
 
         try {
-
-            UIManager.setLookAndFeel(ComponentUtils.skin);
+          //  UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            UIManager.setLookAndFeel(new SubstanceNightShadeLookAndFeel());
+           // UIManager.setLookAndFeel(ComponentUtils.skin);
             UIManager.put("ToolTip.foreground", new ColorUIResource(Color.ORANGE));
             UIManager
                     .put("defaultFont", new Font("Arial", Font.BOLD, 14));

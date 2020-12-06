@@ -1,11 +1,11 @@
 package org.dpr.mykeys.ihm.listeners;
 
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 
 public interface KeystoreActionPublisher {
     void notifyopenStore(String what);
 
-    void notifyInsertCertificate(CertificateValue what);
+    void notifyInsertCertificate(Certificate what);
 
     void notifyInsertCertificateFromProfile(String what);
 

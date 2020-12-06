@@ -3,7 +3,7 @@ package org.dpr.mykeys.ihm.crl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.swingtools.components.JFieldsPanel;
 import org.dpr.swingtools.components.JSpinnerDate;
@@ -31,7 +31,7 @@ public class SaveCrlDialog extends JDialog {
 
     }
 
-    public SaveCrlDialog(JFrame owner, CertificateValue certificateValue) {
+    public SaveCrlDialog(JFrame owner, Certificate certificateValue) {
 
         super(owner, true);
         // CertificateInfo certInfo = new CertificateInfo();

@@ -8,7 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
@@ -39,12 +39,12 @@ public class CRLEditorDialog extends JDialog {
     private JButton ajouterButton;
     private JLabel subTitle;
     private JLabel validityPeriodLabel;
-    private final CertificateValue certificate;
+    private final Certificate certificate;
     private final CRLService service;
     private File crlFile;
     CRLState state;
 
-    public CRLEditorDialog(CertificateValue certificate) {
+    public CRLEditorDialog(Certificate certificate) {
 
         this.certificate = certificate;
         service = new CRLService(certificate);
@@ -148,7 +148,7 @@ public class CRLEditorDialog extends JDialog {
             if (crl.getRevokedCertificates() != null) {
                 for (X509CRLEntry entry : crl.getRevokedCertificates()) {
                     String subject = "";
-                    for (CertificateValue child : certificate.getChildren()) {
+                    for (Certificate child : certificate.getChildren()) {
                         if (child.getCertificate().getSerialNumber().equals(entry.getSerialNumber()))
                             subject = child.getSubjectString();
                     }

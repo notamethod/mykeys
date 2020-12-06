@@ -6,7 +6,7 @@ import org.dpr.mykeys.app.KeyUsages;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.utils.CertificateUtils;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeKeyStoreActions;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.CertificateActionPublisher;
@@ -35,7 +35,7 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
 
     private final List<CertificateActionListener> listeners = new ArrayList<>();
 
-    private CertificateValue certificate;
+    private Certificate certificate;
 
     public TreePopupMenuCertificate(String string, TreeKeyStoreActions treeKeyStore) {
         super(string);
@@ -98,8 +98,8 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
             delete.setVisible(false);
             exportCert.setVisible(false);
 
-        } else if (node.getUserObject() instanceof CertificateValue) {
-            CertificateValue certInfo = (CertificateValue) node.getUserObject();
+        } else if (node.getUserObject() instanceof Certificate) {
+            Certificate certInfo = (Certificate) node.getUserObject();
             certificate = certInfo;
             add.setVisible(certInfo.isContainsPrivateKey() && (KeyUsages.isKeyUsage(certInfo.getKeyUsage(), X509Constants.USAGE_CERTSIGN)));
 //            addAC.setVisible(certInfo.isContainsPrivateKey() && (CertificateUtils.isKeyUsage(certInfo.getKeyUsage(),X509Constants.USAGE_CERTSIGN)));
@@ -115,14 +115,14 @@ public class TreePopupMenuCertificate extends JPopupMenu implements CertificateA
     }
 
     @Override
-    public void notifyInsertCertificate(CertificateValue what) {
+    public void notifyInsertCertificate(Certificate what) {
         log.debug("notify " + what.getName() + " " + this.getClass());
         for (CertificateActionListener listener : listeners) {
             listener.insertCertificateRequested(what);
         }
     }
 
-    private void notifyInsertCertificateAC(CertificateValue certificate) {
+    private void notifyInsertCertificateAC(Certificate certificate) {
         for (CertificateActionListener listener : listeners) {
             listener.insertCertificateACRequested("what !");
         }

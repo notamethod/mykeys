@@ -3,7 +3,7 @@ package org.dpr.mykeys.ihm.certificate;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.crl.CRLEntry;
 import org.dpr.mykeys.app.crl.CRLManager;
 
@@ -23,10 +23,10 @@ public class CertificateSelectDialog extends JDialog {
     private JTextField textField1;
     private JComboBox comboReason;
     private CRLEntry result;
-    private CertificateValue selectedCertificate;
-    final Map<String, CertificateValue> certificateMap = new HashMap<>();
+    private Certificate selectedCertificate;
+    final Map<String, Certificate> certificateMap = new HashMap<>();
 
-    public CertificateSelectDialog(List<CertificateValue> children) {
+    public CertificateSelectDialog(List<Certificate> children) {
         setContentPane(contentPane1);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -45,10 +45,10 @@ public class CertificateSelectDialog extends JDialog {
 
         // call onCancel() on ESCAPE
         contentPane1.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        CertificateValue[] lists = new CertificateValue[children.size()];
+        Certificate[] lists = new Certificate[children.size()];
 
         int i = 0;
-        for (CertificateValue value : children) {
+        for (Certificate value : children) {
             certificateMap.put(value.getSubjectString(), value);
             comboBox1.addItem(value.getSubjectString());
         }

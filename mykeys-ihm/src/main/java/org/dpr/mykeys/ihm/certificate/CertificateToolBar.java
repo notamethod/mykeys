@@ -2,10 +2,10 @@ package org.dpr.mykeys.ihm.certificate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.certificate.MkCertificate;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.ChildInfo;
 import org.dpr.mykeys.app.NodeInfo;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.actions.TypeAction;
@@ -179,12 +179,12 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
         return (info instanceof KeyStoreValue) & ((KeyStoreValue) info).isCertStore();
     }
     @Override
-    public void enableElementActions(NodeInfo info, ChildInfo ci, boolean b) {
+    public void enableElementActions(NodeInfo info, MkCertificate ci, boolean b) {
 
         exportButton.setEnabled(b);
         deleteButton.setEnabled(b);
-        CrlManagerButton.setVisible(b && ((ci instanceof CertificateValue) && (((CertificateValue) ci).isAcceptChildAC())));
-        CrlManagerButton.setEnabled(b && ((ci instanceof CertificateValue) && (((CertificateValue) ci).isAcceptChildAC())));
+        CrlManagerButton.setVisible(b && ((ci instanceof Certificate) && (((Certificate) ci).isAcceptChildAC())));
+        CrlManagerButton.setEnabled(b && ((ci instanceof Certificate) && (((Certificate) ci).isAcceptChildAC())));
 
     }
 
@@ -197,7 +197,7 @@ public class CertificateToolBar extends ObjToolBar implements CertificateActionP
     }
 
     @Override
-    public void notifyInsertCertificate(CertificateValue what) {
+    public void notifyInsertCertificate(Certificate what) {
         for (CertificateActionListener listener : listeners) {
             listener.insertCertificateRequested(what);
         }

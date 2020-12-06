@@ -7,7 +7,7 @@ import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.utils.ProviderUtil;
 import org.dpr.mykeys.app.utils.X509Util;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.crl.CRLManager;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -43,7 +43,7 @@ public class CreateCrlDialog extends JDialog {
     private JTextField tfDirectoryOut;
     private LabelValuePanel infosPanel;
     // CertificateInfo certInfo = new CertificateInfo();
-    private CertificateValue certificateValue;
+    private Certificate certificateValue;
 
     public CreateCrlDialog(JFrame owner, boolean modal) {
 
@@ -54,7 +54,7 @@ public class CreateCrlDialog extends JDialog {
 
     }
 
-    public CreateCrlDialog(JFrame owner, CertificateValue certificateValue) {
+    public CreateCrlDialog(JFrame owner, Certificate certificateValue) {
 
         super(owner, true);
         this.certificateValue = certificateValue;
@@ -191,7 +191,7 @@ public class CreateCrlDialog extends JDialog {
                     CRLManager crlMan = new CRLManager();
                     KeyStoreHelper ktools = new KeyStoreHelper();
                     String aliasIssuer = (String) elements.get("emetteur");
-                    CertificateValue certSign = certificateValue;
+                    Certificate certSign = certificateValue;
                     if (certSign == null) {
                         certSign = ktools.findCertificateAndPrivateKeyByAlias(null, aliasIssuer);
                     } else if (certSign.getPrivateKey() == null) {

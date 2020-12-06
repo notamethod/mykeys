@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.AppManager;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
@@ -199,8 +199,8 @@ public class TreePopupMenuKS extends JPopupMenu implements TreePopupMenu {
                 addCertMenu.setVisible(false);
                 importCert.setVisible(false);
             }
-        } else if (node.getUserObject() instanceof CertificateValue) {
-            CertificateValue certInfo = (CertificateValue) node.getUserObject();
+        } else if (node.getUserObject() instanceof Certificate) {
+            Certificate certInfo = (Certificate) node.getUserObject();
 
             exportCert.setVisible(true);
 

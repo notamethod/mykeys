@@ -2,7 +2,7 @@ package org.dpr.mykeys.ihm.components.treekeystore;
 
 import org.dpr.mykeys.app.KeyUsages;
 import org.dpr.mykeys.app.utils.CertificateUtils;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.crl.CrlValue;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
@@ -96,9 +96,9 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
 //                if (isSelected) {
 //                    rc.setForeground(colorb);
 //                }
-            } else if (node.getUserObject() instanceof CertificateValue) {
+            } else if (node.getUserObject() instanceof Certificate) {
 
-                CertificateValue cInfo = (CertificateValue) node.getUserObject();
+                Certificate cInfo = (Certificate) node.getUserObject();
                 rc.setText(getCertificateLabel(cInfo));
                 tooltip = cInfo.getName();
                 boolean[] usages = KeyUsages.keyUsageFromInt(cInfo.getKeyUsageInt());
@@ -133,7 +133,7 @@ class GradientTreeRenderer extends DefaultTreeCellRenderer implements
      * @param cInfo
      * @return
      */
-    protected String getCertificateLabel(CertificateValue cInfo) {
+    protected String getCertificateLabel(Certificate cInfo) {
         return cInfo.getName();
     }
 

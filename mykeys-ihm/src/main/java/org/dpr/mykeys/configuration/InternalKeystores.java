@@ -12,11 +12,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.ServiceException;
+import org.dpr.mykeys.app.certificate.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.keystore.repository.MkKeystore;
 import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.utils.MkUtils;
 
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;

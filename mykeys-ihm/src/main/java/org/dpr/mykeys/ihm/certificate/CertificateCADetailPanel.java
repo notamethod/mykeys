@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.certificate;
 
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.ihm.crl.CRLEditorDialog;
 import org.dpr.swingtools.components.LabelValuePanel;
 
@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CertificateCADetailPanel extends CertificateDetailPanel {
-    public CertificateCADetailPanel(CertificateValue info) {
+    public CertificateCADetailPanel(Certificate info) {
         super(info);
     }
 

@@ -1,18 +1,18 @@
 package org.dpr.mykeys.ihm.certificate;
 
 import org.dpr.mykeys.app.KeyUsages;
+import org.dpr.mykeys.app.certificate.profile.ProfilException;
+import org.dpr.mykeys.app.certificate.profile.ProfileServices;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateManager;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
 import org.dpr.mykeys.app.keystore.StoreModel;
-import org.dpr.mykeys.app.profile.ProfilException;
-import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.utils.DialogUtil;
@@ -201,11 +201,11 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
                         CertificateManager cm = new CertificateManager();
                         KeyStoreHelper kserv = new KeyStoreHelper(ksInfo);
                         //FIXME
-                        CertificateValue issuer = null;
+                        Certificate issuer = null;
                         if (null != certInfo.getIssuer() && !certInfo.getIssuer().trim().isEmpty())
                             issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), certInfo.getIssuer());
 
-                        CertificateValue newCertificate = cm.generate(certInfo, issuer, typeCer);
+                        Certificate newCertificate = cm.generate(certInfo, issuer, typeCer);
                         if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                             newCertificate.setPassword(MkSession.password);
 

@@ -34,9 +34,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
+import org.dpr.mykeys.app.certificate.MkCertificate;
+import org.dpr.mykeys.app.certificate.profile.ProfilStoreInfo;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.profile.ProfilStoreInfo;
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.actions.TreePopupMenu;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuKS;
@@ -134,12 +135,12 @@ public class TreeKsManager implements MouseListener,
         JPanel leftPanel = new JPanel();
     }
 
-    protected void displayCertDetail(CertificateValue info) {
+    protected void displayCertDetail(Certificate info) {
         notifyCertDetailToUpdate(info);
 
     }
 
-    protected void notifyCertDetailToUpdate(CertificateValue info) {
+    protected void notifyCertDetailToUpdate(Certificate info) {
         for (EventCompListener listener : listeners) {
             listener.certificateSelected(info);
         }
@@ -252,9 +253,9 @@ public class TreeKsManager implements MouseListener,
         // DefaultMutableTreeNode parent = rootNode;
 
 
-        if (node.getUserObject() instanceof CertificateValue) {
+        if (node.getUserObject() instanceof Certificate) {
 
-            CertificateValue value = ((CertificateValue) node.getUserObject());
+            Certificate value = ((Certificate) node.getUserObject());
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(value);
             String key = X509Util.toHexString(value.getDigestSHA256(), "", false);
             String issuerParent = getIssuerParent(value);
@@ -286,10 +287,10 @@ public class TreeKsManager implements MouseListener,
         return node;
     }
 
-    private String getIssuerParent(CertificateValue value) {
+    private String getIssuerParent(Certificate value) {
         if (value.getCertificateChain() != null && value.getCertificateChain().length > 1) {
             try {
-                CertificateValue cv = new CertificateValue("xx", (X509Certificate) value.getCertificateChain()[1]);
+                Certificate cv = new Certificate("xx", (X509Certificate) value.getCertificateChain()[1]);
 
                 return X509Util.toHexString(cv.getDigestSHA256(), "", false);
             } catch (GeneralSecurityException e) {
@@ -389,7 +390,7 @@ public class TreeKsManager implements MouseListener,
                 return;
             }
             //spent 1 full day to add this condition ! :-(
-            else if (object instanceof CertificateValue) {
+            else if (object instanceof Certificate) {
                 return;
             }
             throw new ExpandVetoException(event);
@@ -433,8 +434,8 @@ public class TreeKsManager implements MouseListener,
                 DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) selPath
                         .getLastPathComponent();
                 Object object = tNode.getUserObject();
-                if (object instanceof CertificateValue) {
-                    CertificateValue certInfo = ((CertificateValue) object);
+                if (object instanceof Certificate) {
+                    Certificate certInfo = ((Certificate) object);
                     displayCertDetail(certInfo);
 
                 } else {
@@ -575,10 +576,10 @@ public class TreeKsManager implements MouseListener,
         log.error("Method removed !");
 //        JFrame frame = (JFrame) tree.getTopLevelAncestor();
 //        // KeyStoreValue ksInfo = null;
-//        CertificateValue certInfo = null;
+//        Certificate certInfo = null;
 //        Object object = node.getUserObject();
-//        if (object instanceof CertificateValue) {
-//            certInfo = ((CertificateValue) object);
+//        if (object instanceof Certificate) {
+//            certInfo = ((Certificate) object);
 //        }
 //        KeyStoreValue ksInfo = null;
 //        DefaultMutableTreeNode objectKs = (DefaultMutableTreeNode) node
@@ -703,9 +704,9 @@ public class TreeKsManager implements MouseListener,
             treeModel.insertNodeInto(node, rootNode, rootNode.getChildCount());
     }
 
-    public void fillNodes(ChildInfo ci) {
-        if (ci instanceof CertificateValue) {
-            CertificateValue value = (CertificateValue) ci;
+    public void fillNodes(MkCertificate ci) {
+        if (ci instanceof Certificate) {
+            Certificate value = (Certificate) ci;
             log.debug(value.getCertificateChain());
             String key = X509Util.toHexString(value.getDigestSHA256(), "", false);
             nodes.put(key, new DefaultMutableTreeNode(value));
@@ -747,7 +748,7 @@ public class TreeKsManager implements MouseListener,
             DataFlavor df = null;
             try {
                 df = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
-                        ";class=org.dpr.mykeys.app.certificate.CertificateValue");
+                        ";class=org.dpr.mykeys.app.certificate.Certificate");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -755,9 +756,9 @@ public class TreeKsManager implements MouseListener,
                     (JTree.DropLocation) support.getDropLocation();
             TreePath path = dropLocation.getPath();
             Transferable transferable = support.getTransferable();
-            List<CertificateValue> transferData;
+            List<Certificate> transferData;
             try {
-                transferData = (List<CertificateValue>) transferable.getTransferData(
+                transferData = (List<Certificate>) transferable.getTransferData(
                         df);
             } catch (IOException | UnsupportedFlavorException e) {
                 e.printStackTrace();

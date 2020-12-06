@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.certificate;
 
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreModel;
 import org.dpr.mykeys.ihm.CancelCreationException;
@@ -27,7 +27,7 @@ public class CertificateCreateFactory {
         //return null;
     }
 
-    public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, CertificateValue issuer, CertificateType certificateType) throws CancelCreationException {
+    public static SuperCreate getCreateDialog(JFrame owner, KeyStoreValue info, Certificate issuer, CertificateType certificateType) throws CancelCreationException {
         switch (certificateType) {
             case STANDARD:
                 return new CreateCertificatDialog(owner, info, issuer,

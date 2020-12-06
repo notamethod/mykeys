@@ -2,12 +2,12 @@ package org.dpr.mykeys.ihm.certificate.template;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.certificate.profile.ProfileServices;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.authentication.AuthenticationService;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
-import org.dpr.mykeys.app.profile.ProfileServices;
 import org.dpr.mykeys.ihm.IhmException;
 import org.dpr.mykeys.ihm.windows.MkDialog;
 import org.dpr.mykeys.ihm.certificate.CreateCertProfilDialog;

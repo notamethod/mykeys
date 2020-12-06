@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.certificate.CSRManager;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
@@ -39,7 +39,7 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
 
 	private JDropText tfDirectory;
 
-    private final CertificateValue certInfo = new CertificateValue();
+    private final Certificate certInfo = new Certificate();
 
     public CreateCertificatFromCSRDialog(Frame owner, KeyStoreValue ksInfo, boolean modal) {
 
@@ -125,8 +125,8 @@ public class CreateCertificatFromCSRDialog extends SuperCreate implements ItemLi
                     KeyStoreHelper kserv = new KeyStoreHelper();
                     try (InputStream is = new FileInputStream(tfDirectory.getText())) {
                         // load issuer
-                        CertificateValue issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), (String) infosPanel.getElements().get("emetteur"));
-                        CertificateValue certificate = cm.generateCertificate(is, issuer);
+                        Certificate issuer = kserv.findCertificateAndPrivateKeyByAlias(KSConfig.getInternalKeystores().getStoreAC(), (String) infosPanel.getElements().get("emetteur"));
+                        Certificate certificate = cm.generateCertificate(is, issuer);
                         //FIXME if password in ksinfo null
                         kserv.addCertToKeyStore(ksInfo, certificate, null, null);
                         CreateCertificatFromCSRDialog.this.setVisible(false);

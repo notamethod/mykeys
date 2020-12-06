@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.listeners;
 
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 
 import java.util.EventListener;
 
@@ -8,7 +8,7 @@ public interface CertificateActionListener extends EventListener {
 
     void openStoreRequested(String what);
 
-    void insertCertificateRequested(CertificateValue what);
+    void insertCertificateRequested(Certificate what);
 
     void insertCertificateFromProfileRequested(String what);
 

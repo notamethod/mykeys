@@ -7,7 +7,7 @@ import org.dpr.mykeys.configuration.InternalKeystores;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.*;
 import org.dpr.mykeys.utils.DialogUtil;
 import org.dpr.swingtools.components.JFieldsPanel;
@@ -37,7 +37,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     private LabelValuePanel infosPanel;
 
     @NotNull
-    private final List<CertificateValue> certInfos;
+    private final List<Certificate> certInfos;
 
     private final boolean isMultiple;
 
@@ -46,7 +46,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
     private  List<String> exportedFiles;
 
     public ExportCertificateDialog(Frame owner, KeyStoreValue ksInfo, @NotNull
-            List<CertificateValue> certInfos, boolean modal) {
+            List<Certificate> certInfos, boolean modal) {
         super(owner, modal);
         this.certInfos = certInfos;
         isMultiple = certInfos.size() > 1;
@@ -113,8 +113,8 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
     }
 
-    private boolean isContainsPrivateKey(@NotNull List<CertificateValue> certInfos) {
-        for (CertificateValue cert : certInfos) {
+    private boolean isContainsPrivateKey(@NotNull List<Certificate> certInfos) {
+        for (Certificate cert : certInfos) {
             if (cert.isContainsPrivateKey())
                 return true;
         }
@@ -240,7 +240,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
                             try {
                                 if (isExportCle) {
-                                    for (CertificateValue cert : certInfos) {
+                                    for (Certificate cert : certInfos) {
                                         PrivateKey pk = kServ.getPrivateKey(ksInfo, cert.getAlias(), privKeyPd);
                                         cert.setPrivateKey(pk);
                                         cert.setPassword(privKeyPd);
@@ -304,7 +304,7 @@ public class ExportCertificateDialog extends JDialog implements ItemListener {
 
         }
 
-        private void setPassword(char[] password, List<CertificateValue> certInfos) {
+        private void setPassword(char[] password, List<Certificate> certInfos) {
             certInfos.forEach(cert -> cert.setPassword(password));
         }
 

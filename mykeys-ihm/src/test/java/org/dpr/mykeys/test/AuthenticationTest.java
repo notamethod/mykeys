@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.authentication.AuthenticationService;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.utils.ProviderUtil;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.ServiceException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ public class AuthenticationTest {
     public void list_users() {
         AuthenticationService service = new AuthenticationService();
         try {
-            List<CertificateValue> users = service.listUsers();
+            List<Certificate> users = service.listUsers();
             assertThat(users).hasSize(2);
         } catch (ServiceException e) {
             // TODO Auto-generated catch block
@@ -65,10 +65,10 @@ public class AuthenticationTest {
         try {
             service.createUser("user3", "pwd".toCharArray());
 
-            List<CertificateValue> lst = service.listUsers();
+            List<Certificate> lst = service.listUsers();
             assertEquals("", 3, lst.size());
 
-            for (CertificateValue val : lst) {
+            for (Certificate val : lst) {
                 assertTrue("", val.getAlias().startsWith("user"));
                 assertTrue("", val.isContainsPrivateKey());
 
@@ -85,7 +85,7 @@ public class AuthenticationTest {
     public void load_users() {
         AuthenticationService service = new AuthenticationService();
         try {
-            CertificateValue val = service.loadUser("user1", "pwd".toCharArray());
+            Certificate val = service.loadUser("user1", "pwd".toCharArray());
 
             assertEquals("", val.getAlias(), "user1");
 
@@ -101,7 +101,7 @@ public class AuthenticationTest {
         AuthenticationService service = new AuthenticationService();
         log.debug(KSConfig.getInternalKeystores().existsUserDatabase());
         try {
-            List<CertificateValue> lst = service.listUsers();
+            List<Certificate> lst = service.listUsers();
             assertEquals("", lst.size(), 2);
             service.deleteUser("user1");
             lst = service.listUsers();

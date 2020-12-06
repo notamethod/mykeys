@@ -6,7 +6,7 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.util.encoders.Hex;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.utils.CertificateUtils;
 import org.dpr.mykeys.app.utils.X509Util;
 import org.dpr.swingtools.components.JSpinnerDate;
@@ -26,9 +26,9 @@ import java.util.*;
 public class CertificateDetailPanel extends JPanel {
 
     // LabelValuePanel infosPanel;
-    protected final CertificateValue info;
+    protected final Certificate info;
 
-    public CertificateDetailPanel(CertificateValue info) {
+    public CertificateDetailPanel(Certificate info) {
         this.info = info;
         setLayout(new VerticalLayout());
         init();
@@ -240,7 +240,7 @@ public class CertificateDetailPanel extends JPanel {
         infosPanel.putEmptyLine();
     }
 
-    private Color getValidityColor(CertificateValue info) {
+    private Color getValidityColor(Certificate info) {
         if (info.getCertificate() != null) {
             try {
                 info.getCertificate().checkValidity();

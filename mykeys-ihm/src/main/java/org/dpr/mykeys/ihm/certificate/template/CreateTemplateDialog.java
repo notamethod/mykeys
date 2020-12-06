@@ -1,19 +1,18 @@
 package org.dpr.mykeys.ihm.certificate.template;
 
 import org.dpr.mykeys.app.KeyUsages;
-import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.app.X509Constants;
-import org.dpr.mykeys.app.utils.CertificateUtils;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
+import org.dpr.mykeys.app.certificate.profile.CertificateTemplate;
+import org.dpr.mykeys.app.certificate.profile.ProfileServices;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
-import org.dpr.mykeys.app.profile.CertificateTemplate;
-import org.dpr.mykeys.app.profile.ProfileServices;
-import org.dpr.mykeys.ihm.windows.OkCancelPanel;
+import org.dpr.mykeys.app.utils.OrderedProperties;
+import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.ihm.certificate.FillUtils;
 import org.dpr.mykeys.ihm.certificate.SuperCreate;
+import org.dpr.mykeys.ihm.windows.OkCancelPanel;
 import org.dpr.mykeys.utils.DialogUtil;
-import org.dpr.mykeys.app.utils.OrderedProperties;
 import org.dpr.mykeys.utils.X509AttributesUtils;
 import org.dpr.swingtools.components.LabelValuePanel;
 
@@ -32,7 +31,7 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
 
     private LabelValuePanel infosPanel;
     private final Map<String, JCheckBox> checkBoxes = new HashMap<>();
-    private final CertificateValue certInfo = new CertificateValue();
+    private final Certificate certInfo = new Certificate();
     private boolean isEditing = false;
 
     public CreateTemplateDialog(Frame owner, boolean modal) {

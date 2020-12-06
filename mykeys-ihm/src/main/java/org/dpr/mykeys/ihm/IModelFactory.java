@@ -1,12 +1,13 @@
 package org.dpr.mykeys.ihm;
 
-import org.dpr.mykeys.app.ChildInfo;
+
+import org.dpr.mykeys.app.certificate.MkCertificate;
 
 public interface IModelFactory {
 
     void removeAllElements();
 
-    void addElement(ChildInfo ci);
+    void addElement(MkCertificate ci);
 
     void refresh();
 }

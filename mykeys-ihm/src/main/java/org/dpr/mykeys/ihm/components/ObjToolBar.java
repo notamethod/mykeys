@@ -1,7 +1,8 @@
 package org.dpr.mykeys.ihm.components;
 
-import org.dpr.mykeys.app.ChildInfo;
+
 import org.dpr.mykeys.app.NodeInfo;
+import org.dpr.mykeys.app.certificate.MkCertificate;
 
 import javax.swing.JToolBar;
 
@@ -35,7 +36,7 @@ public abstract class ObjToolBar extends JToolBar {
 
     public abstract void enableGenericActions(NodeInfo info, boolean b);
 
-	public abstract void enableElementActions(NodeInfo info, ChildInfo ci, boolean b);
+	public abstract void enableElementActions(NodeInfo info, MkCertificate ci, boolean b);
 
 	public  void setVisible() {
 		setVisible(!isVisible());

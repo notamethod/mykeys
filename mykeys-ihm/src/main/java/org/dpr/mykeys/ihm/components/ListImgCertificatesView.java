@@ -1,9 +1,11 @@
 package org.dpr.mykeys.ihm.components;
 
-import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
+import org.dpr.mykeys.app.certificate.MkCertificate;
 import org.dpr.mykeys.ihm.CertificatesView;
 import org.dpr.mykeys.ihm.IModelFactory;
+import org.dpr.mykeys.ihm.components.treekeystore.SecurityElementView;
+import org.dpr.mykeys.ihm.listeners.EventCompListener;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -14,10 +16,10 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.*;
 import java.util.List;
 
-public class ListImgCertificatesView extends Component implements CertificatesView {
+public class ListImgCertificatesView extends SecurityElementView implements CertificatesView {
 
     private final JImgList listCerts;
-
+    private final List<EventCompListener> listeners = new ArrayList<>();
     DataFlavor nodesFlavor;
     final DataFlavor[] flavors = new DataFlavor[1];
 
@@ -26,7 +28,6 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
         return listCerts;
     }
 
-    private final IModelFactory model;
     private final DefaultListModel listModel;
     //private ListSelectionListener listListener;
 
@@ -40,7 +41,7 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
             }
 
             @Override
-            public void addElement(ChildInfo ci) {
+            public void addElement(MkCertificate ci) {
                 listModel.addElement(ci);
             }
 
@@ -54,7 +55,7 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
 
         try {
             nodesFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
-                    ";class=org.dpr.mykeys.app.certificate.CertificateValue");
+                    ";class=org.dpr.mykeys.app.certificate.Certificate");
             flavors[0] = nodesFlavor;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -65,13 +66,13 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
 
     public void sort() {
 
-        List<ChildInfo> list = new ArrayList<>();
+        List<MkCertificate> list = new ArrayList<>();
         for (int i = 0; i < listModel.size(); i++) {
-            list.add((ChildInfo) listModel.get(i));
+            list.add((MkCertificate) listModel.get(i));
         }
         Collections.sort(list);
         model.removeAllElements();
-        for (ChildInfo s : list) {
+        for (MkCertificate s : list) {
             model.addElement(s);
         }
     }
@@ -108,13 +109,20 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
             }
         });
 
+        listCerts.addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting()) {
+                for (EventCompListener listener:listeners){
+                    MkCertificate ci = (MkCertificate) ((JList) event.getSource()).getSelectedValue();
+                    listener.certificateSelected(ci);
+                }
+            }
+        });
+
     }
 
     @Override
-    public void addListener(EventListener listListener) {
-        // this.listListener = listListener;
-        if (listListener instanceof ListSelectionListener)
-            listCerts.addListSelectionListener((ListSelectionListener) listListener);
+    public void addListener(EventListener listener) {
+        listeners.add((EventCompListener) listener);
     }
 
     @Override
@@ -124,18 +132,13 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
     }
 
     @Override
-    public IModelFactory getModel() {
-        return model;
-    }
-
-    @Override
     public void makeVisible(boolean b) {
         listCerts.setShowImage(b);
     }
 
     @Override
-    public CertificateValue getSelected() {
-        return (CertificateValue) listCerts.getSelectedValue();
+    public Certificate getSelected() {
+        return (Certificate) listCerts.getSelectedValue();
     }
 
     @Override
@@ -144,9 +147,9 @@ public class ListImgCertificatesView extends Component implements CertificatesVi
     }
 
     public class CertificatesTransferable implements Transferable {
-        final List<CertificateValue> nodes;
+        final List<Certificate> nodes;
 
-        public CertificatesTransferable(List<CertificateValue> nodes) {
+        public CertificatesTransferable(List<Certificate> nodes) {
             this.nodes = nodes;
         }
 

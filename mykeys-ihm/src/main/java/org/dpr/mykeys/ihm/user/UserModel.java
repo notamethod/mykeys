@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.user;
 
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
@@ -10,13 +10,13 @@ public class UserModel extends AbstractTableModel {
 
     private final String[] entetes = {Messages.getString("label.name"), "Description"};
 
-    private List<CertificateValue> users;
+    private List<Certificate> users;
 
-    public UserModel(List<CertificateValue> users) {
+    public UserModel(List<Certificate> users) {
         this.users = users;
     }
 
-    public void setUsers(List<CertificateValue> users) {
+    public void setUsers(List<Certificate> users) {
         this.users = users;
     }
 
@@ -37,7 +37,7 @@ public class UserModel extends AbstractTableModel {
     }
 
 
-    public CertificateValue getValueAt(int rowIndex) {
+    public Certificate getValueAt(int rowIndex) {
         return users.get(rowIndex);
     }
 
@@ -52,7 +52,7 @@ public class UserModel extends AbstractTableModel {
         }
     }
 
-    public List<CertificateValue> getUsers() {
+    public List<Certificate> getUsers() {
         return users;
     }
 }

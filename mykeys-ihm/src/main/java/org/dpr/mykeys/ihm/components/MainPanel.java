@@ -32,6 +32,7 @@ package org.dpr.mykeys.ihm.components;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.certificate.MkCertificate;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.ihm.AppManager;
 import org.dpr.mykeys.ihm.certificate.CertificateListPanel;
@@ -281,7 +282,7 @@ public class MainPanel extends JPanel implements
     }
 
     @Override
-    public void certificateSelected(ChildInfo info) {
+    public void certificateSelected(MkCertificate info) {
 
         detailPanel.updateInfo(info);
 

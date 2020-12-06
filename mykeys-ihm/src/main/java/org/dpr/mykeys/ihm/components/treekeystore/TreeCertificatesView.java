@@ -1,8 +1,8 @@
 package org.dpr.mykeys.ihm.components.treekeystore;
 
+import org.dpr.mykeys.app.certificate.MkCertificate;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.ihm.actions.TreePopupMenuCertificate;
 import org.dpr.mykeys.ihm.CertificatesView;
 import org.dpr.mykeys.ihm.IModelFactory;
@@ -16,11 +16,10 @@ import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.List;
 
-public class TreeCertificatesView implements CertificatesView {
+public class TreeCertificatesView extends SecurityElementView implements CertificatesView  {
 
     final String KS_AC_NAME = "store.ac.name";
     private final TreeCertManager treeks;
-    private final IModelFactory model;
 
 
     public TreeCertManager getTreeManager() {
@@ -39,7 +38,7 @@ public class TreeCertificatesView implements CertificatesView {
             }
 
             @Override
-            public void addElement(ChildInfo ci) {
+            public void addElement(MkCertificate ci) {
                 treeks.fillNodes(
                         ci);
             }
@@ -83,10 +82,6 @@ public class TreeCertificatesView implements CertificatesView {
 
     }
 
-    @Override
-    public IModelFactory getModel() {
-        return model;
-    }
 
     @Override
     public void makeVisible(boolean b) {
@@ -94,25 +89,25 @@ public class TreeCertificatesView implements CertificatesView {
     }
 
     @Override
-    public CertificateValue getSelected() {
+    public Certificate getSelected() {
         DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) treeks.getTree().getLastSelectedPathComponent();
         if (tNode != null) {
             Object object = tNode.getUserObject();
-            List<CertificateValue> certs = new ArrayList<>();
+            List<Certificate> certs = new ArrayList<>();
 
             Enumeration<TreeNode> children = tNode.children();
             if (children != null) {
                 while (children.hasMoreElements()) {
                     DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
                     Object childObj = child.getUserObject();
-                    if (childObj instanceof CertificateValue)
-                        certs.add((CertificateValue) childObj);
+                    if (childObj instanceof Certificate)
+                        certs.add((Certificate) childObj);
                 }
             }
-            if (object != null && object instanceof CertificateValue) {
-                ((CertificateValue) object).setChildren(certs);
+            if (object != null && object instanceof Certificate) {
+                ((Certificate) object).setChildren(certs);
 
-                return (CertificateValue) object;
+                return (Certificate) object;
             }
         }
         return null;
@@ -121,7 +116,7 @@ public class TreeCertificatesView implements CertificatesView {
 
     @Override
     public List getSelectedList() {
-        List ar = new ArrayList<CertificateValue>();
+        List ar = new ArrayList<Certificate>();
         DefaultMutableTreeNode tNode = (DefaultMutableTreeNode) treeks.getTree().getLastSelectedPathComponent();
         if (tNode != null) {
             Object object = tNode.getUserObject();

@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm.listeners;
 
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 
 public interface CertificateActionPublisher extends KeystoreActionPublisher{
 

@@ -1,7 +1,7 @@
 package org.dpr.mykeys.ihm.certificate;
 
 import org.dpr.mykeys.app.CertificateType;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.ihm.CancelCreationException;
 
@@ -10,7 +10,7 @@ import java.awt.event.ItemListener;
 
 public class CreateCertificatDialog extends SuperCreate implements ItemListener {
 
-    protected CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo, CertificateValue issuer,
+    protected CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo, Certificate issuer,
                                      boolean modal) throws CancelCreationException {
 
         super(owner, modal);
@@ -32,7 +32,7 @@ public class CreateCertificatDialog extends SuperCreate implements ItemListener 
 
     }
 
-    public CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo, CertificateValue issuer, boolean modal, CertificateType certificateType) throws CancelCreationException {
+    public CreateCertificatDialog(JFrame owner, KeyStoreValue ksInfo, Certificate issuer, boolean modal, CertificateType certificateType) throws CancelCreationException {
         super(owner, modal);
         this.ksInfo = ksInfo;
         this.typeCer = certificateType;

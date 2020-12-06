@@ -34,6 +34,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.*;
 import org.dpr.mykeys.app.PkiTools.TypeObject;
+import org.dpr.mykeys.app.certificate.MkCertificate;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.ihm.certificate.CertificateListPanel;
 import org.dpr.mykeys.ihm.DetailPanel;
@@ -189,7 +190,7 @@ public class MainPKIPanel extends JPanel implements
     }
 
     @Override
-    public void certificateSelected(ChildInfo info) {
+    public void certificateSelected(MkCertificate info) {
 
         detailPanel.updateInfo(info);
 

@@ -1,6 +1,7 @@
 package org.dpr.mykeys.ihm.components;
 
-import org.dpr.mykeys.app.ChildInfo;
+
+import org.dpr.mykeys.app.certificate.MkCertificate;
 
 import javax.swing.*;
 
@@ -18,7 +19,7 @@ public class ModelFactory {
         listModel.removeAllElements();
     }
 
-    public void addElement(ChildInfo ci) {
+    public void addElement(MkCertificate ci) {
         listModel.addElement(ci);
     }
 }

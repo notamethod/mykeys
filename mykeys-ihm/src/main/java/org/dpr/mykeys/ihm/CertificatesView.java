@@ -1,6 +1,6 @@
 package org.dpr.mykeys.ihm;
 
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 
 import java.awt.*;
 import java.util.EventListener;
@@ -17,7 +17,7 @@ public interface CertificatesView {
 
     void makeVisible(boolean b);
 
-    CertificateValue getSelected();
+    Certificate getSelected();
 
     List getSelectedList();
 

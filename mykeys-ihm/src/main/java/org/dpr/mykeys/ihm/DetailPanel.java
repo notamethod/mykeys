@@ -3,9 +3,9 @@ package org.dpr.mykeys.ihm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.app.CertificateType;
-import org.dpr.mykeys.app.ChildInfo;
-import org.dpr.mykeys.app.certificate.CertificateValue;
-import org.dpr.mykeys.app.profile.CertificateTemplate;
+import org.dpr.mykeys.app.certificate.Certificate;
+import org.dpr.mykeys.app.certificate.MkCertificate;
+import org.dpr.mykeys.app.certificate.profile.CertificateTemplate;
 import org.dpr.mykeys.ihm.certificate.CertificateCADetailPanel;
 import org.dpr.mykeys.ihm.certificate.CertificateDetailPanel;
 import org.dpr.mykeys.ihm.certificate.template.ProfilDetailPanel;
@@ -21,7 +21,7 @@ public class DetailPanel extends JPanel {
     // Map<String, String> elements = new HashMap<String, String>();
     LabelValuePanel infosPanel;
 
-    CertificateValue certificatInfo;
+    Certificate certificatInfo;
 
     private JPanel jp;
     private JTabbedPane jtab;
@@ -56,16 +56,16 @@ public class DetailPanel extends JPanel {
         jtab.setVisible(false);
     }
 
-    public void updateInfoGen(ChildInfo info) {
+    public void updateInfoGen(MkCertificate info) {
 
 
         //jp.add(infosPanel);
 
     }
 
-    private Component getDetailInstance(ChildInfo info) {
-        if (info instanceof CertificateValue) {
-            CertificateValue value = (CertificateValue) info;
+    private Component getDetailInstance(MkCertificate info) {
+        if (info instanceof Certificate) {
+            Certificate value = (Certificate) info;
             if (value.getType() != null && value.getType().equals(CertificateType.AC))
                 return new CertificateCADetailPanel(value);
             else
@@ -97,7 +97,7 @@ public class DetailPanel extends JPanel {
 
     }
 
-    public void updateInfo(ChildInfo info) {
+    public void updateInfo(MkCertificate info) {
         // FIXME: repaint component ?
         if (info == null) {
             jtab.setVisible(false);
@@ -107,8 +107,8 @@ public class DetailPanel extends JPanel {
         //jtab.revalidate();
         jp.add(getDetailInstance(info));
         titre.setText(Messages.getString("detail.cert.title"));
-        if (info instanceof CertificateValue) {
-            jtab.setTitleAt(0, ((CertificateValue) info).getAlias());
+        if (info instanceof Certificate) {
+            jtab.setTitleAt(0, ((Certificate) info).getAlias());
         }
 
         jtab.setVisible(true);

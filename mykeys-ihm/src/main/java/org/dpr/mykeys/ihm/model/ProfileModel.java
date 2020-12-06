@@ -1,7 +1,8 @@
 package org.dpr.mykeys.ihm.model;
 
+import org.dpr.mykeys.app.certificate.profile.CertificateTemplate;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.profile.CertificateTemplate;
+
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;

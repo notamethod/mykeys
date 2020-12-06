@@ -8,7 +8,7 @@ import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.X509Constants;
 import org.dpr.mykeys.app.certificate.CertificateManager;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.keystore.StoreLocationType;
@@ -39,10 +39,10 @@ public class SuperCreate extends JDialog implements ItemListener {
     protected boolean isAC = false;
 
     LabelValuePanel infosPanel;
-    final CertificateValue certInfo = new CertificateValue();
+    final Certificate certInfo = new Certificate();
     protected CertificateType typeCer;
     private LabelValuePanel durationPanel;
-    private CertificateValue issuer;
+    private Certificate issuer;
     protected final List<JCheckBox> keyUsageCheckBoxes = new ArrayList<>();
 
     protected SuperCreate() {
@@ -79,7 +79,7 @@ public class SuperCreate extends JDialog implements ItemListener {
         return typeCer;
     }
 
-    protected void init(CertificateValue issuer) throws CancelCreationException {
+    protected void init(Certificate issuer) throws CancelCreationException {
         this.issuer = issuer;
         init();
     }
@@ -317,7 +317,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                         if (ksInfo.getStoreModel().equals(StoreModel.PKISTORE)) {
                             ksAC = ksInfo;
                         }
-                        CertificateValue inIssuer = SuperCreate.this.issuer;
+                        Certificate inIssuer = SuperCreate.this.issuer;
                         if (inIssuer != null) {
                             certInfo.setIssuer(inIssuer.getAlias());
                             inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
@@ -327,7 +327,7 @@ public class SuperCreate extends JDialog implements ItemListener {
                                 inIssuer = kserv.findCertificateByAlias(ksAC, certInfo.getIssuer(), MkSession.password);
                         }
                         CertificateManager chn = new CertificateManager();
-                        CertificateValue newCertificate = chn.generate(certInfo, inIssuer, typeCer);
+                        Certificate newCertificate = chn.generate(certInfo, inIssuer, typeCer);
 
                         if (ksInfo.getStoreType().equals(StoreLocationType.INTERNAL))
                             newCertificate.setPassword(MkSession.password);

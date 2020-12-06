@@ -2,18 +2,21 @@ package org.dpr.mykeys.ihm.certificate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dpr.mykeys.app.certificate.MkCertificate;
+import org.dpr.mykeys.app.certificate.profile.ProfilStoreInfo;
+import org.dpr.mykeys.app.certificate.profile.ProfileServices;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.app.*;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.*;
-import org.dpr.mykeys.app.profile.ProfilStoreInfo;
-import org.dpr.mykeys.app.profile.ProfileServices;
+
 import org.dpr.mykeys.ihm.CancelCreationException;
 import org.dpr.mykeys.ihm.CertificatesView;
 import org.dpr.mykeys.ihm.IhmException;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.ihm.components.ListImgCertificatesView;
+import org.dpr.mykeys.ihm.components.TableElementsView;
 import org.dpr.mykeys.ihm.components.treekeystore.TreeCertificatesView;
 import org.dpr.mykeys.ihm.listeners.CertificateActionListener;
 import org.dpr.mykeys.ihm.listeners.EventCompListener;
@@ -37,6 +40,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 
 import static org.dpr.mykeys.utils.MessageUtils.getMessage;
@@ -45,13 +49,11 @@ import static org.dpr.swingtools.ImageUtils.createImageIcon;
 @SuppressWarnings("serial")
 public class CertificateListPanel extends JPanel implements DropTargetListener, CertificateActionListener {
     private static final Log log = LogFactory.getLog(CertificateListPanel.class);
-
-    NodeInfo ksInfo;
-    CertificatesView listCerts;
-    private final List<EventCompListener> listeners = new ArrayList<>();
+    private final List<EventCompListener> certListPanelListeners = new ArrayList<>();
     private final List<EventKeystoreListener> keystoreListeners = new ArrayList<>();
     private final ToolBarManager toolBarManager = new ToolBarManager();
-
+    NodeInfo ksInfo;
+    CertificatesView listCerts;
     private JPanel jp;
 
     public CertificateListPanel(String viewType) {
@@ -79,22 +81,23 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         }
 
 
-        ListSelectionListener listListener = new CertListListener();
+        EventListener listListener = new CertListListener();
 
         String viewTypePref = KSConfig.getUserCfg().getString("certificate.list.style", "flat");
         if (viewType == null)
             viewType = viewTypePref;
+        //TEST
+      viewType="table";
         if (viewType.equalsIgnoreCase("tree")) {
             listCerts = new TreeCertificatesView();
             ((TreeCertificatesView) listCerts).addCertListener(this);
-        } else
+        } else if (viewType.equalsIgnoreCase("table")) {
+            listCerts = new TableElementsView();
+        } else {
             listCerts = new ListImgCertificatesView();
-
-
+        }
         listCerts.addListener(listListener);
-        // listCerts.addListener(this);
 
-        // listCerts.setTransferHandler(new ListTransferHandler());
 
         JScrollPane listScroller = new JScrollPane(listCerts.getListCerts());
         // listScroller.setPreferredSize(new Dimension(450, 80));
@@ -114,7 +117,6 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         jp.remove(toolBarManager.getInvInstance(info));
         jp.add(toolBarManager.getInstance(info), BorderLayout.PAGE_START);
-        // jp.revalidate();
         if (info == null) {
             return;
         }
@@ -123,7 +125,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         if (ksInfo instanceof ProfilStoreInfo) {
 
-            for (ChildInfo ci : ProfileServices.getProfils(KSConfig.getProfilsPath())) {
+            for (MkCertificate ci : ProfileServices.getProfils(KSConfig.getProfilsPath())) {
                 listCerts.getModel().addElement(ci);
             }
         } else {
@@ -132,7 +134,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
 
                 log.debug("childlist:" + ks.getChildList().size());
-                for (ChildInfo ci : ks.getChildList()) {
+                for (MkCertificate ci : ks.getChildList()) {
                     listCerts.getModel().addElement(ci);
                 }
             }
@@ -162,13 +164,13 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         jp.setVisible(true);
     }
 
-    private void fireCertificateSelected(ChildInfo info) {
-        for (EventCompListener listener : listeners) {
+    private void displayDetail(MkCertificate info) {
+        for (EventCompListener listener : certListPanelListeners) {
             listener.certificateSelected(info);
         }
     }
 
-    private void fireKeyStoreAdded(List<String> info) {
+    private void displayCreation(List<String> info) {
         log.debug("fire keystore added event");
         for (EventKeystoreListener listener : keystoreListeners) {
             listener.KeystoreAdded(info);
@@ -176,11 +178,11 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     }
 
 
-
     public void registerListener(EventCompListener listener) {
-        listeners.add(listener);
-
+        log.info(listener.getClass()+ " listening to " +this.getClass());
+        certListPanelListeners.add(listener);
     }
+
     public void addKeystoreListener(EventKeystoreListener listener) {
         keystoreListeners.add(listener);
 
@@ -201,7 +203,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     }
 
 
-    public void addElement(NodeInfo info, boolean b, CertificateValue issuer) throws ServiceException {
+    public void addElement(NodeInfo info, boolean b, Certificate issuer) throws ServiceException {
 
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         SuperCreate cs = null;
@@ -255,7 +257,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         return;
     }
 
-    public void showCreateCrlFrame(NodeInfo info, CertificateValue certificateInfo, boolean b) throws ServiceException {
+    public void showCreateCrlFrame(NodeInfo info, Certificate certificateInfo, boolean b) throws ServiceException {
 
         JFrame frame = (JFrame) this.getTopLevelAncestor();
         CreateCrlDialog cs = new CreateCrlDialog(frame, certificateInfo);
@@ -277,7 +279,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
      * @param certificateInfo
      * @throws ServiceException
      */
-    public void showDeleteCertificateFrame(NodeInfo info, List<CertificateValue> certificateInfo) throws ServiceException {
+    public void showDeleteCertificateFrame(NodeInfo info, List<Certificate> certificateInfo) throws ServiceException {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         KeystoreService ksv = new KeystoreService();
         try {
@@ -294,19 +296,19 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     public void showExportCertificatesFrame(NodeInfo info, List selectedValuesList) {
         KeyStoreValue kinfo = (KeyStoreValue) info;
         JFrame frame = (JFrame) this.getTopLevelAncestor();
-        List<CertificateValue> certificates;
+        List<Certificate> certificates;
         certificates = new ArrayList<>(selectedValuesList);
         ExportCertificateDialog cs = new ExportCertificateDialog(frame, kinfo, certificates, true);
         cs.setLocationRelativeTo(frame);
         List<String> files = cs.showDialog();
         KeyStoreHelper helper = new KeyStoreHelper();
         if (files != null) {
-            for (String file : files){
+            for (String file : files) {
                 KSConfig.getUserCfg().addProperty(
                         "store." + StoreModel.CERTSTORE + "."
                                 + helper.findKeystoreType(file), file);
             }
-            fireKeyStoreAdded(files);
+            displayCreation(files);
         }
 
     }
@@ -506,10 +508,10 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     }
 
     @Override
-    public void insertCertificateRequested(CertificateValue certificate) {
+    public void insertCertificateRequested(Certificate certificate) {
         if (certificate == null) {
             if (listCerts != null && listCerts.getSelected() != null) {
-                List<CertificateValue> certInfo = listCerts.getSelectedList();
+                List<Certificate> certInfo = listCerts.getSelectedList();
                 if (certInfo.get(0).getType().equals(CertificateType.AC))
                     certificate = certInfo.get(0);
             }
@@ -565,7 +567,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     @Override
     public void deleteCertificateRequested(String what) {
         if (listCerts != null && listCerts.getSelected() != null) {
-            List<CertificateValue> certInfo = listCerts.getSelectedList();
+            List<Certificate> certInfo = listCerts.getSelectedList();
             if (DialogUtil.askConfirmDialog(null, Messages.getString("delete.certificat.confirm", certInfo.toString()))) {
                 try {
                     showDeleteCertificateFrame(ksInfo, certInfo);
@@ -580,7 +582,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     @Override
     public void createCrlRequested(String what) {
         if (listCerts != null && listCerts.getSelected() != null) {
-            CertificateValue certInfo = listCerts.getSelected();
+            Certificate certInfo = listCerts.getSelected();
             try {
                 showCreateCrlFrame(ksInfo, certInfo, false);
             } catch (ServiceException e1) {
@@ -601,7 +603,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         public ListTransferHandler() {
             try {
                 String certType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-                        + org.dpr.mykeys.app.certificate.CertificateValue.class.getName() + "\"";
+                        + org.dpr.mykeys.app.certificate.Certificate.class.getName() + "\"";
                 certFlavor = new DataFlavor(certType);
             } catch (ClassNotFoundException e) {
                 log.trace("ClassNotFound: " + e.getMessage());
@@ -612,26 +614,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     /**
      * @author Buck
      */
-    class CertListListener implements ListSelectionListener, EventCompListener {
-
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            if (!e.getValueIsAdjusting()) {
-
-                log.trace(e.getSource().getClass());
-                if (e.getSource() instanceof JList) {
-                    if (((JList) e.getSource()).getSelectedValue() instanceof ChildInfo) {
-                        ChildInfo ci = (ChildInfo) ((JList) e.getSource()).getSelectedValue();
-                        fireCertificateSelected(ci);
-                        if (ksInfo.isOpen()) {
-                            toolBarManager.enableElementActions(ksInfo, ci, true);
-
-                        }
-                    }
-
-                }
-            }
-        }
+    class CertListListener implements  EventCompListener {
 
         @Override
         public void certificateListChanged(NodeInfo info) {
@@ -639,8 +622,8 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
         }
 
         @Override
-        public void certificateSelected(ChildInfo info) {
-            fireCertificateSelected(info);
+        public void certificateSelected(MkCertificate info) {
+            displayDetail(info);
             if (ksInfo.isOpen()) {
                 toolBarManager.enableElementActions(ksInfo, info, true);
 

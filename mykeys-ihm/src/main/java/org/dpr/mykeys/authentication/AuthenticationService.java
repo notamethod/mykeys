@@ -7,7 +7,7 @@ import org.dpr.mykeys.app.keystore.repository.RepositoryException;
 import org.dpr.mykeys.configuration.KSConfig;
 import org.dpr.mykeys.configuration.MkSession;
 import org.dpr.mykeys.ihm.Messages;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.keystore.KeyStoreHelper;
 import org.dpr.mykeys.app.keystore.KeyStoreValue;
 import org.dpr.mykeys.app.ServiceException;
@@ -26,11 +26,11 @@ public class AuthenticationService {
     public void createUser(String id, char[] pwd) throws ServiceException {
         CertificateManager ch = new CertificateManager();
         KeyStoreHelper kh = new KeyStoreHelper();
-        CertificateValue cer;
+        Certificate cer;
         KeyStoreValue ki;
         try {
             // check if not exists
-            CertificateValue cerCheck = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, null);
+            Certificate cerCheck = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, null);
             if (cerCheck != null) {
                 throw new ServiceException(Messages.getString(Messages.getString("certificate.error.create.exists"), id));
             }
@@ -46,9 +46,9 @@ public class AuthenticationService {
 
     }
 
-    public CertificateValue loadUser(String id, char[] pwd) {
+    public Certificate loadUser(String id, char[] pwd) {
         KeyStoreHelper ch = new KeyStoreHelper();
-        CertificateValue cer = null;
+        Certificate cer = null;
 
         try {
             cer = ch.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
@@ -60,9 +60,9 @@ public class AuthenticationService {
         return cer;
     }
 
-    public CertificateValue authenticateUSer(String id, char[] pwd) throws AuthenticationException {
+    public Certificate authenticateUSer(String id, char[] pwd) throws AuthenticationException {
         KeyStoreHelper ch = new KeyStoreHelper();
-        CertificateValue cer;
+        Certificate cer;
 
         try {
             cer = ch.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
@@ -75,9 +75,9 @@ public class AuthenticationService {
         return cer;
     }
 
-    public List<CertificateValue> listUsers() throws ServiceException {
+    public List<Certificate> listUsers() throws ServiceException {
         KeyStoreHelper ch = new KeyStoreHelper();
-        List<CertificateValue> cer;
+        List<Certificate> cer;
 
         try {
             cer = ch.getCertificatesForUser(KSConfig.getInternalKeystores().getUserDB());
@@ -91,13 +91,13 @@ public class AuthenticationService {
     public void deleteUser(String id) throws ServiceException {
         KeyStoreHelper kh = new KeyStoreHelper();
         KeystoreService ks = new KeystoreService();
-        CertificateValue cer;
+        Certificate cer;
         char[] pwd = null;
         KeyStoreValue ki;
         try {
             cer = kh.findCertificateByAlias(KSConfig.getInternalKeystores().getUserDB(), id, pwd);
             ki = KSConfig.getInternalKeystores().getUserDB();
-            List<CertificateValue> list = Collections.singletonList(cer);
+            List<Certificate> list = Collections.singletonList(cer);
             ks.removeCertificates(ki, list);
         } catch (Exception e) {
             throw new ServiceException(e);

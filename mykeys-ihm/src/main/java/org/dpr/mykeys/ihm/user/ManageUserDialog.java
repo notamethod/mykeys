@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.authentication.AuthenticationService;
 import org.dpr.mykeys.configuration.MkSession;
-import org.dpr.mykeys.app.certificate.CertificateValue;
+import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.ServiceException;
 import org.dpr.mykeys.ihm.IhmException;
 import org.dpr.mykeys.utils.DialogUtil;
@@ -96,7 +96,7 @@ public class ManageUserDialog extends JFrame {
             } else if (command.equals("delete")) {
 
                 int row = table.getSelectedRow();
-                CertificateValue p = modele.getValueAt(row);
+                Certificate p = modele.getValueAt(row);
                 if (DialogUtil.askConfirmDialog(null, Messages.getString(Messages.getString("user.delete.ask"), p.getName()))) {
                     if (MkSession.user == null || MkSession.user.equals(p.getAlias()))
                         return;
