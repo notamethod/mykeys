@@ -15,7 +15,7 @@
         <logger name="org.apache.xml.security.stax.impl.InputProcessorChainImpl" level="info"/>
         <logger name="org.apache.xml.security.stax.impl.OutputProcessorChainImpl" level="info"/>
 
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="STDOUT"/>
         </Root>
 

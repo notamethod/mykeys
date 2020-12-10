@@ -5,6 +5,7 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.util.encoders.Hex;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
+import org.dpr.mykeys.app.utils.Pair;
 import org.dpr.mykeys.ihm.Messages;
 import org.dpr.mykeys.app.certificate.Certificate;
 import org.dpr.mykeys.app.utils.CertificateUtils;
@@ -222,21 +223,34 @@ public class CertificateDetailPanel extends JPanel {
 
     private void addSubjectPanel(LabelValuePanel infosPanel) {
         infosPanel.addTitle(Messages.getString("x509.subject"));
-        if (info.getSubjectMap() != null) {
-            for (String key : info.getSubjectMap().keySet()) {
-                String name;
-                try {
-                    name = Messages.getString(X509Util.getMapNames().get(key));
-                } catch (Exception e) {
-                    name = key;
-                }
-                String value = info.getSubjectMap().get(key);
-                if (value.startsWith("#")) {
-                    value = new String(Hex.decode(value.substring(1)));
-                }
-                infosPanel.put(name, JTextField.class, "", value, false);
+        for (Pair pair : info.getSubjectList()){
+            String name;
+            try {
+                name = Messages.getString(X509Util.getMapNames().get(pair.getKey()));
+            } catch (Exception e) {
+                name = pair.getKey();
             }
+            String value = pair.getValue();
+            if (value.startsWith("#")) {
+                value = new String(Hex.decode(value.substring(1)));
+            }
+            infosPanel.put(name, JTextField.class, "", value, false);
         }
+//        if (info.getSubjectMap() != null) {
+//            for (String key : info.getSubjectMap().keySet()) {
+//                String name;
+//                try {
+//                    name = Messages.getString(X509Util.getMapNames().get(key));
+//                } catch (Exception e) {
+//                    name = key;
+//                }
+//                String value = info.getSubjectMap().get(key);
+//                if (value.startsWith("#")) {
+//                    value = new String(Hex.decode(value.substring(1)));
+//                }
+//                infosPanel.put(name, JTextField.class, "", value, false);
+//            }
+//        }
         infosPanel.putEmptyLine();
     }
 

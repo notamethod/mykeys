@@ -85,9 +85,11 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         String viewTypePref = KSConfig.getUserCfg().getString("certificate.list.style", "flat");
         if (viewType == null)
-            viewType = viewTypePref;
+            viewType = "table";//viewTypePref;
+
+        //TODO: factory ?
         //TEST
-      viewType="table";
+
         if (viewType.equalsIgnoreCase("tree")) {
             listCerts = new TreeCertificatesView();
             ((TreeCertificatesView) listCerts).addCertListener(this);
@@ -508,17 +510,17 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
     }
 
     @Override
-    public void insertCertificateRequested(Certificate certificate) {
-        if (certificate == null) {
-            if (listCerts != null && listCerts.getSelected() != null) {
-                List<Certificate> certInfo = listCerts.getSelectedList();
-                if (certInfo.get(0).getType().equals(CertificateType.AC))
-                    certificate = certInfo.get(0);
-            }
-        }
+    public void insertCertificateRequested(Certificate issuer) {
+//        if (issuer == null) {
+//            if (listCerts != null && listCerts.getSelected() != null) {
+//                List<Certificate> certInfo = listCerts.getSelectedList();
+//                if (certInfo.get(0).getType().equals(CertificateType.AC))
+//                    issuer = certInfo.get(0);
+//            }
+//        }
         try {
 
-            addElement(ksInfo, false, certificate);
+            addElement(ksInfo, false, issuer);
         } catch (ServiceException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -618,7 +620,7 @@ public class CertificateListPanel extends JPanel implements DropTargetListener, 
 
         @Override
         public void certificateListChanged(NodeInfo info) {
-
+            log.trace("changed!");
         }
 
         @Override

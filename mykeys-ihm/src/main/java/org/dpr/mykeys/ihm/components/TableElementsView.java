@@ -9,6 +9,8 @@ import org.dpr.mykeys.ihm.listeners.EventCompListener;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -43,7 +45,25 @@ public class TableElementsView extends Component implements CertificatesView {
         };
 
         table = new JTable(tableModel);
-        init();
+//        TableColumnModel columnModel = table.getColumnModel();
+//        columnModel.getColumn(0).setWidth(50);
+//        columnModel.getColumn(0).setPreferredWidth(50);
+        table.setCellSelectionEnabled(false);
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(true);
+        table.setAutoCreateRowSorter(true);
+
+        table.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting()) {
+                tableModel.getRow(table.getSelectedRow()).ifPresent(certificate -> {
+                            for (EventCompListener listener : listeners) {
+                                listener.certificateSelected(certificate);
+                            }
+                        }
+                );
+            }
+        });
+        resizeColumns();
     }
 
     @Override
@@ -58,6 +78,7 @@ public class TableElementsView extends Component implements CertificatesView {
 
     @Override
     public void clear() {
+        table.clearSelection();
         model.removeAllElements();
 
     }
@@ -74,7 +95,8 @@ public class TableElementsView extends Component implements CertificatesView {
 
     @Override
     public Certificate getSelected() {
-        return tableModel.getRow(table.getSelectedRow());
+        return tableModel.getRow(table.getSelectedRow()).orElse(null);
+
     }
 
     @Override
@@ -93,18 +115,23 @@ public class TableElementsView extends Component implements CertificatesView {
     }
 
 
-    private void init(){
-        table.setCellSelectionEnabled(false);
-        table.setColumnSelectionAllowed(false);
-        table.setRowSelectionAllowed(true);
+    private void init() {
 
-        table.getSelectionModel().addListSelectionListener(event -> {
-            if (!event.getValueIsAdjusting()) {
-                System.out.println(tableModel.getRow(table.getSelectedRow()).toString());
-                for (EventCompListener listener:listeners){
-                    listener.certificateSelected(tableModel.getRow(table.getSelectedRow()));
-                }
-            }
-        });
+    }
+
+    private void resizeColumns() {
+        float[] columnWidthPercentage = {0.05f, 0.55f, 0.1f, 0.05f, 0.05f};
+
+        // Use TableColumnModel.getTotalColumnWidth() if your table is included in a JScrollPane
+        TableColumnModel columnModel = table.getColumnModel();
+        int tW = columnModel.getTotalColumnWidth();
+        TableColumn column;
+
+        int cantCols = columnModel.getColumnCount();
+        for (int i = 0; i < cantCols; i++) {
+            column = columnModel.getColumn(i);
+            int pWidth = Math.round(columnWidthPercentage[i] * tW);
+            column.setPreferredWidth(pWidth);
+        }
     }
 }

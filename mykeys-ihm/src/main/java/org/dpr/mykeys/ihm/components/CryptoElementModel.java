@@ -25,6 +25,7 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -36,7 +37,7 @@ public class CryptoElementModel extends AbstractTableModel {
         super();
     }
 
-    private final String[] colName = new String[]{"Type", "Info", "a", "b", "c"};
+    private final String[] colName = new String[]{"Type", "Info", "S/N", "b", "c"};
 
     public void setCertificates(List<Certificate> certificates) {
         this.certificates.clear();
@@ -57,9 +58,10 @@ public class CryptoElementModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        if (certificates == null)
-            return 0;
-        return certificates.size();
+        int rowCount=0;
+        if (certificates != null)
+           rowCount = certificates.size();
+        return rowCount;
     }
 
     @Override
@@ -80,21 +82,34 @@ public class CryptoElementModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int column) {
         Certificate entry = null;
-        entry = certificates.get(row);
+        try {
+            entry = certificates.get(row);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String subject = entry.getSubjectList().stream()
+                .map(e->/*e.getKey()+": "+*/e.getValue())
+                .collect(Collectors.joining(", "));
         switch (column) {
 
             case 0:
                 return "X509";
             case 1:
-                return entry.getSubjectString();//+X509Util.toHexString(entry.getSerialNumber(), " ", true)
+                return subject;//+X509Util.toHexString(entry.getSerialNumber(), " ", true)
+            case 2:
+                return entry.getSerialNumber();
             default:
                 return "";
         }
 
+
     }
 
-    public Certificate getRow(int row) {
-        return certificates.get(row);
+    public Optional<Certificate> getRow(int rowNumber) {
+
+        return rowNumber>=0?Optional.of(certificates.get(rowNumber)):Optional.empty();
+        //System.out.println(certificates.size());
+        //return certificates.get(row);
     }
 
     public List<Certificate> getRows(int[] rows) {
@@ -107,6 +122,7 @@ public class CryptoElementModel extends AbstractTableModel {
 
     public void clear() {
         this.certificates.clear();
+        fireTableDataChanged();
     }
 
     public void addRow(Certificate data) {

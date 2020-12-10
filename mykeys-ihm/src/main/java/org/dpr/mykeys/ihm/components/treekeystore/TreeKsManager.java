@@ -427,7 +427,7 @@ public class TreeKsManager implements MouseListener,
 
         }
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
-        log.debug(selRow);
+        log.trace("selected row:"+selRow);
         TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
         if (selRow != -1) {
             if (e.getClickCount() == 1) {
