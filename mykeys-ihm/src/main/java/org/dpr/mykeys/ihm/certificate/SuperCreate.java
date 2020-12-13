@@ -364,8 +364,6 @@ public class SuperCreate extends JDialog implements ItemListener {
                 return;
             }
 
-            // certInfo.setX509PrincipalMap(elements);
-            HashMap<String, String> subjectMap = new HashMap<>();
             FillUtils.fillCertInfo(elements, certInfo);
             certInfo.setAlias((String) elements.get("alias"));
             certInfo.setNotBefore((Date) elements.get("notBefore"));

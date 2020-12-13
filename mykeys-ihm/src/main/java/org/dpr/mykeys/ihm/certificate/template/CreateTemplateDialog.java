@@ -253,8 +253,6 @@ public class CreateTemplateDialog extends SuperCreate implements ItemListener {
             for (String key : keys) {
             }
 
-            // certInfo.setX509PrincipalMap(elements);
-            HashMap<String, String> subjectMap = new HashMap<>();
 
             FillUtils.fillCertInfo(elements, certInfo);
             //certInfo.setDuration((Integer) elements.get("duration"));

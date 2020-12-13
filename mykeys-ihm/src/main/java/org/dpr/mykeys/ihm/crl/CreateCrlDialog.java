@@ -179,8 +179,6 @@ public class CreateCrlDialog extends JDialog {
                 List<String> list = new ArrayList<>();
                 if (serials != null && !serials.isEmpty())
                     list = new ArrayList<>(Arrays.asList(serials.split(",")));
-                // certInfo.setX509PrincipalMap(elements);
-                HashMap<String, String> subjectMap = new HashMap<>();
                 crlValue.setName("name");
                 crlValue.setThisUpdate((Date) elements.get("notBefore"));
                 crlValue.setNextUpdate((Date) elements.get("notAfter"));

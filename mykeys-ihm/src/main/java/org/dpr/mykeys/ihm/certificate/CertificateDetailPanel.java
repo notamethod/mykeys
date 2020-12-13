@@ -236,21 +236,7 @@ public class CertificateDetailPanel extends JPanel {
             }
             infosPanel.put(name, JTextField.class, "", value, false);
         }
-//        if (info.getSubjectMap() != null) {
-//            for (String key : info.getSubjectMap().keySet()) {
-//                String name;
-//                try {
-//                    name = Messages.getString(X509Util.getMapNames().get(key));
-//                } catch (Exception e) {
-//                    name = key;
-//                }
-//                String value = info.getSubjectMap().get(key);
-//                if (value.startsWith("#")) {
-//                    value = new String(Hex.decode(value.substring(1)));
-//                }
-//                infosPanel.put(name, JTextField.class, "", value, false);
-//            }
-//        }
+
         infosPanel.putEmptyLine();
     }
 

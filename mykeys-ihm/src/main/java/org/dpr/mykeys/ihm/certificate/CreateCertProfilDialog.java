@@ -232,8 +232,6 @@ public class CreateCertProfilDialog extends SuperCreate implements ItemListener,
             for (String key : keys) {
             }
 
-            // certInfo.setX509PrincipalMap(elements);
-            HashMap<String, String> subjectMap = new HashMap<>();
 
             FillUtils.fillCertInfo(elements, certInfo);
             certInfo.setDuration(Integer.valueOf((String) elements.get("duration")));
